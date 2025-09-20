@@ -34,6 +34,7 @@ dependencies:
   # Web Specefic
 #  universal_html: ^2.2.4
   http: ^1.3.0
+  photo_view: ^0.15.0
 #  dynamic_path_url_strategy: ^1.0.0
 
 dev_dependencies:

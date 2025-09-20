@@ -22,7 +22,7 @@ class TRoundedContainer extends StatelessWidget {
     this.margin,
     this.showShadow = true,
     this.showBorder = false,
-    this.padding = const EdgeInsets.all(TSizes.md),
+    this.padding = const EdgeInsets.all(TSizes.sm),
     this.borderColor = TColors.borderPrimary,
     this.radius = TSizes.cardRadiusLg,
     this.backgroundColor ,
@@ -51,7 +51,7 @@ class TRoundedContainer extends StatelessWidget {
         padding: padding,
         margin: margin,
         decoration: BoxDecoration(
-          color: (backgroundColor)??(THelperFunctions.isDarkMode(context)?TColors.dark:TColors.light),
+          color: (backgroundColor)??(THelperFunctions.isDarkMode(context)?TColors.dark:TColors.white),
           borderRadius: BorderRadius.circular(radius),
           border: showBorder ? Border.all(color: borderColor) : null,
           boxShadow: [

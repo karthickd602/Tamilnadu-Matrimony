@@ -39,5 +39,38 @@
   "retry_in": "மீண்டும் முயற்சிக்க 00:",
   "resend": "OTP மீண்டும் அனுப்பு",
   "error_full_otp": "முழு OTP உள்ளிடவும்",
-  "otp_entered": "OTP சேர்க்கப்பட்டது"
+  "otp_entered": "OTP சேர்க்கப்பட்டது",
+
+  "home_title": "தமிழ் திருமணம்",
+  "filter": "வடிகட்டு",
+  "verified": "சரிபார்க்கப்பட்டது",
+  "unlock_number": "எண்ணை திறக்கவும்",
+
+  "profile_details": "சுயவிவர விவரங்கள்",
+  "personal_details": "தனிப்பட்ட விவரங்கள்",
+  "basic_details": "அடிப்படை விவரங்கள்",
+  "occupation_details": "வேலை விவரங்கள்",
+  "education_details": "கல்வி விவரங்கள்",
+
+  "date_of_birth": "பிறந்த தேதி",
+  "caste": "சாதி",
+  "location": "இடம்",
+  "mother_tongue": "தாய்மொழி",
+  "profile_created_for": "சுயவிவரம் உருவாக்கப்பட்டது",
+  "marital_status": "திருமண நிலை",
+  "job_type": "வேலை வகை",
+  "salary": "சம்பளம்",
+  "highest_qualification": "அதிகபட்ச தகுதி",
+  "share_profile": "சுயவிவரம் பகிரவும்",
+
+
+  "profile": "புரொபைல்",
+  "edit_profile": "காண்க/சுயவிவரத்தை திருத்து",
+  "update_photo": "போட்டோவை புதுப்பிக்கவும்",
+  "verify_profile": "சுயவிவரத்தை சரிபார்க்கவும்",
+  "subscriptions": "சரிபார்க்கவும்",
+  "help_support": "உதவி",
+  "membership_details": "மெம்பர்ஷிப் விவரங்கள்",
+  "share_app": "பகிரவும்",
+  "delete_profile": "புரொபைலை நீக்கு"
 }

@@ -30,7 +30,7 @@ class TElevatedButtonTheme {
   static final darkElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       elevation: 0,
-      foregroundColor: TColors.dark,
+      foregroundColor: TColors.light,
       backgroundColor: TColors.buttonPrimary,
       disabledForegroundColor: TColors.darkGrey,
       disabledBackgroundColor: TColors.darkerGrey,
@@ -41,8 +41,7 @@ class TElevatedButtonTheme {
       textStyle: const TextStyle(
           fontSize: 16,
           color: TColors.textWhite,
-          fontWeight: FontWeight.w600,
-          fontFamily: 'Urbanist'),
+          fontWeight: FontWeight.w600,),
     ),
   );
 }

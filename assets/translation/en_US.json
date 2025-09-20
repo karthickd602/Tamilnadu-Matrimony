@@ -40,5 +40,40 @@
   "retry_in": "Retry in 00:",
   "resend": "Resend OTP",
   "error_full_otp": "Please enter full OTP",
-  "otp_entered": "OTP Entered"
+  "otp_entered": "OTP Entered",
+
+
+  "home_title": "Tamil Matrimony",
+  "filter": "Filter",
+  "verified": "Verified",
+  "unlock_number": "Unlock Number",
+
+
+  "profile_details": "Profile Details",
+  "personal_details": "Personal details",
+  "basic_details": "Basic details",
+  "occupation_details": "Occupation details",
+  "education_details": "Education details",
+
+  "date_of_birth": "Date of birth",
+  "caste": "Caste",
+  "location": "Location",
+  "mother_tongue": "Mother tongue",
+  "profile_created_for": "Profile created for",
+  "marital_status": "Marital Status",
+  "job_type": "Job Type",
+  "salary": "Salary",
+  "highest_qualification": "Highest qualification",
+  "share_profile": "Share profile",
+
+
+  "profile": "Profile",
+  "edit_profile": "Edit Profile",
+  "update_photo": "Update Photo",
+  "verify_profile": "verify Profile",
+  "subscriptions": "Subscriptions",
+  "help_support": "Help & Support",
+  "membership_details": "Membership Details",
+  "share_app": "Share",
+  "delete_profile": "Delete Profile"
 }

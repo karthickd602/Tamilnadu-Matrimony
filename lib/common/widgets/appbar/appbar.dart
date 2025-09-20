@@ -39,7 +39,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
           : leadingIcon != null
           ? IconButton(onPressed: leadingOnPressed, icon: Icon(leadingIcon))
           : null,
-      title: Text(title,style: Theme.of(context).textTheme.titleLarge,),
+      title: Text(title,style: Theme.of(context).textTheme.headlineSmall,),
       actions: actions,
     );
   }

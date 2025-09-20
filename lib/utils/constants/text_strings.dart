@@ -45,4 +45,40 @@ class TTexts {
   static const String resend = "resend";
   static const String errorFullOtp = "error_full_otp";
   static const String otpEntered = "otp_entered";
+
+
+  // Home Page
+  static const String homeTitle = "home_title";
+  static const String filter = "filter";
+  static const String verified = "verified";
+  static const String unlockNumber = "unlock_number";
+
+  // Home Profile Details Page
+  static const String profileDetails = "profile_details";
+  static const String personalDetails = "personal_details";
+  static const String basicDetails = "basic_details";
+  static const String occupationDetails = "occupation_details";
+  static const String educationDetails = "education_details";
+  static const String dateOfBirth = "date_of_birth";
+  static const String caste = "caste";
+  static const String location = "location";
+  static const String motherTongue = "mother_tongue";
+  static const String profileCreatedFor = "profile_created_for";
+  static const String maritalStatus = "marital_status";
+  static const String jobType = "job_type";
+  static const String salary = "salary";
+  static const String highestQualification = "highest_qualification";
+  static const String shareProfile = "share_profile";
+
+
+  // Profile Page
+  static const String profile = "profile";
+  static const String editProfile = "edit_profile";
+  static const String updatePhoto = "update_photo";
+  static const String subscriptions = "subscriptions";
+  static const String verifyProfile = "verify_profile";
+  static const String helpSupport = "help_support";
+  static const String membershipDetails = "membership_details";
+  static const String shareApp = "share_app";
+  static const String deleteProfile = "delete_profile";
 }

@@ -47,12 +47,9 @@ class TImages {
   static const String onBoardingImage2 = "assets/images/on_boarding_images/sammy-line-shopping.gif";
   static const String onBoardingImage3 = "assets/images/on_boarding_images/sammy-line-delivery.gif";
 
-  // -- Product Reviews
-  static const String userProfileImage1 = "assets/images/reviews/review_profile_image_1.jpg";
-  static const String userProfileImage2 = "assets/images/reviews/review_profile_image_2.jpeg";
-  static const String userProfileImage3 = "assets/images/reviews/review_profile_image_3.jpeg";
 
   //Profile
-  static const String user = "assets/images/content/user.png";
+  static const String sampleUser = "assets/images/content/user.jpg";
+  static const String defaultProfilePic = "assets/images/content/user.png";
 }
 
