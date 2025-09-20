@@ -1,0 +1,44 @@
+{
+  "and": "and",
+  "skip": "Skip",
+  "done": "Done",
+  "submit": "Submit",
+  "app_name": "Tamilnadu Matrimony",
+  "continue": "Continue",
+
+  "login": "Login",
+  "first_name": "First Name",
+  "last_name": "Last Name",
+  "email": "E-Mail",
+  "password": "Password",
+  "new_password": "New Password",
+  "username": "Username",
+  "mobile_no": "Mobile Number",
+  "remember_me": "Remember Me",
+  "forget_password": "Forget Password?",
+  "sign_in": "Sign In",
+  "create_account": "Create Account",
+  "or_sign_in_with": "or sign in with",
+  "or_sign_up_with": "or sign up with",
+  "i_agree_to": "I agree to",
+  "privacy_policy": "Privacy Policy",
+  "terms_of_use": "Terms of Use",
+  "verification_code": "Verification Code",
+  "resend_email": "Resend Email",
+  "resend_email_in": "Resend email in",
+
+  "select_language": "Choose Your Language",
+  "continue_text": "Continue",
+
+  "login_page_header": "Enter your phone number to get started",
+  "login_page_notifier": "You will receive an OTP on this number",
+
+
+  "enter_otp": "Enter OTP",
+  "auto_fetching": "Auto-fetching OTP",
+  "did_not_receive": "Didn't receive the OTP?",
+  "retry_in": "Retry in 00:",
+  "resend": "Resend OTP",
+  "error_full_otp": "Please enter full OTP",
+  "otp_entered": "OTP Entered"
+}
