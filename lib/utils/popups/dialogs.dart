@@ -1,7 +1,7 @@
 import '../constants/path_provider.dart';
 
 class TDialogs {
-  static defaultDialog({
+  static void defaultDialog({
     required BuildContext context,
     String title = 'Removal Confirmation',
     String content =

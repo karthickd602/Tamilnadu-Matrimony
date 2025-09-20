@@ -6,6 +6,7 @@ import 'package:tamilnadu_matrimony/features/authentication/screen/register/regi
 
 import '../features/authentication/screen/login/login_page.dart';
 import '../features/splash/splash_screen.dart';
+import '../navigation_menu.dart';
 import '../utils/constants/path_provider.dart';
 
 class TAppRoutes {
@@ -15,6 +16,7 @@ class TAppRoutes {
     GetPage(name: TRoutes.loginPage, page: () => LoginPage()),
     GetPage(name: TRoutes.otp, page: () => OtpPage()),
     GetPage(name: TRoutes.register, page: () => RegisterPage()),
+    GetPage(name: TRoutes.bottomNav, page: () => NavigationMenu()),
 
 
   ];

@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
-
-import '../../../../../utils/constants/colors.dart';
-import '../../../../utils/constants/sizes.dart';
 
 /// A container widget with rounded corners and customizable properties.
 class TRoundedContainer extends StatelessWidget {

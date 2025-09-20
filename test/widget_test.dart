@@ -8,22 +8,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tamilnadu_matrimony/app.dart';
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('App smoke test', (WidgetTester tester) async {
+    // Provide mock translations
+    final mockTranslations = {
+      'en_US': {'hello': 'Hello'},
+      'ta_IN': {'hello': 'வணக்கம்'},
+    };
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Build our app with mock translations
+    await tester.pumpWidget(MyApp(translations: mockTranslations));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Example check: verify app builds
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }

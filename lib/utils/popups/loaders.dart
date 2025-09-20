@@ -6,10 +6,10 @@ import '../constants/colors.dart';
 import '../helpers/helper_functions.dart';
 
 class TLoaders {
-  static hideSnackBar() =>
+  static void hideSnackBar() =>
       ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
 
-  static customToast({required message}) {
+  static void customToast({required String message}) {
     ScaffoldMessenger.of(Get.context!).showSnackBar(
       SnackBar(
         width: 500,
@@ -34,7 +34,7 @@ class TLoaders {
     );
   }
 
-  static successSnackBar({required title, message = '', duration = 3}) {
+  static void successSnackBar({required String title, message = '', int duration = 3}) {
     Get.snackbar(
       title,
       message,
@@ -42,7 +42,7 @@ class TLoaders {
       isDismissible: true,
       shouldIconPulse: true,
       colorText: Colors.white,
-      backgroundColor: TColors.primary,
+      backgroundColor: TColors.green,
       snackPosition: SnackPosition.TOP,
       duration: Duration(seconds: duration),
       margin: const EdgeInsets.all(10),
@@ -50,7 +50,7 @@ class TLoaders {
     );
   }
 
-  static warningSnackBar({required title, message = ''}) {
+  static void warningSnackBar({required String title, message = ''}) {
     Get.snackbar(
       title,
       message,
@@ -66,7 +66,7 @@ class TLoaders {
     );
   }
 
-  static errorSnackBar({title = 'Oh Snap', message = ''}) {
+  static void errorSnackBar({String title = 'Oh Snap', message = ''}) {
     Get.snackbar(
       title,
       message,

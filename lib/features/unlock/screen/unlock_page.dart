@@ -2,8 +2,8 @@ import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 
 import '../../../utils/constants/path_provider.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class UnlockPage extends StatelessWidget {
+  const UnlockPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(TSizes.defaultSpace),
           child: Column(children: [
-            Text("HOME")
+            Text("Unlock")
           ]),
         ),
       ),

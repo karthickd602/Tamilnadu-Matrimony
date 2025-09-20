@@ -27,11 +27,13 @@ class OtpController extends GetxController {
 
   void otpSubmit() {
     final otp = otpControllers.map((c) => c.text).join().trim();
-    if (otp.length == 6) {
-      Get.snackbar(TTexts.otpEntered.tr, otp);
-    } else {
-      Get.snackbar(TTexts.errorFullOtp.tr, '');
-    }
+    // if (otp.length == 6) {
+     TLoaders.successSnackBar(message:TTexts.otpEntered.tr, title: otp);
+      
+      Get.offAllNamed(TRoutes.bottomNav);
+    // } else {
+    //   Get.snackbar(TTexts.errorFullOtp.tr, '');
+    // }
   }
 
   void retryOtp() {

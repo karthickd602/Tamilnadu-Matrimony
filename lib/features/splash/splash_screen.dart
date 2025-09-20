@@ -1,6 +1,5 @@
 import 'package:lottie/lottie.dart';
 
-import '../../utils/constants/image_strings.dart';
 import '../../utils/constants/path_provider.dart';
 import 'splash_controller.dart';
 
@@ -9,7 +8,7 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SplashController());
+  Get.put(SplashController());
     return Scaffold(
       backgroundColor: TColors.yellow,
       body: Container(

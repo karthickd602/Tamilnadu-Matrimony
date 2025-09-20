@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'pages/basic_register_page.dart';
 import '../../controller/register/register_controller.dart';
+import 'pages/basic_register_page.dart';
 import 'pages/family_register_page.dart';
 
 class RegisterPage extends StatelessWidget {
