@@ -48,6 +48,9 @@ class TImages {
   static const String onBoardingImage3 = "assets/images/on_boarding_images/sammy-line-delivery.gif";
 
 
+  /// -- Banner
+  static const String banner1 = "assets/images/banner/banner 1.png";
+
   //Profile
   static const String sampleUser = "assets/images/content/user.jpg";
   static const String defaultProfilePic = "assets/images/content/user.png";

@@ -1,49 +1,55 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
-import '../../../utils/constants/colors.dart';
-import '../../../utils/device/device_utility.dart';
-import '../../../utils/helpers/helper_functions.dart';
+import '../../../utils/constants/path_provider.dart';
+
 
 class TAppBar extends StatelessWidget implements PreferredSizeWidget {
-  /// Custom appbar for achieving a desired design goal.
-  /// - Set [title] for a custom title.
-  /// - [showBackArrow] to toggle the visibility of the back arrow.
-  /// - [leadingIcon] for a custom leading icon.
-  /// - [leadingOnPressed] callback for the leading icon press event.
-  /// - [actions] for adding a list of action widgets.
-  /// - Horizontal padding of the appbar can be customized inside this widget.
   const TAppBar({
     super.key,
-   required this.title,
+    required this.title,
+    this.isBackButtonNeed = false,
+    this.bottom,
     this.actions,
-    this.leadingIcon,
-    this.leadingOnPressed,
-    this.showBackArrow = false,
   });
 
   final String title;
-  final bool showBackArrow;
-  final IconData? leadingIcon;
+  final bool isBackButtonNeed;
+  final TabBar? bottom;
   final List<Widget>? actions;
-  final VoidCallback? leadingOnPressed;
 
   @override
   Widget build(BuildContext context) {
-    final dark = THelperFunctions.isDarkMode(context);
+    final isDark = THelperFunctions.isDarkMode(context);
+    final textTheme = Theme.of(context).textTheme;
+
     return AppBar(
+      elevation: 0,
+      centerTitle: true,
       automaticallyImplyLeading: false,
-      leading: showBackArrow
-          ? IconButton(onPressed: () => Get.back(), icon: Icon(Iconsax.arrow_left, color: dark ? TColors.white : TColors.dark))
-          : leadingIcon != null
-          ? IconButton(onPressed: leadingOnPressed, icon: Icon(leadingIcon))
+      backgroundColor: isDark ? TColors.black : TColors.white,
+      leading: isBackButtonNeed
+          ? IconButton(
+        onPressed: () => Get.back(),
+        icon: Icon(
+          Icons.arrow_back_ios_new_rounded,
+          color: isDark ? Colors.white : Colors.black87,
+        ),
+        tooltip: "Back",
+      )
           : null,
-      title: Text(title,style: Theme.of(context).textTheme.headlineSmall,),
+      title: Text(title, style: textTheme.headlineSmall),
       actions: actions,
+      bottom: bottom,
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
+      //   side: BorderSide(
+      //     color: isDark ? Colors.grey.shade800 : Colors.grey.shade300,
+      //   ),
+      // ),
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(TDeviceUtils.getAppBarHeight());
+  Size get preferredSize => Size.fromHeight(
+    bottom == null ? TSizes.appBarHeight : TSizes.appBarHeight * 2.1,
+  );
 }

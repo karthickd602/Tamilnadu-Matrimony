@@ -1,13 +1,12 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:tamilnadu_matrimony/features/alerts/screen/alert_page.dart';
 import 'package:tamilnadu_matrimony/features/home/screen/home_page.dart';
 import 'package:tamilnadu_matrimony/features/profile/screen/profile_page.dart';
-import 'package:tamilnadu_matrimony/features/unlock/screen/unlock_page.dart';
 
 import '../../../utils/constants/path_provider.dart';
+import 'features/favorites/screen/favorites_page.dart';
+import 'features/subscription/screen/subscription_page.dart';
 
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});
@@ -16,6 +15,7 @@ class NavigationMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationController());
     final darkMode = THelperFunctions.isDarkMode(context);
+    final iconAndLabelColor = TColors.white;
 
     return PopScope(
       canPop: false, // prevent auto-pop
@@ -34,35 +34,35 @@ class NavigationMenu extends StatelessWidget {
           child: Obx(
                 () => CurvedNavigationBar(
               index: controller.selectedIndex.value,
-              backgroundColor: darkMode ? TColors.dark : TColors.light,
-              buttonBackgroundColor: TColors.primary,
+              backgroundColor: TColors.bottomNavColor2,
+              buttonBackgroundColor: TColors.bottomNavColor,
               animationCurve: Curves.easeInOut,
               animationDuration: const Duration(milliseconds: 600),
               color: darkMode
-                  ? TColors.primary
-                  : TColors.primary,
+                  ? TColors.yellow
+                  : TColors.bottomNavColor,
               onTap: (index) {
                 controller.selectedIndex.value = index;
               },
               items:  [
                 CurvedNavigationBarItem(
-                  child: Icon(Iconsax.home, color: Colors.white),
+                  child: Icon(Iconsax.home, color: iconAndLabelColor),
                   label: 'Home',
-                  labelStyle: TextStyle(color: Colors.white),
+                  labelStyle: TextStyle(color:iconAndLabelColor),
                 ),
                 CurvedNavigationBarItem(
-                  child: Icon(Iconsax.heart5, color: Colors.white),
+                  child: Icon(Iconsax.heart, color: iconAndLabelColor),
                   label: 'Favorites',
-                  labelStyle: TextStyle(color: Colors.white),
+                  labelStyle: TextStyle(color: iconAndLabelColor),
                 ),CurvedNavigationBarItem(
-                  child: Icon(Icons.wallet_outlined, color: Colors.white),
+                  child: Icon(Icons.wallet_outlined, color: iconAndLabelColor),
                   label: 'Subscription',
-                  labelStyle: TextStyle(color: Colors.white),
+                  labelStyle: TextStyle(color: iconAndLabelColor),
                 ),
                 CurvedNavigationBarItem(
-                  child: Icon(Iconsax.user, color: Colors.white),
+                  child: Icon(Iconsax.user, color: iconAndLabelColor),
                   label: 'Profile',
-                  labelStyle: TextStyle(color: Colors.white),
+                  labelStyle: TextStyle(color: iconAndLabelColor),
                 ),
               ],
             ),
@@ -100,8 +100,8 @@ class NavigationController extends GetxController {
   RxInt back = 0.obs;
   final screens = [
     HomePage(),
-    UnlockPage(),
-    AlertPage(),
+    FavoritesPage(),
+    SubscriptionPage(),
     ProfilePage(),
   ];
 }

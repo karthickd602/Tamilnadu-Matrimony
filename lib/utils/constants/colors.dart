@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 
 class TColors {
   // App theme colors
-  static const Color primary = Color(0xFF6302FD);
+  // static const Color primary = Color(0xFF6302FD);
+  static const Color primary = green;
   static const Color secondary = Color(0xFFFD34CB);
   static const Color yellow = Color(0xfff8f833);
   static const Color green = Color(0xff299508);
-
+static const Color bottomNavColor =  green;
+// static const Color bottomNavColor =  Color(0xFFF7DE9D);
+static const Color bottomNavColor2 =  Color(0xFFF7DE9D);
+// static const Color bottomNavColor = primary;
   // Icon colors
   static const Color iconPrimary = Color(0xFF8D8D8D);
 

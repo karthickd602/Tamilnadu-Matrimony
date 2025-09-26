@@ -27,7 +27,7 @@ class TTextTheme {
     titleMedium: const TextStyle().copyWith(
         fontSize: 16.0,
         fontWeight: FontWeight.w600,
-        color: TColors.textSecondary),
+        color: TColors.textPrimary),
     titleSmall: const TextStyle().copyWith(
         fontSize: 16.0,
         fontWeight: FontWeight.w400,

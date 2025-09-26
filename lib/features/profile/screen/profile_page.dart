@@ -1,6 +1,5 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
-import 'package:tamilnadu_matrimony/common/widgets/images/t_rounded_image.dart';
 
 import '../../../utils/constants/path_provider.dart';
 

@@ -50,10 +50,10 @@
 
 
   "profile_details": "Profile Details",
-  "personal_details": "Personal details",
-  "basic_details": "Basic details",
-  "occupation_details": "Occupation details",
-  "education_details": "Education details",
+  "personal_details": "Personal Details",
+  "basic_details": "Basic Details",
+  "occupation_details": "Occupation Details",
+  "education_details": "Education Details",
 
   "date_of_birth": "Date of birth",
   "caste": "Caste",
@@ -63,14 +63,14 @@
   "marital_status": "Marital Status",
   "job_type": "Job Type",
   "salary": "Salary",
-  "highest_qualification": "Highest qualification",
-  "share_profile": "Share profile",
+  "highest_qualification": "Highest Qualification",
+  "share_profile": "Share Profile",
 
 
   "profile": "Profile",
   "edit_profile": "Edit Profile",
   "update_photo": "Update Photo",
-  "verify_profile": "verify Profile",
+  "verify_profile": "Verify Profile",
   "subscriptions": "Subscriptions",
   "help_support": "Help & Support",
   "membership_details": "Membership Details",

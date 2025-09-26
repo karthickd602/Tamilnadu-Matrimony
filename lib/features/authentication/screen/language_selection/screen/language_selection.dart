@@ -23,7 +23,7 @@ class LanguageSelectionPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: TSizes.spaceBtwSections),
 
             // 🔹 Language Options
             Obx(
@@ -58,7 +58,7 @@ class LanguageSelectionPage extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(TRoutes.loginPage);
+                    Get.toNamed(TRoutes.bottomNav);
                   },
                   child: Text(
                     TTexts.continueText.tr, // use translation key
