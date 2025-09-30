@@ -53,6 +53,8 @@ class TImages {
 
   //Profile
   static const String sampleUser = "assets/images/content/user.jpg";
+  static const String sampleUser1 = "assets/images/content/user1.jpg";
+  static const String sampleUser2 = "assets/images/content/user2.png";
   static const String defaultProfilePic = "assets/images/content/user.png";
 }
 
