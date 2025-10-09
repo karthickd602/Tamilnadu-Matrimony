@@ -29,8 +29,9 @@ class OtpController extends GetxController {
     final otp = otpControllers.map((c) => c.text).join().trim();
     // if (otp.length == 6) {
      TLoaders.successSnackBar(message:TTexts.otpEntered.tr, title: otp);
-      
-      Get.offAllNamed(TRoutes.bottomNav);
+
+     Get.offAllNamed(TRoutes.register);
+      // Get.offAllNamed(TRoutes.bottomNav);
     // } else {
     //   Get.snackbar(TTexts.errorFullOtp.tr, '');
     // }

@@ -15,7 +15,7 @@ class TAppRoutes {
     GetPage(name: TRoutes.languageSelection, page: () => LanguageSelectionPage()),
     GetPage(name: TRoutes.loginPage, page: () => LoginPage()),
     GetPage(name: TRoutes.otp, page: () => OtpPage()),
-    GetPage(name: TRoutes.register, page: () => RegisterPage()),
+    GetPage(name: TRoutes.register, page: () => RegistrationPage()),
     GetPage(name: TRoutes.bottomNav, page: () => NavigationMenu()),
 
 

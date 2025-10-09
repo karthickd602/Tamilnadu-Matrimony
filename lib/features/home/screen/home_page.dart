@@ -42,10 +42,7 @@ class HomePage extends StatelessWidget {
                   separatorBuilder: (_, i) =>
                   const SizedBox(height: TSizes.spaceBtwItems),
                   itemBuilder: (conte, index) {
-                    return InkWell(
-                      onTap: ()=>Get.to(()=>ProfileDetailsPage()),
-                      child: CustomerCard(),
-                    );
+                    return CustomerCard();
                   },
                 ),
               ),

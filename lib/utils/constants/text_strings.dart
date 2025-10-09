@@ -6,6 +6,7 @@ class TTexts {
   static const String submit = "submit";
   static const String appName = "app_name";
   static const String tContinue = "continue";
+  static const String back = "back";
 
   // -- Authentication Forms
   static const String login = "login";
@@ -45,7 +46,57 @@ class TTexts {
   static const String resend = "resend";
   static const String errorFullOtp = "error_full_otp";
   static const String otpEntered = "otp_entered";
+// -- REGISTRATION SECTIONS
+  static const String basicDetails = "basic_details";
+  static const String familyDetails = "family_details";
+  static const String horoscopeDetails = "horoscope_details";
+  static const String contactDetails = "contact_details";
+  static const String reviewSubmit = "review_submit";
 
+  // -- BASIC DETAILS
+  static const String name = "name";
+  static const String gender = "gender";
+  static const String dob = "dob";
+  static const String age = "age";
+  static const String height = "height";
+  static const String weight = "weight";
+  static const String maritalStatus = "marital_status";
+  static const String education = "education";
+  static const String occupation = "occupation";
+  static const String income = "income";
+  static const String religion = "religion";
+  static const String caste = "caste";
+  static const String subCaste = "sub_caste";
+
+  // -- FAMILY DETAILS
+  static const String fatherName = "father_name";
+  static const String motherName = "mother_name";
+  static const String fatherOccupation = "father_occupation";
+  static const String motherOccupation = "mother_occupation";
+  static const String brothers = "brothers";
+  static const String sisters = "sisters";
+  static const String familyType = "family_type";
+  static const String familyStatus = "family_status";
+  static const String nativePlace = "native_place";
+
+  // -- HOROSCOPE DETAILS
+  static const String rasi = "rasi";
+  static const String star = "star";
+  static const String gothram = "gothram";
+  static const String lagnam = "lagnam";
+  static const String birthTime = "birth_time";
+  static const String birthPlace = "birth_place";
+  static const String dosham = "dosham";
+
+  // -- CONTACT DETAILS
+  static const String mobileNumber = "mobile_number";
+  static const String alternateNumber = "alternate_number";
+  static const String address = "address";
+  static const String city = "city";
+  static const String state = "state";
+  static const String pincode = "pincode";
+  static const String country = "country";
+  static const String nationality = "nationality";
 
   // Home Page
   static const String homeTitle = "home_title";
@@ -56,15 +107,12 @@ class TTexts {
   // Home Profile Details Page
   static const String profileDetails = "profile_details";
   static const String personalDetails = "personal_details";
-  static const String basicDetails = "basic_details";
   static const String occupationDetails = "occupation_details";
   static const String educationDetails = "education_details";
   static const String dateOfBirth = "date_of_birth";
-  static const String caste = "caste";
   static const String location = "location";
   static const String motherTongue = "mother_tongue";
   static const String profileCreatedFor = "profile_created_for";
-  static const String maritalStatus = "marital_status";
   static const String jobType = "job_type";
   static const String salary = "salary";
   static const String highestQualification = "highest_qualification";
@@ -81,4 +129,25 @@ class TTexts {
   static const String membershipDetails = "membership_details";
   static const String shareApp = "share_app";
   static const String deleteProfile = "delete_profile";
+
+
+  // Customer Details
+  static const basicInfo = 'basic_info';
+  static const educationOccupation = 'education_occupation';
+  static const socioReligious = 'socio_religious';
+  static const physicalStatus = 'physical_status';
+  static const partnerPreference = 'partner_preference';
+
+  // Fields
+  static const nameAge = 'name_age';
+  static const degree = 'degree';
+  static const complexion = 'complexion';
+  static const father = 'father';
+  static const mother = 'mother';
+  static const siblings = 'siblings';
+  static const partnerCaste = 'partner_caste';
+
+  // Buttons
+  static const downloadHoroscope = 'download_horoscope';
+  static const showInterest = 'show_interest';
 }

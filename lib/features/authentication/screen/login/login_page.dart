@@ -11,6 +11,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
     return Scaffold(
+      // backgroundColor: TColors.white,
       body: SafeArea(
         child: Padding(
           padding:  EdgeInsets.only(top: 124.0,bottom: TSizes.defaultSpace,left: TSizes.defaultSpace,right: TSizes.defaultSpace),

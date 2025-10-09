@@ -18,11 +18,11 @@ class TTextFormFieldTheme {
     floatingLabelStyle: const TextStyle().copyWith(color: TColors.black.withValues(alpha: 0.8)),
     border: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.inputFieldRadius),
-      borderSide: const BorderSide(width: 1, color: TColors.grey),
+      borderSide: const BorderSide(width: 1, color: TColors.darkerGrey),
     ),
     enabledBorder: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.inputFieldRadius),
-      borderSide: const BorderSide(width: 1, color: TColors.grey),
+      borderSide: const BorderSide(width: 1, color: TColors.darkerGrey),
     ),
     focusedBorder:const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.inputFieldRadius),

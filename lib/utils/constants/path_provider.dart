@@ -1,6 +1,7 @@
 export 'package:flutter/material.dart';
 export 'package:get/get.dart';
 export 'package:iconsax/iconsax.dart';
+export '../../../../../common/widgets/form_widgets/custom_text_form_widget.dart';
 
 export '../../../../../../common/widgets/loaders/loader_animation.dart';
 export '../../../../../../utils/constants/enums.dart';

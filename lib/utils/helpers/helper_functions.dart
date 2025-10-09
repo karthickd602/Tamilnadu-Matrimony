@@ -120,7 +120,7 @@ class THelperFunctions {
   }
 
   static String getFormattedDate(DateTime date,
-      {String format = 'dd MMM yyyy'}) {
+      {String format = 'dd-MMM-yyyy'}) {
     return DateFormat(format).format(date);
   }
 

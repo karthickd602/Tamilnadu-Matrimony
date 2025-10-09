@@ -1,108 +1,211 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
-
+import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 import '../../../common/widgets/images/image_preview_page.dart';
-import '../../../utils/constants/path_provider.dart';
 
-class ProfileDetailsPage extends StatelessWidget {
-  const ProfileDetailsPage({super.key});
+class CustomerDetailsView extends StatelessWidget {
+  const CustomerDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = TColors.primary;
+    final secondaryColor = Colors.grey[100]!;
+
     return Scaffold(
-      appBar: TAppBar(title: TTexts.profileDetails.tr),
+      backgroundColor: secondaryColor,
+      appBar: TAppBar(
+        title: TTexts.appName.tr,
+        isBackButtonNeed: true,
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.language),
+        //     onPressed: () {
+        //       if (Get.locale?.languageCode == 'en') {
+        //         Get.updateLocale(const Locale('ta', 'IN'));
+        //       } else {
+        //         Get.updateLocale(const Locale('en', 'US'));
+        //       }
+        //     },
+        //   )
+        // ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding:  EdgeInsets.all(TSizes.defaultSpace),
-          physics: const BouncingScrollPhysics(),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// Profile Image
-              InkWell(
-                onTap: ()=>Get.to(()=> ImagePreviewPage(imageUrl: TImages.sampleUser)),
-                child: Center(
-                  child: TRoundedImage(
-                    width: double.infinity,
-                    height: 250,
-                    imageType: ImageType.asset,
-                    image:  TImages.sampleUser, // dynamic later
-                    fit: BoxFit.fill,
-                  ),
+              GestureDetector(
+                onTap: () => Get.to(() => ImagePreviewPage(
+                    imageUrl: TImages.sampleUser, imageType: ImageType.asset)),
+                child: TRoundedImage(
+                  width: double.infinity,
+                  height: 400,
+                  margin: 0,
+                  padding: 0,
+                  borderRadius: 0,
+                  imageType: ImageType.asset,
+                  image: TImages.sampleUser,
+                  backgroundColor: TColors.white,
+                  fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(height: TSizes.spaceBtwItems),
-
-              /// Name + Age
-              Center(
-                child: Text(
-                  "Jameela, 35",
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: TSizes.spaceBtwSections),
-
-              /// PERSONAL DETAILS
-              _buildSectionHeader(context, TTexts.personalDetails.tr),
-              _buildDetailItem(Icons.cake, TTexts.dateOfBirth.tr, "1989-11-25"),
-              _buildDetailItem(Icons.people, TTexts.caste.tr, "Muslim | Hanafi"),
-              _buildDetailItem(Icons.location_on, TTexts.location.tr, "Chennai"),
-              _buildDetailItem(Icons.language, TTexts.motherTongue.tr, "Tamil"),
 
               const SizedBox(height: TSizes.spaceBtwSections),
 
-              /// BASIC DETAILS
-              _buildSectionHeader(context, TTexts.basicDetails.tr),
-              _buildDetailItem(Icons.person_add, TTexts.profileCreatedFor.tr, "Myself"),
-              _buildDetailItem(Icons.favorite, TTexts.maritalStatus.tr, "Divorced"),
+              /// Info Sections
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  children: [
+                    _infoCard(
+                      TTexts.basicInfo.tr,
+                      Icons.person_outline,
+                      [
+                        {
+                          "icon": Icons.badge,
+                          "label": TTexts.nameAge.tr,
+                          "value": "மரியலட்சுமி, 25 yrs"
+                        },
+                        {
+                          "icon": Icons.location_on,
+                          "label": TTexts.location.tr,
+                          "value": "Thanjavur, தமிழ்நாடு"
+                        },
+                        {
+                          "icon": Icons.favorite,
+                          "label": TTexts.maritalStatus.tr,
+                          "value": "Unmarried"
+                        },
+                        {
+                          "icon": Icons.cake,
+                          "label": TTexts.dob.tr,
+                          "value": "23-02-2000"
+                        },
+                      ],
+                      primaryColor,
+                    ),
+                    _infoCard(
+                      TTexts.educationOccupation.tr,
+                      Icons.school_outlined,
+                      [
+                        {
+                          "icon": Icons.menu_book,
+                          "label": TTexts.degree.tr,
+                          "value": "Bachelors in Arts (BA)"
+                        },
+                        {
+                          "icon": Icons.work_outline,
+                          "label": TTexts.occupation.tr,
+                          "value": "Not working"
+                        },
+                      ],
+                      primaryColor,
+                    ),
+                    _infoCard(
+                      TTexts.socioReligious.tr,
+                      Icons.account_balance,
+                      [
+                        {
+                          "icon": Icons.self_improvement,
+                          "label": TTexts.religion.tr,
+                          "value": "Hindu"
+                        },
+                        {
+                          "icon": Icons.groups,
+                          "label": TTexts.caste.tr,
+                          "value": "Vanniar"
+                        },
+                        {
+                          "icon": Icons.star_rate,
+                          "label": TTexts.star.tr,
+                          "value": "சித்ரை - 1ம் பாதம்"
+                        },
+                        {
+                          "icon": Icons.wb_sunny,
+                          "label": TTexts.lagnam.tr,
+                          "value": "கடகம்"
+                        },
+                      ],
+                      primaryColor,
+                    ),
+                    _infoCard(
+                      TTexts.physicalStatus.tr,
+                      Icons.accessibility_new,
+                      [
+                        {
+                          "icon": Icons.height,
+                          "label": TTexts.height.tr,
+                          "value": "5ft 3in (160cm)"
+                        },
+                        {
+                          "icon": Icons.face_retouching_natural,
+                          "label": TTexts.complexion.tr,
+                          "value": "Medium"
+                        },
+                      ],
+                      primaryColor,
+                    ),
+                    _infoCard(
+                      TTexts.familyDetails.tr,
+                      Icons.family_restroom,
+                      [
+                        {
+                          "icon": Icons.man,
+                          "label": TTexts.father.tr,
+                          "value": "செந்தில்குமார் (Private)"
+                        },
+                        {
+                          "icon": Icons.woman,
+                          "label": TTexts.mother.tr,
+                          "value": "கோவிந்தி (Housewife)"
+                        },
+                        {
+                          "icon": Icons.people,
+                          "label": TTexts.siblings.tr,
+                          "value": "0 Brothers | 0 Sisters"
+                        },
+                      ],
+                      primaryColor,
+                    ),
+                    _infoCard(
+                      TTexts.partnerPreference.tr,
+                      Icons.favorite_border,
+                      [
+                        {
+                          "icon": Icons.groups_2,
+                          "label": TTexts.caste.tr,
+                          "value": "Vanniar"
+                        },
+                      ],
+                      primaryColor,
+                    ),
 
-              const SizedBox(height: TSizes.spaceBtwSections),
-
-              /// OCCUPATION DETAILS
-              _buildSectionHeader(context, TTexts.occupationDetails.tr),
-              _buildDetailItem(Icons.work, TTexts.jobType.tr, "Private Job"),
-              _buildDetailItem(Icons.currency_rupee, TTexts.salary.tr, "20,000 - 50,000"),
-
-              const SizedBox(height: TSizes.spaceBtwSections),
-
-              /// EDUCATION DETAILS
-              _buildSectionHeader(context, TTexts.educationDetails.tr),
-              _buildDetailItem(Icons.school, TTexts.highestQualification.tr, "Bachelor's Degree"),
-
-              const SizedBox(height: TSizes.spaceBtwSections * 2),
-
-              /// Action Buttons
-              Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () {},
-
-                      icon: const Icon(Icons.share, color: TColors.primary),
-                      label: Text(
-                        TTexts.shareProfile.tr,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: TColors.primary,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.download),
+                            label: Text(TTexts.downloadHoroscope.tr),
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              side: const BorderSide(color: Colors.red),
+                            ),
+                            onPressed: () {},
+                            icon: const Icon(Icons.favorite),
+                            label: Text(TTexts.showInterest.tr),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwItems),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-
-                      icon: const Icon(Icons.call, color: Colors.white),
-                      label: Text(
-                        TTexts.unlockNumber.tr,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
@@ -111,41 +214,71 @@ class ProfileDetailsPage extends StatelessWidget {
     );
   }
 
-  /// Section Header
-  Widget _buildSectionHeader(BuildContext context, String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: TSizes.sm),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  /// Detail Row
-  Widget _buildDetailItem(IconData icon, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
-      child: Row(
+  /// Info card widget
+  static Widget _infoCard(String title, IconData icon,
+      List<Map<String, dynamic>> details, Color primaryColor) {
+    return TRoundedContainer(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: Colors.grey[600]),
-          const SizedBox(width: TSizes.sm),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(label,
-                    style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-                const SizedBox(height: 2),
-                Text(
-                  value,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: primaryColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-              ],
+                child: Icon(icon, color: primaryColor, size: 26),
+              ),
+              const SizedBox(width: 14),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+          const Divider(height: 20, thickness: 1.2),
+          ...details.map(
+                (item) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(item["icon"], size: 22, color: Colors.grey[700]),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item["label"],
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          item["value"],
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )
+          ),
         ],
       ),
     );

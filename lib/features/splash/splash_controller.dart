@@ -18,8 +18,9 @@ class SplashController extends GetxController{
 
   void validate() async {
 
+    Get.offAllNamed(TRoutes.loginPage);
 
-    Get.offAllNamed(TRoutes.languageSelection);
+    // Get.offAllNamed(TRoutes.languageSelection);
 
 
   }
