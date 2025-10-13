@@ -44,9 +44,13 @@
 
   "basic_details": "அடிப்படை விவரங்கள்",
   "family_details": "குடும்ப விவரங்கள்",
-  "horoscope_details": "ஜாதக விவரங்கள்",
-  "contact_details": "தொடர்பு விவரங்கள்",
   "review_submit": "சரிபார்த்து சமர்ப்பிக்கவும்",
+  "contact_details_title": "தொடர்பு விவரங்கள்",
+  "contact_details": "தொடர்பு விவரங்கள்",
+  "whatsapp_number": "வாட்ஸ்அப் எண்",
+  "alternate_mobile": "மாற்று மொபைல்",
+  "district": "மாவட்டம்",
+
 
   "name": "பெயர்",
   "gender": "பாலினம்",
@@ -68,24 +72,37 @@
   "mother_occupation": "தாயின் தொழில்",
   "brothers": "சகோதரர்கள்",
   "sisters": "சகோதரிகள்",
+
+  "married_brothers": "திருமணமான சகோதரிகள்",
+  "married_sisters": "திருமணமான சகோதரிகள்",
   "family_type": "குடும்ப வகை",
   "family_status": "குடும்ப நிலை",
   "native_place": "பூர்வீக ஊர்",
 
-  "rasi": "ராசி",
   "star": "நட்சத்திரம்",
-  "gothram": "கோத்திரம்",
   "lagnam": "லக்னம்",
   "birth_time": "பிறந்த நேரம்",
   "birth_place": "பிறந்த இடம்",
-  "dosham": "தோஷம்",
 
+  "horoscope_details_title": "ஜாதக விவரங்கள்",
+  "horoscope_details": "ஜாதக விவரங்கள்",
+  "rasi": "ராசி",
+  "nakshatra": "நட்சத்திரம்",
+  "gothram": "கோத்திரம்",
+  "dosham": "தோஷம்",
+  "dasa_type": "திசை இருப்பு",
+  "dasa_balance_days": "திசை இருப்பு முடிவு தேதி",
+  "yes": "ஆம்",
+  "no": "இல்லை",
+  "upload_horoscope_image": "ஜாதகப் படத்தை பதிவேற்றவும்",
+  "tap_to_upload": "பதிவேற்ற தட்டவும்",
   "mobile_number": "மொபைல் எண்",
   "alternate_number": "மாற்று எண்",
   "address": "முகவரி",
   "city": "நகரம்",
   "state": "மாநிலம்",
   "pincode": "அஞ்சல் குறியீடு",
+  "caste_no_bar": "சாதி தடை இல்லை",
   "country": "நாடு",
   "nationality": "தேசீயத்துவம்",
 
@@ -101,6 +118,8 @@
   "education_details": "கல்வி விவரங்கள்",
 
   "date_of_birth": "பிறந்த தேதி",
+  "time": "நேரம்",
+  "date_of_time": "பிறந்த நேரம்",
   "location": "இடம்",
   "mother_tongue": "தாய்மொழி",
   "profile_created_for": "சுயவிவரம் உருவாக்கப்பட்டது",
@@ -124,6 +143,17 @@
 
   "download_horoscope": "ஜாதகம் பதிவிறக்கு",
   "show_interest": "ஆர்வம் தெரிவி",
+
+
+  "favorite": "பிடித்தவை",
+  "liked": "விரும்பியவை",
+  "unlocked": "திறக்கப்பட்டது",
+
+  "alerts": "எச்சரிக்கைகள்",
+  "notification": "அறிவிப்புகள்",
+  "interestSent": "அனுப்பிய விருப்பங்கள்",
+  "interestReceived": "பெற்ற விருப்பங்கள்",
+
 
   "profile": "புரொபைல்",
   "edit_profile": "காண்க/சுயவிவரத்தை திருத்து",

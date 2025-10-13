@@ -1,6 +1,7 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/services.dart';
+import 'package:tamilnadu_matrimony/features/alerts/screen/alert_page.dart';
 import 'package:tamilnadu_matrimony/features/home/screen/home_page.dart';
 import 'package:tamilnadu_matrimony/features/profile/screen/profile_page.dart';
 
@@ -34,7 +35,7 @@ class NavigationMenu extends StatelessWidget {
           child: Obx(
                 () => CurvedNavigationBar(
               index: controller.selectedIndex.value,
-              backgroundColor: TColors.bottomNavColor2,
+              backgroundColor: TColors.scaffoldColor,
               buttonBackgroundColor: TColors.bottomNavColor,
               animationCurve: Curves.easeInOut,
               animationDuration: const Duration(milliseconds: 600),
@@ -55,8 +56,8 @@ class NavigationMenu extends StatelessWidget {
                   label: 'Favorites',
                   labelStyle: TextStyle(color: iconAndLabelColor),
                 ),CurvedNavigationBarItem(
-                  child: Icon(Icons.wallet_outlined, color: iconAndLabelColor),
-                  label: 'Subscription',
+                  child: Icon(Icons.notifications_active_outlined, color: iconAndLabelColor),
+                  label: 'Alerts',
                   labelStyle: TextStyle(color: iconAndLabelColor),
                 ),
                 CurvedNavigationBarItem(
@@ -101,7 +102,7 @@ class NavigationController extends GetxController {
   final screens = [
     HomePage(),
     FavoritesPage(),
-    SubscriptionPage(),
+    AlertPage(),
     ProfilePage(),
   ];
 }

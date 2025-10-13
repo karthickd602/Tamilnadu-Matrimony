@@ -9,7 +9,7 @@ class TColors {
   static const Color green = Color(0xff299508);
 static const Color bottomNavColor =  green;
 // static const Color bottomNavColor =  Color(0xFFF7DE9D);
-static const Color bottomNavColor2 =  Color(0xFFF7DE9D);
+static const Color scaffoldColor =  Color(0xFFF7DE9D);
 // static const Color bottomNavColor = primary;
   // Icon colors
   static const Color iconPrimary = Color(0xFF8D8D8D);

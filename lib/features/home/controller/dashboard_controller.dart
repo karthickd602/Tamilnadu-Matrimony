@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 import 'package:tamilnadu_matrimony/utils/constants/image_strings.dart';
 
-class DashboardController extends GetxController {
+class DashboardController extends GetxController
+{
   var customerList = <Map<String, dynamic>>[].obs;
 
   @override
@@ -9,6 +10,7 @@ class DashboardController extends GetxController {
     super.onInit();
     loadProfiles();
   }
+
 
   void loadProfiles() {
     customerList.value = [

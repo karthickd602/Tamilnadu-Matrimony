@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../controller/register/register_controller.dart';
 import 'pages/basic_register_page.dart';
 import 'pages/contact_detail_register_page.dart';
@@ -44,6 +44,7 @@ class RegistrationPage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
+                    if(idx < controller.totalSteps - 1)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -73,7 +74,7 @@ class RegistrationPage extends StatelessWidget {
                   case 2:
                     return HoroscopeDetails();
                   case 3:
-                    return ContactDetailsStep();
+                    return ContactDetails ();
                   default:
                     return StepBasicDetails();
                 }

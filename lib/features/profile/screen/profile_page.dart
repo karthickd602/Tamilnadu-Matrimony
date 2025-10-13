@@ -44,7 +44,9 @@ class ProfilePage extends StatelessWidget {
               _buildMenuItem(context,Icons.person_outline, TTexts.editProfile.tr, () {}),
 
               _buildMenuItem(context,Icons.camera_alt_outlined, TTexts.updatePhoto.tr, () {}),
-              _buildMenuItem(context,Icons.wallet_outlined, TTexts.subscriptions.tr, () {}),
+              _buildMenuItem(context,Icons.wallet_outlined, TTexts.subscriptions.tr, () {
+                Get.toNamed(TRoutes.subscription);
+              }),
               _buildMenuItem(context,Icons.headset_mic_outlined, TTexts.helpSupport.tr, () {}),
               _buildMenuItem(context,Icons.card_membership_outlined, TTexts.membershipDetails.tr, () {}),
               _buildMenuItem(context,Icons.share_outlined, TTexts.shareProfile.tr, () {}),

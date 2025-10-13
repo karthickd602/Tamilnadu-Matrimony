@@ -5,5 +5,6 @@ class TRoutes {
   static const register = '/register';
   static const otp = '/otp';
   static const bottomNav = '/bottomNav';
+  static const subscription = '/subscription';
   static const home = '/home';
 }

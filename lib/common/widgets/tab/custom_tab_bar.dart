@@ -27,6 +27,7 @@ class KTabBarPage extends StatelessWidget {
           title: title,
           isBackButtonNeed: isBackButtonNeed,
           bottom: TabBar(
+
             labelStyle: textTheme.labelLarge,
             labelColor: isDark ? TColors.secondary : TColors.primary,
             unselectedLabelColor:

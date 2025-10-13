@@ -25,7 +25,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: true,
       automaticallyImplyLeading: false,
-      backgroundColor: isDark ? TColors.black : TColors.white,
+      backgroundColor: TColors.scaffoldColor,
       leading: isBackButtonNeed
           ? IconButton(
         onPressed: () => Get.back(),

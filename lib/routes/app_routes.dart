@@ -3,6 +3,7 @@
 import 'package:tamilnadu_matrimony/features/authentication/screen/language_selection/screen/language_selection.dart';
 import 'package:tamilnadu_matrimony/features/authentication/screen/otp/otp_page.dart';
 import 'package:tamilnadu_matrimony/features/authentication/screen/register/register_page.dart';
+import 'package:tamilnadu_matrimony/features/subscription/screen/subscription_page.dart';
 
 import '../features/authentication/screen/login/login_page.dart';
 import '../features/splash/splash_screen.dart';
@@ -17,6 +18,7 @@ class TAppRoutes {
     GetPage(name: TRoutes.otp, page: () => OtpPage()),
     GetPage(name: TRoutes.register, page: () => RegistrationPage()),
     GetPage(name: TRoutes.bottomNav, page: () => NavigationMenu()),
+    GetPage(name: TRoutes.subscription, page: () => SubscriptionPage()),
 
 
   ];

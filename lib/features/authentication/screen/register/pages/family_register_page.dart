@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-import '../../../../../common/widgets/appbar/appbar.dart';
+
 import '../../../../../utils/constants/path_provider.dart';
 import '../../../controller/register/register_controller.dart';
 
@@ -14,42 +12,42 @@ class FamilyDetails extends StatelessWidget {
     final primary = TColors.primary;
 
     return Scaffold(
-      appBar: TAppBar(title: TTexts.familyDetails.tr),
+      // appBar: TAppBar(title: TTexts.familyDetails.tr),
       body: Form(
+        key: controller.familyFormKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               TFormField(
-                label: TTexts.fatherName.tr,
+                labelText: TTexts.fatherName.tr,
                 controller: TextEditingController(),
-                hintText: "${TTexts.fatherName.tr}...",
-                icon: Iconsax.user2,
+                icon: Iconsax.user,
               ),
               TFormField(
-                label: TTexts.fatherOccupation.tr,
+                labelText: TTexts.fatherOccupation.tr,
                 controller: TextEditingController(),
                 icon: Iconsax.briefcase,
               ),
               TFormField(
-                label: TTexts.motherName.tr,
+                labelText: TTexts.motherName.tr,
                 controller: TextEditingController(),
                 icon: IconlyLight.user,
               ),
               TFormField(
-                label: TTexts.motherOccupation.tr,
+                labelText: TTexts.motherOccupation.tr,
                 controller: TextEditingController(),
                 icon: Iconsax.briefcase,
               ),
               TFormField(
-                label: TTexts.familyStatus.tr,
+                labelText: TTexts.familyStatus.tr,
                 isDropdown: true,
                 icon: IconlyLight.home,
                 items: ["Middle Class", "Upper Middle", "Rich", "Affluent"],
                 onChanged: (v) {},
               ),
               TFormField(
-                label: TTexts.familyType.tr,
+                labelText: TTexts.familyType.tr,
                 isDropdown: true,
                 icon: Icons.groups_2_outlined,
                 items: ["Joint Family", "Nuclear Family"],
@@ -59,17 +57,41 @@ class FamilyDetails extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TFormField(
-                      label: TTexts.brothers.tr,
+                      labelText: TTexts.brothers.tr,
                       controller: TextEditingController(),
                       hintText: "0",
+                      icon: Icons.male_outlined,
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TFormField(
+                      labelText: TTexts.sisters.tr,
+                      controller: TextEditingController(),
+                      hintText: "0",
+                      icon: Icons.female_outlined,
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                ],
+              ), Row(
+                children: [
+                  Expanded(
+                    child: TFormField(
+                      labelText: TTexts.marriedBrothers.tr,
+                      controller: TextEditingController(),
+                      hintText: "0",
+                      keyboardType: TextInputType.number,
                       icon: Icons.male_outlined,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: TFormField(
-                      label: TTexts.sisters.tr,
+                      labelText: TTexts.marriedSisters.tr,
                       controller: TextEditingController(),
+                      keyboardType: TextInputType.number,
                       hintText: "0",
                       icon: Icons.female_outlined,
                     ),
@@ -77,7 +99,7 @@ class FamilyDetails extends StatelessWidget {
                 ],
               ),
               TFormField(
-                label: TTexts.nativePlace.tr,
+                labelText: TTexts.nativePlace.tr,
                 controller: TextEditingController(),
                 icon: IconlyLight.location,
               ),
@@ -106,7 +128,7 @@ class FamilyDetails extends StatelessWidget {
                         ),
                         minimumSize: const Size(double.infinity, 50),
                       ),
-                      onPressed: controller.nextStep,
+                      onPressed:()=> controller.familyFormSubmit(),
                       child: Text(
                         TTexts.tContinue.tr,
                         style: const TextStyle(

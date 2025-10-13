@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
+
 import '../../../utils/constants/image_strings.dart';
 import '../controller/subscription_controller.dart';
 
@@ -16,44 +17,13 @@ class SubscriptionPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header Banner
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                 TImages.banner1,
-                  height: 220,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-                // Container(
-                //   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                //   decoration: BoxDecoration(
-                //     color: Colors.white.withOpacity(0.85),
-                //     borderRadius: BorderRadius.circular(20),
-                //   ),
-                //   child: Column(
-                //     children: [
-                //       Text(
-                //         "HAPPY Navratri",
-                //         style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                //           color: Colors.brown[700],
-                //           fontWeight: FontWeight.bold,
-                //         ),
-                //       ),
-                //       const SizedBox(height: 4),
-                //       Text(
-                //         "Offer Ends Soon!",
-                //         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                //           color: Colors.orange[800],
-                //           fontWeight: FontWeight.w600,
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-              ],
+            Image.asset(
+              TImages.banner1,
+              height: 220,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
+
 
             const SizedBox(height: 20),
 
@@ -87,9 +57,10 @@ class SubscriptionPage extends StatelessWidget {
                       ),
                     );
                   },
-                ).map((e) => Expanded(child: e)).toList(),
+                ),
               ),
             )),
+
 
             const SizedBox(height: 30),
 
@@ -160,7 +131,7 @@ class SubscriptionPage extends StatelessWidget {
           color: selected ? Colors.red : Colors.grey.shade300,
           width: selected ? 2 : 1,
         ),
-        color: selected ? Colors.red.withOpacity(0.05) : Colors.white,
+        color: selected ? Colors.red.withValues(alpha:0.05) : Colors.white,
       ),
       child: Column(
         children: [

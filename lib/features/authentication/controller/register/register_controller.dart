@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 class RegistrationController extends GetxController {
   static RegistrationController get instance => Get.find();
@@ -13,11 +12,15 @@ class RegistrationController extends GetxController {
 
   // Form keys
   final basicFormKey = GlobalKey<FormState>();
+  final familyFormKey = GlobalKey<FormState>();
+  final horoscopeFormKey = GlobalKey<FormState>();
+  final contactFormKey = GlobalKey<FormState>();
 
   // Basic Details fields
   final nameController = TextEditingController();
   final gender = ''.obs;
-  final dob = Rxn<DateTime>();
+  final dobController = TextEditingController();
+  final dotController = TextEditingController();
   final heightController = TextEditingController();
   final weightController = TextEditingController();
   final maritalStatus = ''.obs;
@@ -27,14 +30,44 @@ class RegistrationController extends GetxController {
   final religion = ''.obs;
   final caste = ''.obs;
   final subCasteController = TextEditingController();
-// Horoscope fields
+
+  // Family Details fields
+  final fatherNameController = TextEditingController();
+  final fatherOccupationController = TextEditingController();
+  final motherNameController = TextEditingController();
+  final motherOccupationController = TextEditingController();
+  final familyStatusController = TextEditingController();
+  final familyTypeController = TextEditingController();
+  final brothersController = TextEditingController();
+  final sistersController = TextEditingController();
+  final nativePlaceController = TextEditingController();
+
+
+  // Horoscope fields
   final rasiController = TextEditingController();
   final nakshatraController = TextEditingController();
   final gothramController = TextEditingController();
   RxString dosham = ''.obs;
+  final dasaType = ''.obs;
+  final dasaBalanceDays = TextEditingController();
   RxString horoscopeImagePath = ''.obs;
+  final mobileController = TextEditingController();
+  final whatsappController = TextEditingController();
+  final alternateMobileController = TextEditingController();
+  final emailController = TextEditingController();
+  final addressController = TextEditingController();
+  final cityController = TextEditingController();
+  final districtController = TextEditingController();
+  final stateController = TextEditingController();
+  final pincodeController = TextEditingController();
+  final noCasteChecked = false.obs;
 
-// Pick horoscope image
+  void submitRegistration() {
+    // You can handle API call or summary review here
+    debugPrint("Registration Submitted Successfully ✅");
+  }
+
+  // Pick horoscope image
   Future<void> pickHoroscopeImage() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: ImageSource.gallery);
@@ -43,12 +76,150 @@ class RegistrationController extends GetxController {
     }
   }
 
-  // Move to next step
-  void nextStep() {
-    if (basicFormKey.currentState?.validate() ?? false) {
+  Future<void> basicFormSubmit() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        return;
+      }
+      if (!basicFormKey.currentState!.validate()) {
+        return;
+      }
+
+      final request = {
+        "name": nameController.text,
+        "gender": gender.value,
+        "dob": dobController.text,
+        "dot":dotController.text,
+        "height": heightController.text,
+        "weight": weightController.text,
+        "marital_status": maritalStatus.value,
+        "education": educationController.text,
+        "occupation": occupationController.text,
+        "income": incomeController.text,
+        "religion": religion.value,
+        "caste": caste.value,
+        "sub_caste": subCasteController.text,
+      };
+      print("Basic : $request");
       currentStep.value++;
+    } catch (e) {
+      debugPrint("basicFormSubmit - ${e}");
+      TLoaders.errorSnackBar(
+        title: "Failed",
+        message:
+            "Something went wrong in Basic Details submit, try again later",
+      );
     }
   }
+  Future<void> familyFormSubmit() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        return;
+      }
+
+      if (!familyFormKey.currentState!.validate()) {
+        return;
+
+
+      }
+      final request = {
+        "father_name": fatherNameController.text,
+        "father_occupation": fatherOccupationController.text,
+        "mother_name": motherNameController.text,
+        "mother_occupation": motherOccupationController.text,
+        "family_status": familyStatusController.text,
+        "family_type": familyTypeController.text,
+        "brothers": brothersController.text,
+        "sisters": sistersController.text,
+        "native_place": nativePlaceController.text,
+
+      };
+      currentStep.value++;
+
+      print("Family : $request");
+    }
+    catch(e){
+      debugPrint("familyFormSubmit - ${e}");
+      TLoaders.errorSnackBar(
+        title: "Failed",
+        message:
+        "Something went wrong in Family Details submit, try again later",
+      );
+    }
+  }
+
+  Future<void> horoscopeFormSubmit() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        return;
+      }
+
+
+      if (!horoscopeFormKey.currentState!.validate()) {
+        return;
+      }
+      final request = {
+        "rasi": rasiController.text,
+        "nakshatra": nakshatraController.text,
+        "gothram": gothramController.text,
+        "dosham": dosham.value,
+        "horoscope_image": horoscopeImagePath.value,
+      };
+      print("Horoscope : $request");
+
+      currentStep.value++;
+    }
+    catch(e){
+      debugPrint("horoscopeFormSubmit - ${e}");
+
+      TLoaders.errorSnackBar(
+        title: "Failed",
+        message:
+        "Something went wrong in Horoscope Details submit, try again later",
+      );
+
+    }
+  }
+
+  Future<void> contactFormSubmit() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        return;
+      }
+      if (!contactFormKey.currentState!.validate()) {
+        return;
+      }
+      final request = {
+        "mobile": mobileController.text,
+        "whatsapp": whatsappController.text,
+        "alternate_mobile": alternateMobileController.text,
+        "email": emailController.text,
+        "address": addressController.text,
+        "city": cityController.text,
+        "district": districtController.text,
+        "state": stateController.text,
+        "pincode": pincodeController.text,
+      };
+      print("Contact : $request");
+      submitRegistration();
+    Get.offAllNamed(TRoutes.bottomNav);
+      }
+      catch(e){
+      debugPrint("contactFormSubmit - ${e}");
+        TLoaders.errorSnackBar(title: "Failed", message: "Something went wrong in Contact Details submit, try again later");
+    }
+  }
+
+  // Move to next step
+  // void nextStep() {
+  //   if (basicFormKey.currentState?.validate() ?? false) {
+  //     currentStep.value++;
+  //   }
+  // }
 
   // Go back
   void previousStep() {

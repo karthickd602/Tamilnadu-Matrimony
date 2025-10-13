@@ -1,11 +1,11 @@
 export 'package:flutter/material.dart';
 export 'package:get/get.dart';
 export 'package:iconsax/iconsax.dart';
-export '../../../../../common/widgets/form_widgets/custom_text_form_widget.dart';
 
 export '../../../../../../common/widgets/loaders/loader_animation.dart';
 export '../../../../../../utils/constants/enums.dart';
 export '../../../../../common/widgets/containers/rounded_container.dart';
+export '../../../../../common/widgets/form_widgets/custom_text_form_widget.dart';
 export '../../../../../utils/constants/text_strings.dart';
 export '../../../../../utils/helpers/helper_functions.dart';
 export '../../../../common/widgets/images/t_rounded_image.dart';

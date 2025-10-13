@@ -58,7 +58,8 @@ class LanguageSelectionPage extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(TRoutes.bottomNav);
+                    // Get.toNamed(TRoutes.bottomNav);
+                    Get.toNamed(TRoutes.loginPage);
                   },
                   child: Text(
                     TTexts.continueText.tr, // use translation key

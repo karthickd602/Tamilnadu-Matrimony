@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
+
 import '../../../common/widgets/images/image_preview_page.dart';
 
 class CustomerDetailsView extends StatelessWidget {
@@ -227,7 +226,7 @@ class CustomerDetailsView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.15),
+                  color: primaryColor.withValues(alpha:0.15),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(icon, color: primaryColor, size: 26),

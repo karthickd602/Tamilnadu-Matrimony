@@ -1,7 +1,6 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
-import 'profile_detail_screen.dart';
 import 'widget/customer_card.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,7 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.black.withValues(alpha: 0.12),
-      backgroundColor: TColors.bottomNavColor2,
+      backgroundColor: TColors.scaffoldColor,
       appBar: TAppBar(
         title: TTexts.homeTitle.tr,
         actions: [

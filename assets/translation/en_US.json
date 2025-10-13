@@ -43,7 +43,6 @@
   "error_full_otp": "Please enter full OTP",
   "otp_entered": "OTP Entered",
 
-  "horoscope_details": "Horoscope Details",
   "contact_details": "Contact Details",
   "review_submit": "Review & Submit",
 
@@ -65,17 +64,35 @@
   "mother_occupation": "Mother's Occupation",
   "brothers": "Brothers",
   "sisters": "Sisters",
+  "married_brothers": "Married Brothers",
+  "married_sisters": "Married Sisters",
   "family_type": "Family Type",
   "family_status": "Family Status",
   "native_place": "Native Place",
 
-  "rasi": "Rasi",
   "star": "Star",
-  "gothram": "Gothram",
+
   "lagnam": "Lagnam",
   "birth_time": "Birth Time",
   "birth_place": "Birth Place",
+  "contact_details_title": "Contact Details",
+  "whatsapp_number": "WhatsApp Number",
+  "alternate_mobile": "Alternate Mobile",
+  "district": "District",
+
+
+  "horoscope_details_title": "Horoscope Details",
+  "horoscope_details": "Horoscope Details",
+  "rasi": "Rasi",
+  "nakshatra": "Star",
+  "gothram": "Gothram",
   "dosham": "Dosham",
+  "dasa_Type": "Dasa Type",
+  "dasa_balance_days": "Dasa Balance Days",
+  "yes": "Yes",
+  "no": "No",
+  "upload_horoscope_image": "Upload Horoscope Image",
+  "tap_to_upload": "Tap to Upload Horoscope",
 
   "mobile_number": "Mobile Number",
   "alternate_number": "Alternate Number",
@@ -83,6 +100,7 @@
   "city": "City",
   "state": "State",
   "pincode": "Pincode",
+  "caste_no_bar": "Caste No Bar",
   "country": "Country",
   "nationality": "Nationality",
   "home_title": "TamilNadu Matrimony",
@@ -98,6 +116,8 @@
 
   "name_age": "Name & Age",
   "dob": "Date of Birth",
+  "date_of_time": "Date of Time",
+  "time": "Time",
   "degree": "Degree",
   "height": "Height",
   "complexion": "Complexion",
@@ -124,8 +144,14 @@
   "highest_qualification": "Highest Qualification",
   "share_profile": "Share Profile",
 
+  "favorite": "Favorite",
+  "liked": "Liked",
+  "unlocked": "Un-Locked",
 
-
+  "alerts": "Alerts",
+  "notification": "Notification",
+  "interestSent": "Interest Sent",
+  "interestReceived": "Interest Received",
 
   "profile": "Profile",
   "edit_profile": "Edit Profile",

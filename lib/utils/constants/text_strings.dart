@@ -49,7 +49,6 @@ class TTexts {
 // -- REGISTRATION SECTIONS
   static const String basicDetails = "basic_details";
   static const String familyDetails = "family_details";
-  static const String horoscopeDetails = "horoscope_details";
   static const String contactDetails = "contact_details";
   static const String reviewSubmit = "review_submit";
 
@@ -57,6 +56,8 @@ class TTexts {
   static const String name = "name";
   static const String gender = "gender";
   static const String dob = "dob";
+  static const String dateOfTime = "date_of_time";
+  static const String time = "time";
   static const String age = "age";
   static const String height = "height";
   static const String weight = "weight";
@@ -74,29 +75,40 @@ class TTexts {
   static const String fatherOccupation = "father_occupation";
   static const String motherOccupation = "mother_occupation";
   static const String brothers = "brothers";
+  static const String marriedBrothers = "married_brothers";
   static const String sisters = "sisters";
+  static const String marriedSisters = "married_sisters";
   static const String familyType = "family_type";
   static const String familyStatus = "family_status";
   static const String nativePlace = "native_place";
 
   // -- HOROSCOPE DETAILS
+  static const String horoscopeDetailsTitle = "horoscope_details_title";
+  static const String horoscopeDetails = "horoscope_details";
   static const String rasi = "rasi";
-  static const String star = "star";
+  static const String nakshatra = "nakshatra";
   static const String gothram = "gothram";
-  static const String lagnam = "lagnam";
-  static const String birthTime = "birth_time";
-  static const String birthPlace = "birth_place";
   static const String dosham = "dosham";
+  static const String dasaType = "dasa_type";
+  static const String dasaBalanceDays = "dasa_balance_days";
+  static const String yes = "yes";
+  static const String lagnam = "lagnam";
+  static const String star = "star";
 
+  static const String no = "no";
+  static const String uploadHoroscopeImage = "upload_horoscope_image";
+  static const String tapToUpload = "tap_to_upload";
   // -- CONTACT DETAILS
+  static const String contactDetailsTitle = "contact_details_title";
   static const String mobileNumber = "mobile_number";
-  static const String alternateNumber = "alternate_number";
+  static const String whatsappNumber = "whatsapp_number";
+  static const String alternateMobile = "alternate_mobile";
   static const String address = "address";
   static const String city = "city";
+  static const String district = "district";
   static const String state = "state";
-  static const String pincode = "pincode";
-  static const String country = "country";
-  static const String nationality = "nationality";
+    static const String pincode = "pincode";
+  static const String noCaste = "caste_no_bar";
 
   // Home Page
   static const String homeTitle = "home_title";
@@ -118,6 +130,11 @@ class TTexts {
   static const String highestQualification = "highest_qualification";
   static const String shareProfile = "share_profile";
 
+
+  //Favorite page
+  static const favorite = "favorite";
+  static const liked = "liked";
+  static const unlocked = "unlocked";
 
   // Profile Page
   static const String profile = "profile";
@@ -146,6 +163,14 @@ class TTexts {
   static const mother = 'mother';
   static const siblings = 'siblings';
   static const partnerCaste = 'partner_caste';
+
+
+  // -- Notification
+  static const alerts = "alerts";
+  static const notification = "notification";
+  static const interestSent = "interestSent";
+  static const interestReceived = "interestReceived";
+
 
   // Buttons
   static const downloadHoroscope = 'download_horoscope';

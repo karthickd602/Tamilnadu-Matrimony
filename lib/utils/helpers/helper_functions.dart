@@ -68,6 +68,36 @@ class THelperFunctions {
     ScaffoldMessenger.of(Get.context!).showSnackBar(
       SnackBar(content: Text(message)),
     );
+  }/// 📅 Show Date Picker
+  static Future<void> showDatePickerField(TextEditingController controller,{DateTime? initialDate,DateTime? lastDate,DateTime? firstDate}) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: Get.context!,
+      initialDate:initialDate?? DateTime.now(),
+      firstDate:firstDate?? DateTime(1935),
+      lastDate: lastDate??DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      controller.text = DateFormat('dd-MMM-yyyy').format(pickedDate);
+    }
+  }
+
+  /// ⏰ Show Time Picker
+  static Future<void> showTimePickerField(TextEditingController controller) async {
+    final TimeOfDay? pickedTime =
+    await showTimePicker(context: Get.context!, initialTime: TimeOfDay.now());
+
+    if (pickedTime != null) {
+      final now = DateTime.now();
+      final formattedTime = DateFormat('HH:mm').format(DateTime(
+        now.year,
+        now.month,
+        now.day,
+        pickedTime.hour,
+        pickedTime.minute,
+      ));
+      controller.text = formattedTime;
+    }
   }
 
   static void showAlert(String title, String message) {

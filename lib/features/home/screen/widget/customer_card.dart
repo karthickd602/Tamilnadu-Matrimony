@@ -1,5 +1,6 @@
 
 import '../../../../utils/constants/path_provider.dart';
+import '../../controller/dashboard_controller.dart';
 import '../profile_detail_screen.dart';
 
 class CustomerCard extends StatelessWidget {
@@ -7,6 +8,8 @@ class CustomerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(DashboardController());
+
     return Container(
       height: 600,
       decoration: BoxDecoration(
@@ -14,7 +17,7 @@ class CustomerCard extends StatelessWidget {
         border: Border.all(color: TColors.white,width: 5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha:0.08),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -49,7 +52,7 @@ class CustomerCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 6,
                           offset: const Offset(0, 3),
                         ),
@@ -78,7 +81,7 @@ class CustomerCard extends StatelessWidget {
                   right: 0,
                   child: Container(
                     padding: const EdgeInsets.all(8),
-                    color: Colors.black.withOpacity(0.4),
+                    color: Colors.black.withValues(alpha:0.4),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -109,7 +112,9 @@ class CustomerCard extends StatelessWidget {
                   child: FloatingActionButton(
                     heroTag: null,
                     tooltip: 'Like',
-                    onPressed: () {},
+                    onPressed: () {
+
+                    },
                     mini: true,
                     backgroundColor: Colors.white,
                     child: Icon(Icons.favorite, color: TColors.error),
