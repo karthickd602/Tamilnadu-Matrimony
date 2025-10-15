@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tamilnadu_matrimony/common/widgets/images/image_uploader.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 import '../../../../../common/widgets/form_widgets/custom_text_form_widget.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/text_strings.dart';
 import '../../../controller/register/register_controller.dart';
+import '../widgets/get_image.dart';
 
 class ContactDetails extends StatelessWidget {
   const ContactDetails({super.key});
@@ -29,14 +31,6 @@ class ContactDetails extends StatelessWidget {
               style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-
-            /// --- Mobile Number ---
-            TFormField(
-              controller: controller.mobileController,
-              labelText: TTexts.mobileNumber.tr,
-              icon: Icons.phone_android,
-              keyboardType: TextInputType.phone,
-            ),
 
 
             /// --- WhatsApp Number ---
@@ -75,14 +69,6 @@ class ContactDetails extends StatelessWidget {
             ),
 
 
-            /// --- City ---
-            TFormField(
-              controller: controller.cityController,
-              labelText: TTexts.city.tr,
-              icon: Icons.location_city_outlined,
-            ),
-
-
             /// --- District ---
             TFormField(
               controller: controller.districtController,
@@ -107,7 +93,9 @@ class ContactDetails extends StatelessWidget {
               keyboardType: TextInputType.number,
             ),
 
-
+            ImagePickerBox(
+              title: TTexts.profile.tr,
+              onPickImage:controller.showImageSourceSheet, imagePath: "".obs,),
         Obx(() => Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -124,8 +112,9 @@ class ContactDetails extends StatelessWidget {
             ),
           ],
         ),),
+            
 
-            const SizedBox(height: 30),
+            const SizedBox(height: TSizes.spaceBtwSections),
 
             /// --- Submit Button ---
             Row(

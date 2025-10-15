@@ -1,7 +1,7 @@
 
 import '../../../../utils/constants/path_provider.dart';
 import '../../controller/dashboard_controller.dart';
-import '../profile_detail_screen.dart';
+import '../customer_card_view.dart';
 
 class CustomerCard extends StatelessWidget {
   const CustomerCard({super.key});

@@ -46,13 +46,7 @@ class FamilyDetails extends StatelessWidget {
                 items: ["Middle Class", "Upper Middle", "Rich", "Affluent"],
                 onChanged: (v) {},
               ),
-              TFormField(
-                labelText: TTexts.familyType.tr,
-                isDropdown: true,
-                icon: Icons.groups_2_outlined,
-                items: ["Joint Family", "Nuclear Family"],
-                onChanged: (v) {},
-              ),
+
               Row(
                 children: [
                   Expanded(

@@ -173,6 +173,6 @@ class TTexts {
 
 
   // Buttons
-  static const downloadHoroscope = 'download_horoscope';
-  static const showInterest = 'show_interest';
+  static const horoscope = 'horoscope';
+  static const sentInterest = 'sent_interest';
 }

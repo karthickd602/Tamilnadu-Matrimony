@@ -67,15 +67,7 @@ class HoroscopeDetails extends StatelessWidget {
               onChanged: (v) {},
             ),
 
-            TFormField(
-              labelText: TTexts.dasaType.tr,
-              validator: (value) =>
-                  TValidator.validateEmptyText(TTexts.dasaType.tr, value),
-              isDropdown: true,
-              icon: Icons.security_update_warning,
-              items: ["Dasa 1", "Dasa 2"],
-              onChanged: (v) {},
-            ),
+
             GestureDetector(
               onTap: ()=>THelperFunctions.showDatePickerField(controller.dasaBalanceDays,lastDate: DateTime(2100),firstDate: DateTime.now(),initialDate: DateTime.now()),
               child: AbsorbPointer(
@@ -88,28 +80,7 @@ class HoroscopeDetails extends StatelessWidget {
                 ),
               ),
             ),
-            // DropdownButtonFormField<String>(
-            //   value: controller.dosham.value.isEmpty
-            //       ? null
-            //       : controller.dosham.value,
-            //   items: [TTexts.yes.tr, TTexts.no.tr]
-            //       .map(
-            //         (value) =>
-            //             DropdownMenuItem(value: value, child: Text(value)),
-            //       )
-            //       .toList(),
-            //   onChanged: (value) {
-            //     if (value != null) controller.dosham.value = value;
-            //   },
-            //   validator: (value)=>TValidator.validateEmptyText(TTexts.dosham.tr, value),
-            //   isExpanded: true,
-            //   decoration: InputDecoration(
-            //     prefixIcon: const Icon(Icons.warning_amber_rounded),
-            //     labelText: TTexts.dosham.tr,
-            //     border: const OutlineInputBorder(),
-            //   ),
-            // ),
-            // const SizedBox(height: TSizes.spaceBtwInputFields),
+
 
             /// --- Upload Horoscope Image ---
             Text(
@@ -123,7 +94,7 @@ class HoroscopeDetails extends StatelessWidget {
             // const SizedBox(height: TSizes.spaceBtwSections),
             Obx(
               () => GestureDetector(
-                onTap: controller.pickHoroscopeImage,
+                onTap: controller.showImageSourceSheet,
                 child: Container(
                   width: double.infinity,
                   height: 180,

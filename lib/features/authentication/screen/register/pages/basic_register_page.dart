@@ -29,7 +29,7 @@ class StepBasicDetails extends StatelessWidget {
               isDropdown: true,
               icon: IconlyLight.user_1,
               hintText: TTexts.gender.tr,
-              items: ["Male", "Female", "Others"],
+              items: ["Male", "Female"],
               onChanged: (val) => controller.gender.value = val ?? '',
               validator: (v) =>
                   TValidator.validateEmptyText(TTexts.gender.tr, v),
@@ -47,39 +47,12 @@ class StepBasicDetails extends StatelessWidget {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: ()=>THelperFunctions.showTimePickerField(controller.dotController),
-              child: AbsorbPointer(
-                child: TFormField(
-                  labelText: TTexts.dateOfTime.tr,
-                
-                  hintText: "HH:MM",
-                  icon: IconlyLight.time_circle,
-                  controller: controller.dotController,
-                  validator: (v) => TValidator.validateEmptyText(TTexts.dateOfTime.tr, v),
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TFormField(
-                    labelText: TTexts.height.tr,
-                    controller: controller.heightController,
-                    hintText: "in cm",
-                    icon: Icons.height,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: TFormField(
-                    labelText: TTexts.weight.tr,
-                    controller: controller.weightController,
-                    hintText: "in kg",
-                    icon: Icons.monitor_weight_outlined,
-                  ),
-                ),
-              ],
+
+            TFormField(
+              labelText: TTexts.height.tr,
+              controller: controller.heightController,
+              hintText: "in cm",
+              icon: Icons.height,
             ),
             TFormField(
               labelText: TTexts.maritalStatus.tr,

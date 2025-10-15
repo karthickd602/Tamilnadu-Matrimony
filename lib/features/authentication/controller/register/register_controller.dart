@@ -68,14 +68,45 @@ class RegistrationController extends GetxController {
   }
 
   // Pick horoscope image
-  Future<void> pickHoroscopeImage() async {
+
+  Future<void> pickImage(ImageSource source) async {
     final picker = ImagePicker();
-    final picked = await picker.pickImage(source: ImageSource.gallery);
+    final picked = await picker.pickImage(source: source);
     if (picked != null) {
       horoscopeImagePath.value = picked.path;
     }
   }
-
+  void showImageSourceSheet() {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () {
+                pickImage(ImageSource.camera);
+                Get.back();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo),
+              title: const Text('Gallery'),
+              onTap: () {
+                pickImage(ImageSource.gallery);
+                Get.back();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   Future<void> basicFormSubmit() async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();

@@ -61,7 +61,7 @@
   "marital_status": "திருமண நிலை",
   "education": "கல்வி",
   "occupation": "வேலை",
-  "income": "வருமானம்",
+  "income": "மாதம் வருமானம்",
   "religion": "மதம்",
   "caste": "ஜாதி",
   "sub_caste": "உப ஜாதி",
@@ -141,8 +141,8 @@
   "siblings": "சகோதரர் / சகோதரி",
   "partner_caste": "ஜாதி",
 
-  "download_horoscope": "ஜாதகம் பதிவிறக்கு",
-  "show_interest": "ஆர்வம் தெரிவி",
+  "horoscope": "ஜாதகம்",
+  "sent_interest": "ஆர்வம் தெரிவி",
 
 
   "favorite": "பிடித்தவை",

@@ -53,7 +53,7 @@
   "marital_status": "Marital Status",
   "education": "Education",
   "occupation": "Occupation",
-  "income": "Income",
+  "income": "Monthly Income",
   "religion": "Religion",
   "caste": "Caste",
   "sub_caste": "Sub Caste",
@@ -126,8 +126,8 @@
   "siblings": "Siblings",
   "partner_caste": "Caste",
 
-  "download_horoscope": "Download Horoscope",
-  "show_interest": "Show Interest",
+  "horoscope": "Horoscope",
+  "sent_interest": "Send Interest",
 
   "profile_details": "Profile Details",
   "personal_details": "Personal Details",

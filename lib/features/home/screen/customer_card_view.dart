@@ -16,18 +16,7 @@ class CustomerDetailsView extends StatelessWidget {
       appBar: TAppBar(
         title: TTexts.appName.tr,
         isBackButtonNeed: true,
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.language),
-        //     onPressed: () {
-        //       if (Get.locale?.languageCode == 'en') {
-        //         Get.updateLocale(const Locale('ta', 'IN'));
-        //       } else {
-        //         Get.updateLocale(const Locale('en', 'US'));
-        //       }
-        //     },
-        //   )
-        // ],
+
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -186,7 +175,7 @@ class CustomerDetailsView extends StatelessWidget {
                           child: ElevatedButton.icon(
                             onPressed: () {},
                             icon: const Icon(Icons.download),
-                            label: Text(TTexts.downloadHoroscope.tr),
+                            label: Text(TTexts.horoscope.tr),
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -198,7 +187,7 @@ class CustomerDetailsView extends StatelessWidget {
                             ),
                             onPressed: () {},
                             icon: const Icon(Icons.favorite),
-                            label: Text(TTexts.showInterest.tr),
+                            label: Text(TTexts.sentInterest.tr),
                           ),
                         ),
                       ],
