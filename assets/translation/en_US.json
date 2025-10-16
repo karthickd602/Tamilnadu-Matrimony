@@ -51,12 +51,15 @@
   "age": "Age",
   "weight": "Weight",
   "marital_status": "Marital Status",
+  "noOfChildren": "No. of Children",
+  "childrenLivingStatus": "Children Living Status",
   "education": "Education",
   "occupation": "Occupation",
   "income": "Monthly Income",
   "religion": "Religion",
   "caste": "Caste",
   "sub_caste": "Sub Caste",
+  "disablePerson": "Disable person",
 
   "father_name": "Father's Name",
   "mother_name": "Mother's Name",
@@ -85,7 +88,7 @@
   "horoscope_details": "Horoscope Details",
   "rasi": "Rasi",
   "nakshatra": "Star",
-  "gothram": "Gothram",
+  "laknam": "Laknam",
   "dosham": "Dosham",
   "dasa_Type": "Dasa Type",
   "dasa_balance_days": "Dasa Balance Days",
@@ -161,5 +164,6 @@
   "help_support": "Help & Support",
   "membership_details": "Membership Details",
   "share_app": "Share",
-  "delete_profile": "Delete Profile"
+  "delete_profile": "Delete Profile",
+  "logout": "Logout"
 }

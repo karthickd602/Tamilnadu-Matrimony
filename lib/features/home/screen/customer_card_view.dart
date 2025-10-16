@@ -39,7 +39,14 @@ class CustomerDetailsView extends StatelessWidget {
                 ),
               ),
 
+              // After profile image and before SizedBox
               const SizedBox(height: TSizes.spaceBtwSections),
+
+// Like & Share Row
+
+
+              const SizedBox(height: TSizes.spaceBtwItems),
+
 
               /// Info Sections
               Padding(
@@ -47,6 +54,7 @@ class CustomerDetailsView extends StatelessWidget {
                 child: Column(
                   children: [
                     _infoCard(
+                      showLikeAndShare: true,
                       TTexts.basicInfo.tr,
                       Icons.person_outline,
                       [
@@ -204,7 +212,8 @@ class CustomerDetailsView extends StatelessWidget {
 
   /// Info card widget
   static Widget _infoCard(String title, IconData icon,
-      List<Map<String, dynamic>> details, Color primaryColor) {
+      List<Map<String, dynamic>> details, Color primaryColor,
+      {bool showLikeAndShare = false}) {
     return TRoundedContainer(
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -227,6 +236,41 @@ class CustomerDetailsView extends StatelessWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.black87,
+                ),
+              ),
+              if(showLikeAndShare)
+              Spacer(),
+              if(showLikeAndShare)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            // TODO: Handle like button logic
+                            THelperFunctions.showSnackBar('You liked this profile!');
+                          },
+                          icon: const Icon(Icons.favorite_border),
+                          color: Colors.redAccent,
+                          iconSize: 28,
+                        ),
+                        const SizedBox(width: 8),
+
+                      ],
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        // TODO: Implement share functionality
+                        //await Share.share('Check out this profile on TamilNadu Matrimony!');
+                      },
+                      icon: const Icon(Icons.share_outlined),
+                      color: Colors.blueAccent,
+                      iconSize: 26,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -263,6 +307,7 @@ class CustomerDetailsView extends StatelessWidget {
                       ],
                     ),
                   ),
+
                 ],
               ),
             ),

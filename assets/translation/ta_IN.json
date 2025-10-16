@@ -59,12 +59,15 @@
   "height": "உயரம்",
   "weight": "எடை",
   "marital_status": "திருமண நிலை",
+  "noOfChildren": "குழந்தைகள்",
+  "childrenLivingStatus": "குழந்தைகள் வசிப்பது",
   "education": "கல்வி",
   "occupation": "வேலை",
   "income": "மாதம் வருமானம்",
   "religion": "மதம்",
   "caste": "ஜாதி",
   "sub_caste": "உப ஜாதி",
+  "disablePerson": "ஊனமுற்ற நபர்",
 
   "father_name": "தந்தையின் பெயர்",
   "mother_name": "தாயின் பெயர்",
@@ -88,7 +91,7 @@
   "horoscope_details": "ஜாதக விவரங்கள்",
   "rasi": "ராசி",
   "nakshatra": "நட்சத்திரம்",
-  "gothram": "கோத்திரம்",
+  "laknam": "லக்னம்",
   "dosham": "தோஷம்",
   "dasa_type": "திசை இருப்பு",
   "dasa_balance_days": "திசை இருப்பு முடிவு தேதி",
@@ -163,5 +166,6 @@
   "help_support": "உதவி",
   "membership_details": "மெம்பர்ஷிப் விவரங்கள்",
   "share_app": "பகிரவும்",
-  "delete_profile": "புரொபைலை நீக்கு"
+  "delete_profile": "புரொபைலை நீக்கு",
+  "Logout": "வெளியேறு"
 }

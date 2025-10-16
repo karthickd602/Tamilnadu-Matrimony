@@ -62,12 +62,15 @@ class TTexts {
   static const String height = "height";
   static const String weight = "weight";
   static const String maritalStatus = "marital_status";
+  static const String noOfChildren = "noOfChildren";
+  static const String childrenLivingStatus = "childrenLivingStatus";
   static const String education = "education";
   static const String occupation = "occupation";
   static const String income = "income";
   static const String religion = "religion";
   static const String caste = "caste";
   static const String subCaste = "sub_caste";
+  static const String disablePerson = "disablePerson";
 
   // -- FAMILY DETAILS
   static const String fatherName = "father_name";
@@ -87,7 +90,7 @@ class TTexts {
   static const String horoscopeDetails = "horoscope_details";
   static const String rasi = "rasi";
   static const String nakshatra = "nakshatra";
-  static const String gothram = "gothram";
+  static const String laknam = "laknam";
   static const String dosham = "dosham";
   static const String dasaType = "dasa_type";
   static const String dasaBalanceDays = "dasa_balance_days";
@@ -146,6 +149,7 @@ class TTexts {
   static const String membershipDetails = "membership_details";
   static const String shareApp = "share_app";
   static const String deleteProfile = "delete_profile";
+  static const String logout = "logout";
 
 
   // Customer Details

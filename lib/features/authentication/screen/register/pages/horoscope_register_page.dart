@@ -4,6 +4,7 @@ import 'package:tamilnadu_matrimony/utils/validators/validation.dart';
 
 import '../../../../../utils/constants/path_provider.dart';
 import '../../../controller/register/register_controller.dart';
+import '../widgets/get_image.dart';
 
 class HoroscopeDetails extends StatelessWidget {
   const HoroscopeDetails({super.key});
@@ -13,7 +14,6 @@ class HoroscopeDetails extends StatelessWidget {
     final controller = RegistrationController.instance;
     final textTheme = Theme.of(context).textTheme;
     final primaryColor = TColors.primary;
-    final secondaryColor = Colors.grey[100];
 
     return Form(
       key: controller.horoscopeFormKey,
@@ -32,7 +32,23 @@ class HoroscopeDetails extends StatelessWidget {
 
             /// --- Rasi ---
             TFormField(
-              controller: controller.rasiController,
+              items: [
+                "மேஷம்",
+                "ரிஷபம்",
+                "மிதுனம்",
+                "கடகம்",
+                "சிம்மம்",
+                "கன்னி",
+                "துலாம்",
+                "விருச்சிகம்",
+                "தனுசு",
+                "மகரம்",
+                "கும்பம்",
+                "மீனம்",
+              ],
+              isDropdown: true,
+              onChanged: (v)=>controller.rasiController.value =v??'',
+
               validator: (value) =>
                   TValidator.validateEmptyText(TTexts.rasi.tr, value),
               labelText: TTexts.rasi.tr,
@@ -49,10 +65,25 @@ class HoroscopeDetails extends StatelessWidget {
 
             /// --- Gothram ---
             TFormField(
-              controller: controller.gothramController,
+              isDropdown: true,
+              items: [
+                "மேஷம்",
+                "ரிஷபம்",
+                "மிதுனம்",
+                "கடகம்",
+                "சிம்மம்",
+                "கன்னி",
+                "துலாம்",
+                "விருச்சிகம்",
+                "தனுசு",
+                "மகரம்",
+                "கும்பம்",
+                "மீனம்",
+              ],
+              onChanged: (v)=>controller.laknamController.value =v??'',
               validator: (value) =>
-                  TValidator.validateEmptyText(TTexts.gothram.tr, value),
-              labelText: TTexts.gothram.tr,
+                  TValidator.validateEmptyText(TTexts.laknam.tr, value),
+              labelText: TTexts.laknam.tr,
               icon: Icons.family_restroom_outlined,
             ),
             // const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -68,93 +99,21 @@ class HoroscopeDetails extends StatelessWidget {
             ),
 
 
-            GestureDetector(
-              onTap: ()=>THelperFunctions.showDatePickerField(controller.dasaBalanceDays,lastDate: DateTime(2100),firstDate: DateTime.now(),initialDate: DateTime.now()),
-              child: AbsorbPointer(
-                child: TFormField(
-                  controller: controller.dasaBalanceDays,
-                  labelText: TTexts.dasaBalanceDays.tr,
-                  validator: (value) =>
-                      TValidator.validateEmptyText(TTexts.dasaBalanceDays.tr, value),
-                  icon: Icons.calendar_month,
-                ),
-              ),
-            ),
 
 
             /// --- Upload Horoscope Image ---
-            Text(
-              TTexts.uploadHoroscopeImage.tr,
-              style: textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: primaryColor,
-              ),
-            ),
+            // Text(
+            //   TTexts.uploadHoroscopeImage.tr,
+            //   style: textTheme.titleMedium?.copyWith(
+            //     fontWeight: FontWeight.w600,
+            //     color: primaryColor,
+            //   ),
+            // ),
 
-            // const SizedBox(height: TSizes.spaceBtwSections),
-            Obx(
-              () => GestureDetector(
-                onTap: controller.showImageSourceSheet,
-                child: Container(
-                  width: double.infinity,
-                  height: 180,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  child: controller.horoscopeImagePath.value.isEmpty
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.add_a_photo,
-                              size: 42,
-                              color: primaryColor,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              TTexts.tapToUpload.tr,
-                              style: textTheme.bodyMedium?.copyWith(
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
-                        )
-                      : Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.file(
-                                File(controller.horoscopeImagePath.value),
-                                width: double.infinity,
-                                height: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Positioned(
-                              top: 8,
-                              right: 8,
-                              child: CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Colors.black54,
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  icon: const Icon(
-                                    Icons.close,
-                                    size: 18,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () =>
-                                      controller.horoscopeImagePath.value = '',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-              ),
-            ),
+            ImagePickerBox(
+              title: TTexts.uploadHoroscopeImage.tr,
+              onPickImage:()=>controller.showImageSourceSheet(imagePath: controller.horoscopeImagePath), imagePath: controller.horoscopeImagePath,),
+
 
             const SizedBox(height: 30),
 

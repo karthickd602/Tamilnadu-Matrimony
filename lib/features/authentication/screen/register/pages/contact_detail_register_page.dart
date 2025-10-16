@@ -95,7 +95,7 @@ class ContactDetails extends StatelessWidget {
 
             ImagePickerBox(
               title: TTexts.profile.tr,
-              onPickImage:controller.showImageSourceSheet, imagePath: "".obs,),
+              onPickImage:()=>controller.showImageSourceSheet(imagePath: controller.profileImagePath), imagePath: controller.profileImagePath,),
         Obx(() => Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

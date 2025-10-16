@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return GetMaterialApp(
-      title: TTexts.appName,
+      title: TTexts.appName.tr,
       initialBinding: GeneralBinding(),
       translations: MapTranslations(translations),
     locale: TranslationService.locale,

@@ -24,10 +24,15 @@ class RegistrationController extends GetxController {
   final heightController = TextEditingController();
   final weightController = TextEditingController();
   final maritalStatus = ''.obs;
-  final educationController = TextEditingController();
-  final occupationController = TextEditingController();
+  final noOfChildren = ''.obs;
+  final eduction = ''.obs;
+  final occupation  = ''.obs;
+  final colorComplexion  = ''.obs;
+  final educationDetailsController = TextEditingController();
+  final occupationDetailsController = TextEditingController();
   final incomeController = TextEditingController();
   final religion = ''.obs;
+  final isDisablePerson = 'Yes'.obs;
   final caste = ''.obs;
   final subCasteController = TextEditingController();
 
@@ -44,13 +49,15 @@ class RegistrationController extends GetxController {
 
 
   // Horoscope fields
-  final rasiController = TextEditingController();
+  final rasiController = "".obs;
   final nakshatraController = TextEditingController();
-  final gothramController = TextEditingController();
+  final laknamController = ''.obs;
   RxString dosham = ''.obs;
   final dasaType = ''.obs;
   final dasaBalanceDays = TextEditingController();
   RxString horoscopeImagePath = ''.obs;
+
+
   final mobileController = TextEditingController();
   final whatsappController = TextEditingController();
   final alternateMobileController = TextEditingController();
@@ -60,6 +67,8 @@ class RegistrationController extends GetxController {
   final districtController = TextEditingController();
   final stateController = TextEditingController();
   final pincodeController = TextEditingController();
+  RxString profileImagePath = ''.obs;
+
   final noCasteChecked = false.obs;
 
   void submitRegistration() {
@@ -69,14 +78,14 @@ class RegistrationController extends GetxController {
 
   // Pick horoscope image
 
-  Future<void> pickImage(ImageSource source) async {
+  Future<void> pickImage(ImageSource source,{required RxString imagePath}) async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: source);
     if (picked != null) {
-      horoscopeImagePath.value = picked.path;
+      imagePath.value = picked.path;
     }
   }
-  void showImageSourceSheet() {
+  void showImageSourceSheet({required RxString imagePath}) {
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(16),
@@ -90,7 +99,7 @@ class RegistrationController extends GetxController {
               leading: const Icon(Icons.camera_alt),
               title: const Text('Camera'),
               onTap: () {
-                pickImage(ImageSource.camera);
+                pickImage(ImageSource.camera,imagePath: imagePath);
                 Get.back();
               },
             ),
@@ -98,7 +107,7 @@ class RegistrationController extends GetxController {
               leading: const Icon(Icons.photo),
               title: const Text('Gallery'),
               onTap: () {
-                pickImage(ImageSource.gallery);
+                pickImage(ImageSource.gallery,imagePath: imagePath);
                 Get.back();
               },
             ),
@@ -125,8 +134,8 @@ class RegistrationController extends GetxController {
         "height": heightController.text,
         "weight": weightController.text,
         "marital_status": maritalStatus.value,
-        "education": educationController.text,
-        "occupation": occupationController.text,
+        "education": educationDetailsController.text,
+        "occupation": occupationDetailsController.text,
         "income": incomeController.text,
         "religion": religion.value,
         "caste": caste.value,
@@ -193,9 +202,9 @@ class RegistrationController extends GetxController {
         return;
       }
       final request = {
-        "rasi": rasiController.text,
+        "rasi": rasiController.value,
         "nakshatra": nakshatraController.text,
-        "gothram": gothramController.text,
+        "gothram": laknamController.value,
         "dosham": dosham.value,
         "horoscope_image": horoscopeImagePath.value,
       };
@@ -262,8 +271,8 @@ class RegistrationController extends GetxController {
     nameController.dispose();
     heightController.dispose();
     weightController.dispose();
-    educationController.dispose();
-    occupationController.dispose();
+    educationDetailsController.dispose();
+    occupationDetailsController.dispose();
     incomeController.dispose();
     subCasteController.dispose();
     super.onClose();

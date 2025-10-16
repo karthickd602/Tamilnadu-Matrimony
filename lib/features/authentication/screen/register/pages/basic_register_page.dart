@@ -35,15 +35,19 @@ class StepBasicDetails extends StatelessWidget {
                   TValidator.validateEmptyText(TTexts.gender.tr, v),
             ),
             GestureDetector(
-              onTap: ()=>THelperFunctions.showDatePickerField(controller.dobController,initialDate: DateTime(2000)),
+              onTap: () => THelperFunctions.showDatePickerField(
+                controller.dobController,
+                initialDate: DateTime(2000),
+              ),
               child: AbsorbPointer(
                 child: TFormField(
                   isReadOnly: true,
                   labelText: TTexts.dob.tr,
                   hintText: "DD-MM-YYYY",
                   icon: IconlyLight.calendar,
-                  controller:controller.dobController,
-                  validator: (v) => TValidator.validateEmptyText(TTexts.dob.tr, v),
+                  controller: controller.dobController,
+                  validator: (v) =>
+                      TValidator.validateEmptyText(TTexts.dob.tr, v),
                 ),
               ),
             ),
@@ -55,20 +59,52 @@ class StepBasicDetails extends StatelessWidget {
               icon: Icons.height,
             ),
             TFormField(
+              labelText: TTexts.complexion.tr,
+              isDropdown: true,
+              icon: Icons.color_lens_outlined,
+              items: ["சிவப்பு","மாநிறம்", "புது நிறம்", "கருப்பு"],
+              onChanged: (v) => controller.colorComplexion.value = v ?? '',
+            ),TFormField(
               labelText: TTexts.maritalStatus.tr,
               isDropdown: true,
-              icon: IconlyLight.heart,
-              items: ["Single", "Divorced", "Widowed"],
+              icon: Icons.join_inner_outlined,
+              items: ["திருமணம் ஆகாதவர்", " துணையை இழந்தவர்", "விவாகரத்து ஆனவர்","பிரிந்து வாழ்பவர்"],
+              onChanged: (v) => controller.maritalStatus.value = v ?? '',
+            ),TFormField(
+              labelText: TTexts.noOfChildren.tr,
+              isDropdown: true,
+              icon: Icons.baby_changing_station_outlined,
+              items: ["0", "1", "2","3","4"],
+              onChanged: (v) => controller.noOfChildren.value = v ?? '',
+            ),TFormField(
+              labelText: TTexts.childrenLivingStatus.tr,
+              isDropdown: true,
+              icon: Icons.baby_changing_station_outlined,
+              items: ["Living with me", "Not living with me"],
               onChanged: (v) => controller.maritalStatus.value = v ?? '',
             ),
             TFormField(
+              isDropdown: true,
+              items: ["BE","ME","B.Sc"],
               labelText: TTexts.education.tr,
-              controller: controller.educationController,
+              onChanged: (v) => controller.occupation.value = v ?? '',
               icon: Icons.school_outlined,
             ),
             TFormField(
+              labelText: TTexts.educationDetails.tr,
+              controller: controller.educationDetailsController,
+              icon: Icons.school_outlined,
+            ),
+            TFormField(
+              isDropdown: true,
+              items: ["IT","Accountant",'Business'],
+              labelText: TTexts.occupationDetails.tr,
+              onChanged: (v) => controller.occupation.value = v ?? '',
+              icon: IconlyLight.bag_2,
+            ),
+            TFormField(
               labelText: TTexts.occupation.tr,
-              controller: controller.occupationController,
+              controller: controller.occupationDetailsController,
               icon: IconlyLight.bag_2,
             ),
             TFormField(
@@ -95,7 +131,14 @@ class StepBasicDetails extends StatelessWidget {
               controller: controller.subCasteController,
               icon: IconlyLight.user,
             ),
-            const SizedBox(height: 24),
+            TFormField(
+              labelText: TTexts.disablePerson.tr,
+              isDropdown: true,
+              icon: Icons.check_box_outlined,
+              items: ["Yes", "No",],
+              onChanged: (v) => controller.isDisablePerson.value = v ?? 'Yes',
+            ),
+            const SizedBox(height: TSizes.spaceBtwSections),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary,
