@@ -2,6 +2,7 @@ import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
 import 'package:tamilnadu_matrimony/features/profile/screen/verified_profile/verify_profile.dart';
 
+import '../../../common/widgets/dialog/logout_dialog.dart';
 import '../../../utils/constants/path_provider.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -53,7 +54,9 @@ Get.to(()=>VerifyProfile());
                 Get.toNamed(TRoutes.subscription);
               }),
               _buildMenuItem(context,Icons.share_outlined, TTexts.shareProfile.tr, () {}),
-              _buildMenuItem(context,Icons.delete_outline, TTexts.logout.tr, () {}, isDanger: true),
+              _buildMenuItem(context,Icons.delete_outline, TTexts.logout.tr, () {
+                showLogoutDialog(context);
+              }, isDanger: true),
               _buildMenuItem(context,Icons.delete_outline, TTexts.deleteProfile.tr, () {
 
               }, isDanger: true),

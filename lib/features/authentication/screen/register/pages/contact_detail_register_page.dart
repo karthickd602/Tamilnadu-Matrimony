@@ -69,13 +69,6 @@ class ContactDetails extends StatelessWidget {
             ),
 
 
-            /// --- District ---
-            TFormField(
-              controller: controller.districtController,
-              labelText: TTexts.district.tr,
-              icon: Icons.map_outlined,
-            ),
-
 
             /// --- State ---
             TFormField(
@@ -83,7 +76,12 @@ class ContactDetails extends StatelessWidget {
               labelText: TTexts.state.tr,
               icon: Icons.flag_outlined,
             ),
-
+            /// --- District ---
+            TFormField(
+              controller: controller.districtController,
+              labelText: TTexts.district.tr,
+              icon: Icons.map_outlined,
+            ),
 
             /// --- Pincode ---
             TFormField(
@@ -134,17 +132,17 @@ class ContactDetails extends StatelessWidget {
                 const SizedBox(width: 12),
 
                 Expanded(
-                  child: ElevatedButton.icon(
+                  child: ElevatedButton(
                     onPressed:()=> controller.contactFormSubmit(),
-                    icon: const Icon(Icons.check_circle_outline),
-                    label: Text(TTexts.submit.tr),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      // padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    // icon: const Icon(Icons.check_circle_outline),
+                    child: Text(TTexts.submit.tr),
                   ),
                 ),
               ],

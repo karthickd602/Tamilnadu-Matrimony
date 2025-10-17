@@ -32,7 +32,7 @@ class RegistrationController extends GetxController {
   final occupationDetailsController = TextEditingController();
   final incomeController = TextEditingController();
   final religion = ''.obs;
-  final isDisablePerson = 'Yes'.obs;
+  final isDisablePerson = 'No'.obs;
   final caste = ''.obs;
   final subCasteController = TextEditingController();
 

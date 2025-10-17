@@ -1,7 +1,7 @@
 export 'package:flutter/material.dart';
 export 'package:get/get.dart';
 export 'package:iconsax/iconsax.dart';
-
+export 'package:get_storage/get_storage.dart';
 export '../../../../../../common/widgets/loaders/loader_animation.dart';
 export '../../../../../../utils/constants/enums.dart';
 export '../../../../../common/widgets/containers/rounded_container.dart';

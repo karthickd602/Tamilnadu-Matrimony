@@ -9,7 +9,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.black.withValues(alpha: 0.12),
       backgroundColor: TColors.scaffoldColor,
       appBar: TAppBar(
         title: TTexts.homeTitle.tr,

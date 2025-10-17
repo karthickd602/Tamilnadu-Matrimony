@@ -70,18 +70,26 @@ class StepBasicDetails extends StatelessWidget {
               icon: Icons.join_inner_outlined,
               items: ["திருமணம் ஆகாதவர்", " துணையை இழந்தவர்", "விவாகரத்து ஆனவர்","பிரிந்து வாழ்பவர்"],
               onChanged: (v) => controller.maritalStatus.value = v ?? '',
-            ),TFormField(
-              labelText: TTexts.noOfChildren.tr,
-              isDropdown: true,
-              icon: Icons.baby_changing_station_outlined,
-              items: ["0", "1", "2","3","4"],
-              onChanged: (v) => controller.noOfChildren.value = v ?? '',
-            ),TFormField(
-              labelText: TTexts.childrenLivingStatus.tr,
-              isDropdown: true,
-              icon: Icons.baby_changing_station_outlined,
-              items: ["Living with me", "Not living with me"],
-              onChanged: (v) => controller.maritalStatus.value = v ?? '',
+            ),
+
+            Obx(
+              ()=>(controller.maritalStatus.value == "திருமணம் ஆகாதவர்"|| controller.maritalStatus.value =='')?SizedBox(): TFormField(
+                labelText: TTexts.noOfChildren.tr,
+                isDropdown: true,
+                icon: Icons.baby_changing_station_outlined,
+                items: ["0", "1", "2","3","4"],
+                onChanged: (v) => controller.noOfChildren.value = v ?? '',
+              ),
+            ),
+
+            Obx(
+              ()=> (controller.noOfChildren.value == "0"|| controller.noOfChildren.value =='')?SizedBox():TFormField(
+                labelText: TTexts.childrenLivingStatus.tr,
+                isDropdown: true,
+                icon: Icons.baby_changing_station_outlined,
+                items: ["Living with me", "Not living with me"],
+                onChanged: (v) => controller.maritalStatus.value = v ?? '',
+              ),
             ),
             TFormField(
               isDropdown: true,
@@ -136,7 +144,8 @@ class StepBasicDetails extends StatelessWidget {
               isDropdown: true,
               icon: Icons.check_box_outlined,
               items: ["Yes", "No",],
-              onChanged: (v) => controller.isDisablePerson.value = v ?? 'Yes',
+              value: controller.isDisablePerson.value,
+              onChanged: (v) => controller.isDisablePerson.value = v ?? '',
             ),
             const SizedBox(height: TSizes.spaceBtwSections),
             ElevatedButton(

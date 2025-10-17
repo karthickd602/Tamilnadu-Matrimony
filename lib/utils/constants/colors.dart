@@ -13,7 +13,7 @@ static const Color scaffoldColor =  Color(0xFFF7DE9D);
 // static const Color bottomNavColor = primary;
   // Icon colors
   static const Color iconPrimary = Color(0xFF8D8D8D);
-
+  static const Color red = Color(0xFFD32F2F);
   // Text colors
   static const Color textPrimary = Color(0xFF272727);
   static const Color textSecondary = Color(0xFF656565);

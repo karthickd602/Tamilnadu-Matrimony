@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../utils/constants/colors.dart';
 
 class TFormField extends StatelessWidget {
@@ -12,7 +11,8 @@ class TFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final IconData? icon;
   final TextInputType keyboardType;
-final  bool isReadOnly ;
+  final bool isReadOnly;
+  final String? value; // ✅ Added
 
   const TFormField({
     super.key,
@@ -25,7 +25,8 @@ final  bool isReadOnly ;
     this.validator,
     this.icon,
     this.keyboardType = TextInputType.text,
-    this.isReadOnly = false
+    this.isReadOnly = false,
+    this.value, // ✅ Added
   });
 
   @override
@@ -34,48 +35,47 @@ final  bool isReadOnly ;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Text(labelText, style: Theme.of(context).textTheme.bodyLarge),
-          // const SizedBox(height: 4),
-          isDropdown
-              ? DropdownButtonFormField<String>(
-
-            decoration: InputDecoration(
-              prefixIcon: Icon(icon, color: primary),
-              labelText: labelText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-            ),
-            hint: Text(hintText ?? labelText,style: Theme.of(context).textTheme.bodyMedium,),
-
-            onChanged: onChanged,
-            validator: validator,
-            items: items
-                ?.map((e) =>
-                DropdownMenuItem<String>(value: e, child: Text(e)))
-                .toList(),
-          )
-              : TextFormField(
-            readOnly: isReadOnly,
-            controller: controller,
-            keyboardType: keyboardType,
-            decoration: InputDecoration(
-              labelText: labelText,
-              labelStyle: Theme.of(context).textTheme.bodyMedium,
-              prefixIcon: Icon(icon, color: primary),
-              hintText: hintText,
-              hintStyle: Theme.of(context).textTheme.bodyMedium,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            validator: validator,
+      child: isDropdown
+          ? DropdownButtonFormField<String>(
+        value: value, // ✅ Default selected value
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon, color: primary),
+          labelText: labelText,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-        ],
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+        ),
+        hint: Text(
+          hintText ?? labelText,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        onChanged: onChanged,
+        validator: validator,
+        items: items
+            ?.map(
+              (e) => DropdownMenuItem<String>(
+            value: e,
+            child: Text(e),
+          ),
+        )
+            .toList(),
+      )
+          : TextFormField(
+        readOnly: isReadOnly,
+        controller: controller,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: Theme.of(context).textTheme.bodyMedium,
+          prefixIcon: Icon(icon, color: primary),
+          hintText: hintText,
+          hintStyle: Theme.of(context).textTheme.bodyMedium,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        validator: validator,
       ),
     );
   }
