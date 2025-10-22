@@ -55,6 +55,8 @@ class TTexts {
   // -- BASIC DETAILS
   static const String name = "name";
   static const String gender = "gender";
+  static const String male = "male";
+  static const String female = "female";
   static const String dob = "dob";
   static const String dateOfTime = "date_of_time";
   static const String time = "time";
@@ -65,6 +67,7 @@ class TTexts {
   static const String noOfChildren = "noOfChildren";
   static const String childrenLivingStatus = "childrenLivingStatus";
   static const String education = "education";
+  static const String highEducation = "highEducation";
   static const String occupation = "occupation";
   static const String income = "income";
   static const String religion = "religion";
@@ -91,6 +94,7 @@ class TTexts {
   static const String rasi = "rasi";
   static const String nakshatra = "nakshatra";
   static const String laknam = "laknam";
+  static const String isDoshamHave = "is_dosham_have";
   static const String dosham = "dosham";
   static const String dasaType = "dasa_type";
   static const String dasaBalanceDays = "dasa_balance_days";
@@ -99,6 +103,7 @@ class TTexts {
   static const String star = "star";
 
   static const String no = "no";
+  static const String iDontKnow = "i_dont_know";
   static const String uploadHoroscopeImage = "upload_horoscope_image";
   static const String tapToUpload = "tap_to_upload";
   // -- CONTACT DETAILS

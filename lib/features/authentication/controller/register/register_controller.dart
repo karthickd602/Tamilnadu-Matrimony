@@ -52,8 +52,8 @@ class RegistrationController extends GetxController {
   final rasiController = "".obs;
   final nakshatraController = TextEditingController();
   final laknamController = ''.obs;
-  RxString dosham = ''.obs;
-  final dasaType = ''.obs;
+  RxString isDoshamHave = ''.obs;
+  final doshamType = ''.obs;
   final dasaBalanceDays = TextEditingController();
   RxString horoscopeImagePath = ''.obs;
 
@@ -64,8 +64,8 @@ class RegistrationController extends GetxController {
   final emailController = TextEditingController();
   final addressController = TextEditingController();
   final cityController = TextEditingController();
-  final districtController = TextEditingController();
-  final stateController = TextEditingController();
+  RxString districtController = "".obs;
+  RxString stateController = "".obs;
   final pincodeController = TextEditingController();
   RxString profileImagePath = ''.obs;
 
@@ -205,7 +205,7 @@ class RegistrationController extends GetxController {
         "rasi": rasiController.value,
         "nakshatra": nakshatraController.text,
         "gothram": laknamController.value,
-        "dosham": dosham.value,
+        "dosham": doshamType.value,
         "horoscope_image": horoscopeImagePath.value,
       };
       print("Horoscope : $request");
@@ -240,8 +240,8 @@ class RegistrationController extends GetxController {
         "email": emailController.text,
         "address": addressController.text,
         "city": cityController.text,
-        "district": districtController.text,
-        "state": stateController.text,
+        "district": districtController,
+        "state": stateController,
         "pincode": pincodeController.text,
       };
       print("Contact : $request");

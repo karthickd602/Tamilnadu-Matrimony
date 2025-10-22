@@ -37,6 +37,7 @@ dependencies:
   photo_view: ^0.15.0
   image_picker: ^1.2.0
   iconly: ^1.0.1
+  url_launcher: ^6.3.2
 #  dynamic_path_url_strategy: ^1.0.0
 
 dev_dependencies:

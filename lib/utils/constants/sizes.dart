@@ -1,4 +1,4 @@
-import '../helpers/helper_functions.dart';
+
 
 class TSizes {
   // Padding and margin sizes
@@ -32,7 +32,8 @@ class TSizes {
   static const double imageThumbSize = 80.0;
 
   // Default spacing between sections
-  static double defaultSpace = THelperFunctions.screenWidth() > 600 ? 24.0 : 16;
+  // static double defaultSpace = THelperFunctions.screenWidth() > 600 ? 24.0 : 16;
+  static const double defaultSpace = 16.0;
   static const double spaceBtwItems = 16.0;
   static const double spaceBtwSections = 32.0;
 

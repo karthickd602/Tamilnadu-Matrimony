@@ -16,6 +16,17 @@ class CustomerDetailsView extends StatelessWidget {
       appBar: TAppBar(
         title: TTexts.appName.tr,
         isBackButtonNeed: true,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              // TODO: Implement share functionality
+              //await Share.share('Check out this profile on TamilNadu Matrimony!');
+            },
+            icon: const Icon(Icons.share_outlined),
+            color: TColors.primary,
+            iconSize: 26,
+          ),
+        ],
 
       ),
       body: SafeArea(
@@ -41,11 +52,6 @@ class CustomerDetailsView extends StatelessWidget {
 
               // After profile image and before SizedBox
               const SizedBox(height: TSizes.spaceBtwSections),
-
-// Like & Share Row
-
-
-              const SizedBox(height: TSizes.spaceBtwItems),
 
 
               /// Info Sections
@@ -241,37 +247,31 @@ class CustomerDetailsView extends StatelessWidget {
               if(showLikeAndShare)
               Spacer(),
               if(showLikeAndShare)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            // TODO: Handle like button logic
-                            THelperFunctions.showSnackBar('You liked this profile!');
-                          },
-                          icon: const Icon(Icons.favorite_border),
-                          color: Colors.redAccent,
-                          iconSize: 28,
-                        ),
-                        const SizedBox(width: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
 
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        // TODO: Implement share functionality
-                        //await Share.share('Check out this profile on TamilNadu Matrimony!');
-                      },
-                      icon: const Icon(Icons.share_outlined),
-                      color: Colors.blueAccent,
-                      iconSize: 26,
-                    ),
-                  ],
-                ),
+                  IconButton(
+                    tooltip: "Like",
+                    onPressed: () {
+                      // TODO: Handle like button logic
+                      THelperFunctions.showSnackBar('You liked this profile!');
+                    },
+                    icon: const Icon(Icons.favorite_border),
+                    color: Colors.redAccent,
+                    iconSize: 28,
+                  ),
+                  IconButton(
+                    tooltip: "Send Interest",
+                    onPressed: () async {
+                      // TODO: Implement share functionality
+                      //await Share.share('Check out this profile on TamilNadu Matrimony!');
+                    },
+                    icon: const Icon(Icons.send_sharp),
+                    color: Colors.blueAccent,
+                    iconSize: 26,
+                  ),
+                ],
               ),
             ],
           ),

@@ -1,11 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:tamilnadu_matrimony/common/widgets/images/image_uploader.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
-import '../../../../../common/widgets/form_widgets/custom_text_form_widget.dart';
-import '../../../../../utils/constants/colors.dart';
-import '../../../../../utils/constants/text_strings.dart';
 import '../../../controller/register/register_controller.dart';
 import '../widgets/get_image.dart';
 
@@ -22,7 +16,7 @@ class ContactDetails extends StatelessWidget {
     return  Form(
       key: controller.contactFormKey,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding:  EdgeInsets.all(TSizes.defaultSpace),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -34,12 +28,12 @@ class ContactDetails extends StatelessWidget {
 
 
             /// --- WhatsApp Number ---
-            TFormField(
-              controller: controller.whatsappController,
-              labelText: TTexts.whatsappNumber.tr,
-              icon: Icons.message,
-              keyboardType: TextInputType.phone,
-            ),
+            // TFormField(
+            //   controller: controller.whatsappController,
+            //   labelText: TTexts.whatsappNumber.tr,
+            //   icon: Icons.message,
+            //   keyboardType: TextInputType.phone,
+            // ),
 
 
             /// --- Alternate Mobile ---
@@ -72,13 +66,17 @@ class ContactDetails extends StatelessWidget {
 
             /// --- State ---
             TFormField(
-              controller: controller.stateController,
+              isDropdown: true,
+              items: ["Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh", "Maharashtra", "Rajasthan",],
+              onChanged:(v)=> controller.stateController.value=v??'',
               labelText: TTexts.state.tr,
               icon: Icons.flag_outlined,
             ),
             /// --- District ---
             TFormField(
-              controller: controller.districtController,
+              onChanged:(v)=> controller.districtController.value=v??'',
+              isDropdown: true,
+              items: ["Madurai","Chennai"],
               labelText: TTexts.district.tr,
               icon: Icons.map_outlined,
             ),

@@ -54,6 +54,8 @@
 
   "name": "பெயர்",
   "gender": "பாலினம்",
+  "male": "ஆண்",
+  "female": "பெண்",
   "dob": "பிறந்த தேதி",
   "age": "வயது",
   "height": "உயரம்",
@@ -93,10 +95,13 @@
   "nakshatra": "நட்சத்திரம்",
   "laknam": "லக்னம்",
   "dosham": "தோஷம்",
+  "is_dosham_have": "தோஷம் உள்ளதா?",
+
   "dasa_type": "திசை இருப்பு",
   "dasa_balance_days": "திசை இருப்பு முடிவு தேதி",
   "yes": "ஆம்",
   "no": "இல்லை",
+  "i_dont_know": "தெரியவில்லை",
   "upload_horoscope_image": "ஜாதகப் படத்தை பதிவேற்றவும்",
   "tap_to_upload": "பதிவேற்ற தட்டவும்",
   "mobile_number": "மொபைல் எண்",
@@ -119,7 +124,7 @@
   "personal_details": "தனிப்பட்ட விவரங்கள்",
   "occupation_details": "வேலை விவரங்கள்",
   "education_details": "கல்வி விவரங்கள்",
-
+  "highEducation": "உயர் கல்வி",
   "date_of_birth": "பிறந்த தேதி",
   "time": "நேரம்",
   "date_of_time": "பிறந்த நேரம்",

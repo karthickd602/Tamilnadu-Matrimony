@@ -1,10 +1,12 @@
+
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
 class THttpHelper {
   static const String _baseUrl =
-      'https://your-api-base-url.com'; // Replace with your API base URL
+      'https://api.matrimonymeadows.com/api'; 
 
   // Helper method to make a GET request
   static Future<Map<String, dynamic>> get(String endpoint) async {
@@ -21,6 +23,23 @@ class THttpHelper {
       body: json.encode(data),
     );
     return _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> postWithFiles(String endpoint, Map<String, String> data, Map<String, File> files) async {
+    final request = http.MultipartRequest('POST', Uri.parse('$_baseUrl/$endpoint'));
+    request.fields.addAll(data);
+    files.forEach((key, value) async {
+      request.files.add(await http.MultipartFile.fromPath(key, value.path));
+    });
+
+    final response = await request.send();
+    final responseBody = await response.stream.bytesToString();
+
+    if (response.statusCode == 200) {
+      return json.decode(responseBody);
+    } else {
+      throw Exception('Failed to load data: ${response.statusCode}');
+    }
   }
 
   // Helper method to make a PUT request

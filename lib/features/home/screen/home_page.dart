@@ -11,15 +11,15 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: TColors.scaffoldColor,
       appBar: TAppBar(
-        title: TTexts.homeTitle.tr,
+        title: TTexts.appName.tr,
         actions: [
           InkWell(
             onTap: () {},
             child: Row(
               children: [
-                const Icon(Icons.filter_alt_outlined),
-                const SizedBox(width: TSizes.xs),
-                Text(TTexts.filter.tr),
+                const Icon(Icons.filter_alt_outlined,size: TSizes.iconMd,color: TColors.primary,),
+                const SizedBox(width: TSizes.xs/2),
+                Text(TTexts.filter.tr,style: Theme.of(context).textTheme.bodyLarge,),
                 const SizedBox(width: TSizes.xs),
               ],
             ),

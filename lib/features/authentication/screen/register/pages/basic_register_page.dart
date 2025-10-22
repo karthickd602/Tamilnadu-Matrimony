@@ -29,7 +29,7 @@ class StepBasicDetails extends StatelessWidget {
               isDropdown: true,
               icon: IconlyLight.user_1,
               hintText: TTexts.gender.tr,
-              items: ["Male", "Female"],
+              items: [TTexts.male.tr, TTexts.female.tr],
               onChanged: (val) => controller.gender.value = val ?? '',
               validator: (v) =>
                   TValidator.validateEmptyText(TTexts.gender.tr, v),
@@ -94,8 +94,8 @@ class StepBasicDetails extends StatelessWidget {
             TFormField(
               isDropdown: true,
               items: ["BE","ME","B.Sc"],
-              labelText: TTexts.education.tr,
-              onChanged: (v) => controller.occupation.value = v ?? '',
+              labelText: TTexts.highEducation.tr,
+              onChanged: (v) => controller.eduction.value = v ?? '',
               icon: Icons.school_outlined,
             ),
             TFormField(

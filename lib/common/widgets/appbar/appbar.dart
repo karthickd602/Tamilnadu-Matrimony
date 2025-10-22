@@ -36,15 +36,14 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
         tooltip: "Back",
       )
           : null,
-      title: Text(title, style: textTheme.headlineSmall),
+      title: Column(
+        children: [
+          Text(title, style: textTheme.headlineMedium,maxLines: 2,),
+        ],
+      ),
       actions: actions,
       bottom: bottom,
-      // shape: RoundedRectangleBorder(
-      //   borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
-      //   side: BorderSide(
-      //     color: isDark ? Colors.grey.shade800 : Colors.grey.shade300,
-      //   ),
-      // ),
+
     );
   }
 
