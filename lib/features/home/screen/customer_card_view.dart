@@ -182,30 +182,15 @@ class CustomerDetailsView extends StatelessWidget {
                       ],
                       primaryColor,
                     ),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.download),
-                            label: Text(TTexts.horoscope.tr),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              side: const BorderSide(color: Colors.red),
-                            ),
-                            onPressed: () {},
-                            icon: const Icon(Icons.favorite),
-                            label: Text(TTexts.sentInterest.tr),
-                          ),
-                        ),
-                      ],
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(Icons.download),
+                        label: Text(TTexts.horoscope.tr),
+                      ),
                     ),
+
                   ],
                 ),
               ),

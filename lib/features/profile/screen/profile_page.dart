@@ -1,10 +1,12 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
+import 'package:tamilnadu_matrimony/features/profile/screen/edit_profile/edit_basic_register_page.dart';
 import 'package:tamilnadu_matrimony/features/profile/screen/verified_profile/verify_profile.dart';
 
 import '../../../common/widgets/dialog/logout_dialog.dart';
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/helpers/url_launcher.dart';
+import 'edit_profile/edit_profile_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -84,7 +86,9 @@ class ProfilePage extends StatelessWidget {
 
               /// Menu Items
               _buildMenuItem(context, Icons.person_outline,
-                  TTexts.editProfile.tr, () {}),
+                  TTexts.editProfile.tr, () {
+                Get.to(()=> const EditProfilePage());
+                  }),
               _buildMenuItem(context, Icons.camera_alt_outlined,
                   TTexts.updatePhoto.tr, () {}),
               _buildMenuItem(

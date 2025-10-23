@@ -137,6 +137,11 @@
   "horoscope": "Horoscope",
   "sent_interest": "Send Interest",
 
+  "marriage_type": "Marriage Type",
+  "disability": "Disability",
+  "no_caste_bar": "No Caste Bar",
+  "reset": "Reset",
+  "apply": "Apply",
   "profile_details": "Profile Details",
   "personal_details": "Personal Details",
   "basic_details": "Basic Details",

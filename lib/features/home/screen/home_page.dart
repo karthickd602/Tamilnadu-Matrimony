@@ -1,6 +1,7 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
+import 'filter/filter_screen.dart';
 import 'widget/customer_card.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,7 +15,9 @@ class HomePage extends StatelessWidget {
         title: TTexts.appName.tr,
         actions: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Get.toNamed(TRoutes.filter);
+            },
             child: Row(
               children: [
                 const Icon(Icons.filter_alt_outlined,size: TSizes.iconMd,color: TColors.primary,),

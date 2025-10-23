@@ -123,7 +123,15 @@ class TTexts {
   static const String filter = "filter";
   static const String verified = "verified";
   static const String unlockNumber = "unlock_number";
+  // Categories
 
+  static const String marriageType = "marriage_type";
+  static const String disability = "disability";
+  static const String noCasteBar = "no_caste_bar";
+
+  // Buttons
+  static const String reset = "reset";
+  static const String apply = "apply";
   // Home Profile Details Page
   static const String profileDetails = "profile_details";
   static const String personalDetails = "personal_details";

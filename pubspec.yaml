@@ -74,8 +74,6 @@ flutter:
     - assets/logos/
     - assets/images/content/
     - assets/images/banner/
-    - assets/images/animations/
-    - assets/icons/payment_methods/
     - assets/translation/
 
   fonts:
