@@ -4,6 +4,7 @@ import 'package:tamilnadu_matrimony/features/profile/screen/edit_profile/edit_ba
 import 'package:tamilnadu_matrimony/features/profile/screen/edit_profile/edit_family_register_page.dart';
 
 import '../../../../common/widgets/appbar/appbar.dart';
+import '../../../../utils/constants/text_strings.dart';
 import '../../controller/edit_profile_controller/edit_profile_controller.dart';
 import 'edit_contact_detail_register_page.dart';
 import 'edit_horoscope_register_page.dart';
@@ -19,10 +20,7 @@ class EditProfilePage extends StatelessWidget {
     final stepTitles = ['Basic Details', 'Family Details', 'Horoscope', 'Contact'];
 
     return Scaffold(
-      appBar: TAppBar(
-        title:'Register',
-
-      ),
+      appBar: TAppBar(title: TTexts.editProfile.tr),
       body: SafeArea(
         child: Column(
           children: [

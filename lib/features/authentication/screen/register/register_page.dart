@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/widgets/appbar/appbar.dart';
+import '../../../../utils/constants/text_strings.dart';
 import '../../controller/register/register_controller.dart';
 import 'pages/basic_register_page.dart';
 import 'pages/contact_detail_register_page.dart';
@@ -19,10 +20,8 @@ class RegistrationPage extends StatelessWidget {
     final stepTitles = ['Basic Details', 'Family Details', 'Horoscope', 'Contact'];
 
     return Scaffold(
-      appBar: TAppBar(
-        title:'Register',
 
-      ),
+      appBar: TAppBar(title: TTexts.register.tr),
       body: SafeArea(
         child: Column(
           children: [

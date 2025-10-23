@@ -14,7 +14,7 @@ class EditBasicDetails extends StatelessWidget {
     return Form(
       key: controller.basicFormKey,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding:  EdgeInsets.all(TSizes.defaultSpace),
         child: Column(
           children: [
             TFormField(

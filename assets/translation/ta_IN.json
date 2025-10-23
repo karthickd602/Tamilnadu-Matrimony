@@ -41,6 +41,7 @@
   "resend": "OTP மீண்டும் அனுப்பு",
   "error_full_otp": "முழு OTP உள்ளிடவும்",
   "otp_entered": "OTP சேர்க்கப்பட்டது",
+  "register": "பதிவு செய்யுங்கள்",
 
   "basic_details": "அடிப்படை விவரங்கள்",
   "family_details": "குடும்ப விவரங்கள்",

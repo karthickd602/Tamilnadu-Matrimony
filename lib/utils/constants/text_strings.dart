@@ -47,6 +47,7 @@ class TTexts {
   static const String errorFullOtp = "error_full_otp";
   static const String otpEntered = "otp_entered";
 // -- REGISTRATION SECTIONS
+  static const String register = "register";
   static const String basicDetails = "basic_details";
   static const String familyDetails = "family_details";
   static const String contactDetails = "contact_details";

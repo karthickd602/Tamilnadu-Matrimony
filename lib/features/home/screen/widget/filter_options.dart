@@ -62,6 +62,9 @@ class FilterOptionsWidget extends StatelessWidget {
         return ["Brahmin", "Gounder", "Naidu"];
       case "Age":
         return ["18-25", "26-30", "31-35"];
+      case "Education":
+        return ["BEd", "MEd", "Diploma"];
+
       case "Marriage Type":
         return ["First Marriage", "Second Marriage"];
 

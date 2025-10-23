@@ -9,6 +9,7 @@ class FilterController extends GetxController {
     "Religion",
     "Caste",
     "Age",
+    "Education",
     "Marriage Type",
     "Nakshatram",
     "Location",
