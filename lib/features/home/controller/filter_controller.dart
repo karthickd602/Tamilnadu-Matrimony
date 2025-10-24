@@ -6,7 +6,6 @@ class FilterController extends GetxController {
 
   // 🔹 Categories
   final filterCategories = [
-    "Religion",
     "Caste",
     "Age",
     "Education",
@@ -19,7 +18,7 @@ class FilterController extends GetxController {
   ].obs;
 
   // 🔹 Locked categories
-  final lockedCategories = [ "Dosham", "Location","Nakshatram"].obs;
+  final lockedCategories = [ "Dosham","Nakshatram"].obs;
 
   // 🔹 Selected options per category
   final selectedOptions = <String, List<String>>{}.obs;

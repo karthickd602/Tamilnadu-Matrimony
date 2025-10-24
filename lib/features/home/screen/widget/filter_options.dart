@@ -50,14 +50,12 @@ class FilterOptionsWidget extends StatelessWidget {
 
   // Example categories that need single selection
   bool _useRadioForCategory(String category) {
-    const radioCategories = [];
+    const radioCategories = ["Caste","Education","Location"];
     return radioCategories.contains(category);
   }
 
   List<String> _getOptionsForCategory(String category) {
     switch (category) {
-      case "Religion":
-        return ["Hindu", "Muslim", "Christian"];
       case "Caste":
         return ["Brahmin", "Gounder", "Naidu"];
       case "Age":
@@ -67,6 +65,8 @@ class FilterOptionsWidget extends StatelessWidget {
 
       case "Marriage Type":
         return ["First Marriage", "Second Marriage"];
+      case "Location":
+        return ["Madurai", "Ramnad","Trichy"];
 
       case "Disability":
         return ["Yes", "No"];
