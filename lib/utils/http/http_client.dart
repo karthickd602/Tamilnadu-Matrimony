@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class THttpHelper {
   static const String _baseUrl =
-      'https://api.matrimonymeadows.com/api'; 
+      'https://www.jobsintimate.com/api';
 
   // Helper method to make a GET request
   static Future<Map<String, dynamic>> get(String endpoint) async {
@@ -62,7 +62,11 @@ class THttpHelper {
   static Map<String, dynamic> _handleResponse(http.Response response) {
     if (response.statusCode == 200) {
       return json.decode(response.body);
-    } else {
+    }
+    if(response.statusCode == 404||response.statusCode == 400){
+      final message = json.decode(response.body)['message'];
+      throw message;
+    }else {
       throw Exception('Failed to load data: ${response.statusCode}');
     }
   }

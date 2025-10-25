@@ -1,4 +1,8 @@
 
 /* -- LIST OF Constants used in APIs -- */
+class ApiConstant {
 
-// Example
+  static const String sendOtp = "send_otp";
+  static const String verifyOtp = "verify_otp";
+
+}

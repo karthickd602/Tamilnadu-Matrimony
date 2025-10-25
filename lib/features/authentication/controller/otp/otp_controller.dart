@@ -1,18 +1,56 @@
-
 import 'dart:async';
+
+import 'package:tamilnadu_matrimony/features/authentication/controller/login/login_controller.dart';
+import 'package:tamilnadu_matrimony/utils/constants/api_constants.dart';
+import 'package:tamilnadu_matrimony/utils/http/http_client.dart';
+import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 
 import '../../../../utils/constants/path_provider.dart';
 
 class OtpController extends GetxController {
-  var secondsRemaining = 30.obs;
+  var secondsRemaining = 300.obs;
   late Timer _timer;
-  final List<TextEditingController> otpControllers =
-  List.generate(6, (_) => TextEditingController());
+  final otpTextController = TextEditingController();
+
+  // final List<TextEditingController> otpControllers = List.generate(
+  //   6,
+  //   (_) => TextEditingController(),
+  // );
 
   @override
   void onInit() {
     super.onInit();
     startTimer();
+  }
+
+  Future<void> verifyOtpApi() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Please check your internet connection and try again.",
+        );
+        return;
+      }
+
+      TFullScreenLoader.popUpCircular();
+
+
+      final loginController = LoginController.instance;
+      final request = {
+        "mobile_no":loginController.mobileNoT.text,
+        "otp":otpTextController.text,
+
+      };
+      debugPrint("OTP Verify1 : $request");
+      final response = await THttpHelper.post(ApiConstant.verifyOtp, request);
+      debugPrint("OTP Verify : $response");
+      TFullScreenLoader.stopLoading();
+      Get.offAllNamed(TRoutes.register);
+    } catch (e) {
+      TLoaders.errorSnackBar(title: "Failed", message: e.toString());
+    }
   }
 
   void startTimer() {
@@ -25,20 +63,15 @@ class OtpController extends GetxController {
     });
   }
 
-  void otpSubmit() {
-    final otp = otpControllers.map((c) => c.text).join().trim();
-    // if (otp.length == 6) {
-     TLoaders.successSnackBar(message:TTexts.otpEntered.tr, title: otp);
-
-     Get.offAllNamed(TRoutes.register);
-      // Get.offAllNamed(TRoutes.bottomNav);
-    // } else {
-    //   Get.snackbar(TTexts.errorFullOtp.tr, '');
-    // }
+  /// Format as MM:SS (e.g., 5:00)
+  String get formattedTime {
+    final minutes = (secondsRemaining.value ~/ 60).toString().padLeft(1, '0');
+    final seconds = (secondsRemaining.value % 60).toString().padLeft(2, '0');
+    return "$minutes:$seconds";
   }
 
   void retryOtp() {
-    secondsRemaining.value = 30;
+    secondsRemaining.value = 300;
     startTimer();
   }
 

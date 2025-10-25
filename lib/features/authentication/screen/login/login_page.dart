@@ -60,7 +60,7 @@ class LoginPage extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        controller.login();
+                        controller.loginApi();
                       },
                       child: Text(TTexts.login.tr),
                     ),
