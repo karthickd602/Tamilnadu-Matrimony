@@ -1,4 +1,5 @@
-import 'package:get/get.dart';
+
+import '../../../utils/constants/path_provider.dart';
 
 class FilterController extends GetxController {
   // 🔹 Selected category index
@@ -16,6 +17,7 @@ class FilterController extends GetxController {
     "No Caste Bar",
     "Disability",
   ].obs;
+  var ageRange = const RangeValues(18,50).obs;
 
   // 🔹 Locked categories
   final lockedCategories = [ "Dosham","Nakshatram"].obs;

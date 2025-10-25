@@ -13,7 +13,8 @@ class FilterPage extends GetView<FilterController> {
     final primaryColor = TColors.primary;
 
     return Scaffold(
-      appBar: const TAppBar(title: "Filter", isBackButtonNeed: true),
+      backgroundColor: Colors.white,
+      appBar: const TAppBar(title: "Filter", isBackButtonNeed: true,backgroundColor: Colors.white,),
       persistentFooterButtons: [
         _BottomButtons(primaryColor: primaryColor),
       ],

@@ -9,12 +9,14 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isBackButtonNeed = false,
     this.bottom,
     this.actions,
+    this.backgroundColor
   });
 
   final String title;
   final bool isBackButtonNeed;
   final TabBar? bottom;
   final List<Widget>? actions;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: true,
       automaticallyImplyLeading: false,
-      backgroundColor: TColors.scaffoldColor,
+      backgroundColor: backgroundColor??TColors.scaffoldColor,
       leading: isBackButtonNeed
           ? IconButton(
         onPressed: () => Get.back(),

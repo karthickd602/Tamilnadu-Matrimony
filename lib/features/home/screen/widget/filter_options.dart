@@ -10,6 +10,9 @@ class FilterOptionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<FilterController>();
+    if (category == "Age") {
+      return const _AgeRangeSelector(); // 👈 Custom widget for Age
+    }
 
     // Dummy options per category
     final categoryOptions = _getOptionsForCategory(category);
@@ -143,6 +146,51 @@ class _RadioOptionTile extends StatelessWidget {
               controller.selectedOptions[category] = [option];
             },
           ),
+        ),
+      );
+    });
+  }
+}
+class _AgeRangeSelector extends StatelessWidget {
+  const _AgeRangeSelector();
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<FilterController>();
+
+    return Obx(() {
+      final ageRange = controller.ageRange.value;
+
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Select Age Range",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("From: ${ageRange.start.toInt()}"),
+                Text("To: ${ageRange.end.toInt()}"),
+              ],
+            ),
+            RangeSlider(
+              min: 18,
+              max: 50,
+              divisions: 32,
+              activeColor: Theme.of(context).primaryColor,
+              values: ageRange,
+              labels: RangeLabels(
+                ageRange.start.toInt().toString(),
+                ageRange.end.toInt().toString(),
+              ),
+              onChanged: (range) => controller.ageRange.value = range,
+            ),
+          ],
         ),
       );
     });
