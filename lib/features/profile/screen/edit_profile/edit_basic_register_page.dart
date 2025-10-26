@@ -21,7 +21,7 @@ class EditBasicDetails extends StatelessWidget {
               labelText: TTexts.name.tr,
               controller: controller.nameController,
               icon: IconlyLight.profile,
-              validator: (v) => TValidator.validateEmptyText(TTexts.name.tr, v),
+              // validator: (v) => TValidator.validateEmptyText(TTexts.name.tr, v),
             ),
             TFormField(
               labelText: TTexts.gender.tr,
@@ -45,8 +45,8 @@ class EditBasicDetails extends StatelessWidget {
                   hintText: "DD-MM-YYYY",
                   icon: IconlyLight.calendar,
                   controller: controller.dobController,
-                  validator: (v) =>
-                      TValidator.validateEmptyText(TTexts.dob.tr, v),
+                  // validator: (v) =>
+                  //     TValidator.validateEmptyText(TTexts.dob.tr, v),
                 ),
               ),
             ),

@@ -1,5 +1,10 @@
 import 'package:image_picker/image_picker.dart';
+import 'package:tamilnadu_matrimony/features/authentication/model/occupation_model.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
+
+import '../../../../utils/constants/api_constants.dart';
+import '../../../../utils/http/http_client.dart';
+import '../../../../utils/popups/full_screen_loader.dart';
 
 class RegistrationController extends GetxController {
   static RegistrationController get instance => Get.find();
@@ -9,6 +14,8 @@ class RegistrationController extends GetxController {
 
   // Step index
   RxInt currentStep = 0.obs;
+
+  final occupationDDList = <OccupationDDModel>[].obs;
 
   // Form keys
   final basicFormKey = GlobalKey<FormState>();
@@ -70,6 +77,12 @@ class RegistrationController extends GetxController {
   RxString profileImagePath = ''.obs;
 
   final noCasteChecked = false.obs;
+
+
+  @override
+  void onInit() {
+    fetchOccupationDropdown();
+  }
 
   void submitRegistration() {
     // You can handle API call or summary review here
@@ -254,18 +267,42 @@ class RegistrationController extends GetxController {
     }
   }
 
-  // Move to next step
-  // void nextStep() {
-  //   if (basicFormKey.currentState?.validate() ?? false) {
-  //     currentStep.value++;
-  //   }
-  // }
 
   // Go back
   void previousStep() {
     if (currentStep.value > 0) currentStep.value--;
   }
 
+
+  Future<void> fetchOccupationDropdown()async{
+    try {
+
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.warningSnackBar(title: "No Internet",message: "Please check your Internet Connection");
+        return;
+      }
+
+      //
+      final response = await THttpHelper.get(ApiConstant.getOccupationDD);
+      //
+      debugPrint("occupation Response:${response.toString()}");
+      if(response['statusCode']==200){
+        occupationDDList.value =(response['data'] as List).map((e)=>OccupationDDModel.fromJson(e)).toList();
+
+        // debugPrint("OTP: ${loginOtpModel.first.otp}");
+      }
+
+      // GetStorage().read(TTexts.mobileNo,)
+      TFullScreenLoader.stopLoading();
+
+      Get.toNamed(TRoutes.otp);
+    } catch (e) {
+      TFullScreenLoader.popUpCircular();
+
+      TLoaders.errorSnackBar(title: "Authentication Failed",message:e.toString());
+    }
+  }
   @override
   void onClose() {
     nameController.dispose();

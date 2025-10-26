@@ -1,4 +1,5 @@
 import 'package:iconly/iconly.dart';
+import 'package:tamilnadu_matrimony/features/authentication/model/occupation_model.dart';
 import 'package:tamilnadu_matrimony/utils/validators/validation.dart';
 
 import '../../../../../utils/constants/path_provider.dart';
@@ -22,7 +23,7 @@ class StepBasicDetails extends StatelessWidget {
               labelText: TTexts.name.tr,
               controller: controller.nameController,
               icon: IconlyLight.profile,
-              validator: (v) => TValidator.validateEmptyText(TTexts.name.tr, v),
+              validator: (v) => TValidator.validateEmptyText(TTexts.name.tr,v.toString()),
             ),
             TFormField(
               labelText: TTexts.gender.tr,
@@ -47,7 +48,7 @@ class StepBasicDetails extends StatelessWidget {
                   icon: IconlyLight.calendar,
                   controller: controller.dobController,
                   validator: (v) =>
-                      TValidator.validateEmptyText(TTexts.dob.tr, v),
+                      TValidator.validateEmptyText(TTexts.dob.tr, v.toString()),
                 ),
               ),
             ),
@@ -103,11 +104,11 @@ class StepBasicDetails extends StatelessWidget {
               controller: controller.educationDetailsController,
               icon: Icons.school_outlined,
             ),
-            TFormField(
+            TFormField<OccupationDDModel>(
               isDropdown: true,
-              items: ["IT","Accountant",'Business'],
+              items: controller.occupationDDList.value,
               labelText: TTexts.occupationDetails.tr,
-              onChanged: (v) => controller.occupation.value = v ?? '',
+              onChanged: (v) => controller.occupation.value = v ??"",
               icon: IconlyLight.bag_2,
             ),
             TFormField(

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-
 import '../../../utils/constants/colors.dart';
 
-class TFormField extends StatelessWidget {
+class TFormField<T> extends StatelessWidget {
   final String labelText;
   final TextEditingController? controller;
   final String? hintText;
   final bool isDropdown;
-  final List<String>? items;
-  final void Function(String?)? onChanged;
-  final String? Function(String?)? validator;
+  final List<T>? items;
+  final void Function(T?)? onChanged;
+  final String? Function(T?)? validator;
   final IconData? icon;
   final TextInputType keyboardType;
   final bool isReadOnly;
-  final String? value; // ✅ Added
+  final T? value;
+  final String Function(T)? itemLabelBuilder; // ✅ to get name from model
 
   const TFormField({
     super.key,
@@ -27,7 +27,8 @@ class TFormField extends StatelessWidget {
     this.icon,
     this.keyboardType = TextInputType.text,
     this.isReadOnly = false,
-    this.value, // ✅ Added
+    this.value,
+    this.itemLabelBuilder, // ✅
   });
 
   @override
@@ -37,15 +38,16 @@ class TFormField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: isDropdown
-          ? DropdownButtonFormField<String>(
-        value: value, // ✅ Default selected value
+          ? DropdownButtonFormField<T>(
+        value: value,
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: primary),
           labelText: labelText,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+          contentPadding:
+          const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         ),
         hint: Text(
           hintText ?? labelText,
@@ -55,12 +57,17 @@ class TFormField extends StatelessWidget {
         validator: validator,
         items: items
             ?.map(
-              (e) => DropdownMenuItem<String>(
+              (e) => DropdownMenuItem<T>(
             value: e,
-            child: Text(e),
+            child: Text(
+              itemLabelBuilder != null
+                  ? itemLabelBuilder!(e)
+                  : e.toString(),
+            ),
           ),
         )
-            .toList(),
+            .toList() ??
+            [],
       )
           : TextFormField(
         readOnly: isReadOnly,
@@ -76,7 +83,7 @@ class TFormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        validator: validator,
+        validator: (val) => validator?.call(val as T?),
       ),
     );
   }
