@@ -1,10 +1,9 @@
 import 'package:image_picker/image_picker.dart';
-import 'package:tamilnadu_matrimony/features/authentication/model/occupation_model.dart';
+import 'package:tamilnadu_matrimony/features/authentication/model/dropdown_model.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 import '../../../../utils/constants/api_constants.dart';
 import '../../../../utils/http/http_client.dart';
-import '../../../../utils/popups/full_screen_loader.dart';
 
 class RegistrationController extends GetxController {
   static RegistrationController get instance => Get.find();
@@ -16,6 +15,9 @@ class RegistrationController extends GetxController {
   RxInt currentStep = 0.obs;
 
   final occupationDDList = <OccupationDDModel>[].obs;
+  final religionDDList = <ReligionDDModel>[].obs;
+  final casteDDList = <CasteDDModel>[].obs;
+  final educationDDList = <EducationDDModel>[].obs;
 
   // Form keys
   final basicFormKey = GlobalKey<FormState>();
@@ -32,15 +34,19 @@ class RegistrationController extends GetxController {
   final weightController = TextEditingController();
   final maritalStatus = ''.obs;
   final noOfChildren = ''.obs;
-  final eduction = ''.obs;
-  final occupation  = ''.obs;
-  final colorComplexion  = ''.obs;
+
+  // final eduction = ''.obs;
+  // final occupation  = ''.obs;
+  final selectedEducation = Rxn<EducationDDModel>();
+  final selectedOccupation = Rxn<OccupationDDModel>();
+  final selectedReligion = Rxn<ReligionDDModel>();
+  final selectedCaste = Rxn<CasteDDModel>();
+  final colorComplexion = ''.obs;
   final educationDetailsController = TextEditingController();
   final occupationDetailsController = TextEditingController();
   final incomeController = TextEditingController();
-  final religion = ''.obs;
+
   final isDisablePerson = 'No'.obs;
-  final caste = ''.obs;
   final subCasteController = TextEditingController();
 
   // Family Details fields
@@ -54,7 +60,6 @@ class RegistrationController extends GetxController {
   final sistersController = TextEditingController();
   final nativePlaceController = TextEditingController();
 
-
   // Horoscope fields
   final rasiController = "".obs;
   final nakshatraController = TextEditingController();
@@ -63,7 +68,6 @@ class RegistrationController extends GetxController {
   final doshamType = ''.obs;
   final dasaBalanceDays = TextEditingController();
   RxString horoscopeImagePath = ''.obs;
-
 
   final mobileController = TextEditingController();
   final whatsappController = TextEditingController();
@@ -78,10 +82,127 @@ class RegistrationController extends GetxController {
 
   final noCasteChecked = false.obs;
 
-
   @override
-  void onInit() {
-    fetchOccupationDropdown();
+  void onInit() async {
+    super.onInit();
+    await fetchOccupationDropdown();
+    await fetchEducationDropdown();
+    await fetchReligionDropdown();
+  }
+
+  Future<void> fetchOccupationDropdown() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Please check your Internet Connection",
+        );
+        return;
+      }
+
+      final response = await THttpHelper.get(ApiConstant.getOccupationDD);
+      //
+      debugPrint("occupation Response:${response.toString()}");
+      if (response['statusCode'] == 200) {
+        occupationDDList.value = (response['data'] as List)
+            .map((e) => OccupationDDModel.fromJson(e))
+            .toList();
+      }
+    } catch (e) {
+      TLoaders.errorSnackBar(
+        title: "Occupation Dropdown Failed",
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<void> fetchEducationDropdown() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Please check your Internet Connection",
+        );
+        return;
+      }
+
+      final response = await THttpHelper.get(ApiConstant.getEducationDD);
+      //
+      debugPrint("Education Response:${response.toString()}");
+      if (response['statusCode'] == 200) {
+        educationDDList.value = (response['data'] as List)
+            .map((e) => EducationDDModel.fromJson(e))
+            .toList();
+      } else {
+        educationDDList.value = <EducationDDModel>[];
+      }
+    } catch (e) {
+      TLoaders.errorSnackBar(
+        title: "Education Dropdown Failed",
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<void> fetchReligionDropdown() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Please check your Internet Connection",
+        );
+        return;
+      }
+
+      final response = await THttpHelper.get(ApiConstant.getReligionDD);
+      //
+      debugPrint("occupation Response:${response.toString()}");
+      if (response['statusCode'] == 200) {
+        religionDDList.value = (response['data'] as List)
+            .map((e) => ReligionDDModel.fromJson(e))
+            .toList();
+      } else {
+        religionDDList.value = <ReligionDDModel>[];
+      }
+    } catch (e) {
+      TLoaders.errorSnackBar(
+        title: "Religion Dropdown Failed",
+        message: e.toString(),
+      );
+    }
+  }
+
+  Future<void> fetchCasteDropdown({required int religionId}) async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Please check your Internet Connection",
+        );
+        return;
+      }
+
+      final req = {"religion_id": religionId};
+      final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
+      //
+      debugPrint("occupation Response:${response.toString()}");
+      if (response['statusCode'] == 200) {
+        casteDDList.value = (response['data'] as List)
+            .map((e) => CasteDDModel.fromJson(e))
+            .toList();
+      } else {
+        casteDDList.value = <CasteDDModel>[];
+      }
+    } catch (e) {
+      TLoaders.errorSnackBar(
+        title: "Caste Dropdown Issue",
+        message: e.toString(),
+      );
+    }
   }
 
   void submitRegistration() {
@@ -91,13 +212,17 @@ class RegistrationController extends GetxController {
 
   // Pick horoscope image
 
-  Future<void> pickImage(ImageSource source,{required RxString imagePath}) async {
+  Future<void> pickImage(
+    ImageSource source, {
+    required RxString imagePath,
+  }) async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: source);
     if (picked != null) {
       imagePath.value = picked.path;
     }
   }
+
   void showImageSourceSheet({required RxString imagePath}) {
     Get.bottomSheet(
       Container(
@@ -112,7 +237,7 @@ class RegistrationController extends GetxController {
               leading: const Icon(Icons.camera_alt),
               title: const Text('Camera'),
               onTap: () {
-                pickImage(ImageSource.camera,imagePath: imagePath);
+                pickImage(ImageSource.camera, imagePath: imagePath);
                 Get.back();
               },
             ),
@@ -120,7 +245,7 @@ class RegistrationController extends GetxController {
               leading: const Icon(Icons.photo),
               title: const Text('Gallery'),
               onTap: () {
-                pickImage(ImageSource.gallery,imagePath: imagePath);
+                pickImage(ImageSource.gallery, imagePath: imagePath);
                 Get.back();
               },
             ),
@@ -129,6 +254,7 @@ class RegistrationController extends GetxController {
       ),
     );
   }
+
   Future<void> basicFormSubmit() async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -143,15 +269,15 @@ class RegistrationController extends GetxController {
         "name": nameController.text,
         "gender": gender.value,
         "dob": dobController.text,
-        "dot":dotController.text,
+        "dot": dotController.text,
         "height": heightController.text,
         "weight": weightController.text,
         "marital_status": maritalStatus.value,
         "education": educationDetailsController.text,
         "occupation": occupationDetailsController.text,
         "income": incomeController.text,
-        "religion": religion.value,
-        "caste": caste.value,
+        "religion": selectedReligion.value,
+        "caste": selectedCaste.value,
         "sub_caste": subCasteController.text,
       };
       print("Basic : $request");
@@ -165,6 +291,7 @@ class RegistrationController extends GetxController {
       );
     }
   }
+
   Future<void> familyFormSubmit() async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -174,8 +301,6 @@ class RegistrationController extends GetxController {
 
       if (!familyFormKey.currentState!.validate()) {
         return;
-
-
       }
       final request = {
         "father_name": fatherNameController.text,
@@ -187,18 +312,16 @@ class RegistrationController extends GetxController {
         "brothers": brothersController.text,
         "sisters": sistersController.text,
         "native_place": nativePlaceController.text,
-
       };
       currentStep.value++;
 
       print("Family : $request");
-    }
-    catch(e){
+    } catch (e) {
       debugPrint("familyFormSubmit - ${e}");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
-        "Something went wrong in Family Details submit, try again later",
+            "Something went wrong in Family Details submit, try again later",
       );
     }
   }
@@ -209,7 +332,6 @@ class RegistrationController extends GetxController {
       if (!isConnected) {
         return;
       }
-
 
       if (!horoscopeFormKey.currentState!.validate()) {
         return;
@@ -224,16 +346,14 @@ class RegistrationController extends GetxController {
       print("Horoscope : $request");
 
       currentStep.value++;
-    }
-    catch(e){
+    } catch (e) {
       debugPrint("horoscopeFormSubmit - ${e}");
 
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
-        "Something went wrong in Horoscope Details submit, try again later",
+            "Something went wrong in Horoscope Details submit, try again later",
       );
-
     }
   }
 
@@ -259,50 +379,22 @@ class RegistrationController extends GetxController {
       };
       print("Contact : $request");
       submitRegistration();
-    Get.offAllNamed(TRoutes.bottomNav);
-      }
-      catch(e){
+      Get.offAllNamed(TRoutes.bottomNav);
+    } catch (e) {
       debugPrint("contactFormSubmit - ${e}");
-        TLoaders.errorSnackBar(title: "Failed", message: "Something went wrong in Contact Details submit, try again later");
+      TLoaders.errorSnackBar(
+        title: "Failed",
+        message:
+            "Something went wrong in Contact Details submit, try again later",
+      );
     }
   }
-
 
   // Go back
   void previousStep() {
     if (currentStep.value > 0) currentStep.value--;
   }
 
-
-  Future<void> fetchOccupationDropdown()async{
-    try {
-
-      final isConnected = await NetworkManager.instance.isConnected();
-      if (!isConnected) {
-        TLoaders.warningSnackBar(title: "No Internet",message: "Please check your Internet Connection");
-        return;
-      }
-
-      //
-      final response = await THttpHelper.get(ApiConstant.getOccupationDD);
-      //
-      debugPrint("occupation Response:${response.toString()}");
-      if(response['statusCode']==200){
-        occupationDDList.value =(response['data'] as List).map((e)=>OccupationDDModel.fromJson(e)).toList();
-
-        // debugPrint("OTP: ${loginOtpModel.first.otp}");
-      }
-
-      // GetStorage().read(TTexts.mobileNo,)
-      TFullScreenLoader.stopLoading();
-
-      Get.toNamed(TRoutes.otp);
-    } catch (e) {
-      TFullScreenLoader.popUpCircular();
-
-      TLoaders.errorSnackBar(title: "Authentication Failed",message:e.toString());
-    }
-  }
   @override
   void onClose() {
     nameController.dispose();

@@ -44,11 +44,13 @@ class OtpController extends GetxController {
 
       };
       debugPrint("OTP Verify1 : $request");
-      final response = await THttpHelper.post(ApiConstant.verifyOtp, request);
-      debugPrint("OTP Verify : $response");
+      // final response = await THttpHelper.post(ApiConstant.verifyOtp, request);
+      // debugPrint("OTP Verify : $response");
       TFullScreenLoader.stopLoading();
       Get.offAllNamed(TRoutes.register);
     } catch (e) {
+
+      TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: "Failed", message: e.toString());
     }
   }

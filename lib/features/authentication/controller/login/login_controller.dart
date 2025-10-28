@@ -27,7 +27,7 @@ class LoginController extends GetxController {
         TLoaders.warningSnackBar(title: "No Internet",message: "Please check your Internet Connection");
         return;
       }
-      if (!formKey.currentState!.validate()) return;
+      // if (!formKey.currentState!.validate()) return;
       TFullScreenLoader.popUpCircular();
 
       final request = {"mobile_no": mobileNoT.text};

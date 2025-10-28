@@ -5,5 +5,8 @@ class ApiConstant {
   static const String sendOtp = "send_otp";
   static const String verifyOtp = "verify_otp";
   static const String getOccupationDD = "get_occupation_data";
+  static const String getReligionDD = "get_religion_data";
+  static const String getCasteDD = "get_caste_data";
+  static const String getEducationDD = "get_education_data";
 
 }
