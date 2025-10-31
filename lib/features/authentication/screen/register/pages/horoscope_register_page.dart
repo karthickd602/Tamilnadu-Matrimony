@@ -1,5 +1,6 @@
 import 'package:tamilnadu_matrimony/utils/validators/validation.dart';
 
+import '../../../../../common/widgets/dropdown/dropdown_with_search.dart';
 import '../../../../../utils/constants/path_provider.dart';
 import '../../../controller/register/register_controller.dart';
 import '../widgets/get_image.dart';
@@ -17,7 +18,7 @@ class HoroscopeDetails extends StatelessWidget {
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Obx(
-          ()=> Column(
+          () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -27,106 +28,81 @@ class HoroscopeDetails extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields),
-
-              /// --- Rasi ---
-              TFormField(
-                items: [
-                  "மேஷம்",
-                  "ரிஷபம்",
-                  "மிதுனம்",
-                  "கடகம்",
-                  "சிம்மம்",
-                  "கன்னி",
-                  "துலாம்",
-                  "விருச்சிகம்",
-                  "தனுசு",
-                  "மகரம்",
-                  "கும்பம்",
-                  "மீனம்",
-                ],
-                isDropdown: true,
-                onChanged: (v)=>controller.rasiController.value =v??'',
-
-                validator: (value) =>
-                    TValidator.validateEmptyText(TTexts.rasi.tr, value),
-                labelText: TTexts.rasi.tr,
-                icon: Icons.auto_awesome,
+              TSearchDropdownField<String>(
+                label: "ராசி",
+                items: controller.raasiList,
+                selectedItem: controller.selectedRaasi.value,
+                onChanged: controller.onRaasiChanged,
+                prefixIcon: Icons.star_border,
+                validator: (v) =>
+                    v == null ? "தயவுசெய்து ராசி தேர்ந்தெடுக்கவும்" : null,
               ),
+              const SizedBox(height: TSizes.md),
 
-              /// --- Nakshatra ---
-              TFormField(
-                controller: controller.nakshatraController,
-                labelText: TTexts.nakshatra.tr,
-                icon: Icons.star_outline,
-                isDropdown: true,
-                items: [],
+              /// STAR depends on RASSI
+              TSearchDropdownField<String>(
+                label: "நட்சத்திரம்",
+                items: controller.starsForSelectedRaasi,
+                selectedItem: controller.selectedStar.value,
+                onChanged: controller.onStarChanged,
+                prefixIcon: Icons.auto_awesome,
+                validator: (v) => controller.selectedRaasi.value == null
+                    ? "தயவுசெய்து நட்சத்திரம் தேர்ந்தெடுக்கவும்"
+                    : null,
               ),
-              // const SizedBox(height: TSizes.spaceBtwInputFields),
+              const SizedBox(height: TSizes.md),
 
-              /// --- Gothram ---
-              TFormField(
-                isDropdown: true,
-                items: [
-                  "மேஷம்",
-                  "ரிஷபம்",
-                  "மிதுனம்",
-                  "கடகம்",
-                  "சிம்மம்",
-                  "கன்னி",
-                  "துலாம்",
-                  "விருச்சிகம்",
-                  "தனுசு",
-                  "மகரம்",
-                  "கும்பம்",
-                  "மீனம்",
-                ],
-                onChanged: (v)=>controller.laknamController.value =v??'',
-                validator: (value) =>
-                    TValidator.validateEmptyText(TTexts.laknam.tr, value),
-                labelText: TTexts.laknam.tr,
-                icon: Icons.family_restroom_outlined,
+              /// DASA depends on STAR
+              TSearchDropdownField<String>(
+                label: "திசை (Dasa Type)",
+                items: controller.filteredDasaList,
+                selectedItem: controller.selectedDasa.value,
+                onChanged: (v) => controller.selectedDasa.value = v,
+                prefixIcon: Icons.sunny,
               ),
-
-              TFormField(
-                labelText: TTexts.isDoshamHave.tr,
-                validator: (value) =>
-                    TValidator.validateEmptyText(TTexts.isDoshamHave.tr, value),
-                isDropdown: true,
-                icon: Icons.warning_amber_rounded,
+              const SizedBox(height: TSizes.md),
+       TSearchDropdownField<String>(
+                label: TTexts.isDoshamHave.tr,
                 items: [TTexts.yes.tr, TTexts.no.tr, TTexts.iDontKnow.tr],
-                onChanged: (v) =>controller.isDoshamHave.value = v??'',
+                selectedItem: controller.selectedDasa.value,
+                onChanged: (v) => controller.isDoshamHave.value = v??'',
+                prefixIcon: Icons.warning_amber_rounded,
+         validator: (value) =>
+             TValidator.validateEmptyText(TTexts.isDoshamHave.tr, value),
               ),
+              // const SizedBox(height: TSizes.md),
 
-
-
-              // const SizedBox(height: TSizes.spaceBtwInputFields),
-              /// --- Dosham Dropdown ---
-              controller.isDoshamHave.value == TTexts.yes.tr?TFormField(
-                labelText: TTexts.dosham.tr,
-                validator: (value) =>
-                    TValidator.validateEmptyText(TTexts.dosham.tr, value),
-                isDropdown: true,
-                icon: Icons.warning_amber_rounded,
-                items: ["Naga Dosham", "Dosham 2"],
-                onChanged: (v) =>controller.doshamType.value =v!,
-              ):const SizedBox(),
-
-
-
-
-              /// --- Upload Horoscope Image ---
-              // Text(
-              //   TTexts.uploadHoroscopeImage.tr,
-              //   style: textTheme.titleMedium?.copyWith(
-              //     fontWeight: FontWeight.w600,
-              //     color: primaryColor,
-              //   ),
+              // TFormField(
+              //   labelText: TTexts.isDoshamHave.tr,
+              //   validator: (value) =>
+              //       TValidator.validateEmptyText(TTexts.isDoshamHave.tr, value),
+              //   isDropdown: true,
+              //   icon: Icons.warning_amber_rounded,
+              //   items: [TTexts.yes.tr, TTexts.no.tr, TTexts.iDontKnow.tr],
+              //   onChanged: (v) => controller.isDoshamHave.value = v ?? '',
               // ),
 
+              SizedBox(height: TSizes.md),
+              // const SizedBox(height: TSizes.spaceBtwInputFields),
+              /// --- Dosham Dropdown ---
+              controller.isDoshamHave.value == TTexts.yes.tr
+                  ? TSearchDropdownField<String>(
+                      label: "தோஷம் (Dhosam)",
+                      items: controller.filteredDhosamList,
+                      selectedItem: controller.selectedDhosam.value,
+                      onChanged: (v) => controller.selectedDhosam.value = v,
+                      prefixIcon: Icons.warning_amber,
+                    )
+                  : const SizedBox(),
+
+              /// --- Upload Horoscope Image ---
               ImagePickerBox(
                 title: TTexts.uploadHoroscopeImage.tr,
-                onPickImage:()=>controller.showImageSourceSheet(imagePath: controller.horoscopeImagePath), imagePath: controller.horoscopeImagePath,),
-
+                onPickImage: () => controller.showImageSourceSheet(
+                  imagePath: controller.horoscopeImagePath,
+                ),
+                imagePath: controller.horoscopeImagePath,
+              ),
 
               const SizedBox(height: 30),
 
