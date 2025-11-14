@@ -37,6 +37,10 @@ final bool isReceived;
                     ),
                     const SizedBox(height: 4),
                     Text(
+                      "Married",
+                      style:
+                      Theme.of(context).textTheme.bodyMedium,
+                    ),       Text(
                       "26 yrs • 5'2\" • Naidu • BCA",
                       style:
                       Theme.of(context).textTheme.bodyMedium,
@@ -73,29 +77,6 @@ final bool isReceived;
                 ),
               ],
             ),
-          ),
-
-          const SizedBox(height: TSizes.sm),
-
-          /// Action Buttons
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.call),
-                  label: const Text("Call Now"),
-                ),
-              ),
-              const SizedBox(width: TSizes.sm),
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.message),
-                  label: const Text("Message"),
-                ),
-              ),
-            ],
           ),
         ],
       ),
