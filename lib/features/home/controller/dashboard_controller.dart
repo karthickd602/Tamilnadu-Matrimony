@@ -1,16 +1,50 @@
-import 'package:get/get.dart';
-import 'package:tamilnadu_matrimony/utils/constants/image_strings.dart';
+import 'package:tamilnadu_matrimony/utils/constants/api_constants.dart';
+import 'package:tamilnadu_matrimony/utils/http/http_client.dart';
 
-class DashboardController extends GetxController
-{
+import '../../../utils/constants/path_provider.dart';
+import '../model/dashboard_list_model.dart';
+
+class DashboardController extends GetxController {
   var customerList = <Map<String, dynamic>>[].obs;
+
+  final RxBool isLoading = true.obs;
+  final dashboardCustomerList = <CustomerProfileListModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
     loadProfiles();
+    fetchDashboardCustomerProfile();
   }
 
+  Future<void> fetchDashboardCustomerProfile() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.errorSnackBar(
+          title: "Error",
+          message: "No Internet Connection",
+        );
+        return;
+      }
+      isLoading.value = true;
+      final req = {"id": TTexts.userId};
+      final response = await THttpHelper.post(
+        ApiConstant.dashboardListEndPoint,
+        req,
+      );
+
+      debugPrint("response: $response");
+
+      dashboardCustomerList.value = (response["profiles"] as List)
+          .map((e) => CustomerProfileListModel.fromJson(e))
+          .toList();
+
+      isLoading.value =false;
+    } catch (e) {
+      TLoaders.errorSnackBar(title: "Error", message: e.toString());
+    }
+  }
 
   void loadProfiles() {
     customerList.value = [
@@ -111,7 +145,6 @@ class DashboardController extends GetxController
         "image": TImages.sampleUser,
       },
     ];
-
   }
 
   void onLike(String name) {

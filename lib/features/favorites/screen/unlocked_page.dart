@@ -17,7 +17,7 @@ class UnlockedPage extends StatelessWidget {
             separatorBuilder: (_, i) =>
             const SizedBox(height: TSizes.spaceBtwItems),
             itemBuilder: (conte, index) {
-              return CustomerCard();
+              // return CustomerCard();
             },
           ),
         ),

@@ -1,14 +1,16 @@
 
 import '../../../../utils/constants/path_provider.dart';
 import '../../controller/dashboard_controller.dart';
+import '../../model/dashboard_list_model.dart';
 import '../customer_card_view.dart';
 
 class CustomerCard extends StatelessWidget {
-  const CustomerCard({super.key});
+  const CustomerCard({super.key, required this.customerProfile});
+
+  final CustomerProfileListModel customerProfile;
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(DashboardController());
 
     return Container(
       height: 600,
@@ -87,14 +89,14 @@ class CustomerCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "ID-TM0001",
+                          customerProfile.id.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
                               .copyWith(color: Colors.white70),
                         ),
                         Text(
-                          "Karthick, 28",
+                          "${customerProfile.name},${customerProfile.age}",
                           style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -134,13 +136,13 @@ class CustomerCard extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 6,
                   children: [
-                    _buildChip(Icons.auto_awesome, "24 மனை செட்டியார் 16 வீடு"),
-                    _buildChip(Icons.work, "Software Engineer"),
-                    _buildChip(Icons.school, "B.E. CSE"),
-                    _buildChip(Icons.stars, "Rasi: Mesham"),
-                    _buildChip(Icons.star, "Ashwini"),
-                    _buildChip(Icons.location_on, "Madurai"),
-                    _buildChip(Icons.join_inner_rounded, "Never Married"),
+                    _buildChip(Icons.auto_awesome, customerProfile.address??''),
+                    _buildChip(Icons.work, customerProfile.occupation??''),
+                    _buildChip(Icons.school, customerProfile.educationDetails??''),
+                    _buildChip(Icons.stars, "Rasi: ${customerProfile.moonSign??''}"),
+                    _buildChip(Icons.star, customerProfile.star??''),
+                    _buildChip(Icons.location_on, customerProfile.city??''),
+                    _buildChip(Icons.join_inner_rounded,customerProfile.maritalStatus??''),
                   ],
                 ),
                 const SizedBox(height: 16),

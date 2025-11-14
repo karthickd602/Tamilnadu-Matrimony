@@ -1,4 +1,5 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
+import 'package:tamilnadu_matrimony/features/home/controller/dashboard_controller.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 import 'filter/filter_screen.dart';
@@ -9,6 +10,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(DashboardController());
     return Scaffold(
       backgroundColor: TColors.scaffoldColor,
       appBar: TAppBar(
@@ -36,15 +38,18 @@ class HomePage extends StatelessWidget {
             children: [
 
               Expanded(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: 21,
-                  separatorBuilder: (_, i) =>
-                  const SizedBox(height: TSizes.spaceBtwItems),
-                  itemBuilder: (conte, index) {
-                    return CustomerCard();
-                  },
+                child: Obx(
+                  ()=> ListView.separated(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: controller.dashboardCustomerList.length,
+                    separatorBuilder: (_, i) =>
+                    const SizedBox(height: TSizes.spaceBtwItems),
+                    itemBuilder: (conte, index) {
+                      final customer = controller.dashboardCustomerList[index];
+                      return CustomerCard(customerProfile: customer,);
+                    },
+                  ),
                 ),
               ),
             ],

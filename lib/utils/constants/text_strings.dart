@@ -1,10 +1,13 @@
 class TTexts {
   // -- GLOBAL Keys
+
+
+  static const String userId = "11623";
   static const String and = "and";
   static const String skip = "skip";
   static const String done = "done";
   static const String submit = "submit";
-  static const String appName = "app_name";
+  static const String appName = "Tamilnadu Matrimony";
   static const String tContinue = "continue";
   static const String back = "back";
 
