@@ -12,5 +12,6 @@ class ApiConstant {
   static const String getCasteDD = "get_caste_data";
   static const String getEducationDD = "get_education_data";
   static const String dashboardListEndPoint = "dashboard";
+  static const String likeProfileEndPoint = "liked_profile";
 
 }

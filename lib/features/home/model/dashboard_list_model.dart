@@ -1,43 +1,5 @@
-class ProfilesResponse {
-  final String? message;
-  final int? statusCode;
-  final int? currentPage;
-  final int? total;
-  final List<dynamic>? filtersUsed;
-  final List<CustomerProfileListModel>? profiles;
+import '../../../utils/constants/path_provider.dart';
 
-  ProfilesResponse({
-    this.message,
-    this.statusCode,
-    this.currentPage,
-    this.total,
-    this.filtersUsed,
-    this.profiles,
-  });
-
-  factory ProfilesResponse.fromJson(Map<String, dynamic> json) {
-    return ProfilesResponse(
-      message: json['message'],
-      statusCode: json['statusCode'],
-      currentPage: json['current_page'],
-      total: json['total'],
-      filtersUsed: json['filters_used'],
-      profiles: json['profiles'] != null
-          ? List<CustomerProfileListModel>.from(
-          json['profiles'].map((x) => CustomerProfileListModel.fromJson(x)))
-          : [],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "message": message,
-    "statusCode": statusCode,
-    "current_page": currentPage,
-    "total": total,
-    "filters_used": filtersUsed,
-    "profiles": profiles?.map((x) => x.toJson()).toList(),
-  };
-}
 class CustomerProfileListModel {
   final int? id;
   final String? matriId;
@@ -51,6 +13,10 @@ class CustomerProfileListModel {
   final String? city;
   final String? maritalStatus;
   final String? caste;
+  final String? image;
+  final String? photoApprove;
+  RxString liked = "no".obs;
+  final String? verified;
 
   CustomerProfileListModel({
     this.id,
@@ -65,7 +31,13 @@ class CustomerProfileListModel {
     this.city,
     this.maritalStatus,
     this.caste,
-  });
+    this.image,
+    this.photoApprove,
+    String? liked,
+    this.verified,
+  }) {
+    this.liked.value = liked ?? "no";
+  }
 
   factory CustomerProfileListModel.fromJson(Map<String, dynamic> json) {
     return CustomerProfileListModel(
@@ -81,21 +53,10 @@ class CustomerProfileListModel {
       city: json['City'],
       maritalStatus: json['Maritalstatus'],
       caste: json['Caste'],
+      image: json['photo1'],
+      photoApprove: json['Photo1Approve'],
+      liked: json['liked'] ?? "no",
+      verified: json['verified'] ?? "false",
     );
   }
-
-  Map<String, dynamic> toJson() => {
-    "ID": id,
-    "MatriID": matriId,
-    "Name": name,
-    "Age": age,
-    "Address": address,
-    "Occupation": occupation,
-    "EducationDetails": educationDetails,
-    "Moonsign": moonSign,
-    "Star": star,
-    "City": city,
-    "Maritalstatus": maritalStatus,
-    "Caste": caste,
-  };
 }
