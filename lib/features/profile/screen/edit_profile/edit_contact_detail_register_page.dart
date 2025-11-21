@@ -1,7 +1,6 @@
 import 'package:tamilnadu_matrimony/features/profile/controller/edit_profile_controller/edit_profile_controller.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
-import '../../../authentication/controller/register/register_controller.dart';
 import '../../../authentication/screen/register/widgets/get_image.dart';
 
 class EditContactDetails extends StatelessWidget {
@@ -12,7 +11,7 @@ class EditContactDetails extends StatelessWidget {
     final controller = EditProfileController.instance;
     final textTheme = Theme.of(context).textTheme;
     final primaryColor = TColors.primary;
-    final secondaryColor = Colors.grey[100];
+    // final secondaryColor = Colors.grey[100];
 
     return Form(
       key: controller.contactFormKey,

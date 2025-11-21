@@ -1,10 +1,13 @@
+import 'package:tamilnadu_matrimony/features/alerts/model/alert_profile_model.dart';
+
 import '../../../../utils/constants/path_provider.dart';
 
 class InterestUserCard extends StatelessWidget {
   const InterestUserCard({
-    super.key, required this.isReceived,
+    super.key, required this.isReceived, required this.alertProfileModel,
   });
 final bool isReceived;
+final AlertProfileModel alertProfileModel;
   @override
   Widget build(BuildContext context) {
     return TRoundedContainer(
@@ -18,8 +21,8 @@ final bool isReceived;
             children: [
               TRoundedImage(
                 padding: 0,
-                imageType: ImageType.asset,
-                image: TImages.sampleUser1,
+                imageType: ImageType.network,
+                image: alertProfileModel.photo1,
                 height: 100,
                 width: 100,
               ),
@@ -29,7 +32,7 @@ final bool isReceived;
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "N Arun Kumar (EMP0001)",
+                      alertProfileModel.name,
                       style:
                       Theme.of(context).textTheme.titleLarge,
                       maxLines: 2,
@@ -41,17 +44,17 @@ final bool isReceived;
                       style:
                       Theme.of(context).textTheme.bodyMedium,
                     ),       Text(
-                      "26 yrs • 5'2\" • Naidu • BCA",
+                      "${alertProfileModel.age} yrs • ${alertProfileModel.height} • ${alertProfileModel.caste} • ${alertProfileModel.educationDetails}",
                       style:
                       Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(
-                      "Software Professional",
+                      alertProfileModel.occupation,
                       style:
                       Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(
-                      "Chennai",
+                      alertProfileModel.city,
                       style:
                       Theme.of(context).textTheme.bodyMedium,
                     ),
@@ -72,7 +75,7 @@ final bool isReceived;
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 TextSpan(
-                  text: " - 18 Feb 25",
+                  text: " - ${alertProfileModel.eisentdt}",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],

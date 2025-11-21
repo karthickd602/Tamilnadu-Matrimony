@@ -2,7 +2,6 @@ import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/features/home/controller/dashboard_controller.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
-import 'filter/filter_screen.dart';
 import 'widget/customer_card.dart';
 
 class HomePage extends StatelessWidget {

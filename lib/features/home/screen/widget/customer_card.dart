@@ -117,20 +117,22 @@ class CustomerCard extends StatelessWidget {
                 Positioned(
                   bottom: 50,
                   right: 20,
-                  child:Obx(() => FloatingActionButton(
-                    heroTag: null,
-                    tooltip: 'Like',
-                    onPressed: () {
-                      controller.likeProfile(customerProfile.id ?? 0);
-                      customerProfile.liked.value = "yes";
-                    },
-                    mini: true,
-                    backgroundColor: Colors.white,
-                    child: customerProfile.liked.value == "yes"
-                        ? Icon(Icons.favorite, color: TColors.error)
-                        : Icon(Icons.favorite_border, color: TColors.error),
-                  ))
-
+                  child: Obx(
+                    () => FloatingActionButton(
+                      heroTag: null,
+                      tooltip: 'Like',
+                      onPressed: () {
+                        controller.likeProfile(profileModel: customerProfile);
+                      },
+                      mini: true,
+                      backgroundColor: Colors.white,
+                      child: controller.isLikeLoading.value
+                          ? CircularProgressIndicator(color: Colors.red)
+                          : customerProfile.liked.value == "yes"
+                          ? Icon(Icons.favorite, color: TColors.error)
+                          : Icon(Icons.favorite_border, color: TColors.error),
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -392,10 +392,10 @@ class RegistrationController extends GetxController {
         "caste": selectedCaste.value,
         "sub_caste": subCasteController.text,
       };
-      print("Basic : $request");
+      debugPrint("Basic : $request");
       currentStep.value++;
     } catch (e) {
-      debugPrint("basicFormSubmit - ${e}");
+      debugPrint("basicFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
@@ -429,7 +429,7 @@ class RegistrationController extends GetxController {
 
       print("Family : $request");
     } catch (e) {
-      debugPrint("familyFormSubmit - ${e}");
+      debugPrint("familyFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:

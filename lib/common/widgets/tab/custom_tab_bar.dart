@@ -27,18 +27,18 @@ class KTabBarPage extends StatelessWidget {
           title: title,
           isBackButtonNeed: isBackButtonNeed,
           bottom: TabBar(
-
             labelStyle: textTheme.labelLarge,
             labelColor: isDark ? TColors.secondary : TColors.primary,
             unselectedLabelColor:
             isDark ? TColors.lightGrey : TColors.darkerGrey,
             indicatorColor: isDark ? TColors.secondary : TColors.primary,
             tabs: tabs,
+            isScrollable: false,
           ),
         ),
         body: Padding(
           padding:  EdgeInsets.all(TSizes.defaultSpace),
-          child: TabBarView(children: tabViews),
+          child: TabBarView(children: tabViews,),
         ),
       ),
     );

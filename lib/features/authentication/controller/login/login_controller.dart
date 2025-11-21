@@ -1,7 +1,3 @@
-import 'package:tamilnadu_matrimony/utils/constants/api_constants.dart';
-import 'package:tamilnadu_matrimony/utils/http/http_client.dart';
-import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
-
 import '../../../../utils/constants/path_provider.dart';
 import '../../model/login_otp_model.dart';
 

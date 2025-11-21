@@ -8,12 +8,11 @@ import '../model/dashboard_list_model.dart';
 class DashboardController extends GetxController {
   static DashboardController get instance => Get.find();
 
-  var customerList = <Map<String, dynamic>>[].obs;
 
   final RxBool isLikeLoading = false.obs;
-  final dashboardCustomerList = <CustomerProfileListModel>[].obs;
   late final String? liked;
-
+  final storage = GetStorage();
+  final dashboardCustomerList = <CustomerProfileListModel>[].obs;
 
   @override
   void onInit() {
@@ -33,7 +32,9 @@ class DashboardController extends GetxController {
       }
 
       TFullScreenLoader.popUpCircular();
-      final req = {"id": TTexts.userId};
+      final req = {"id": storage.read(TTexts.userId)};
+
+      debugPrint("fetchDashboardCustomerProfile req: $req");
       final response = await THttpHelper.post(
         ApiConstant.dashboardListEndPoint,
         req,
@@ -53,8 +54,7 @@ class DashboardController extends GetxController {
     }
   }
 
-
-  Future<void> likeProfile(int profileId) async {
+  Future<void> likeProfile({required CustomerProfileListModel profileModel}) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
@@ -66,22 +66,23 @@ class DashboardController extends GetxController {
       }
 
       isLikeLoading.value = true;
-      final req = {"user_id": TTexts.userId,"liked_user_id": profileId};
+      final req = {"user_id": storage.read(TTexts.userId), "liked_user_id": profileModel.id};
       final response = await THttpHelper.post(
         ApiConstant.likeProfileEndPoint,
         req,
       );
+      if(profileModel.liked.value == "yes") {
+        profileModel.liked.value = "no";
+      } else {
+        profileModel.liked.value = "yes";
+      }
 
       debugPrint("likeProfile response: $response");
 
-      isLikeLoading.value =false;
-    }
-    catch (e) {
-      isLikeLoading.value =false;
-      TLoaders.errorSnackBar(title: "likeProfile", message: e.toString());
+      isLikeLoading.value = false;
+    } catch (e) {
+      isLikeLoading.value = false;
+      TLoaders.errorSnackBar(title: "Error in Like Profile", message: e.toString());
     }
   }
-
-
-
 }

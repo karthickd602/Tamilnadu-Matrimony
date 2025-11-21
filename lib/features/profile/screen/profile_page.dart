@@ -1,6 +1,5 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
-import 'package:tamilnadu_matrimony/features/profile/screen/edit_profile/edit_basic_register_page.dart';
 import 'package:tamilnadu_matrimony/features/profile/screen/verified_profile/verify_profile.dart';
 
 import '../../../common/widgets/dialog/logout_dialog.dart';
@@ -14,7 +13,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final isDark = THelperFunctions.isDarkMode(context);
+    // final isDark = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
       appBar: TAppBar(title: TTexts.profile.tr),

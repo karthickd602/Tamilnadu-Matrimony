@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../controller/filter_controller.dart';
 
 class FilterOptionsWidget extends StatelessWidget {
@@ -129,7 +130,7 @@ class _RadioOptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       final selectedOptions = controller.selectedOptions[category];
-      final isSelected = selectedOptions != null && selectedOptions.contains(option);
+      // final isSelected = selectedOptions != null && selectedOptions.contains(option);
 
       return Card(
         margin: const EdgeInsets.symmetric(vertical: 4),

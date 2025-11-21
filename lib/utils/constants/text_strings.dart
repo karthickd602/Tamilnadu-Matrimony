@@ -1,9 +1,10 @@
 class TTexts {
+
+  // -- Local Storage
+  static const String userId = "USER_ID";
+
   // -- GLOBAL Keys
-
-
-  static const String userId = "11623";
-  static const String and = "and";
+ static const String and = "and";
   static const String skip = "skip";
   static const String done = "done";
   static const String submit = "submit";

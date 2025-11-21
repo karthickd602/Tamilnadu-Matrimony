@@ -1,5 +1,4 @@
 import '../../../utils/constants/path_provider.dart';
-import '../../home/screen/widget/customer_card.dart';
 
 class UnlockedPage extends StatelessWidget {
   const UnlockedPage({super.key});

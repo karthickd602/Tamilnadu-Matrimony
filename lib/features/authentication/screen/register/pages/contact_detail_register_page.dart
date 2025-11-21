@@ -11,7 +11,6 @@ class ContactDetails extends StatelessWidget {
     final controller = RegistrationController.instance;
     final textTheme = Theme.of(context).textTheme;
     final primaryColor = TColors.primary;
-    final secondaryColor = Colors.grey[100];
 
     return  Form(
       key: controller.contactFormKey,

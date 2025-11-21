@@ -144,7 +144,7 @@ class EditProfileController extends GetxController {
       print("Basic : $request");
       currentStep.value++;
     } catch (e) {
-      debugPrint("basicFormSubmit - ${e}");
+      debugPrint("basicFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
