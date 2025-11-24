@@ -1,5 +1,4 @@
-import 'package:tamilnadu_matrimony/utils/constants/api_constants.dart';
-import 'package:tamilnadu_matrimony/utils/http/http_client.dart';
+import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart';
 import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 
 import '../../../utils/constants/path_provider.dart';
@@ -13,11 +12,13 @@ class DashboardController extends GetxController {
   late final String? liked;
   final storage = GetStorage();
   final dashboardCustomerList = <CustomerProfileListModel>[].obs;
+  final userModel =CustomerUserModel.empty().obs;
 
   @override
   void onInit() {
     super.onInit();
     fetchDashboardCustomerProfile();
+    fetchCustomerPage();
   }
 
   Future<void> fetchDashboardCustomerProfile() async {
@@ -54,6 +55,40 @@ class DashboardController extends GetxController {
     }
   }
 
+  Future<void> fetchCustomerPage() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.errorSnackBar(
+          title: "No Internet",
+          message: "No Internet Connection",
+        );
+        return;
+      }
+
+      TFullScreenLoader.popUpCircular();
+      final req = {"id": storage.read(TTexts.userId)};
+
+      debugPrint("fetchCustomerPage req: $req");
+      final response = await THttpHelper.post(
+        ApiConstant.customerProfilePage,
+        req,
+      );
+
+      debugPrint("fetchDashboardCustomerProfile response: $response");
+
+      final user =  (response["data"] as List)
+          .map((e) => CustomerUserModel.fromJson(e))
+          .toList();
+userModel.value =user.first;
+
+      TFullScreenLoader.stopLoading();
+    } catch (e) {
+      TFullScreenLoader.stopLoading();
+      debugPrint("fetchDashboardCustomerProfile Error: $e");
+      TLoaders.errorSnackBar(title: "Error", message: e.toString());
+    }
+  }
   Future<void> likeProfile({required CustomerProfileListModel profileModel}) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();

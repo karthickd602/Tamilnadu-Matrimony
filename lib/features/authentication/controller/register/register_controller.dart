@@ -2,9 +2,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tamilnadu_matrimony/features/authentication/model/dropdown_model.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
-import '../../../../utils/constants/api_constants.dart';
-import '../../../../utils/http/http_client.dart';
-
 class RegistrationController extends GetxController {
   static RegistrationController get instance => Get.find();
 

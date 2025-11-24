@@ -2,8 +2,7 @@ export 'package:flutter/material.dart';
 export 'package:get/get.dart';
 export 'package:get_storage/get_storage.dart';
 export 'package:iconsax/iconsax.dart';
-export '../../../utils/constants/api_constants.dart';
-export '../../../utils/http/http_client.dart';
+
 export '../../../../../../common/widgets/loaders/loader_animation.dart';
 export '../../../../../../utils/constants/enums.dart';
 export '../../../../../common/widgets/containers/rounded_container.dart';
@@ -17,5 +16,7 @@ export '../../../../utils/constants/image_strings.dart';
 export '../../../../utils/constants/sizes.dart';
 export '../../../../utils/device/device_utility.dart';
 export '../../../../utils/helpers/network_manager.dart';
+export '../../../utils/constants/api_constants.dart';
 export '../../../utils/constants/path_provider.dart';
+export '../../../utils/http/http_client.dart';
 export '../../../utils/popups/loaders.dart';

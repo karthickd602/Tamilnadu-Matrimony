@@ -1,13 +1,19 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
+import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
-import '../../../common/widgets/images/image_preview_page.dart';
+import '../controller/dashboard_controller.dart';
 
 class CustomerDetailsView extends StatelessWidget {
+  // final CustomerUserModel userModel;
   const CustomerDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = DashboardController.instance;
+
+    final userModel = controller.userModel.value;
+
     final primaryColor = TColors.primary;
     final secondaryColor = Colors.grey[100]!;
 
@@ -18,75 +24,82 @@ class CustomerDetailsView extends StatelessWidget {
         isBackButtonNeed: true,
         actions: [
           IconButton(
-            onPressed: () async {
-              // TODO: Implement share functionality
-              //await Share.share('Check out this profile on TamilNadu Matrimony!');
-            },
+            onPressed: () async {},
             icon: const Icon(Icons.share_outlined),
             color: TColors.primary,
             iconSize: 26,
           ),
         ],
-
       ),
+
+      /// Body
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
               /// Profile Image
               GestureDetector(
-                onTap: () => Get.to(() => ImagePreviewPage(
-                    imageUrl: TImages.sampleUser, imageType: ImageType.asset)),
+                onTap: () => Get.to(
+                      () => ImagePreviewPage(
+                    imageUrl: userModel.photo1 ?? TImages.sampleUser,
+                    imageType: userModel.photo1 == null
+                        ? ImageType.asset
+                        : ImageType.network,
+                  ),
+                ),
                 child: TRoundedImage(
                   width: double.infinity,
                   height: 400,
                   margin: 0,
                   padding: 0,
                   borderRadius: 0,
-                  imageType: ImageType.asset,
-                  image: TImages.sampleUser,
+                  imageType: userModel.photo1 == null
+                      ? ImageType.asset
+                      : ImageType.network,
+                  image: userModel.photo1 ?? TImages.sampleUser,
                   backgroundColor: TColors.white,
                   fit: BoxFit.cover,
                 ),
               ),
 
-              // After profile image and before SizedBox
               const SizedBox(height: TSizes.spaceBtwSections),
 
-
-              /// Info Sections
+              /// All Info Sections
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Column(
                   children: [
+                    /// BASIC INFO
                     _infoCard(
-                      showLikeAndShare: true,
                       TTexts.basicInfo.tr,
                       Icons.person_outline,
                       [
                         {
                           "icon": Icons.badge,
                           "label": TTexts.nameAge.tr,
-                          "value": "மரியலட்சுமி, 25 yrs"
+                          "value": "${userModel.name ?? ''}, ${userModel.age ?? ''} yrs"
                         },
                         {
                           "icon": Icons.location_on,
                           "label": TTexts.location.tr,
-                          "value": "Thanjavur, தமிழ்நாடு"
+                          "value": "${userModel.city ?? ''}, ${userModel.state ?? ''}"
                         },
                         {
                           "icon": Icons.favorite,
                           "label": TTexts.maritalStatus.tr,
-                          "value": "Unmarried"
+                          "value": userModel.maritalStatus ?? "-"
                         },
                         {
                           "icon": Icons.cake,
                           "label": TTexts.dob.tr,
-                          "value": "23-02-2000"
+                          "value": userModel.dob ?? "-"
                         },
                       ],
                       primaryColor,
+                      showLikeAndShare: true,
                     ),
+
+                    /// EDUCATION & OCCUPATION
                     _infoCard(
                       TTexts.educationOccupation.tr,
                       Icons.school_outlined,
@@ -94,16 +107,18 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.menu_book,
                           "label": TTexts.degree.tr,
-                          "value": "Bachelors in Arts (BA)"
+                          "value": userModel.educationDetails ?? "-"
                         },
                         {
                           "icon": Icons.work_outline,
                           "label": TTexts.occupation.tr,
-                          "value": "Not working"
+                          "value": userModel.occupation ?? "-"
                         },
                       ],
                       primaryColor,
                     ),
+
+                    /// SOCIO RELIGIOUS
                     _infoCard(
                       TTexts.socioReligious.tr,
                       Icons.account_balance,
@@ -111,26 +126,28 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.self_improvement,
                           "label": TTexts.religion.tr,
-                          "value": "Hindu"
+                          "value": userModel.religion ?? "-"
                         },
                         {
                           "icon": Icons.groups,
                           "label": TTexts.caste.tr,
-                          "value": "Vanniar"
+                          "value": userModel.caste ?? "-"
                         },
                         {
                           "icon": Icons.star_rate,
                           "label": TTexts.star.tr,
-                          "value": "சித்ரை - 1ம் பாதம்"
+                          "value": userModel.star ?? "-"
                         },
                         {
                           "icon": Icons.wb_sunny,
                           "label": TTexts.lagnam.tr,
-                          "value": "கடகம்"
+                          "value": userModel.inLaknam ?? "-"
                         },
                       ],
                       primaryColor,
                     ),
+
+                    /// PHYSICAL DETAILS
                     _infoCard(
                       TTexts.physicalStatus.tr,
                       Icons.accessibility_new,
@@ -138,16 +155,18 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.height,
                           "label": TTexts.height.tr,
-                          "value": "5ft 3in (160cm)"
+                          "value": userModel.height ?? "-"
                         },
                         {
                           "icon": Icons.face_retouching_natural,
                           "label": TTexts.complexion.tr,
-                          "value": "Medium"
+                          "value": userModel.complexion ?? "-"
                         },
                       ],
                       primaryColor,
                     ),
+
+                    /// FAMILY DETAILS
                     _infoCard(
                       TTexts.familyDetails.tr,
                       Icons.family_restroom,
@@ -155,21 +174,26 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.man,
                           "label": TTexts.father.tr,
-                          "value": "செந்தில்குமார் (Private)"
+                          "value":
+                          "${userModel.fatherName ?? ''} (${userModel.fathersOccupation ?? ''})"
                         },
                         {
                           "icon": Icons.woman,
                           "label": TTexts.mother.tr,
-                          "value": "கோவிந்தி (Housewife)"
+                          "value":
+                          "${userModel.motherName ?? ''} (${userModel.mothersOccupation ?? ''})"
                         },
                         {
                           "icon": Icons.people,
                           "label": TTexts.siblings.tr,
-                          "value": "0 Brothers | 0 Sisters"
+                          "value":
+                          "${userModel.noOfBrothers ?? '0'} Brothers | ${userModel.noOfSisters ?? '0'} Sisters"
                         },
                       ],
                       primaryColor,
                     ),
+
+                    /// PARTNER PREFERENCE PLACEHOLDER
                     _infoCard(
                       TTexts.partnerPreference.tr,
                       Icons.favorite_border,
@@ -177,11 +201,13 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.groups_2,
                           "label": TTexts.caste.tr,
-                          "value": "Vanniar"
+                          "value": userModel.caste ?? "-"
                         },
                       ],
                       primaryColor,
                     ),
+
+                    /// Horoscope Button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
@@ -190,7 +216,6 @@ class CustomerDetailsView extends StatelessWidget {
                         label: Text(TTexts.horoscope.tr),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -201,10 +226,14 @@ class CustomerDetailsView extends StatelessWidget {
     );
   }
 
-  /// Info card widget
-  static Widget _infoCard(String title, IconData icon,
-      List<Map<String, dynamic>> details, Color primaryColor,
-      {bool showLikeAndShare = false}) {
+  /// ---------------------- Info Card Widget ------------------------
+  static Widget _infoCard(
+      String title,
+      IconData icon,
+      List<Map<String, dynamic>> details,
+      Color primaryColor, {
+        bool showLikeAndShare = false,
+      }) {
     return TRoundedContainer(
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -215,7 +244,7 @@ class CustomerDetailsView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: primaryColor.withValues(alpha:0.15),
+                  color: primaryColor.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(icon, color: primaryColor, size: 26),
@@ -229,38 +258,32 @@ class CustomerDetailsView extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              if(showLikeAndShare)
-              Spacer(),
-              if(showLikeAndShare)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-
-                  IconButton(
-                    tooltip: "Like",
-                    onPressed: () {
-                      // TODO: Handle like button logic
-                      THelperFunctions.showSnackBar('You liked this profile!');
-                    },
-                    icon: const Icon(Icons.favorite_border),
-                    color: Colors.redAccent,
-                    iconSize: 28,
-                  ),
-                  IconButton(
-                    tooltip: "Send Interest",
-                    onPressed: () async {
-                      // TODO: Implement share functionality
-                      //await Share.share('Check out this profile on TamilNadu Matrimony!');
-                    },
-                    icon: const Icon(Icons.send_sharp),
-                    color: Colors.blueAccent,
-                    iconSize: 26,
-                  ),
-                ],
-              ),
+              const Spacer(),
+              if (showLikeAndShare)
+                Row(
+                  children: [
+                    IconButton(
+                      tooltip: "Like",
+                      onPressed: () {},
+                      icon: const Icon(Icons.favorite_border),
+                      color: Colors.redAccent,
+                      iconSize: 28,
+                    ),
+                    IconButton(
+                      tooltip: "Send Interest",
+                      onPressed: () {},
+                      icon: const Icon(Icons.send),
+                      color: Colors.blueAccent,
+                      iconSize: 26,
+                    ),
+                  ],
+                ),
             ],
           ),
+
           const Divider(height: 20, thickness: 1.2),
+
+          /// Detail rows
           ...details.map(
                 (item) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -273,26 +296,18 @@ class CustomerDetailsView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          item["label"],
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                          ),
-                        ),
+                        Text(item["label"],
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87)),
                         const SizedBox(height: 2),
-                        Text(
-                          item["value"],
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.black54,
-                          ),
-                        ),
+                        Text(item["value"],
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.black54)),
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
