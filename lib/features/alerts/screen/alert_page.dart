@@ -7,6 +7,7 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/text_strings.dart';
 import '../controller/alert_interest_send_controller.dart';
 import 'interest_received.dart';
+import 'notification_page.dart';
 
 class AlertPage extends StatelessWidget {
   const AlertPage({super.key});
@@ -34,7 +35,7 @@ class AlertPage extends StatelessWidget {
         ),
       ],
       tabViews: const [
-        Center(child: Text("Notification")),
+        NotificationPage(),
         InterestSend(),
         InterestReceived()
       ],

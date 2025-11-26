@@ -16,5 +16,8 @@ class ApiConstant {
   static const String likeProfileEndPoint = "liked_profile";
   static const String alertListSendEndPoint = "alert_int_sent";
   static const String alertListReceiveEndPoint = "alert_int_receive";
+  static const String notificationListEndPoint = "alert_notifications";
+  static const String likeListEndPoint = "view_liked_profile";
+  static const String unlockListEndPoint = "view_unlocked_profile";
 
 }

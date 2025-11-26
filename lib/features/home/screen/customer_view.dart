@@ -1,5 +1,6 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
+import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 import '../controller/dashboard_controller.dart';
@@ -40,7 +41,7 @@ class CustomerDetailsView extends StatelessWidget {
               /// Profile Image
               GestureDetector(
                 onTap: () => Get.to(
-                      () => ImagePreviewPage(
+                  () => ImagePreviewPage(
                     imageUrl: userModel.photo1 ?? TImages.sampleUser,
                     imageType: userModel.photo1 == null
                         ? ImageType.asset
@@ -71,28 +72,31 @@ class CustomerDetailsView extends StatelessWidget {
                   children: [
                     /// BASIC INFO
                     _infoCard(
+                      userModel: userModel,
                       TTexts.basicInfo.tr,
                       Icons.person_outline,
                       [
                         {
                           "icon": Icons.badge,
                           "label": TTexts.nameAge.tr,
-                          "value": "${userModel.name ?? ''}, ${userModel.age ?? ''} yrs"
+                          "value":
+                              "${userModel.name ?? ''}, ${userModel.age ?? ''} yrs",
                         },
                         {
                           "icon": Icons.location_on,
                           "label": TTexts.location.tr,
-                          "value": "${userModel.city ?? ''}, ${userModel.state ?? ''}"
+                          "value":
+                              "${userModel.city ?? ''}, ${userModel.state ?? ''}",
                         },
                         {
                           "icon": Icons.favorite,
                           "label": TTexts.maritalStatus.tr,
-                          "value": userModel.maritalStatus ?? "-"
+                          "value": userModel.maritalStatus ?? "-",
                         },
                         {
                           "icon": Icons.cake,
                           "label": TTexts.dob.tr,
-                          "value": userModel.dob ?? "-"
+                          "value": userModel.dob ?? "-",
                         },
                       ],
                       primaryColor,
@@ -101,18 +105,19 @@ class CustomerDetailsView extends StatelessWidget {
 
                     /// EDUCATION & OCCUPATION
                     _infoCard(
+                      userModel: userModel,
                       TTexts.educationOccupation.tr,
                       Icons.school_outlined,
                       [
                         {
                           "icon": Icons.menu_book,
                           "label": TTexts.degree.tr,
-                          "value": userModel.educationDetails ?? "-"
+                          "value": userModel.educationDetails ?? "-",
                         },
                         {
                           "icon": Icons.work_outline,
                           "label": TTexts.occupation.tr,
-                          "value": userModel.occupation ?? "-"
+                          "value": userModel.occupation ?? "-",
                         },
                       ],
                       primaryColor,
@@ -120,28 +125,29 @@ class CustomerDetailsView extends StatelessWidget {
 
                     /// SOCIO RELIGIOUS
                     _infoCard(
+                      userModel: userModel,
                       TTexts.socioReligious.tr,
                       Icons.account_balance,
                       [
                         {
                           "icon": Icons.self_improvement,
                           "label": TTexts.religion.tr,
-                          "value": userModel.religion ?? "-"
+                          "value": userModel.religion ?? "-",
                         },
                         {
                           "icon": Icons.groups,
                           "label": TTexts.caste.tr,
-                          "value": userModel.caste ?? "-"
+                          "value": userModel.caste ?? "-",
                         },
                         {
                           "icon": Icons.star_rate,
                           "label": TTexts.star.tr,
-                          "value": userModel.star ?? "-"
+                          "value": userModel.star ?? "-",
                         },
                         {
                           "icon": Icons.wb_sunny,
                           "label": TTexts.lagnam.tr,
-                          "value": userModel.inLaknam ?? "-"
+                          "value": userModel.inLaknam ?? "-",
                         },
                       ],
                       primaryColor,
@@ -149,18 +155,19 @@ class CustomerDetailsView extends StatelessWidget {
 
                     /// PHYSICAL DETAILS
                     _infoCard(
+                      userModel: userModel,
                       TTexts.physicalStatus.tr,
                       Icons.accessibility_new,
                       [
                         {
                           "icon": Icons.height,
                           "label": TTexts.height.tr,
-                          "value": userModel.height ?? "-"
+                          "value": userModel.height ?? "-",
                         },
                         {
                           "icon": Icons.face_retouching_natural,
                           "label": TTexts.complexion.tr,
-                          "value": userModel.complexion ?? "-"
+                          "value": userModel.complexion ?? "-",
                         },
                       ],
                       primaryColor,
@@ -168,6 +175,7 @@ class CustomerDetailsView extends StatelessWidget {
 
                     /// FAMILY DETAILS
                     _infoCard(
+                      userModel: userModel,
                       TTexts.familyDetails.tr,
                       Icons.family_restroom,
                       [
@@ -175,19 +183,19 @@ class CustomerDetailsView extends StatelessWidget {
                           "icon": Icons.man,
                           "label": TTexts.father.tr,
                           "value":
-                          "${userModel.fatherName ?? ''} (${userModel.fathersOccupation ?? ''})"
+                              "${userModel.fatherName ?? ''} (${userModel.fathersOccupation ?? ''})",
                         },
                         {
                           "icon": Icons.woman,
                           "label": TTexts.mother.tr,
                           "value":
-                          "${userModel.motherName ?? ''} (${userModel.mothersOccupation ?? ''})"
+                              "${userModel.motherName ?? ''} (${userModel.mothersOccupation ?? ''})",
                         },
                         {
                           "icon": Icons.people,
                           "label": TTexts.siblings.tr,
                           "value":
-                          "${userModel.noOfBrothers ?? '0'} Brothers | ${userModel.noOfSisters ?? '0'} Sisters"
+                              "${userModel.noOfBrothers ?? '0'} Brothers | ${userModel.noOfSisters ?? '0'} Sisters",
                         },
                       ],
                       primaryColor,
@@ -195,13 +203,14 @@ class CustomerDetailsView extends StatelessWidget {
 
                     /// PARTNER PREFERENCE PLACEHOLDER
                     _infoCard(
+                      userModel: userModel,
                       TTexts.partnerPreference.tr,
                       Icons.favorite_border,
                       [
                         {
                           "icon": Icons.groups_2,
                           "label": TTexts.caste.tr,
-                          "value": userModel.caste ?? "-"
+                          "value": userModel.caste ?? "-",
                         },
                       ],
                       primaryColor,
@@ -212,7 +221,7 @@ class CustomerDetailsView extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: () {},
-                        icon: const Icon(Icons.download),
+                        icon: const Icon(Icons.remove_red_eye),
                         label: Text(TTexts.horoscope.tr),
                       ),
                     ),
@@ -228,12 +237,15 @@ class CustomerDetailsView extends StatelessWidget {
 
   /// ---------------------- Info Card Widget ------------------------
   static Widget _infoCard(
-      String title,
-      IconData icon,
-      List<Map<String, dynamic>> details,
-      Color primaryColor, {
-        bool showLikeAndShare = false,
-      }) {
+    String title,
+    IconData icon,
+    List<Map<String, dynamic>> details,
+    Color primaryColor, {
+    required CustomerUserModel userModel,
+    bool showLikeAndShare = false,
+  }) {
+    final controller = DashboardController.instance;
+
     return TRoundedContainer(
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -264,8 +276,14 @@ class CustomerDetailsView extends StatelessWidget {
                   children: [
                     IconButton(
                       tooltip: "Like",
-                      onPressed: () {},
-                      icon: const Icon(Icons.favorite_border),
+                      onPressed: () {
+                        controller.likeProfileInView(profileModel: userModel);
+                      },
+                      icon:controller.isLikeLoading.value
+                          ? CircularProgressIndicator(color: Colors.red)
+                          : userModel.liked.value == "yes"
+                          ? Icon(Icons.favorite, color: TColors.error)
+                          : Icon(Icons.favorite_border, color: TColors.error),
                       color: Colors.redAccent,
                       iconSize: 28,
                     ),
@@ -285,7 +303,7 @@ class CustomerDetailsView extends StatelessWidget {
 
           /// Detail rows
           ...details.map(
-                (item) => Padding(
+            (item) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,15 +314,22 @@ class CustomerDetailsView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(item["label"],
-                            style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87)),
+                        Text(
+                          item["label"],
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
                         const SizedBox(height: 2),
-                        Text(item["value"],
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.black54)),
+                        Text(
+                          item["value"],
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
                       ],
                     ),
                   ),

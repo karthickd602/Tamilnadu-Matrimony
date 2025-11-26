@@ -12,13 +12,15 @@ class DashboardController extends GetxController {
   late final String? liked;
   final storage = GetStorage();
   final dashboardCustomerList = <CustomerProfileListModel>[].obs;
-  final userModel =CustomerUserModel.empty().obs;
+  final userModel = CustomerUserModel
+      .empty()
+      .obs;
 
   @override
   void onInit() {
     super.onInit();
     fetchDashboardCustomerProfile();
-    fetchCustomerPage();
+    // fetchCustomerPage();
   }
 
   Future<void> fetchDashboardCustomerProfile() async {
@@ -55,7 +57,7 @@ class DashboardController extends GetxController {
     }
   }
 
-  Future<void> fetchCustomerPage() async {
+  Future<void> fetchCustomerPage(int profileId) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
@@ -67,7 +69,8 @@ class DashboardController extends GetxController {
       }
 
       TFullScreenLoader.popUpCircular();
-      final req = {"id": storage.read(TTexts.userId)};
+      // final req = {"id": profileId};
+      final req = {"id": 11622};
 
       debugPrint("fetchCustomerPage req: $req");
       final response = await THttpHelper.post(
@@ -77,10 +80,10 @@ class DashboardController extends GetxController {
 
       debugPrint("fetchDashboardCustomerProfile response: $response");
 
-      final user =  (response["data"] as List)
+      final user = (response["data"] as List)
           .map((e) => CustomerUserModel.fromJson(e))
           .toList();
-userModel.value =user.first;
+      userModel.value = user.first;
 
       TFullScreenLoader.stopLoading();
     } catch (e) {
@@ -89,7 +92,9 @@ userModel.value =user.first;
       TLoaders.errorSnackBar(title: "Error", message: e.toString());
     }
   }
-  Future<void> likeProfile({required CustomerProfileListModel profileModel}) async {
+
+  Future<void> likeProfile(
+      {required CustomerProfileListModel profileModel}) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
@@ -101,12 +106,15 @@ userModel.value =user.first;
       }
 
       isLikeLoading.value = true;
-      final req = {"user_id": storage.read(TTexts.userId), "liked_user_id": profileModel.id};
+      final req = {
+        "user_id": storage.read(TTexts.userId),
+        "liked_user_id": profileModel.id
+      };
       final response = await THttpHelper.post(
         ApiConstant.likeProfileEndPoint,
         req,
       );
-      if(profileModel.liked.value == "yes") {
+      if (profileModel.liked.value == "yes") {
         profileModel.liked.value = "no";
       } else {
         profileModel.liked.value = "yes";
@@ -117,7 +125,46 @@ userModel.value =user.first;
       isLikeLoading.value = false;
     } catch (e) {
       isLikeLoading.value = false;
-      TLoaders.errorSnackBar(title: "Error in Like Profile", message: e.toString());
+      TLoaders.errorSnackBar(
+          title: "Error in Like Profile", message: e.toString());
+    }
+  }
+  Future<void> likeProfileInView(
+      {required CustomerUserModel profileModel}) async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.errorSnackBar(
+          title: "No Internet",
+          message: "No Internet Connection",
+        );
+        return;
+      }
+
+      isLikeLoading.value = true;
+      final req = {
+        "user_id": storage.read(TTexts.userId),
+        "liked_user_id": profileModel.id
+      };
+
+      debugPrint("likeProfile response: $req");
+      final response = await THttpHelper.post(
+        ApiConstant.likeProfileEndPoint,
+        req,
+      );
+      if (profileModel.liked.value == "yes") {
+        profileModel.liked.value = "no";
+      } else {
+        profileModel.liked.value = "yes";
+      }
+
+      debugPrint("likeProfile response: $response");
+
+      isLikeLoading.value = false;
+    } catch (e) {
+      isLikeLoading.value = false;
+      TLoaders.errorSnackBar(
+          title: "Error in Like Profile", message: e.toString());
     }
   }
 }

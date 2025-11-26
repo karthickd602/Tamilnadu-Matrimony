@@ -38,7 +38,7 @@ class KTabBarPage extends StatelessWidget {
         ),
         body: Padding(
           padding:  EdgeInsets.all(TSizes.defaultSpace),
-          child: TabBarView(children: tabViews,),
+          child: TabBarView(physics: NeverScrollableScrollPhysics(),children: tabViews,),
         ),
       ),
     );

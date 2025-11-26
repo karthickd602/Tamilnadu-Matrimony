@@ -60,6 +60,22 @@ class THelperFunctions {
       },
     );
   }
+  static String formatDateTimeWithSecString(String? dateString) {
+    if (dateString == null || dateString.isEmpty) return '-';
+    try {
+      final date = DateTime.parse(dateString);
+      return getFormattedDateAndTimeWithSec(date);
+    } catch (e) {
+      return dateString;
+    }
+  }
+  static String getFormattedDateAndTimeWithSec(
+      DateTime date, {
+        String format = 'dd-MM-yyyy - HH:mm:ss',
+      }) {
+    return DateFormat(format).format(date);
+  }
+
 
   static void navigateToScreen(BuildContext context, Widget screen) {
     Navigator.push(

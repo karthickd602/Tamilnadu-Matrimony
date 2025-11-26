@@ -198,6 +198,8 @@ class CustomerCard extends StatelessWidget {
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
+                        controller.fetchCustomerPage(customerProfile.id??0);
+                        // controller.fetchCustomerPage(customerProfile.id??0);
                         Get.to(() => CustomerDetailsView());
                       },
                       child: TRoundedContainer(

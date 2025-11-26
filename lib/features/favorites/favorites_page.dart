@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tamilnadu_matrimony/common/widgets/tab/custom_tab_bar.dart';
 
-import '../../../utils/constants/colors.dart';
-import '../../../utils/constants/text_strings.dart';
-import 'like_page.dart';
-import 'unlocked_page.dart';
+import '../../utils/constants/colors.dart';
+import '../../utils/constants/text_strings.dart';
+import 'screen/like_page.dart';
+import 'screen/unlocked_page.dart';
 
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});

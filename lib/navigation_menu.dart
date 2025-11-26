@@ -6,7 +6,7 @@ import 'package:tamilnadu_matrimony/features/home/screen/home_page.dart';
 import 'package:tamilnadu_matrimony/features/profile/screen/profile_page.dart';
 
 import '../../../utils/constants/path_provider.dart';
-import 'features/favorites/screen/favorites_page.dart';
+import 'features/favorites/favorites_page.dart';
 
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});
