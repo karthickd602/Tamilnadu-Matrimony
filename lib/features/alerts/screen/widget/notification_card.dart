@@ -1,8 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:tamilnadu_matrimony/common/widgets/containers/rounded_container.dart';
-import 'package:tamilnadu_matrimony/common/widgets/images/t_rounded_image.dart';
-import 'package:tamilnadu_matrimony/utils/constants/enums.dart';
-import 'package:tamilnadu_matrimony/utils/constants/image_strings.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 class NotificationCard extends StatelessWidget {

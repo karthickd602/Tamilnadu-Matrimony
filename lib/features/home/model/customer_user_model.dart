@@ -1,4 +1,4 @@
-  import '../../../utils/constants/path_provider.dart';
+
 
 class CustomerUserModel {
   int id;

@@ -1,9 +1,5 @@
-import 'package:get/get.dart';
-
 import '../../../utils/constants/path_provider.dart';
-import '../../../utils/helpers/network_manager.dart';
 import '../../../utils/popups/full_screen_loader.dart';
-import '../../../utils/popups/loaders.dart';
 import '../../home/model/dashboard_list_model.dart';
 
 class LikeController extends GetxController{

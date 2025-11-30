@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
+
 import '../constants/path_provider.dart';
 
 class NetworkManager extends GetxController {
