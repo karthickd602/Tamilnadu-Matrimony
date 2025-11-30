@@ -79,6 +79,14 @@ class RegistrationController extends GetxController {
 
   final noCasteChecked = false.obs;
 
+  final countryList = <CountryModel>[].obs;
+  final selectedCountry = Rxn<CountryModel>();
+  final stateList = <CountryModel>[].obs;
+  final selectedState = Rxn<CountryModel>();
+  final districtList = <CountryModel>[].obs;
+  final selectedDistrict = Rxn<CountryModel>();
+
+
   /// --- Base Lists ---
   final raasiList = [
     "மேஷம்", "ரிஷபம்", "மிதுனம்", "கடகம்", "சிம்மம்",
@@ -197,6 +205,7 @@ class RegistrationController extends GetxController {
     await fetchOccupationDropdown();
     await fetchEducationDropdown();
     await fetchReligionDropdown();
+    await fetchCountryDropdown();
   }
 
   Future<void> fetchOccupationDropdown() async {
@@ -309,6 +318,100 @@ class RegistrationController extends GetxController {
     } catch (e) {
       TLoaders.errorSnackBar(
         title: "Caste Dropdown Issue",
+        message: e.toString(),
+      );
+    }
+  }
+  Future<void> fetchCountryDropdown() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Please check your Internet Connection",
+        );
+        return;
+      }
+
+      // final req = {"religion_id": religionId};
+      final response = await THttpHelper.get(ApiConstant.getCountryDD);
+      //
+      debugPrint("country Response:${response.toString()}");
+      if (response['statusCode'] == 200) {
+        countryList.value = (response['data'] as List)
+            .map((e) => CountryModel.fromJson(e))
+            .toList();
+        // selectedCountry.value = countryList.where((e)=>e.id==101,);
+      } else {
+        countryList.value = <CountryModel>[];
+      }
+    } catch (e) {
+      TLoaders.errorSnackBar(
+        title: "Caste Dropdown Issue",
+        message: e.toString(),
+      );
+    }
+  }
+  Future<void> fetchStateDropdown() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Please check your Internet Connection",
+        );
+        return;
+      }
+
+      final req = {"country_id": selectedCountry.value?.id};
+      final response = await THttpHelper.post(ApiConstant.getStateDD,req);
+      //
+      debugPrint("state Response:${response.toString()}");
+      if (response['statusCode'] == 204) {
+        stateList.value = <CountryModel>[];
+        return;
+      }
+        stateList.value = (response['data'] as List)
+            .map((e) => CountryModel.fromJson(e))
+            .toList();
+      // } else {
+      //
+      // }
+    } catch (e) {
+      TLoaders.errorSnackBar(
+        title: "State Dropdown Issue",
+        message: e.toString(),
+      );
+    }
+  }
+  Future<void> fetchDistrictDropdown() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Please check your Internet Connection",
+        );
+        return;
+      }
+
+      final req = {"state_id": selectedState.value?.id};
+      final response = await THttpHelper.post(ApiConstant.getCityDD,req);
+      //
+      debugPrint("state Response:${response.toString()}");
+      if (response['statusCode'] == 204) {
+        districtList.value = <CountryModel>[];
+        return;
+      }
+      districtList.value = (response['data'] as List)
+            .map((e) => CountryModel.fromJson(e))
+            .toList();
+      // } else {
+      //
+      // }
+    } catch (e) {
+      TLoaders.errorSnackBar(
+        title: "District Dropdown Issue",
         message: e.toString(),
       );
     }

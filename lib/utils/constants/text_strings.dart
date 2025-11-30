@@ -120,6 +120,7 @@ class TTexts {
   static const String city = "city";
   static const String district = "district";
   static const String state = "state";
+  static const String country = "country";
     static const String pincode = "pincode";
   static const String noCaste = "caste_no_bar";
 

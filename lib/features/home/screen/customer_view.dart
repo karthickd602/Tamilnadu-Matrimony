@@ -25,6 +25,7 @@ class CustomerDetailsView extends StatelessWidget {
         isBackButtonNeed: true,
         actions: [
           IconButton(
+            tooltip: "Share",
             onPressed: () async {},
             icon: const Icon(Icons.share_outlined),
             color: TColors.primary,
@@ -43,7 +44,7 @@ class CustomerDetailsView extends StatelessWidget {
                 onTap: () => Get.to(
                   () => ImagePreviewPage(
                     imageUrl: userModel.photo1 ?? TImages.sampleUser,
-                    imageType: userModel.photo1 == null
+                    imageType: userModel.photo1 == ""
                         ? ImageType.asset
                         : ImageType.network,
                   ),
@@ -54,7 +55,7 @@ class CustomerDetailsView extends StatelessWidget {
                   margin: 0,
                   padding: 0,
                   borderRadius: 0,
-                  imageType: userModel.photo1 == null
+                  imageType: userModel.photo1 == ""
                       ? ImageType.asset
                       : ImageType.network,
                   image: userModel.photo1 ?? TImages.sampleUser,
@@ -217,14 +218,20 @@ class CustomerDetailsView extends StatelessWidget {
                     ),
 
                     /// Horoscope Button
+
+                    if(userModel.horosApprove.toLowerCase() == "yes")
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(
+                                  () => ImagePreviewPage( imageUrl: userModel.horosCheck, imageType: ImageType.network,));
+                        },
                         icon: const Icon(Icons.remove_red_eye),
                         label: Text(TTexts.horoscope.tr),
                       ),
                     ),
+                    SizedBox(height: TSizes.spaceBtwSections),
                   ],
                 ),
               ),
@@ -274,22 +281,26 @@ class CustomerDetailsView extends StatelessWidget {
               if (showLikeAndShare)
                 Row(
                   children: [
-                    IconButton(
-                      tooltip: "Like",
-                      onPressed: () {
-                        controller.likeProfileInView(profileModel: userModel);
-                      },
-                      icon:controller.isLikeLoading.value
-                          ? CircularProgressIndicator(color: Colors.red)
-                          : userModel.liked.value == "yes"
-                          ? Icon(Icons.favorite, color: TColors.error)
-                          : Icon(Icons.favorite_border, color: TColors.error),
-                      color: Colors.redAccent,
-                      iconSize: 28,
-                    ),
+                    // Obx(
+                    //   ()=> IconButton(
+                    //     tooltip: "Like",
+                    //     onPressed: () {
+                    //       controller.likeProfile(profileModel: userModel);
+                    //     },
+                    //     icon:controller.isLikeLoading.value
+                    //         ? CircularProgressIndicator(color: Colors.red)
+                    //         : userModel.liked.value.toLowerCase() == "yes"
+                    //         ? Icon(Icons.favorite, color: TColors.error)
+                    //         : Icon(Icons.favorite_border, color: TColors.error),
+                    //     color: Colors.redAccent,
+                    //     iconSize: 28,
+                    //   ),
+                    // ),
                     IconButton(
                       tooltip: "Send Interest",
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.sendRequestAPI(profileId: userModel.id);
+                      },
                       icon: const Icon(Icons.send),
                       color: Colors.blueAccent,
                       iconSize: 26,

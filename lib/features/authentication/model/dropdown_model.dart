@@ -100,3 +100,44 @@ class CasteDDModel {
   }
 
 }
+
+
+class CountryModel {
+  final int? id;
+  final String? name;
+  final String? code;
+  final int? phoneCode;
+  final int? sortOrder;
+  final String? status;
+
+  CountryModel({
+    this.id,
+    this.name,
+    this.code,
+    this.phoneCode,
+    this.sortOrder,
+    this.status,
+  });
+
+  factory CountryModel.fromJson(Map<String, dynamic> json) {
+    return CountryModel(
+      id: json['id'],
+      name: json['name'],
+      code: json['code'],
+      phoneCode: json['phonecode'],
+      sortOrder: json['sortorder'],
+      status: json['status'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name,
+      "code": code,
+      "phonecode": phoneCode,
+      "sortorder": sortOrder,
+      "status": status,
+    };
+  }
+}

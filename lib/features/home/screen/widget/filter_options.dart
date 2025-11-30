@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tamilnadu_matrimony/common/widgets/containers/rounded_container.dart';
 
 import '../../controller/filter_controller.dart';
 
@@ -10,13 +11,13 @@ class FilterOptionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<FilterController>();
+    final controller = Get.put(FilterController());
     if (category == "Age") {
       return const _AgeRangeSelector(); // 👈 Custom widget for Age
     }
 
     // Dummy options per category
-    final categoryOptions = _getOptionsForCategory(category);
+    final categoryOptions = _getOptionsForCategory(category,controller);
 
     if (categoryOptions.isEmpty) {
       return const Center(
@@ -58,19 +59,22 @@ class FilterOptionsWidget extends StatelessWidget {
     return radioCategories.contains(category);
   }
 
-  List<String> _getOptionsForCategory(String category) {
+  List<String> _getOptionsForCategory(String category,FilterController controller) {
     switch (category) {
       case "Caste":
-        return ["Brahmin", "Gounder", "Naidu"];
-      case "Age":
-        return ["18-25", "26-30", "31-35"];
+        return controller.casteList.value.map((e) => e.name!).toList();
+      // case "Age":
+      //   return ["18-25", "26-30", "31-35"];
       case "Education":
-        return ["BEd", "MEd", "Diploma"];
+        controller.fetchEducationFilter();
+        return controller.educationList.value.map((e) => e.name!).toList();
 
       case "Marriage Type":
         return ["First Marriage", "Second Marriage"];
       case "Location":
         return ["Madurai", "Ramnad","Trichy"];
+        case "Dosham":
+        return controller.dhosamList;
 
       case "Disability":
         return ["Yes", "No"];
@@ -98,12 +102,15 @@ class _CheckboxOptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       final isSelected = controller.isOptionSelected(category, option);
-      return Card(
+      return TRoundedContainer(
         margin: const EdgeInsets.symmetric(vertical: 4),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        showBorder: true,
+        showShadow: false,
+        padding: EdgeInsets.all(2),
+        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: ListTile(
           onTap: () => controller.toggleOption(category, option),
-          title: Text(option),
+          title: Text(option,style:Theme.of(context).textTheme.bodyLarge,overflow: TextOverflow.ellipsis,maxLines: 3,),
           trailing: Checkbox(
             value: isSelected,
             onChanged: (_) => controller.toggleOption(category, option),
@@ -132,14 +139,16 @@ class _RadioOptionTile extends StatelessWidget {
       final selectedOptions = controller.selectedOptions[category];
       // final isSelected = selectedOptions != null && selectedOptions.contains(option);
 
-      return Card(
+      return TRoundedContainer(
         margin: const EdgeInsets.symmetric(vertical: 4),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        showBorder: true,
+        showShadow: false,
+        padding: EdgeInsets.all(2),
         child: ListTile(
           onTap: () {
             controller.selectedOptions[category] = [option]; // single selection
           },
-          title: Text(option),
+          title: Text(option,style:Theme.of(context).textTheme.bodyLarge,overflow: TextOverflow.ellipsis,maxLines: 3),
           trailing: Radio<String>(
             value: option,
             groupValue: selectedOptions?.first,

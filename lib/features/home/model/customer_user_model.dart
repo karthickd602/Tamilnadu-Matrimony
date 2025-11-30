@@ -29,7 +29,7 @@ class CustomerUserModel {
   String noOfSisters;
   String horosApprove;
   String horosCheck;
-  RxString liked = "no".obs;
+  // RxString liked = "no".obs;
   String verified;
 
   /// Default constructor
@@ -62,11 +62,9 @@ class CustomerUserModel {
     required this.noOfSisters,
     required this.horosApprove,
     required this.horosCheck,
-    String? liked,
+    // String? liked,
     required this.verified,
-  }){
-    this.liked.value = liked ?? "no";
-  }
+  });
 
   /// 🔥 Empty Default Model
   factory CustomerUserModel.empty() {
@@ -99,7 +97,7 @@ class CustomerUserModel {
       noOfSisters: "",
       horosApprove: "",
       horosCheck: "",
-      liked: "",
+      // liked: "no",
       verified: "",
     );
   }
@@ -135,44 +133,9 @@ class CustomerUserModel {
       noOfSisters: json["noofsisters"]?.toString() ?? "",
       horosApprove: json["HorosApprove"] ?? "",
       horosCheck: json["Horoscheck"]?.toString() ?? "",
-      liked: json['liked'] ?? "no",
+      // liked: json['liked'] ?? "no",
       verified: json["verified"] ?? "",
     );
   }
 
-  /// 🔁 Convert Model → JSON
-  Map<String, dynamic> toJson() {
-    return {
-      "ID": id,
-      "MatriID": matriId,
-      "Name": name,
-      "Age": age,
-      "Address": address,
-      "Occupation": occupation,
-      "EducationDetails": educationDetails,
-      "Moonsign": moonSign,
-      "Star": star,
-      "City": city,
-      "State": state,
-      "Religion": religion,
-      "Maritalstatus": maritalStatus,
-      "DOB": dob,
-      "InLaknam": inLaknam,
-      "Caste": caste,
-      "photo1": photo1,
-      "Photo1Approve": photo1Approve,
-      "Complexion": complexion,
-      "Height": height,
-      "Fathername": fatherName,
-      "Fathersoccupation": fathersOccupation,
-      "Mothersname": motherName,
-      "Mothersoccupation": mothersOccupation,
-      "noofbrothers": noOfBrothers,
-      "noofsisters": noOfSisters,
-      "HorosApprove": horosApprove,
-      "Horoscheck": horosCheck,
-      "liked": liked,
-      "verified": verified,
-    };
-  }
 }

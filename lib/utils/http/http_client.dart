@@ -60,10 +60,10 @@ class THttpHelper {
 
   // Handle the HTTP response
   static Map<String, dynamic> _handleResponse(http.Response response) {
-    if (response.statusCode == 200) {
+    if (response.statusCode >= 200) {
       return json.decode(response.body);
     }
-    if(response.statusCode == 404||response.statusCode == 400){
+    if(response.statusCode == 404||response.statusCode == 400||response.statusCode==409){
       final message = json.decode(response.body)['message'];
       throw message;
     }else {

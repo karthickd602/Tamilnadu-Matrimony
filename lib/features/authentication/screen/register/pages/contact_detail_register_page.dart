@@ -1,5 +1,8 @@
+import 'package:tamilnadu_matrimony/features/authentication/model/dropdown_model.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
+import '../../../../../common/widgets/dropdown/dropdown_with_search.dart';
+import '../../../../../utils/validators/validation.dart';
 import '../../../controller/register/register_controller.dart';
 import '../widgets/get_image.dart';
 
@@ -12,19 +15,20 @@ class ContactDetails extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final primaryColor = TColors.primary;
 
-    return  Form(
+    return Form(
       key: controller.contactFormKey,
       child: SingleChildScrollView(
-        padding:  EdgeInsets.all(TSizes.defaultSpace),
+        padding: EdgeInsets.all(TSizes.defaultSpace),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               TTexts.contactDetails.tr,
-              style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              style: textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 20),
-
 
             /// --- WhatsApp Number ---
             // TFormField(
@@ -34,7 +38,6 @@ class ContactDetails extends StatelessWidget {
             //   keyboardType: TextInputType.phone,
             // ),
 
-
             /// --- Alternate Mobile ---
             TFormField(
               controller: controller.alternateMobileController,
@@ -42,7 +45,6 @@ class ContactDetails extends StatelessWidget {
               icon: Icons.phone,
               keyboardType: TextInputType.phone,
             ),
-
 
             /// --- Email ---
             TFormField(
@@ -52,7 +54,6 @@ class ContactDetails extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
             ),
 
-
             /// --- Address ---
             TFormField(
               controller: controller.addressController,
@@ -61,23 +62,55 @@ class ContactDetails extends StatelessWidget {
               keyboardType: TextInputType.streetAddress,
             ),
 
-
-
-            /// --- State ---
-            TFormField(
-              isDropdown: true,
-              items: ["Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh", "Maharashtra", "Rajasthan",],
-              onChanged:(v)=> controller.stateController.value=v??'',
-              labelText: TTexts.state.tr,
-              icon: Icons.flag_outlined,
+            TSearchDropdownField<CountryModel>(
+              label: TTexts.country.tr,
+              items: controller.countryList,
+              prefixIcon: Icons.map,
+              selectedItem: controller.selectedCountry.value,
+              itemAsString: (item) => item.name.toString(),
+              compareFn: (a, b) => a.name == b.name,
+              onChanged: (value) {
+                if (value == null) return;
+                controller.selectedCountry.value = value;
+                controller.fetchStateDropdown();
+              },
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.occupationDetails.tr,
+                value?.name,
+              ),
             ),
-            /// --- District ---
-            TFormField(
-              onChanged:(v)=> controller.districtController.value=v??'',
-              isDropdown: true,
-              items: ["Madurai","Chennai"],
-              labelText: TTexts.district.tr,
-              icon: Icons.map_outlined,
+
+            SizedBox(height: TSizes.sm),
+            TSearchDropdownField<CountryModel>(
+              label: TTexts.state.tr,
+              items: controller.stateList,
+              prefixIcon: Icons.school_outlined,
+              selectedItem: controller.selectedState.value,
+              itemAsString: (item) => item.name.toString(),
+              compareFn: (a, b) => a.name == b.name,
+              onChanged: (value) {
+                if (value == null) return;
+                controller.selectedState.value = value;
+                controller.fetchDistrictDropdown();
+              },
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.state.tr, value?.name),
+            ),
+            SizedBox(height: TSizes.sm),
+            TSearchDropdownField<CountryModel>(
+              label: TTexts.district.tr,
+              items: controller.districtList,
+              prefixIcon: Icons.map_outlined,
+              selectedItem: controller.selectedDistrict.value,
+              itemAsString: (item) => item.name.toString(),
+              compareFn: (a, b) => a.name == b.name,
+              onChanged: (value) {
+                if (value == null) return;
+                controller.selectedDistrict.value = value;
+                // controller.fetchDistrictDropdown();
+              },
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.district.tr, value?.name),
             ),
 
             /// --- Pincode ---
@@ -90,24 +123,29 @@ class ContactDetails extends StatelessWidget {
 
             ImagePickerBox(
               title: TTexts.profile.tr,
-              onPickImage:()=>controller.showImageSourceSheet(imagePath: controller.profileImagePath), imagePath: controller.profileImagePath,),
-        Obx(() => Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Checkbox(
-              value: controller.noCasteChecked.value,
-              onChanged: (newValue){
-                controller.noCasteChecked.value = newValue!;
-              },
+              onPickImage: () => controller.showImageSourceSheet(
+                imagePath: controller.profileImagePath,
+              ),
+              imagePath: controller.profileImagePath,
             ),
-            const SizedBox(width: TSizes.xs),
-            Text(
-              TTexts.noCaste.tr,
-              style: Theme.of(context).textTheme.titleMedium,
+            Obx(
+              () => Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Checkbox(
+                    value: controller.noCasteChecked.value,
+                    onChanged: (newValue) {
+                      controller.noCasteChecked.value = newValue!;
+                    },
+                  ),
+                  const SizedBox(width: TSizes.xs),
+                  Text(
+                    TTexts.noCaste.tr,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),),
-            
 
             const SizedBox(height: TSizes.spaceBtwSections),
 
@@ -130,7 +168,7 @@ class ContactDetails extends StatelessWidget {
 
                 Expanded(
                   child: ElevatedButton(
-                    onPressed:()=> controller.contactFormSubmit(),
+                    onPressed: () => controller.contactFormSubmit(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
                       // padding: const EdgeInsets.symmetric(vertical: 14),

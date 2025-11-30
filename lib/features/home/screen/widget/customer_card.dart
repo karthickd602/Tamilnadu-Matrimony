@@ -197,8 +197,8 @@ class CustomerCard extends StatelessWidget {
                     const SizedBox(width: 12),
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        controller.fetchCustomerPage(customerProfile.id??0);
+                      onTap: ()async {
+                       await controller.fetchCustomerPage(customerProfile.id??0);
                         // controller.fetchCustomerPage(customerProfile.id??0);
                         Get.to(() => CustomerDetailsView());
                       },

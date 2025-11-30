@@ -11,9 +11,13 @@ class ApiConstant {
   static const String getReligionDD = "get_religion_data";
   static const String getCasteDD = "get_caste_data";
   static const String getEducationDD = "get_education_data";
+  static const String getCountryDD = "get_country_data";
+  static const String getStateDD = "get_state_data";
+  static const String getCityDD = "get_city_data";
   static const String dashboardListEndPoint = "dashboard";
   static const String customerProfilePage = "get_user_data";
   static const String likeProfileEndPoint = "liked_profile";
+  static const String sendInterestProfileEndPoint = "send_interest";
   static const String alertListSendEndPoint = "alert_int_sent";
   static const String alertListReceiveEndPoint = "alert_int_receive";
   static const String notificationListEndPoint = "alert_notifications";

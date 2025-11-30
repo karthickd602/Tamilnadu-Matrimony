@@ -7,14 +7,11 @@ import '../model/dashboard_list_model.dart';
 class DashboardController extends GetxController {
   static DashboardController get instance => Get.find();
 
-
   final RxBool isLikeLoading = false.obs;
   late final String? liked;
   final storage = GetStorage();
   final dashboardCustomerList = <CustomerProfileListModel>[].obs;
-  final userModel = CustomerUserModel
-      .empty()
-      .obs;
+  final userModel = CustomerUserModel.empty().obs;
 
   @override
   void onInit() {
@@ -69,8 +66,9 @@ class DashboardController extends GetxController {
       }
 
       TFullScreenLoader.popUpCircular();
-      // final req = {"id": profileId};
-      final req = {"id": 11622};
+      final req = {"view_user_id": profileId,"user_id"
+          "": storage.read(TTexts.userId)};
+      // final req = {"id": 11622};
 
       debugPrint("fetchCustomerPage req: $req");
       final response = await THttpHelper.post(
@@ -78,12 +76,12 @@ class DashboardController extends GetxController {
         req,
       );
 
-      debugPrint("fetchDashboardCustomerProfile response: $response");
+      debugPrint("fetchCustomerPage response: $response");
 
-      final user = (response["data"] as List)
-          .map((e) => CustomerUserModel.fromJson(e))
-          .toList();
-      userModel.value = user.first;
+      // final user = (response["data"] as List)
+      //     .map((e) => CustomerUserModel.fromJson(e))
+      //     .toList();
+      userModel.value = CustomerUserModel.fromJson(response["data"]);
 
       TFullScreenLoader.stopLoading();
     } catch (e) {
@@ -93,8 +91,9 @@ class DashboardController extends GetxController {
     }
   }
 
-  Future<void> likeProfile(
-      {required CustomerProfileListModel profileModel}) async {
+  Future<void> likeProfile({
+    required CustomerProfileListModel profileModel,
+  }) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
@@ -108,13 +107,13 @@ class DashboardController extends GetxController {
       isLikeLoading.value = true;
       final req = {
         "user_id": storage.read(TTexts.userId),
-        "liked_user_id": profileModel.id
+        "liked_user_id": profileModel.id,
       };
       final response = await THttpHelper.post(
         ApiConstant.likeProfileEndPoint,
         req,
       );
-      if (profileModel.liked.value == "yes") {
+      if (profileModel.liked.value.toLowerCase() == "yes") {
         profileModel.liked.value = "no";
       } else {
         profileModel.liked.value = "yes";
@@ -126,11 +125,13 @@ class DashboardController extends GetxController {
     } catch (e) {
       isLikeLoading.value = false;
       TLoaders.errorSnackBar(
-          title: "Error in Like Profile", message: e.toString());
+        title: "Error in Like Profile",
+        message: e.toString(),
+      );
     }
   }
-  Future<void> likeProfileInView(
-      {required CustomerUserModel profileModel}) async {
+
+  Future<void> sendRequestAPI({required int profileId}) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
@@ -141,30 +142,69 @@ class DashboardController extends GetxController {
         return;
       }
 
-      isLikeLoading.value = true;
+      TFullScreenLoader.popUpCircular();
       final req = {
-        "user_id": storage.read(TTexts.userId),
-        "liked_user_id": profileModel.id
+        "sender_id": storage.read(TTexts.userId),
+        "receiver_id": profileId,
       };
-
-      debugPrint("likeProfile response: $req");
       final response = await THttpHelper.post(
-        ApiConstant.likeProfileEndPoint,
+        ApiConstant.sendInterestProfileEndPoint,
         req,
       );
-      if (profileModel.liked.value == "yes") {
-        profileModel.liked.value = "no";
-      } else {
-        profileModel.liked.value = "yes";
-      }
 
-      debugPrint("likeProfile response: $response");
+      debugPrint("sendRequestAPI response: $response");
+      TLoaders.successSnackBar(
+        title: "Send Interest",
+        message: response['message'],
+      );
 
-      isLikeLoading.value = false;
+      TFullScreenLoader.stopLoading();
     } catch (e) {
-      isLikeLoading.value = false;
+      TFullScreenLoader.stopLoading();
+
       TLoaders.errorSnackBar(
-          title: "Error in Like Profile", message: e.toString());
+        title: "Send Interest",
+        message: e.toString(),
+      );
     }
   }
+
+  // Future<void> likeProfileInView(
+  //     {required CustomerUserModel profileModel}) async {
+  //   try {
+  //     final isConnected = await NetworkManager.instance.isConnected();
+  //     if (!isConnected) {
+  //       TLoaders.errorSnackBar(
+  //         title: "No Internet",
+  //         message: "No Internet Connection",
+  //       );
+  //       return;
+  //     }
+  //
+  //     isLikeLoading.value = true;
+  //     final req = {
+  //       "user_id": storage.read(TTexts.userId),
+  //       "liked_user_id": profileModel.id
+  //     };
+  //
+  //     debugPrint("likeProfileInView response: $req");
+  //     final response = await THttpHelper.post(
+  //       ApiConstant.likeProfileEndPoint,
+  //       req,
+  //     );
+  //     if (profileModel.liked.value == "yes") {
+  //       profileModel.liked.value = "no";
+  //     } else {
+  //       profileModel.liked.value = "yes";
+  //     }
+  //
+  //     debugPrint("likeProfile response: $response");
+  //
+  //     isLikeLoading.value = false;
+  //   } catch (e) {
+  //     isLikeLoading.value = false;
+  //     TLoaders.errorSnackBar(
+  //         title: "Error in Like Profile", message: e.toString());
+  //   }
+  // }
 }

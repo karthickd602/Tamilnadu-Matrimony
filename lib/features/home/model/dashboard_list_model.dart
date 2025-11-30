@@ -1,4 +1,4 @@
-import '../../../utils/constants/path_provider.dart';
+import 'package:get/get.dart';
 
 class CustomerProfileListModel {
   final int? id;
@@ -11,10 +11,24 @@ class CustomerProfileListModel {
   final String? moonSign;
   final String? star;
   final String? city;
+  final String? state;
+  final String? religion;
   final String? maritalStatus;
+  final String? dob;
+  final String? inLaknam;
   final String? caste;
   final String? image;
   final String? photoApprove;
+  final String? complexion;
+  final String? height;
+  final String? fatherName;
+  final String? fatherOccupation;
+  final String? motherName;
+  final String? motherOccupation;
+  final String? noOfBrothers;
+  final String? noOfSisters;
+  final String? horosApprove;
+  final String? horosCheck;
   RxString liked = "no".obs;
   final String? verified;
 
@@ -29,14 +43,64 @@ class CustomerProfileListModel {
     this.moonSign,
     this.star,
     this.city,
+    this.state,
+    this.religion,
     this.maritalStatus,
+    this.dob,
+    this.inLaknam,
     this.caste,
     this.image,
     this.photoApprove,
+    this.complexion,
+    this.height,
+    this.fatherName,
+    this.fatherOccupation,
+    this.motherName,
+    this.motherOccupation,
+    this.noOfBrothers,
+    this.noOfSisters,
+    this.horosApprove,
+    this.horosCheck,
     String? liked,
     this.verified,
   }) {
     this.liked.value = liked ?? "no";
+  }
+
+  /// EMPTY MODEL
+  factory CustomerProfileListModel.empty() {
+    return  CustomerProfileListModel(
+      id : 0,
+      matriId : "",
+      name : "",
+      age : "",
+      address : "",
+      occupation : "",
+      educationDetails : "",
+      moonSign : "",
+      star : "",
+      city : "",
+      state : "",
+      religion : "",
+      maritalStatus : "",
+      dob : "",
+      inLaknam : "",
+      caste : "",
+      image : "",
+      photoApprove : "",
+      complexion : "",
+      height : "",
+      fatherName : "",
+      fatherOccupation : "",
+      motherName : "",
+      motherOccupation : "",
+      noOfBrothers : "",
+      noOfSisters : "",
+      horosApprove : "",
+      horosCheck : "",
+      liked:'',
+      verified : "",
+    );
   }
 
   factory CustomerProfileListModel.fromJson(Map<String, dynamic> json) {
@@ -51,12 +115,61 @@ class CustomerProfileListModel {
       moonSign: json['Moonsign'],
       star: json['Star'],
       city: json['City'],
+      state: json['State'],
+      religion: json['Religion'],
       maritalStatus: json['Maritalstatus'],
+      dob: json['DOB'],
+      inLaknam: json['InLaknam'],
       caste: json['Caste'],
       image: json['photo1'],
       photoApprove: json['Photo1Approve'],
+      complexion: json['Complexion'],
+      height: json['Height'],
+      fatherName: json['Fathername'],
+      fatherOccupation: json['Fathersoccupation'],
+      motherName: json['Mothersname'],
+      motherOccupation: json['Mothersoccupation'],
+      noOfBrothers: json['noofbrothers'],
+      noOfSisters: json['noofsisters'],
+      horosApprove: json['HorosApprove'],
+      horosCheck: json['Horoscheck'],
       liked: json['liked'] ?? "no",
-      verified: json['verified'] ?? "false",
+      verified: json['verified'] ?? "no",
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'ID': id,
+      'MatriID': matriId,
+      'Name': name,
+      'Age': age,
+      'Address': address,
+      'Occupation': occupation,
+      'EducationDetails': educationDetails,
+      'Moonsign': moonSign,
+      'Star': star,
+      'City': city,
+      'State': state,
+      'Religion': religion,
+      'Maritalstatus': maritalStatus,
+      'DOB': dob,
+      'InLaknam': inLaknam,
+      'Caste': caste,
+      'photo1': image,
+      'Photo1Approve': photoApprove,
+      'Complexion': complexion,
+      'Height': height,
+      'Fathername': fatherName,
+      'Fathersoccupation': fatherOccupation,
+      'Mothersname': motherName,
+      'Mothersoccupation': motherOccupation,
+      'noofbrothers': noOfBrothers,
+      'noofsisters': noOfSisters,
+      'HorosApprove': horosApprove,
+      'Horoscheck': horosCheck,
+      'liked': liked.value,
+      'verified': verified,
+    };
   }
 }
