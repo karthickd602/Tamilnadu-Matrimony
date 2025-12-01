@@ -91,6 +91,7 @@ class ContactDetails extends StatelessWidget {
               onChanged: (value) {
                 if (value == null) return;
                 controller.selectedState.value = value;
+                controller.selectedDistrict.value=null;
                 controller.fetchDistrictDropdown();
               },
               validator: (value) =>
@@ -106,6 +107,7 @@ class ContactDetails extends StatelessWidget {
               compareFn: (a, b) => a.name == b.name,
               onChanged: (value) {
                 if (value == null) return;
+
                 controller.selectedDistrict.value = value;
                 // controller.fetchDistrictDropdown();
               },

@@ -145,7 +145,10 @@ class _BottomButtons extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: ElevatedButton.icon(
-            onPressed: () => Get.back(result: controller.selectedOptions),
+            onPressed: () {
+              controller.fetchFilter();
+              // Get.back(result: controller.selectedOptions);
+            },
             icon: const Icon(Icons.check_rounded),
             label: const Text("Apply"),
             style: ElevatedButton.styleFrom(

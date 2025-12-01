@@ -22,6 +22,7 @@ class FilterController extends GetxController {
   ].obs;
   final casteList = <CasteDDModel>[].obs;
   final educationList = <EducationDDModel>[].obs;
+  final districtList = <CountryModel>[].obs;
 
   final dhosamList = [
     "ராகு-கேது தோஷம்",
@@ -31,7 +32,7 @@ class FilterController extends GetxController {
     "களத்திர தோஷம்",
     "பித்ரு தோஷம்",
     "இதர தோஷம்"
-  ];
+  ].obs;
 
   @override
   void onInit() async{
@@ -50,6 +51,8 @@ class FilterController extends GetxController {
         );
         return;
       }
+// if(casteList.isEmpty) return;
+      TFullScreenLoader.popUpCircular();
 
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
@@ -62,8 +65,10 @@ class FilterController extends GetxController {
       } else {
         casteList.value = <CasteDDModel>[];
       }
+      TFullScreenLoader.stopLoading();
       update();
     } catch (e) {
+      TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(
         title: "Caste Dropdown Issue",
         message: e.toString(),
@@ -105,10 +110,42 @@ class FilterController extends GetxController {
     }
   }
 
+  Future<void> fetchDistrictDropdown() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Please check your Internet Connection",
+        );
+        return;
+      }
+
+      final req = {"state_id": 35};
+      final response = await THttpHelper.post(ApiConstant.getCityDD,req);
+      //
+      debugPrint("state Response:${response.toString()}");
+      if (response['statusCode'] == 204) {
+        districtList.value = <CountryModel>[];
+        return;
+      }
+      districtList.value = (response['data'] as List)
+          .map((e) => CountryModel.fromJson(e))
+          .toList();
+
+    } catch (e) {
+      TLoaders.errorSnackBar(
+        title: "District Dropdown Issue",
+        message: e.toString(),
+      );
+    }
+  }
+
   var ageRange = const RangeValues(18,50).obs;
 
+
   // 🔹 Locked categories
-  final lockedCategories = [ ].obs;
+  final lockedCategories = ["Nakshatram" ].obs;
   // final lockedCategories = [ "Dosham","Nakshatram"].obs;
 
   // 🔹 Selected options per category
@@ -138,4 +175,30 @@ class FilterController extends GetxController {
 
   // 🔹 Reset all filters
   void resetFilters() => selectedOptions.clear();
+
+  Future<Map<String, dynamic>> fetchFilter() async {
+    try {
+      final req = {
+        "caste": selectedOptions["Caste"] ?? [],
+        "age_from": ageRange.value.start.toInt(),
+        "age_to": ageRange.value.end.toInt(),
+        "education": selectedOptions["Education"] ?? [],
+        "marriage_type": selectedOptions["Marriage Type"] ?? [],
+        "location": selectedOptions["Location"] ?? [],
+        "dosham": selectedOptions["Dosham"] ?? [],
+        "no_caste_bar": selectedOptions["No Caste Bar"]?.firstOrNull ?? "",
+        "disability": selectedOptions["Disability"]?.firstOrNull ?? "",
+      };
+
+      debugPrint("Filter Request = $req");
+      return req;
+    } catch (e) {
+      TLoaders.errorSnackBar(
+        title: "Filter Error",
+        message: e.toString(),
+      );
+      return {};
+    }
+  }
+
 }

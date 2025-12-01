@@ -36,7 +36,11 @@ class UnlockedController extends GetxController{
         ApiConstant.unlockListEndPoint,
         req,
       );
-
+if(response['statusCode']==204) {
+  TFullScreenLoader.stopLoading();
+  return;
+}
+      // if(response)
       debugPrint("fetch like list response: $response");
 
       unlockList.value = (response["data"] as List)

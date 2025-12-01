@@ -29,8 +29,8 @@ class AlertInterestSendController extends GetxController {
       }
 
       TFullScreenLoader.popUpCircular();
-      // final req = {"user_id": storage.read(TTexts.userId)};
-      final req = {"user_id": "11622"};
+      final req = {"user_id": storage.read(TTexts.userId)};
+      // final req = {"user_id": "11622"};
       debugPrint("fetchAlertSendProfile req: $req");
       final response = await THttpHelper.post(
         ApiConstant.alertListSendEndPoint,
@@ -62,8 +62,8 @@ class AlertInterestSendController extends GetxController {
       }
 
       TFullScreenLoader.popUpCircular();
-      // final req = {"user_id": storage.read(TTexts.userId)};
-      final req = {"user_id": "5"};
+      final req = {"user_id": storage.read(TTexts.userId)};
+      // final req = {"user_id": "5"};
       debugPrint("fetchAlertSendProfile req: $req");
       final response = await THttpHelper.post(
         ApiConstant.alertListReceiveEndPoint,

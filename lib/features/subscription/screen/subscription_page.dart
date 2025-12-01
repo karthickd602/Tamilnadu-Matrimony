@@ -4,6 +4,7 @@ import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 
 import '../../../utils/constants/image_strings.dart';
 import '../controller/subscription_controller.dart';
+import '../model/subscription_model.dart';
 
 class SubscriptionPage extends StatelessWidget {
   const SubscriptionPage({super.key});

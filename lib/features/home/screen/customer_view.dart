@@ -97,7 +97,7 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.cake,
                           "label": TTexts.dob.tr,
-                          "value": userModel.dob ?? "-",
+                          "value": THelperFunctions.formatDateString(userModel.dob),
                         },
                       ],
                       primaryColor,

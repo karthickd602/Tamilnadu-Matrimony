@@ -68,6 +68,14 @@ class THelperFunctions {
     } catch (e) {
       return dateString;
     }
+  }  static String formatDateString(String? dateString) {
+    if (dateString == null || dateString.isEmpty) return '-';
+    try {
+      final date = DateTime.parse(dateString);
+      return getFormattedDate(date);
+    } catch (e) {
+      return dateString;
+    }
   }
   static String getFormattedDateAndTimeWithSec(
       DateTime date, {

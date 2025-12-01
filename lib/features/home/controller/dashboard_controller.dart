@@ -2,6 +2,7 @@ import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart
 import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 
 import '../../../utils/constants/path_provider.dart';
+import '../../favorites/controller/like_controller.dart';
 import '../model/dashboard_list_model.dart';
 
 class DashboardController extends GetxController {
@@ -12,44 +13,74 @@ class DashboardController extends GetxController {
   final storage = GetStorage();
   final dashboardCustomerList = <CustomerProfileListModel>[].obs;
   final userModel = CustomerUserModel.empty().obs;
+  final RxBool isFirstLoad = false.obs;
+  final RxBool isMoreLoading = false.obs;
 
+  final RxInt currentPage = 1.obs;
+  // final int pageSize = 10; // If API supports
+  final RxBool hasMore = true.obs;
+
+
+  final scrollController = ScrollController();
   @override
   void onInit() {
     super.onInit();
-    fetchDashboardCustomerProfile();
-    // fetchCustomerPage();
+    fetchDashboardCustomerProfile(isInitial: true);
+    scrollController.addListener(_scrollListener);
   }
+  void _scrollListener() {
+    if (!hasMore.value || isMoreLoading.value) return;
 
-  Future<void> fetchDashboardCustomerProfile() async {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      fetchDashboardCustomerProfile(isInitial: false);
+    }
+  }
+  Future<void> fetchDashboardCustomerProfile({bool isInitial = false}) async {
     try {
+      if (isInitial) {
+        isFirstLoad.value = true;
+        currentPage.value = 1;
+        hasMore.value = true;
+        dashboardCustomerList.clear();
+      } else {
+        isMoreLoading.value = true;
+      }
+
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
-        TLoaders.errorSnackBar(
-          title: "No Internet",
-          message: "No Internet Connection",
-        );
+        TLoaders.errorSnackBar(title: "No Internet", message: "No Internet Connection");
         return;
       }
 
-      TFullScreenLoader.popUpCircular();
-      final req = {"id": storage.read(TTexts.userId)};
+      final req = {
+        "id": storage.read(TTexts.userId),
+        "page": currentPage.value,
+      };
 
-      debugPrint("fetchDashboardCustomerProfile req: $req");
       final response = await THttpHelper.post(
         ApiConstant.dashboardListEndPoint,
         req,
       );
 
-      debugPrint("fetchDashboardCustomerProfile response: $response");
+      List newData = response["profiles"] ?? [];
 
-      dashboardCustomerList.value = (response["profiles"] as List)
-          .map((e) => CustomerProfileListModel.fromJson(e))
-          .toList();
+      if (newData.isNotEmpty) {
+        dashboardCustomerList.addAll(
+          newData.map((e) => CustomerProfileListModel.fromJson(e)).toList(),
+        );
 
-      TFullScreenLoader.stopLoading();
+        currentPage.value++; // Increment page
+      } else {
+        hasMore.value = false; // No more data
+      }
+
+      isFirstLoad.value = false;
+      isMoreLoading.value = false;
+
     } catch (e) {
-      TFullScreenLoader.stopLoading();
-      debugPrint("fetchDashboardCustomerProfile Error: $e");
+      isFirstLoad.value = false;
+      isMoreLoading.value = false;
       TLoaders.errorSnackBar(title: "Error", message: e.toString());
     }
   }
@@ -66,8 +97,10 @@ class DashboardController extends GetxController {
       }
 
       TFullScreenLoader.popUpCircular();
-      final req = {"view_user_id": profileId,"user_id"
-          "": storage.read(TTexts.userId)};
+      final req = {
+        "view_user_id": profileId,
+        "user_id": storage.read(TTexts.userId),
+      };
       // final req = {"id": 11622};
 
       debugPrint("fetchCustomerPage req: $req");
@@ -77,10 +110,6 @@ class DashboardController extends GetxController {
       );
 
       debugPrint("fetchCustomerPage response: $response");
-
-      // final user = (response["data"] as List)
-      //     .map((e) => CustomerUserModel.fromJson(e))
-      //     .toList();
       userModel.value = CustomerUserModel.fromJson(response["data"]);
 
       TFullScreenLoader.stopLoading();
@@ -118,7 +147,7 @@ class DashboardController extends GetxController {
       } else {
         profileModel.liked.value = "yes";
       }
-
+      await Get.put(LikeController()). fetchLikeList();
       debugPrint("likeProfile response: $response");
 
       isLikeLoading.value = false;
@@ -162,49 +191,7 @@ class DashboardController extends GetxController {
     } catch (e) {
       TFullScreenLoader.stopLoading();
 
-      TLoaders.errorSnackBar(
-        title: "Send Interest",
-        message: e.toString(),
-      );
+      TLoaders.errorSnackBar(title: "Send Interest", message: e.toString());
     }
   }
-
-  // Future<void> likeProfileInView(
-  //     {required CustomerUserModel profileModel}) async {
-  //   try {
-  //     final isConnected = await NetworkManager.instance.isConnected();
-  //     if (!isConnected) {
-  //       TLoaders.errorSnackBar(
-  //         title: "No Internet",
-  //         message: "No Internet Connection",
-  //       );
-  //       return;
-  //     }
-  //
-  //     isLikeLoading.value = true;
-  //     final req = {
-  //       "user_id": storage.read(TTexts.userId),
-  //       "liked_user_id": profileModel.id
-  //     };
-  //
-  //     debugPrint("likeProfileInView response: $req");
-  //     final response = await THttpHelper.post(
-  //       ApiConstant.likeProfileEndPoint,
-  //       req,
-  //     );
-  //     if (profileModel.liked.value == "yes") {
-  //       profileModel.liked.value = "no";
-  //     } else {
-  //       profileModel.liked.value = "yes";
-  //     }
-  //
-  //     debugPrint("likeProfile response: $response");
-  //
-  //     isLikeLoading.value = false;
-  //   } catch (e) {
-  //     isLikeLoading.value = false;
-  //     TLoaders.errorSnackBar(
-  //         title: "Error in Like Profile", message: e.toString());
-  //   }
-  // }
 }

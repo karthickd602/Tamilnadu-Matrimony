@@ -8,25 +8,30 @@ class LikePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LikeController());
-    return  Column(
-      children: [
+    return  RefreshIndicator(
+      onRefresh: (){
+        return controller.fetchLikeList();
+      },
+      child: Column(
+        children: [
 
-        Expanded(
-          child: Obx(
-            ()=> ListView.separated(
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              itemCount: controller.likeList.length,
-              separatorBuilder: (_, i) =>
-              const SizedBox(height: TSizes.spaceBtwItems),
-              itemBuilder: (conte, index) {
-                final customerProfile = controller.likeList[index];
-                return CustomerCard(customerProfile: customerProfile,);
-              },
+          Expanded(
+            child: Obx(
+              ()=> ListView.separated(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                itemCount: controller.likeList.length,
+                separatorBuilder: (_, i) =>
+                const SizedBox(height: TSizes.spaceBtwItems),
+                itemBuilder: (conte, index) {
+                  final customerProfile = controller.likeList[index];
+                  return CustomerCard(customerProfile: customerProfile,);
+                },
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

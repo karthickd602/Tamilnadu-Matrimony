@@ -406,9 +406,7 @@ class RegistrationController extends GetxController {
       districtList.value = (response['data'] as List)
             .map((e) => CountryModel.fromJson(e))
             .toList();
-      // } else {
-      //
-      // }
+
     } catch (e) {
       TLoaders.errorSnackBar(
         title: "District Dropdown Issue",

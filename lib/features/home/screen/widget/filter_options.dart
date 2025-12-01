@@ -16,38 +16,44 @@ class FilterOptionsWidget extends StatelessWidget {
       return const _AgeRangeSelector(); // 👈 Custom widget for Age
     }
 
-    // Dummy options per category
-    final categoryOptions = _getOptionsForCategory(category,controller);
-
-    if (categoryOptions.isEmpty) {
-      return const Center(
-        child: Text(
-          "No options available",
-          style: TextStyle(color: Colors.grey),
-        ),
-      );
-    }
-
-    // Determine if this category should use radio (single selection)
-    final useRadio = _useRadioForCategory(category);
 
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: ListView.builder(
-        itemCount: categoryOptions.length,
-        itemBuilder: (context, index) {
-          final option = categoryOptions[index];
-          return !useRadio
-              ? _RadioOptionTile(
-            category: category,
-            option: option,
-            controller: controller,
-          )
-              : _CheckboxOptionTile(
-            category: category,
-            option: option,
-            controller: controller,
-          );
+      child: Obx(
+        () {
+
+          // Dummy options per category
+          final categoryOptions = _getOptionsForCategory(category,controller);
+
+          if (categoryOptions.isEmpty) {
+            return const Center(
+              child: Text(
+                "No options available",
+                style: TextStyle(color: Colors.grey),
+              ),
+            );
+          }
+
+          // Determine if this category should use radio (single selection)
+          final useRadio = _useRadioForCategory(category);
+
+          return ListView.builder(
+          itemCount: categoryOptions.length,
+          itemBuilder: (context, index) {
+            final option = categoryOptions[index];
+            return !useRadio
+                ? _RadioOptionTile(
+              category: category,
+              option: option,
+              controller: controller,
+            )
+                : _CheckboxOptionTile(
+              category: category,
+              option: option,
+              controller: controller,
+            );
+          },
+        );
         },
       ),
     );
@@ -62,6 +68,7 @@ class FilterOptionsWidget extends StatelessWidget {
   List<String> _getOptionsForCategory(String category,FilterController controller) {
     switch (category) {
       case "Caste":
+
         return controller.casteList.value.map((e) => e.name!).toList();
       // case "Age":
       //   return ["18-25", "26-30", "31-35"];
@@ -70,18 +77,19 @@ class FilterOptionsWidget extends StatelessWidget {
         return controller.educationList.value.map((e) => e.name!).toList();
 
       case "Marriage Type":
-        return ["First Marriage", "Second Marriage"];
+        return ["First Marriage", "Second Marriage"].obs;
       case "Location":
-        return ["Madurai", "Ramnad","Trichy"];
+        controller.fetchDistrictDropdown();
+        return controller.districtList.value.map((e) => e.name!).toList();
         case "Dosham":
         return controller.dhosamList;
 
       case "Disability":
-        return ["Yes", "No"];
+        return ["Yes", "No"].obs;
       case "No Caste Bar":
-        return ["Yes", "No"];
+        return ["Yes", "No"].obs;
       default:
-        return ["Option 1", "Option 2", "Option 3"];
+        return ["Option 1", "Option 2", "Option 3"].obs;
     }
   }
 }

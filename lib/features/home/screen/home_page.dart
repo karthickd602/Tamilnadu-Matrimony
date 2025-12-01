@@ -38,19 +38,30 @@ class HomePage extends StatelessWidget {
 
               Expanded(
                 child: Obx(
-                  ()=> ListView.separated(
-                    shrinkWrap: true,
+                      () => controller.isFirstLoad.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : ListView.separated(
+                    controller: controller.scrollController,
                     physics: const BouncingScrollPhysics(),
-                    itemCount: controller.dashboardCustomerList.length,
-                    separatorBuilder: (_, i) =>
-                    const SizedBox(height: TSizes.spaceBtwItems),
-                    itemBuilder: (conte, index) {
+                    itemCount: controller.dashboardCustomerList.length +
+                        (controller.hasMore.value ? 1 : 0),
+                    separatorBuilder: (_, i) => const SizedBox(height: 20),
+                    itemBuilder: (context, index) {
+                      if (index == controller.dashboardCustomerList.length) {
+                        // Pagination Loader
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
                       final customer = controller.dashboardCustomerList[index];
-                      return CustomerCard(customerProfile: customer,);
+                      return CustomerCard(customerProfile: customer);
                     },
                   ),
                 ),
-              ),
+              )
+
             ],
           ),
         ),

@@ -75,7 +75,7 @@ final AlertProfileModel alertProfileModel;
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 TextSpan(
-                  text: " - ${alertProfileModel.eisentdt}",
+                  text: " - ${THelperFunctions.formatDateString(alertProfileModel.eisentdt)}",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],

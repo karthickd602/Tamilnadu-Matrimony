@@ -1,33 +1,49 @@
+import 'dart:convert';
 import 'package:get/get.dart';
-
-class SubscriptionPlan {
-  final String name;
-  final int unlocks;
-  final int price;
-  final int originalPrice;
-
-  SubscriptionPlan({
-    required this.name,
-    required this.unlocks,
-    required this.price,
-    required this.originalPrice,
-  });
-}
+import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
+import '../model/subscription_model.dart';
+import '../../../utils/helpers/network_manager.dart';
+import '../../../utils/popups/full_screen_loader.dart';
+import '../../../utils/constants/api_constants.dart';
 
 class SubscriptionController extends GetxController {
-  // Available plans
-  final plans = <SubscriptionPlan>[
-    SubscriptionPlan(name: "Bronze", unlocks: 4, price: 199, originalPrice: 299),
-    SubscriptionPlan(name: "Silver", unlocks: 10, price: 399, originalPrice: 499),
-    SubscriptionPlan(name: "Gold", unlocks: 35, price: 999, originalPrice: 1199),
-  ].obs;
+  RxList<SubscriptionPlan> plans = <SubscriptionPlan>[].obs;
+  RxInt selectedIndex = 0.obs;
 
-  // Selected plan index
-  var selectedIndex = 0.obs;
+  SubscriptionPlan get selectedPlan => plans[selectedIndex.value];
+
+  @override
+  void onInit() {
+    fetchSubscriptionPlans();
+    super.onInit();
+  }
+
+  Future<void> fetchSubscriptionPlans() async {
+    try {
+      TFullScreenLoader.popUpCircular();
+
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TFullScreenLoader.stopLoading();
+        return;
+      }
+
+      final response = await THttpHelper.get(
+        ApiConstant.subscriptionPlans,
+      );
+
+      TFullScreenLoader.stopLoading();
+
+      final data = SubscriptionResponse.fromJson(response);
+
+      plans.assignAll(data.data ?? []);
+        } catch (e) {
+      TFullScreenLoader.stopLoading();
+      print("Error fetching plans: $e");
+    }
+  }
 
   void selectPlan(int index) {
     selectedIndex.value = index;
   }
-
-  SubscriptionPlan get selectedPlan => plans[selectedIndex.value];
 }
