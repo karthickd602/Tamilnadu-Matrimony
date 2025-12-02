@@ -1,5 +1,4 @@
 import '../../../utils/constants/path_provider.dart';
-import '../../../utils/popups/full_screen_loader.dart';
 import '../../home/model/dashboard_list_model.dart';
 
 class LikeController extends GetxController {
@@ -28,7 +27,7 @@ class LikeController extends GetxController {
 
       likeList.clear();
 
-      TFullScreenLoader.popUpCircular();
+      // TFullScreenLoader.popUpCircular();
       final req = {"user_id": storage.read(TTexts.userId)};
 
       debugPrint("fetchLikeList req: $req");
@@ -38,7 +37,7 @@ class LikeController extends GetxController {
       );
       debugPrint("fetch like list response: $response");
       if(response['statusCode']==204) {
-        TFullScreenLoader.stopLoading();
+        // TFullScreenLoader.stopLoading();
         return;
       }
 
@@ -46,11 +45,11 @@ class LikeController extends GetxController {
           .map((e) => CustomerProfileListModel.fromJson(e))
           .toList();
 
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
     } catch (e) {
-      TFullScreenLoader.stopLoading();
-      debugPrint("fetchDashboardCustomerProfile Error: $e");
-      TLoaders.errorSnackBar(title: "Error", message: e.toString());
+      // TFullScreenLoader.stopLoading();
+      debugPrint("fetchLikeList Error: $e");
+      TLoaders.errorSnackBar(title: "Error in Like List", message: e.toString());
     }
   }
 }

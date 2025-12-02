@@ -1,49 +1,58 @@
-import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
-import '../model/subscription_model.dart';
-import '../../../utils/helpers/network_manager.dart';
 import '../../../utils/popups/full_screen_loader.dart';
-import '../../../utils/constants/api_constants.dart';
+import '../model/subscription_model.dart';
 
 class SubscriptionController extends GetxController {
-  RxList<SubscriptionPlan> plans = <SubscriptionPlan>[].obs;
-  RxInt selectedIndex = 0.obs;
+  final RxList<SubscriptionPlan> plans = <SubscriptionPlan>[].obs;
+  final RxInt selectedIndex = 0.obs;
 
-  SubscriptionPlan get selectedPlan => plans[selectedIndex.value];
+  // Return nullable to avoid RangeError when plans is empty
+  SubscriptionPlan? get selectedPlan =>
+      plans.isNotEmpty ? plans[selectedIndex.value] : null;
 
   @override
-  void onInit() {
-    fetchSubscriptionPlans();
+  void onInit() async{
     super.onInit();
+    // run after first frame to ensure overlay/context is ready
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    await  fetchSubscriptionPlans();
+    // });
   }
+
 
   Future<void> fetchSubscriptionPlans() async {
     try {
-      TFullScreenLoader.popUpCircular();
 
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
-        TFullScreenLoader.stopLoading();
         return;
       }
 
-      final response = await THttpHelper.get(
-        ApiConstant.subscriptionPlans,
-      );
-
+      TFullScreenLoader.popUpCircular();
+      final response = await THttpHelper.get(ApiConstant.subscriptionPlans);
+      debugPrint("subscriptionPlans response: $response");
       TFullScreenLoader.stopLoading();
 
       final data = SubscriptionResponse.fromJson(response);
 
       plans.assignAll(data.data ?? []);
-        } catch (e) {
+
+      // defensive: clamp selectedIndex if out of range
+      if (plans.isEmpty) {
+        selectedIndex.value = 0;
+      } else {
+        selectedIndex.value = selectedIndex.value.clamp(0, plans.length - 1);
+      }
+    } catch (e) {
       TFullScreenLoader.stopLoading();
       print("Error fetching plans: $e");
     }
   }
 
   void selectPlan(int index) {
-    selectedIndex.value = index;
+    if (index >= 0 && index < plans.length) {
+      selectedIndex.value = index;
+    }
   }
 }

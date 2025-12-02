@@ -1,7 +1,7 @@
 import '../../../../utils/constants/path_provider.dart';
 import '../../controller/dashboard_controller.dart';
 import '../../model/dashboard_list_model.dart';
-import '../customer_view.dart';
+import '../customer_view_page.dart';
 
 class CustomerCard extends StatelessWidget {
   const CustomerCard({super.key, required this.customerProfile});
@@ -122,7 +122,10 @@ class CustomerCard extends StatelessWidget {
                       heroTag: null,
                       tooltip: 'Like',
                       onPressed: () {
-                        controller.likeProfile(profileModel: customerProfile);
+                        controller.likeProfile(
+                          profileId: customerProfile.id!,
+                          likedValue: customerProfile.liked,
+                        );
                       },
                       mini: true,
                       backgroundColor: Colors.white,

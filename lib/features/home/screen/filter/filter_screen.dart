@@ -15,39 +15,37 @@ class FilterPage extends GetView<FilterController> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const TAppBar(title: "Filter", isBackButtonNeed: true,backgroundColor: Colors.white,),
+      appBar: const TAppBar(
+        title: "Filter",
+        isBackButtonNeed: true,
+        backgroundColor: Colors.white,
+      ),
+
       persistentFooterButtons: [
         _BottomButtons(primaryColor: primaryColor),
       ],
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  // 🔹 Left Category Menu
-                  _LeftCategoryMenu(primaryColor: primaryColor),
 
-                  // 🔹 Right Options Area
-                  Expanded(
-                    child: Obx(() {
-                      final category =
-                      controller.filterCategories[controller.selectedIndex.value];
-                      return AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 250),
-                        child: FilterOptionsWidget(
-                          key: ValueKey(category), // triggers animation
-                          category: category,
-                        ),
-                      );
-                    }),
+      body: SafeArea(
+        child: Row(
+          children: [
+            /// LEFT MENU
+            _LeftCategoryMenu(primaryColor: primaryColor),
+
+            /// RIGHT OPTIONS
+            Expanded(
+              child: Obx(() {
+                final category =
+                controller.filterCategories[controller.selectedIndex.value];
+
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  child: FilterOptionsWidget(
+                    key: ValueKey(category),
+                    category: category,
                   ),
-                ],
-              ),
+                );
+              }),
             ),
-        
-            // 🔹 Bottom Buttons
-            // _BottomButtons(primaryColor: primaryColor),
           ],
         ),
       ),
@@ -55,7 +53,10 @@ class FilterPage extends GetView<FilterController> {
   }
 }
 
-// 🔹 Left Category Menu
+//////////////////////////////////////////////////////////////////////////////
+/// LEFT CATEGORY LIST
+//////////////////////////////////////////////////////////////////////////////
+
 class _LeftCategoryMenu extends StatelessWidget {
   final Color primaryColor;
 
@@ -68,19 +69,21 @@ class _LeftCategoryMenu extends StatelessWidget {
     return Container(
       width: Get.width * 0.35,
       color: Colors.grey.shade100,
-      child: ListView.builder(
+      child: Obx(() {
+        return ListView.builder(
         itemCount: controller.filterCategories.length,
         itemBuilder: (context, index) {
           final category = controller.filterCategories[index];
-          return Obx(() {
-            final isSelected = controller.selectedIndex.value == index;
-            final isLocked = controller.isLocked(category);
+          final isSelected = controller.selectedIndex.value == index;
+          final isLocked = controller.isLocked(category);
 
-            return AnimatedContainer(
+          return Obx(
+            ()=> AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              margin:
+              const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               decoration: BoxDecoration(
-                color: isSelected ? Colors.white : Colors.grey.shade100,
+                color:  controller.selectedIndex.value == index? Colors.white : Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: isSelected
                     ? [
@@ -93,7 +96,9 @@ class _LeftCategoryMenu extends StatelessWidget {
                     : [],
               ),
               child: ListTile(
-                onTap: isLocked ? null : () => controller.changeCategory(index),
+                onTap: isLocked ? null : () {
+                  controller.changeCategory(index);
+                },
                 title: Text(
                   category,
                   style: TextStyle(
@@ -102,23 +107,28 @@ class _LeftCategoryMenu extends StatelessWidget {
                         : isSelected
                         ? primaryColor
                         : Colors.black87,
-                    fontWeight:
-                    isSelected ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: isSelected
+                        ? FontWeight.w600
+                        : FontWeight.w400,
                   ),
                 ),
                 trailing: isLocked
                     ? const Icon(Icons.lock, color: Colors.grey, size: 18)
                     : null,
               ),
-            );
-          });
+            ),
+          );
         },
-      ),
+      );
+      }),
     );
   }
 }
 
-// 🔹 Bottom Buttons
+//////////////////////////////////////////////////////////////////////////////
+/// BOTTOM BUTTONS (RESET + APPLY)
+//////////////////////////////////////////////////////////////////////////////
+
 class _BottomButtons extends StatelessWidget {
   final Color primaryColor;
 
@@ -130,9 +140,13 @@ class _BottomButtons extends StatelessWidget {
 
     return Row(
       children: [
+        /// RESET BUTTON
         Expanded(
           child: OutlinedButton(
-            onPressed: controller.resetFilters,
+            onPressed: () {
+              controller.resetFilters();
+              controller.selectedIndex.value = 0; // Reset category view
+            },
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: primaryColor),
               shape: RoundedRectangleBorder(
@@ -142,13 +156,13 @@ class _BottomButtons extends StatelessWidget {
             child: const Text("Reset"),
           ),
         ),
+
         const SizedBox(width: 12),
+
+        /// APPLY BUTTON
         Expanded(
           child: ElevatedButton.icon(
-            onPressed: () {
-              controller.fetchFilter();
-              // Get.back(result: controller.selectedOptions);
-            },
+            onPressed: controller.applyFilter,
             icon: const Icon(Icons.check_rounded),
             label: const Text("Apply"),
             style: ElevatedButton.styleFrom(

@@ -1,14 +1,18 @@
-
-import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
-
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../../utils/constants/path_provider.dart';
+  import '../../../utils/popups/full_screen_loader.dart';
+import '../../../utils/helpers/network_manager.dart';
+import '../../../utils/http/http_client.dart';
 import '../../authentication/model/dropdown_model.dart';
+import '../controller/dashboard_controller.dart';
 
 class FilterController extends GetxController {
-  // 🔹 Selected category index
   final selectedIndex = 0.obs;
+  final storage = GetStorage();
 
-  // 🔹 Categories
+  /// MAIN CATEGORIES
   final filterCategories = [
     "Caste",
     "Age",
@@ -20,185 +24,216 @@ class FilterController extends GetxController {
     "No Caste Bar",
     "Disability",
   ].obs;
+
+  /// DROPDOWN MODELS
   final casteList = <CasteDDModel>[].obs;
   final educationList = <EducationDDModel>[].obs;
   final districtList = <CountryModel>[].obs;
-
+final martialStatus = [
+  {"id": 1, "name": "First Marriage"},
+  {"id": 2, "name": "Second Marriage"},
+].obs;
+  /// DOSHAM STATIC
   final dhosamList = [
-    "ராகு-கேது தோஷம்",
-    "செவ்வாய் தோஷம்",
-    "நாக தோஷம்",
-    "கால சர்ப்ப தோஷம்",
-    "களத்திர தோஷம்",
-    "பித்ரு தோஷம்",
-    "இதர தோஷம்"
+    {"id": 1, "name": "ராகு-கேது தோஷம்"},
+    {"id": 2, "name": "செவ்வாய் தோஷம்"},
+    {"id": 3, "name": "நாக தோஷம்"},
+    {"id": 4, "name": "கால சர்ப்ப தோஷம்"},
   ].obs;
 
+  /// AGE RANGE
+  var ageRange = const RangeValues(18, 50).obs;
+
+  /// SELECTED FILTER DATA
+  /// → Checkbox : List<int>
+  /// → Radio : int
+  final selectedOptions = <String, dynamic>{}.obs;
+
+  // --------------------------------------------------------------
+  // INIT
+  // --------------------------------------------------------------
   @override
-  void onInit() async{
+  void onInit() {
     super.onInit();
-  await  fetchCasteFilter(religionId: 1); //
-    // await fetchEducationDropdown();
+    fetchCasteFilter(religionId: 1);
   }
 
+  // --------------------------------------------------------------
+  // API CALLS
+  // --------------------------------------------------------------
+
+  /// 🔹 Caste Fetch
   Future<void> fetchCasteFilter({required int religionId}) async {
     try {
-      final isConnected = await NetworkManager.instance.isConnected();
-      if (!isConnected) {
+      final connected = await NetworkManager.instance.isConnected();
+      if (!connected) {
         TLoaders.warningSnackBar(
-          title: "No Internet",
-          message: "Please check your Internet Connection",
-        );
+            title: "No Internet", message: "Check connection");
         return;
       }
-// if(casteList.isEmpty) return;
+
       TFullScreenLoader.popUpCircular();
 
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
-      //
-      debugPrint("occupation Response:${response.toString()}");
+
       if (response['statusCode'] == 200) {
         casteList.value = (response['data'] as List)
             .map((e) => CasteDDModel.fromJson(e))
             .toList();
-      } else {
-        casteList.value = <CasteDDModel>[];
       }
+
       TFullScreenLoader.stopLoading();
-      update();
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(
-        title: "Caste Dropdown Issue",
-        message: e.toString(),
-      );
+      TLoaders.errorSnackBar(title: "Caste Fetch Failed", message: e.toString());
     }
   }
 
+  /// 🔹 Education Fetch
   Future<void> fetchEducationFilter() async {
     try {
-      if(educationList.isNotEmpty) return;
-      final isConnected = await NetworkManager.instance.isConnected();
-      if (!isConnected) {
+      if (educationList.isNotEmpty) return;
+
+      final connected = await NetworkManager.instance.isConnected();
+      if (!connected) {
         TLoaders.warningSnackBar(
-          title: "No Internet",
-          message: "Please check your Internet Connection",
-        );
+            title: "No Internet", message: "Check connection");
         return;
       }
 
       TFullScreenLoader.popUpCircular();
 
       final response = await THttpHelper.get(ApiConstant.getEducationDD);
-      //
-      debugPrint("Education Response:${response.toString()}");
+
       if (response['statusCode'] == 200) {
         educationList.value = (response['data'] as List)
             .map((e) => EducationDDModel.fromJson(e))
             .toList();
-      } else {
-        educationList.value = <EducationDDModel>[];
       }
+
       TFullScreenLoader.stopLoading();
     } catch (e) {
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(
-        title: "Education Dropdown Failed",
-        message: e.toString(),
-      );
+          title: "Education Fetch Failed", message: e.toString());
     }
   }
 
+  /// 🔹 District Fetch
   Future<void> fetchDistrictDropdown() async {
     try {
-      final isConnected = await NetworkManager.instance.isConnected();
-      if (!isConnected) {
+      final connected = await NetworkManager.instance.isConnected();
+      if (!connected) {
         TLoaders.warningSnackBar(
-          title: "No Internet",
-          message: "Please check your Internet Connection",
-        );
+            title: "No Internet", message: "Check connection");
         return;
       }
 
       final req = {"state_id": 35};
-      final response = await THttpHelper.post(ApiConstant.getCityDD,req);
-      //
-      debugPrint("state Response:${response.toString()}");
-      if (response['statusCode'] == 204) {
-        districtList.value = <CountryModel>[];
-        return;
-      }
-      districtList.value = (response['data'] as List)
-          .map((e) => CountryModel.fromJson(e))
-          .toList();
+      final response = await THttpHelper.post(ApiConstant.getCityDD, req);
 
+      if (response['statusCode'] == 200) {
+        districtList.value = (response['data'] as List)
+            .map((e) => CountryModel.fromJson(e))
+            .toList();
+      }
     } catch (e) {
       TLoaders.errorSnackBar(
-        title: "District Dropdown Issue",
-        message: e.toString(),
-      );
+          title: "District Fetch Failed", message: e.toString());
     }
   }
 
-  var ageRange = const RangeValues(18,50).obs;
+  // --------------------------------------------------------------
+  // SELECTION LOGIC
+  // --------------------------------------------------------------
 
+  /// MULTIPLE (CHECKBOX)
+  void toggleCheckbox(String category, int id) {
+    final List<int> list = List<int>.from(selectedOptions[category] ?? []);
 
-  // 🔹 Locked categories
-  final lockedCategories = ["Nakshatram" ].obs;
-  // final lockedCategories = [ "Dosham","Nakshatram"].obs;
-
-  // 🔹 Selected options per category
-  final selectedOptions = <String, List<String>>{}.obs;
-
-  // 🔹 Change active category
-  void changeCategory(int index) => selectedIndex.value = index;
-
-  // 🔹 Check if category is locked
-  bool isLocked(String category) => lockedCategories.contains(category);
-
-  // 🔹 Toggle option selection
-  void toggleOption(String category, String option) {
-    final options = selectedOptions[category] ?? [];
-    if (options.contains(option)) {
-      options.remove(option);
+    if (list.contains(id)) {
+      list.remove(id);
     } else {
-      options.add(option);
+      list.add(id);
     }
-    selectedOptions[category] = List.from(options); // important for Rx update
+
+    selectedOptions[category] = list;
   }
 
-  // 🔹 Check if an option is selected
-  bool isOptionSelected(String category, String option) {
-    return selectedOptions[category]?.contains(option) ?? false;
+  bool isCheckboxSelected(String category, int id) {
+    return (selectedOptions[category] ?? []).contains(id);
   }
 
-  // 🔹 Reset all filters
-  void resetFilters() => selectedOptions.clear();
+  /// SINGLE (RADIO)
+  void selectRadio(String category, int id) {
+    selectedOptions[category] = id;
+  }
+
+  bool isRadioSelected(String category, int id) {
+    return selectedOptions[category] == id;
+  }
+  /// 🔹 Change active category
+  void changeCategory(int index) {
+    selectedIndex.value = index;
+    update();
+  }
+  final lockedCategories = ["Nakshatram", ].obs;
+
+  /// 🔹 Check if category is locked
+  bool isLocked(String category) {
+    return lockedCategories.contains(category);
+  }
+  int getOptionId(dynamic option) {
+    if (option is Map) return option["id"];
+    return option.id; // model
+  }
+
+  String getOptionName(dynamic option) {
+    if (option is Map) return option["name"];
+    return option.name; // model
+  }
+
+  // --------------------------------------------------------------
+  // FINAL FILTER REQUEST
+  // --------------------------------------------------------------
 
   Future<Map<String, dynamic>> fetchFilter() async {
-    try {
-      final req = {
-        "caste": selectedOptions["Caste"] ?? [],
-        "age_from": ageRange.value.start.toInt(),
-        "age_to": ageRange.value.end.toInt(),
-        "education": selectedOptions["Education"] ?? [],
-        "marriage_type": selectedOptions["Marriage Type"] ?? [],
-        "location": selectedOptions["Location"] ?? [],
-        "dosham": selectedOptions["Dosham"] ?? [],
-        "no_caste_bar": selectedOptions["No Caste Bar"]?.firstOrNull ?? "",
-        "disability": selectedOptions["Disability"]?.firstOrNull ?? "",
-      };
+    return {
+      "id": storage.read(TTexts.userId),
+      "Caste": selectedOptions["Caste"] ?? [],
+      "EducationDetails": selectedOptions["Education"] ?? [],
+      "City": selectedOptions["Location"] ?? [],
+      "thosam": selectedOptions["Dosham"] ?? [],
+      "Maritalstatus": selectedOptions["Marriage Type"] ?? 0,
+      "no_caste_bar": selectedOptions["No Caste Bar"] ?? 0,
+      "disability": selectedOptions["Disability"] ?? 0,
+      "from_age": ageRange.value.start.toInt(),
+      "to_age": ageRange.value.end.toInt(),
+    };
+  }
 
-      debugPrint("Filter Request = $req");
-      return req;
-    } catch (e) {
-      TLoaders.errorSnackBar(
-        title: "Filter Error",
-        message: e.toString(),
-      );
-      return {};
-    }
+  // --------------------------------------------------------------
+  // APPLY FILTER
+  // --------------------------------------------------------------
+
+  void applyFilter() async {
+    final dashboard = DashboardController.instance;
+
+    final filterReq = await fetchFilter();
+
+    dashboard.fetchDashboardCustomerProfile(
+        isInitial: true, filters: filterReq);
+
+    Get.back();
+  }
+  // --------------------------------------------------------------
+// RESET FILTERS
+// --------------------------------------------------------------
+  void resetFilters() {
+    ageRange.value = const RangeValues(18, 50);
+    selectedOptions.clear();
+    selectedIndex.value = 0;
   }
 
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tamilnadu_matrimony/common/widgets/containers/rounded_container.dart';
-
 import '../../controller/filter_controller.dart';
 
 class FilterOptionsWidget extends StatelessWidget {
@@ -11,206 +10,127 @@ class FilterOptionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(FilterController());
-    if (category == "Age") {
-      return const _AgeRangeSelector(); // 👈 Custom widget for Age
-    }
+    final controller = Get.find<FilterController>();
 
+    if (category == "Age") return const _AgeRangeSelector();
 
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: Obx(
-        () {
+      child: Obx(() {
+        final options = _getOptions(category, controller);
 
-          // Dummy options per category
-          final categoryOptions = _getOptionsForCategory(category,controller);
+        if (options.isEmpty) {
+          return const Center(child: Text("No options available"));
+        }
 
-          if (categoryOptions.isEmpty) {
-            return const Center(
-              child: Text(
-                "No options available",
-                style: TextStyle(color: Colors.grey),
-              ),
-            );
-          }
+        final isRadio = _isRadioCategory(category);
 
-          // Determine if this category should use radio (single selection)
-          final useRadio = _useRadioForCategory(category);
-
-          return ListView.builder(
-          itemCount: categoryOptions.length,
+        return ListView.builder(
+          itemCount: options.length,
           itemBuilder: (context, index) {
-            final option = categoryOptions[index];
-            return !useRadio
-                ? _RadioOptionTile(
-              category: category,
-              option: option,
-              controller: controller,
-            )
-                : _CheckboxOptionTile(
-              category: category,
-              option: option,
-              controller: controller,
-            );
+            final option = options[index];
+            return isRadio
+                ? _RadioTile(category: category, option: option)
+                : _CheckboxTile(category: category, option: option);
           },
         );
-        },
-      ),
+      }),
     );
   }
 
-  // Example categories that need single selection
-  bool _useRadioForCategory(String category) {
-    const radioCategories = ["Caste","Education","Location"];
-    return radioCategories.contains(category);
-  }
+  bool _isRadioCategory(String category) =>
+      ["Marriage Type", "No Caste Bar", "Disability"].contains(category);
 
-  List<String> _getOptionsForCategory(String category,FilterController controller) {
+  List<dynamic> _getOptions(String category, FilterController controller) {
     switch (category) {
       case "Caste":
-
-        return controller.casteList.value.map((e) => e.name!).toList();
-      // case "Age":
-      //   return ["18-25", "26-30", "31-35"];
+        return controller.casteList;
       case "Education":
         controller.fetchEducationFilter();
-        return controller.educationList.value.map((e) => e.name!).toList();
-
-      case "Marriage Type":
-        return ["First Marriage", "Second Marriage"].obs;
+        return controller.educationList;
       case "Location":
         controller.fetchDistrictDropdown();
-        return controller.districtList.value.map((e) => e.name!).toList();
-        case "Dosham":
+        return controller.districtList;
+      case "Dosham":
         return controller.dhosamList;
-
-      case "Disability":
-        return ["Yes", "No"].obs;
+      case "Marriage Type":
+        return controller.martialStatus;
       case "No Caste Bar":
-        return ["Yes", "No"].obs;
+        return [
+          {"id": 1, "name": "Yes"},
+          {"id": 0, "name": "No"},
+        ].obs;
+      case "Disability":
+        return [
+          {"id": 1, "name": "Yes"},
+          {"id": 0, "name": "No"},
+        ].obs;
       default:
-        return ["Option 1", "Option 2", "Option 3"].obs;
+        return [];
     }
   }
 }
-
-// 🔹 Checkbox Tile (multiple selection)
-class _CheckboxOptionTile extends StatelessWidget {
+class _CheckboxTile extends StatelessWidget {
   final String category;
-  final String option;
-  final FilterController controller;
+  final dynamic option;
 
-  const _CheckboxOptionTile({
-    required this.category,
-    required this.option,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      final isSelected = controller.isOptionSelected(category, option);
-      return TRoundedContainer(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        showBorder: true,
-        showShadow: false,
-        padding: EdgeInsets.all(2),
-        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: ListTile(
-          onTap: () => controller.toggleOption(category, option),
-          title: Text(option,style:Theme.of(context).textTheme.bodyLarge,overflow: TextOverflow.ellipsis,maxLines: 3,),
-          trailing: Checkbox(
-            value: isSelected,
-            onChanged: (_) => controller.toggleOption(category, option),
-          ),
-        ),
-      );
-    });
-  }
-}
-
-// 🔹 Radio Tile (single selection)
-class _RadioOptionTile extends StatelessWidget {
-  final String category;
-  final String option;
-  final FilterController controller;
-
-  const _RadioOptionTile({
-    required this.category,
-    required this.option,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      final selectedOptions = controller.selectedOptions[category];
-      // final isSelected = selectedOptions != null && selectedOptions.contains(option);
-
-      return TRoundedContainer(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        showBorder: true,
-        showShadow: false,
-        padding: EdgeInsets.all(2),
-        child: ListTile(
-          onTap: () {
-            controller.selectedOptions[category] = [option]; // single selection
-          },
-          title: Text(option,style:Theme.of(context).textTheme.bodyLarge,overflow: TextOverflow.ellipsis,maxLines: 3),
-          trailing: Radio<String>(
-            value: option,
-            groupValue: selectedOptions?.first,
-            onChanged: (_) {
-              controller.selectedOptions[category] = [option];
-            },
-          ),
-        ),
-      );
-    });
-  }
-}
-class _AgeRangeSelector extends StatelessWidget {
-  const _AgeRangeSelector();
+  const _CheckboxTile({required this.category, required this.option});
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<FilterController>();
 
-    return Obx(() {
-      final ageRange = controller.ageRange.value;
+    final int id = option is Map ? option["id"] : option.id;
+    final String name = option is Map ? option["name"] : option.name;
 
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Select Age Range",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("From: ${ageRange.start.toInt()}"),
-                Text("To: ${ageRange.end.toInt()}"),
-              ],
-            ),
-            RangeSlider(
-              min: 18,
-              max: 50,
-              divisions: 32,
-              activeColor: Theme.of(context).primaryColor,
-              values: ageRange,
-              labels: RangeLabels(
-                ageRange.start.toInt().toString(),
-                ageRange.end.toInt().toString(),
-              ),
-              onChanged: (range) => controller.ageRange.value = range,
-            ),
-          ],
+    return Obx(() {
+      final isSelected = controller.isCheckboxSelected(category, id);
+
+      return TRoundedContainer(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.all(4),
+        showBorder: true,
+        child: ListTile(
+          onTap: () => controller.toggleCheckbox(category, id),
+          title: Text(name),
+          trailing: Checkbox(
+            value: isSelected,
+            onChanged: (_) => controller.toggleCheckbox(category, id),
+          ),
         ),
       );
     });
   }
 }
+class _RadioTile extends StatelessWidget {
+  final String category;
+  final dynamic option;
+
+  const _RadioTile({required this.category, required this.option});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<FilterController>();
+
+    final int id = option is Map ? option["id"] : option.id;
+    final String name = option is Map ? option["name"] : option.name;
+
+    return Obx(() {
+      return TRoundedContainer(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.all(4),
+        showBorder: true,
+        child: ListTile(
+          onTap: () => controller.selectRadio(category, id),
+          title: Text(name),
+          trailing: Radio<int>(
+            value: id,
+            groupValue: controller.selectedOptions[category],
+            onChanged: (_) => controller.selectRadio(category, id),
+          ),
+        ),
+      );
+    });
+  }
+}
+class _AgeRangeSelector extends StatelessWidget { const _AgeRangeSelector(); @override Widget build(BuildContext context) { final controller = Get.find<FilterController>(); return Obx(() { final ageRange = controller.ageRange.value; return Padding( padding: const EdgeInsets.all(16.0), child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: [ const Text( "Select Age Range", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600), ), const SizedBox(height: 20), Row( mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [ Text("From: ${ageRange.start.toInt()}"), Text("To: ${ageRange.end.toInt()}"), ], ), RangeSlider( min: 18, max: 50, divisions: 32, activeColor: Theme.of(context).primaryColor, values: ageRange, labels: RangeLabels( ageRange.start.toInt().toString(), ageRange.end.toInt().toString(), ), onChanged: (range) => controller.ageRange.value = range, ), ], ), ); }); } }

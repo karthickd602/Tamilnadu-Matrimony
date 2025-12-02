@@ -1,5 +1,7 @@
 
 
+import '../../../utils/constants/path_provider.dart';
+
 class CustomerUserModel {
   int id;
   String matriId;
@@ -29,7 +31,7 @@ class CustomerUserModel {
   String noOfSisters;
   String horosApprove;
   String horosCheck;
-  // RxString liked = "no".obs;
+  RxString liked = "no".obs;
   String verified;
 
   /// Default constructor
@@ -62,9 +64,11 @@ class CustomerUserModel {
     required this.noOfSisters,
     required this.horosApprove,
     required this.horosCheck,
-    // String? liked,
+    String? liked,
     required this.verified,
-  });
+  }){
+    this.liked.value = liked ?? "no";
+  }
 
   /// 🔥 Empty Default Model
   factory CustomerUserModel.empty() {
@@ -97,7 +101,7 @@ class CustomerUserModel {
       noOfSisters: "",
       horosApprove: "",
       horosCheck: "",
-      // liked: "no",
+      liked: "no",
       verified: "",
     );
   }
@@ -133,7 +137,7 @@ class CustomerUserModel {
       noOfSisters: json["noofsisters"]?.toString() ?? "",
       horosApprove: json["HorosApprove"] ?? "",
       horosCheck: json["Horoscheck"]?.toString() ?? "",
-      // liked: json['liked'] ?? "no",
+      liked: json['liked'] ?? "no",
       verified: json["verified"] ?? "",
     );
   }

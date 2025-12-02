@@ -281,21 +281,25 @@ class CustomerDetailsView extends StatelessWidget {
               if (showLikeAndShare)
                 Row(
                   children: [
-                    // Obx(
-                    //   ()=> IconButton(
-                    //     tooltip: "Like",
-                    //     onPressed: () {
-                    //       controller.likeProfile(profileModel: userModel);
-                    //     },
-                    //     icon:controller.isLikeLoading.value
-                    //         ? CircularProgressIndicator(color: Colors.red)
-                    //         : userModel.liked.value.toLowerCase() == "yes"
-                    //         ? Icon(Icons.favorite, color: TColors.error)
-                    //         : Icon(Icons.favorite_border, color: TColors.error),
-                    //     color: Colors.redAccent,
-                    //     iconSize: 28,
-                    //   ),
-                    // ),
+                    Obx(
+                      ()=> IconButton(
+                        tooltip: "Like",
+                        onPressed: () {
+                          controller.likeProfile(
+                            profileId: userModel.id,
+                            likedValue: userModel.liked,
+                          );
+
+                        },
+                        icon:controller.isLikeLoading.value
+                            ? CircularProgressIndicator(color: Colors.red)
+                            : userModel.liked.value.toLowerCase() == "yes"
+                            ? Icon(Icons.favorite, color: TColors.error)
+                            : Icon(Icons.favorite_border, color: TColors.error),
+                        color: Colors.redAccent,
+                        iconSize: 28,
+                      ),
+                    ),
                     IconButton(
                       tooltip: "Send Interest",
                       onPressed: () {

@@ -36,7 +36,58 @@ class DashboardController extends GetxController {
       fetchDashboardCustomerProfile(isInitial: false);
     }
   }
-  Future<void> fetchDashboardCustomerProfile({bool isInitial = false}) async {
+  // Future<void> fetchDashboardCustomerProfile({bool isInitial = false}) async {
+  //   try {
+  //     if (isInitial) {
+  //       isFirstLoad.value = true;
+  //       currentPage.value = 1;
+  //       hasMore.value = true;
+  //       dashboardCustomerList.clear();
+  //     } else {
+  //       isMoreLoading.value = true;
+  //     }
+  //
+  //     final isConnected = await NetworkManager.instance.isConnected();
+  //     if (!isConnected) {
+  //       TLoaders.errorSnackBar(title: "No Internet", message: "No Internet Connection");
+  //       return;
+  //     }
+  //
+  //     final req = {
+  //       "id": storage.read(TTexts.userId),
+  //       "page": currentPage.value,
+  //     };
+  //
+  //     final response = await THttpHelper.post(
+  //       ApiConstant.dashboardListEndPoint,
+  //       req,
+  //     );
+  //
+  //     List newData = response["profiles"] ?? [];
+  //
+  //     if (newData.isNotEmpty) {
+  //       dashboardCustomerList.addAll(
+  //         newData.map((e) => CustomerProfileListModel.fromJson(e)).toList(),
+  //       );
+  //
+  //       currentPage.value++; // Increment page
+  //     } else {
+  //       hasMore.value = false; // No more data
+  //     }
+  //
+  //     isFirstLoad.value = false;
+  //     isMoreLoading.value = false;
+  //
+  //   } catch (e) {
+  //     isFirstLoad.value = false;
+  //     isMoreLoading.value = false;
+  //     TLoaders.errorSnackBar(title: "Error", message: e.toString());
+  //   }
+  // }
+  Future<void> fetchDashboardCustomerProfile({
+    bool isInitial = false,
+    Map<String, dynamic>? filters,
+  }) async {
     try {
       if (isInitial) {
         isFirstLoad.value = true;
@@ -49,19 +100,33 @@ class DashboardController extends GetxController {
 
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
-        TLoaders.errorSnackBar(title: "No Internet", message: "No Internet Connection");
+        TLoaders.errorSnackBar(
+          title: "No Internet",
+          message: "No Internet Connection",
+        );
         return;
       }
 
+      /// BASE REQUEST
       final req = {
         "id": storage.read(TTexts.userId),
         "page": currentPage.value,
       };
 
+      /// 🔥 MERGE FILTERS IF PROVIDED
+      if (filters != null && filters.isNotEmpty) {
+        req.addAll(filters);
+      }
+
+      debugPrint("Dashboard Request = $req");
+
       final response = await THttpHelper.post(
         ApiConstant.dashboardListEndPoint,
         req,
       );
+
+      debugPrint("Dashboard Response = $response");
+
 
       List newData = response["profiles"] ?? [];
 
@@ -69,10 +134,9 @@ class DashboardController extends GetxController {
         dashboardCustomerList.addAll(
           newData.map((e) => CustomerProfileListModel.fromJson(e)).toList(),
         );
-
-        currentPage.value++; // Increment page
+        currentPage.value++;
       } else {
-        hasMore.value = false; // No more data
+        hasMore.value = false;
       }
 
       isFirstLoad.value = false;
@@ -121,7 +185,8 @@ class DashboardController extends GetxController {
   }
 
   Future<void> likeProfile({
-    required CustomerProfileListModel profileModel,
+    required int profileId,
+    required RxString likedValue,
   }) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -134,29 +199,40 @@ class DashboardController extends GetxController {
       }
 
       isLikeLoading.value = true;
+
       final req = {
         "user_id": storage.read(TTexts.userId),
-        "liked_user_id": profileModel.id,
+        "liked_user_id": profileId,
       };
+
       final response = await THttpHelper.post(
         ApiConstant.likeProfileEndPoint,
         req,
       );
-      if (profileModel.liked.value.toLowerCase() == "yes") {
-        profileModel.liked.value = "no";
-      } else {
-        profileModel.liked.value = "yes";
-      }
-      await Get.put(LikeController()). fetchLikeList();
-      debugPrint("likeProfile response: $response");
 
-      isLikeLoading.value = false;
+      /// Toggle value for CURRENT MODEL
+      likedValue.value =
+      likedValue.value.toLowerCase() == "yes" ? "no" : "yes";
+
+      /// 🔥 Also update the list page (CustomerCard)
+      final index = dashboardCustomerList
+          .indexWhere((e) => e.id == profileId);
+
+      if (index != -1) {
+        dashboardCustomerList[index].liked.value = likedValue.value;
+        dashboardCustomerList.refresh();   // 🔥 force rebuild UI
+      }
+      await Get.put(LikeController()).fetchLikeList();
+
+
+      debugPrint("likeProfile response: $response");
     } catch (e) {
-      isLikeLoading.value = false;
       TLoaders.errorSnackBar(
         title: "Error in Like Profile",
         message: e.toString(),
       );
+    } finally {
+      isLikeLoading.value = false;
     }
   }
 
