@@ -6,11 +6,12 @@ import '../../../../utils/constants/colors.dart';
 import '../../controller/filter_controller.dart';
 import '../widget/filter_options.dart';
 
-class FilterPage extends GetView<FilterController> {
+class FilterPage extends StatelessWidget {
   const FilterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<FilterController>();
     final primaryColor = TColors.primary;
 
     return Scaffold(
@@ -73,12 +74,14 @@ class _LeftCategoryMenu extends StatelessWidget {
         return ListView.builder(
         itemCount: controller.filterCategories.length,
         itemBuilder: (context, index) {
-          final category = controller.filterCategories[index];
-          final isSelected = controller.selectedIndex.value == index;
-          final isLocked = controller.isLocked(category);
+
 
           return Obx(
-            ()=> AnimatedContainer(
+            () {
+              final category = controller.filterCategories[index];
+              final isSelected = controller.selectedIndex.value == index;
+              final isLocked = controller.isLocked(category);
+              return AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               margin:
               const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
@@ -99,24 +102,73 @@ class _LeftCategoryMenu extends StatelessWidget {
                 onTap: isLocked ? null : () {
                   controller.changeCategory(index);
                 },
-                title: Text(
-                  category,
-                  style: TextStyle(
-                    color: isLocked
-                        ? Colors.grey
-                        : isSelected
-                        ? primaryColor
-                        : Colors.black87,
-                    fontWeight: isSelected
-                        ? FontWeight.w600
-                        : FontWeight.w400,
+                // title: Text(
+                //   category,
+                //   style: TextStyle(
+                //     color: isLocked
+                //         ? Colors.grey
+                //         : isSelected
+                //         ? primaryColor
+                //         : Colors.black87,
+                //     fontWeight: isSelected
+                //         ? FontWeight.w600
+                //         : FontWeight.w400,
+                //   ),
+                // ),
+                title:  Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      category,
+                      style: TextStyle(
+                        color: isLocked
+                            ? Colors.grey
+                            : isSelected
+                            ? primaryColor
+                            : Colors.black87,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                      ),
+                    ),
                   ),
-                ),
+
+                  /// BADGE / COUNT / TICK
+                  Obx(() {
+                    String? badge;
+
+                    if (category == "Age") {
+                      badge = controller.getAgeBadge();
+                    } else {
+                      badge = controller.getCategoryBadge(category);
+                    }
+
+                    if (badge == null) return const SizedBox();
+
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: primaryColor.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        badge,
+                        style: TextStyle(
+                          color: primaryColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              )
+                  ,
                 trailing: isLocked
                     ? const Icon(Icons.lock, color: Colors.grey, size: 18)
                     : null,
               ),
-            ),
+            );
+            },
           );
         },
       );

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:tamilnadu_matrimony/utils/constants/image_strings.dart';
 
 import '../../../utils/constants/enums.dart';
 import '../../../utils/constants/sizes.dart';
@@ -92,7 +93,8 @@ class TRoundedImage extends StatelessWidget {
           return TShimmerEffect(width: width, height: height);
         },
         errorBuilder: (context, error, stackTrace) {
-          return Icon(Icons.error, size: 50, color: Colors.red);
+          // return Icon(Icons.error, size: 50, color: Colors.red);
+          return Image.asset(TImages.defaultProfilePic);
         },
       );
 

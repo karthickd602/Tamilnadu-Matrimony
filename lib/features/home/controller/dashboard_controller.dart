@@ -36,54 +36,6 @@ class DashboardController extends GetxController {
       fetchDashboardCustomerProfile(isInitial: false);
     }
   }
-  // Future<void> fetchDashboardCustomerProfile({bool isInitial = false}) async {
-  //   try {
-  //     if (isInitial) {
-  //       isFirstLoad.value = true;
-  //       currentPage.value = 1;
-  //       hasMore.value = true;
-  //       dashboardCustomerList.clear();
-  //     } else {
-  //       isMoreLoading.value = true;
-  //     }
-  //
-  //     final isConnected = await NetworkManager.instance.isConnected();
-  //     if (!isConnected) {
-  //       TLoaders.errorSnackBar(title: "No Internet", message: "No Internet Connection");
-  //       return;
-  //     }
-  //
-  //     final req = {
-  //       "id": storage.read(TTexts.userId),
-  //       "page": currentPage.value,
-  //     };
-  //
-  //     final response = await THttpHelper.post(
-  //       ApiConstant.dashboardListEndPoint,
-  //       req,
-  //     );
-  //
-  //     List newData = response["profiles"] ?? [];
-  //
-  //     if (newData.isNotEmpty) {
-  //       dashboardCustomerList.addAll(
-  //         newData.map((e) => CustomerProfileListModel.fromJson(e)).toList(),
-  //       );
-  //
-  //       currentPage.value++; // Increment page
-  //     } else {
-  //       hasMore.value = false; // No more data
-  //     }
-  //
-  //     isFirstLoad.value = false;
-  //     isMoreLoading.value = false;
-  //
-  //   } catch (e) {
-  //     isFirstLoad.value = false;
-  //     isMoreLoading.value = false;
-  //     TLoaders.errorSnackBar(title: "Error", message: e.toString());
-  //   }
-  // }
   Future<void> fetchDashboardCustomerProfile({
     bool isInitial = false,
     Map<String, dynamic>? filters,
@@ -267,6 +219,46 @@ class DashboardController extends GetxController {
     } catch (e) {
       TFullScreenLoader.stopLoading();
 
+      TLoaders.errorSnackBar(title: "Send Interest", message: e.toString());
+    }
+  }
+  Future<void> unlockProfile({required int profileId}) async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.errorSnackBar(
+          title: "No Internet",
+          message: "No Internet Connection",
+        );
+        return;
+      }
+
+      TFullScreenLoader.popUpCircular();
+      // final req = {
+      //   "current_user": storage.read(TTexts.userId),
+      //   "target_user": profileId,
+      // };
+
+      final req = {
+        "current_user": "11622",
+        "target_user": profileId,
+      };
+      debugPrint("unlockProfile req: $req");
+      final response = await THttpHelper.post(
+        ApiConstant.userUnlockProfileEndPoint,
+        req,
+      );
+
+      debugPrint("unlockProfile response: $response");
+      TLoaders.successSnackBar(
+        title: "Send Interest",
+        message: response['message'],
+      );
+
+      TFullScreenLoader.stopLoading();
+    } catch (e) {
+      TFullScreenLoader.stopLoading();
+debugPrint("unlockProfile Error: $e");
       TLoaders.errorSnackBar(title: "Send Interest", message: e.toString());
     }
   }

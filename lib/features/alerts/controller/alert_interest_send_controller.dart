@@ -9,6 +9,8 @@ class AlertInterestSendController extends GetxController {
   final sendAlertProfileModel = <AlertProfileModel>[].obs;
   final receiveAlertProfileModel = <AlertProfileModel>[].obs;
   final storage = GetStorage();
+  final isSendAlertLoading = false.obs;
+  final isReceiveAlertLoading = false.obs;
 
   @override
   void onInit() {
@@ -28,7 +30,7 @@ class AlertInterestSendController extends GetxController {
         return;
       }
 
-      TFullScreenLoader.popUpCircular();
+      isSendAlertLoading.value = true;
       final req = {"user_id": storage.read(TTexts.userId)};
       // final req = {"user_id": "11622"};
       debugPrint("fetchAlertSendProfile req: $req");
@@ -43,13 +45,15 @@ class AlertInterestSendController extends GetxController {
           .map((e) => AlertProfileModel.fromJson(e))
           .toList();
 
-      TFullScreenLoader.stopLoading();
     } catch (e) {
-      TFullScreenLoader.stopLoading();
-      debugPrint("fetchDashboardCustomerProfile Error: $e");
+      debugPrint("fetchAlertSendProfile Error: $e");
       TLoaders.errorSnackBar(title: "Error", message: e.toString());
     }
+    finally{
+      isSendAlertLoading.value = false;
+    }
   }
+
   Future<void> fetchAlertReceiveProfile() async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -61,26 +65,27 @@ class AlertInterestSendController extends GetxController {
         return;
       }
 
-      TFullScreenLoader.popUpCircular();
+isReceiveAlertLoading.value = true;
       final req = {"user_id": storage.read(TTexts.userId)};
       // final req = {"user_id": "5"};
-      debugPrint("fetchAlertSendProfile req: $req");
+      debugPrint("fetchAlertReceiveProfile req: $req");
       final response = await THttpHelper.post(
         ApiConstant.alertListReceiveEndPoint,
         req,
       );
 
-      debugPrint("fetchAlertSendProfile response: $response");
+      debugPrint("fetchAlertReceiveProfile response: $response");
 
       receiveAlertProfileModel.value = (response["data"] as List)
           .map((e) => AlertProfileModel.fromJson(e))
           .toList();
 
-      TFullScreenLoader.stopLoading();
     } catch (e) {
-      TFullScreenLoader.stopLoading();
-      debugPrint("fetchDashboardCustomerProfile Error: $e");
+      debugPrint("fetchAlertReceiveProfile Error: $e");
       TLoaders.errorSnackBar(title: "Error", message: e.toString());
+    }
+    finally{
+      isReceiveAlertLoading.value = false;
     }
   }
 }

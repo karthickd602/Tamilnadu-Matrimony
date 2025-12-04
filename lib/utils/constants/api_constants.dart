@@ -18,6 +18,7 @@ class ApiConstant {
   static const String customerProfilePage = "get_user_data";
   static const String likeProfileEndPoint = "liked_profile";
   static const String sendInterestProfileEndPoint = "send_interest";
+  static const String userUnlockProfileEndPoint = "unlock_profile";
   static const String alertListSendEndPoint = "alert_int_sent";
   static const String alertListReceiveEndPoint = "alert_int_receive";
   static const String notificationListEndPoint = "alert_notifications";

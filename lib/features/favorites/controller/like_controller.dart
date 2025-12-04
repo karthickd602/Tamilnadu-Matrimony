@@ -24,7 +24,7 @@ class LikeController extends GetxController {
         );
         return;
       }
-
+      isLikeLoading.value = true;
       likeList.clear();
 
       // TFullScreenLoader.popUpCircular();
@@ -44,12 +44,15 @@ class LikeController extends GetxController {
       likeList.value = (response["data"] as List)
           .map((e) => CustomerProfileListModel.fromJson(e))
           .toList();
-
+      isLikeLoading.value=false;
       // TFullScreenLoader.stopLoading();
     } catch (e) {
       // TFullScreenLoader.stopLoading();
       debugPrint("fetchLikeList Error: $e");
       TLoaders.errorSnackBar(title: "Error in Like List", message: e.toString());
+    }
+    finally{
+      isLikeLoading.value = false;
     }
   }
 }

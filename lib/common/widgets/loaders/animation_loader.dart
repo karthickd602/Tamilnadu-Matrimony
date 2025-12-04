@@ -36,38 +36,40 @@ class TAnimationLoaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset(animation,
-              height: height ?? MediaQuery.of(context).size.height * 0.5,
-              width: width), // Display Lottie animation
-          SizedBox(height: TSizes.defaultSpace),
-          Text(
-            text,
-            style: style ?? Theme.of(context).textTheme.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: TSizes.defaultSpace),
-          showAction
-              ? SizedBox(
-                  width: 250,
-                  child: OutlinedButton(
-                    onPressed: onActionPressed,
-                    style:
-                        OutlinedButton.styleFrom(backgroundColor: TColors.dark),
-                    child: Text(
-                      actionText!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .apply(color: TColors.light),
+    return SafeArea(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(animation,
+                height: height ?? MediaQuery.of(context).size.height * 0.5,
+                width: width), // Display Lottie animation
+            SizedBox(height: TSizes.xs),
+            Text(
+              text,
+              style: style ?? Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: TSizes.defaultSpace),
+            showAction
+                ? SizedBox(
+                    width: 250,
+                    child: OutlinedButton(
+                      onPressed: onActionPressed,
+                      style:
+                          OutlinedButton.styleFrom(backgroundColor: TColors.dark),
+                      child: Text(
+                        actionText!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .apply(color: TColors.light),
+                      ),
                     ),
-                  ),
-                )
-              : const SizedBox(),
-        ],
+                  )
+                : const SizedBox(),
+          ],
+        ),
       ),
     );
   }

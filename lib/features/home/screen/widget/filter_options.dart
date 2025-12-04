@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tamilnadu_matrimony/common/widgets/containers/rounded_container.dart';
+
 import '../../controller/filter_controller.dart';
 
 class FilterOptionsWidget extends StatelessWidget {
@@ -70,6 +71,7 @@ class FilterOptionsWidget extends StatelessWidget {
     }
   }
 }
+
 class _CheckboxTile extends StatelessWidget {
   final String category;
   final dynamic option;
@@ -102,6 +104,7 @@ class _CheckboxTile extends StatelessWidget {
     });
   }
 }
+
 class _RadioTile extends StatelessWidget {
   final String category;
   final dynamic option;
@@ -133,4 +136,47 @@ class _RadioTile extends StatelessWidget {
     });
   }
 }
-class _AgeRangeSelector extends StatelessWidget { const _AgeRangeSelector(); @override Widget build(BuildContext context) { final controller = Get.find<FilterController>(); return Obx(() { final ageRange = controller.ageRange.value; return Padding( padding: const EdgeInsets.all(16.0), child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: [ const Text( "Select Age Range", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600), ), const SizedBox(height: 20), Row( mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [ Text("From: ${ageRange.start.toInt()}"), Text("To: ${ageRange.end.toInt()}"), ], ), RangeSlider( min: 18, max: 50, divisions: 32, activeColor: Theme.of(context).primaryColor, values: ageRange, labels: RangeLabels( ageRange.start.toInt().toString(), ageRange.end.toInt().toString(), ), onChanged: (range) => controller.ageRange.value = range, ), ], ), ); }); } }
+
+class _AgeRangeSelector extends StatelessWidget {
+  const _AgeRangeSelector();
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<FilterController>();
+    return Obx(() {
+      final ageRange = controller.ageRange.value;
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Select Age Range",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("From: ${ageRange.start.toInt()}"),
+                Text("To: ${ageRange.end.toInt()}"),
+              ],
+            ),
+            RangeSlider(
+              min: 18,
+              max: 50,
+              divisions: 32,
+              activeColor: Theme.of(context).primaryColor,
+              values: ageRange,
+              labels: RangeLabels(
+                ageRange.start.toInt().toString(),
+                ageRange.end.toInt().toString(),
+              ),
+              onChanged: (range) => controller.ageRange.value = range,
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}

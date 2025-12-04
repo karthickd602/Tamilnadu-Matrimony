@@ -76,6 +76,7 @@ flutter:
     - assets/images/content/
     - assets/images/banner/
     - assets/translation/
+    - assets/animation/
 
   fonts:
     - family: Urbanist

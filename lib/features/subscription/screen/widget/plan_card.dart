@@ -2,10 +2,11 @@ import '../../../../utils/constants/path_provider.dart';
 import '../../model/subscription_model.dart';
 
 class PlanCard extends StatelessWidget {
-  const PlanCard({
-    super.key, required this.plan, required this.selected,
-  });
-  final SubscriptionPlan plan;final bool selected;
+  const PlanCard({super.key, required this.plan, required this.selected});
+
+  final SubscriptionPlan plan;
+  final bool selected;
+
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -96,7 +96,7 @@ class CustomerCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          customerProfile.id.toString(),
+                          customerProfile.matriId.toString().toUpperCase(),
                           style: Theme.of(context).textTheme.bodySmall!
                               .copyWith(color: Colors.white70),
                         ),
@@ -178,7 +178,9 @@ class CustomerCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          controller.unlockProfile(profileId: customerProfile.id??0);
+                        },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           backgroundColor: TColors.primary,

@@ -160,6 +160,36 @@ final martialStatus = [
 
     selectedOptions[category] = list;
   }
+  /// Return selected count or indicator for category
+  String? getCategoryBadge(String category) {
+    final value = selectedOptions[category];
+
+    if (value == null) return null;
+
+    // Checkbox category → List<int>
+    if (value is List) {
+      return value.isEmpty ? null : value.length.toString();
+    }
+
+    // Radio category → int
+    if (value is int) {
+      return value == 0 ? null : "✔";
+    }
+
+    return null;
+  }
+
+  /// Get custom badge for Age
+  String? getAgeBadge() {
+    final start = ageRange.value.start.toInt();
+    final end = ageRange.value.end.toInt();
+
+    // Default range → don't show badge
+    if (start == 18 && end == 50) return null;
+
+    return "$start–$end";
+  }
+
 
   bool isCheckboxSelected(String category, int id) {
     return (selectedOptions[category] ?? []).contains(id);

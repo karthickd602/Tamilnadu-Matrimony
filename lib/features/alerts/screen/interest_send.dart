@@ -1,3 +1,4 @@
+import '../../../common/widgets/loaders/animation_loader.dart';
 import '../../../utils/constants/path_provider.dart';
 import '../controller/alert_interest_send_controller.dart';
 import 'widget/interest_user_card.dart';
@@ -10,26 +11,32 @@ class InterestSend extends StatelessWidget {
     final controller = Get.put(AlertInterestSendController());
     return RefreshIndicator(
       onRefresh: ()=>controller.fetchAlertSendProfile(),
-      child: SingleChildScrollView(
-        // padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: Obx(
-          ()=> Column(
-            children: [
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.sendAlertProfileModel.length,
-                separatorBuilder: (context, index) =>
-                const SizedBox(height: TSizes.sm),
-                itemBuilder: (context, index) {
-                  final sendAlert = controller.sendAlertProfileModel[index];
 
-                  return InterestUserCard(isReceived: false, alertProfileModel: sendAlert,);
-                },
-              ),
-            ],
-          ),
-        ),
+      child: Obx(
+        () {
+          if(controller.isSendAlertLoading.value){
+            return const Center(child: CircularProgressIndicator());
+          }
+          if(controller.sendAlertProfileModel.isEmpty){
+            return   TAnimationLoaderWidget(
+              animation: TImages.noDataFoundAnimation,
+              text: 'No send Interest send Found',
+            );
+          }
+
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: controller.sendAlertProfileModel.length,
+            separatorBuilder: (context, index) =>
+            const SizedBox(height: TSizes.sm),
+            itemBuilder: (context, index) {
+              final sendAlert = controller.sendAlertProfileModel[index];
+
+              return InterestUserCard(isReceived: false, alertProfileModel: sendAlert,);
+            },
+          );
+        },
       ),
     );
   }
