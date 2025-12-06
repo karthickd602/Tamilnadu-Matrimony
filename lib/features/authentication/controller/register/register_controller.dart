@@ -1,4 +1,6 @@
-import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+import 'package:tamilnadu_matrimony/common/widgets/images/t_image_picker.dart';
 import 'package:tamilnadu_matrimony/features/authentication/model/dropdown_model.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
@@ -26,10 +28,9 @@ class RegistrationController extends GetxController {
   final nameController = TextEditingController();
   final gender = ''.obs;
   final dobController = TextEditingController();
-  final dotController = TextEditingController();
   final heightController = TextEditingController();
-  final weightController = TextEditingController();
   final maritalStatus = ''.obs;
+  final childLivingStatus = ''.obs;
   final noOfChildren = ''.obs;
 
   // final eduction = ''.obs;
@@ -51,10 +52,13 @@ class RegistrationController extends GetxController {
   final fatherOccupationController = TextEditingController();
   final motherNameController = TextEditingController();
   final motherOccupationController = TextEditingController();
-  final familyStatusController = TextEditingController();
-  final familyTypeController = TextEditingController();
+  final familyStatusController = ''.obs;
+
+  // final familyTypeController = TextEditingController();
   final brothersController = TextEditingController();
   final sistersController = TextEditingController();
+  final marriedBrothersController = TextEditingController();
+  final marriedSistersController = TextEditingController();
   final nativePlaceController = TextEditingController();
 
   // Horoscope fields
@@ -64,6 +68,9 @@ class RegistrationController extends GetxController {
   RxString isDoshamHave = ''.obs;
   final doshamType = ''.obs;
   final dasaBalanceDays = TextEditingController();
+
+  // RxString horoscopeImagePath = ''.obs;
+  final horoscopeImageFile = File('').obs;
   RxString horoscopeImagePath = ''.obs;
 
   final mobileController = TextEditingController();
@@ -75,6 +82,8 @@ class RegistrationController extends GetxController {
   RxString districtController = "".obs;
   RxString stateController = "".obs;
   final pincodeController = TextEditingController();
+
+  final profileImageFile = File('').obs;
   RxString profileImagePath = ''.obs;
 
   final noCasteChecked = false.obs;
@@ -86,11 +95,20 @@ class RegistrationController extends GetxController {
   final districtList = <CountryModel>[].obs;
   final selectedDistrict = Rxn<CountryModel>();
 
-
   /// --- Base Lists ---
   final raasiList = [
-    "மேஷம்", "ரிஷபம்", "மிதுனம்", "கடகம்", "சிம்மம்",
-    "கன்னி", "துலாம்", "விருச்சிகம்", "தனுசு", "மகரம்", "கும்பம்", "மீனம்"
+    "மேஷம்",
+    "ரிஷபம்",
+    "மிதுனம்",
+    "கடகம்",
+    "சிம்மம்",
+    "கன்னி",
+    "துலாம்",
+    "விருச்சிகம்",
+    "தனுசு",
+    "மகரம்",
+    "கும்பம்",
+    "மீனம்",
   ];
 
   final starMap = {
@@ -101,7 +119,7 @@ class RegistrationController extends GetxController {
       "கார்த்திகை -4ம் பாதம்",
       "ரோகிணி",
       "மிருக சீரிஷம் -1ம் பாதம்",
-      "மிருக சீரிஷம் -2ம் பாதம்"
+      "மிருக சீரிஷம் -2ம் பாதம்",
     ],
     "மிதுனம்": [
       "மிருக சீரிஷம் -3ம் பாதம்",
@@ -109,7 +127,7 @@ class RegistrationController extends GetxController {
       "திருவாதிரை",
       "புனர்பூசம் -1ம் பாதம்",
       "புனர்பூசம் -2ம் பாதம்",
-      "புனர்பூசம் -3ம் பாதம்"
+      "புனர்பூசம் -3ம் பாதம்",
     ],
     "கடகம்": ["புனர்பூசம் -4ம் பாதம்", "பூசம்", "ஆயில்யம்"],
     "சிம்மம்": ["மகம்", "பூரம்", "உத்திரம் -1ம் பாதம்"],
@@ -118,7 +136,7 @@ class RegistrationController extends GetxController {
       "உத்திரம் -3ம் பாதம்",
       "உத்திரம் -4ம் பாதம்",
       "அஸ்தம்",
-      "சித்திரை -1,2ம் பாதம்"
+      "சித்திரை -1,2ம் பாதம்",
     ],
     "துலாம்": [
       "சித்திரை -3ம் பாதம்",
@@ -126,7 +144,7 @@ class RegistrationController extends GetxController {
       "சுவாதி",
       "விசாகம் -1ம் பாதம்",
       "விசாகம் -2ம் பாதம்",
-      "விசாகம் -3ம் பாதம்"
+      "விசாகம் -3ம் பாதம்",
     ],
     "விருச்சிகம்": ["விசாகம் -4ம் பாதம்", "அனுஷம்", "கேட்டை"],
     "தனுசு": ["மூலம்", "பூராடம்", "உத்திராடம் -1ம் பாதம்"],
@@ -136,7 +154,7 @@ class RegistrationController extends GetxController {
       "உத்திராடம் -4ம் பாதம்",
       "திருவோணம்",
       "அவிட்டம் -1ம் பாதம்",
-      "அவிட்டம் -2ம் பாதம்"
+      "அவிட்டம் -2ம் பாதம்",
     ],
     "கும்பம்": [
       "அவிட்டம் -3ம் பாதம்",
@@ -144,9 +162,9 @@ class RegistrationController extends GetxController {
       "சதயம்",
       "பூரட்டாதி -1ம் பாதம்",
       "பூரட்டாதி -2ம் பாதம்",
-      "பூரட்டாதி -3ம் பாதம்"
+      "பூரட்டாதி -3ம் பாதம்",
     ],
-    "மீனம்": ["பூரட்டாதி -4ம் பாதம்", "உத்திரட்டாதி", "ரேவதி"]
+    "மீனம்": ["பூரட்டாதி -4ம் பாதம்", "உத்திரட்டாதி", "ரேவதி"],
   };
 
   final dasaList = [
@@ -159,7 +177,7 @@ class RegistrationController extends GetxController {
     "சனி மகா திசை",
     "ராகு மகா திசை",
     "கேது மகா திசை",
-    "குரு மகா திசை"
+    "குரு மகா திசை",
   ];
 
   final dhosamList = [
@@ -169,20 +187,21 @@ class RegistrationController extends GetxController {
     "கால சர்ப்ப தோஷம்",
     "களத்திர தோஷம்",
     "பித்ரு தோஷம்",
-    "இதர தோஷம்"
+    "இதர தோஷம்",
   ];
 
   /// --- Selected Values ---
   final selectedRaasi = RxnString();
   final selectedStar = RxnString();
   final selectedDasa = RxnString();
+  final areYouHaveDhosam = RxnString();
   final selectedDhosam = RxnString();
 
   /// --- Dynamic lists ---
-  List<String> get starsForSelectedRaasi =>
-      starMap[selectedRaasi.value] ?? [];
+  List<String> get starsForSelectedRaasi => starMap[selectedRaasi.value] ?? [];
 
   List<String> get filteredDasaList => dasaList;
+
   List<String> get filteredDhosamList => dhosamList;
 
   /// --- Update functions ---
@@ -322,6 +341,7 @@ class RegistrationController extends GetxController {
       );
     }
   }
+
   Future<void> fetchCountryDropdown() async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -352,6 +372,7 @@ class RegistrationController extends GetxController {
       );
     }
   }
+
   Future<void> fetchStateDropdown() async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -364,16 +385,16 @@ class RegistrationController extends GetxController {
       }
 
       final req = {"country_id": selectedCountry.value?.id};
-      final response = await THttpHelper.post(ApiConstant.getStateDD,req);
+      final response = await THttpHelper.post(ApiConstant.getStateDD, req);
       //
       debugPrint("state Response:${response.toString()}");
       if (response['statusCode'] == 204) {
         stateList.value = <CountryModel>[];
         return;
       }
-        stateList.value = (response['data'] as List)
-            .map((e) => CountryModel.fromJson(e))
-            .toList();
+      stateList.value = (response['data'] as List)
+          .map((e) => CountryModel.fromJson(e))
+          .toList();
       // } else {
       //
       // }
@@ -384,6 +405,7 @@ class RegistrationController extends GetxController {
       );
     }
   }
+
   Future<void> fetchDistrictDropdown() async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -396,7 +418,7 @@ class RegistrationController extends GetxController {
       }
 
       final req = {"state_id": selectedState.value?.id};
-      final response = await THttpHelper.post(ApiConstant.getCityDD,req);
+      final response = await THttpHelper.post(ApiConstant.getCityDD, req);
       //
       debugPrint("state Response:${response.toString()}");
       if (response['statusCode'] == 204) {
@@ -404,9 +426,8 @@ class RegistrationController extends GetxController {
         return;
       }
       districtList.value = (response['data'] as List)
-            .map((e) => CountryModel.fromJson(e))
-            .toList();
-
+          .map((e) => CountryModel.fromJson(e))
+          .toList();
     } catch (e) {
       TLoaders.errorSnackBar(
         title: "District Dropdown Issue",
@@ -421,49 +442,63 @@ class RegistrationController extends GetxController {
   }
 
   // Pick horoscope image
-
-  Future<void> pickImage(
-    ImageSource source, {
-    required RxString imagePath,
-  }) async {
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(source: source);
-    if (picked != null) {
-      imagePath.value = picked.path;
+  void selectHoroscopeImage(BuildContext context) async {
+    final file = await TImagePickerHelper.pickImageFromUser(context);
+    if (file != null) {
+      horoscopeImageFile.value = file;
+      horoscopeImagePath.value = file.path;
+    }
+  }// Pick Contact image
+  void selectProfileImage(BuildContext context) async {
+    final file = await TImagePickerHelper.pickImageFromUser(context);
+    if (file != null) {
+      profileImageFile.value = file;
+      profileImagePath.value = file.path;
     }
   }
 
-  void showImageSourceSheet({required RxString imagePath}) {
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Camera'),
-              onTap: () {
-                pickImage(ImageSource.camera, imagePath: imagePath);
-                Get.back();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo),
-              title: const Text('Gallery'),
-              onTap: () {
-                pickImage(ImageSource.gallery, imagePath: imagePath);
-                Get.back();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Future<void> pickImage(
+  //   ImageSource source, {
+  //   required RxString imagePath,
+  // }) async {
+  //   final picker = ImagePicker();
+  //   final picked = await picker.pickImage(source: source);
+  //   if (picked != null) {
+  //     imagePath.value = picked.path;
+  //   }
+  // }
+  //
+  // void showImageSourceSheet({required RxString imagePath}) {
+  //   Get.bottomSheet(
+  //     Container(
+  //       padding: const EdgeInsets.all(16),
+  //       decoration: const BoxDecoration(
+  //         color: Colors.white,
+  //         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //       ),
+  //       child: Wrap(
+  //         children: [
+  //           ListTile(
+  //             leading: const Icon(Icons.camera_alt),
+  //             title: const Text('Camera'),
+  //             onTap: () {
+  //               pickImage(ImageSource.camera, imagePath: imagePath);
+  //               Get.back();
+  //             },
+  //           ),
+  //           ListTile(
+  //             leading: const Icon(Icons.photo),
+  //             title: const Text('Gallery'),
+  //             onTap: () {
+  //               pickImage(ImageSource.gallery, imagePath: imagePath);
+  //               Get.back();
+  //             },
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Future<void> basicFormSubmit() async {
     try {
@@ -476,22 +511,57 @@ class RegistrationController extends GetxController {
       }
 
       final request = {
-        "name": nameController.text,
-        "gender": gender.value,
-        "dob": dobController.text,
-        "dot": dotController.text,
-        "height": heightController.text,
-        "weight": weightController.text,
-        "marital_status": maritalStatus.value,
-        "education": educationDetailsController.text,
-        "occupation": occupationDetailsController.text,
-        "income": incomeController.text,
-        "religion": selectedReligion.value,
-        "caste": selectedCaste.value,
-        "sub_caste": subCasteController.text,
+        // 'id': 0,
+        "Name": nameController.text,
+        // "Gender": gender.value,
+        "Gender": "1",
+        // "DOB": dobController.text,
+        "DOB": '1996-02-01',
+        "Height": heightController.text,
+        "Complexion": colorComplexion.value,
+        "Maritalstatus": maritalStatus.value,
+        // "childCount": noOfChildren.value.isEmpty ? "0" : noOfChildren.value,
+        "childrenlivingstatus": childLivingStatus.value,
+        "Education": selectedEducation.value?.id,
+        "EducationDetails": educationDetailsController.text,
+        "occupation": selectedOccupation.value?.id,
+        "workplace": occupationDetailsController.text,
+        "Annualincome": incomeController.text,
+        "Religion": selectedReligion.value?.id,
+        "Caste": selectedCaste.value?.id,
+        "Subcaste": subCasteController.text,
+        "spe_cases": isDisablePerson.value,
       };
-      debugPrint("Basic : $request");
-      currentStep.value++;
+
+      // final request = {
+      //   "Name": "dinesh",
+      //   "Gender": "1",
+      //   "DOB": "1996-02-01",
+      //   "Height": "11",
+      //   "Complexion": "சிவப்பு",
+      //   "Maritalstatus": "திருமணம் ஆகாதவர்",
+      //   "childrenlivingstatus": "Living with me",
+      //   "Education": "7",
+      //   "EducationDetails": "csc",
+      //   "occupation": "52",
+      //   "workplace": "app developer",
+      //   "Annualincome": "30000",
+      //   "Religion": "1",
+      //   "Caste": "24",
+      //   "Subcaste": "Kakkanad",
+      //   "spe_cases": "No",
+      // };
+
+      debugPrint("Basic Register : $request");
+
+      final response = await THttpHelper.post(
+        ApiConstant.basicRegisterEndpoint,
+        request,
+      );
+
+      debugPrint("Basic Register Response : $response");
+
+      // currentStep.value++;
     } catch (e) {
       debugPrint("basicFormSubmit - $e");
       TLoaders.errorSnackBar(
@@ -510,20 +580,44 @@ class RegistrationController extends GetxController {
       }
 
       if (!familyFormKey.currentState!.validate()) {
+        debugPrint("familyFormSubmit - validate");
         return;
       }
+
+      debugPrint('"father_name": ${fatherNameController.text}');
+      debugPrint('"father_occupation": ${fatherOccupationController.text}');
+      debugPrint('"mother_name": ${motherNameController.text}');
+      debugPrint('"mother_occupation": ${motherOccupationController.text}');
+      debugPrint('"family_status": ${familyStatusController.value}');
+      debugPrint('"brothers": ${brothersController.text}');
+      debugPrint('"sisters": ${sistersController.text}');
+      debugPrint('"married_brothers": ${marriedBrothersController.text}');
+      debugPrint('"married_sisters": ${marriedSistersController.text}');
+      debugPrint('"native_place": ${nativePlaceController.text}');
+
       final request = {
-        "father_name": fatherNameController.text,
-        "father_occupation": fatherOccupationController.text,
-        "mother_name": motherNameController.text,
-        "mother_occupation": motherOccupationController.text,
-        "family_status": familyStatusController.text,
-        "family_type": familyTypeController.text,
-        "brothers": brothersController.text,
-        "sisters": sistersController.text,
-        "native_place": nativePlaceController.text,
+        "id": "11622",
+        "Fathername": fatherNameController.text,
+        "Fathersoccupation": fatherOccupationController.text,
+        "Mothersname": motherNameController.text,
+        "Mothersoccupation": motherOccupationController.text,
+        // "family_status": familyStatusController.value,
+        "noofbrothers": brothersController.text,
+        "noofsisters": sistersController.text,
+        "nbm": marriedBrothersController.text,
+        "nsm": marriedSistersController.text,
+        "irupidam": nativePlaceController.text,
       };
-      currentStep.value++;
+      debugPrint('Family Register reqq $request');
+
+      final response = await THttpHelper.post(
+        ApiConstant.familyRegisterEndpoint,
+        request,
+      );
+
+      debugPrint("Family Register Response : $response");
+
+      // currentStep.value++;
 
       print("Family : $request");
     } catch (e) {
@@ -547,6 +641,7 @@ class RegistrationController extends GetxController {
         return;
       }
       final request = {
+        "id": "11622",
         "rasi": rasiController.value,
         "nakshatra": nakshatraController.text,
         "gothram": laknamController.value,
@@ -609,7 +704,6 @@ class RegistrationController extends GetxController {
   void onClose() {
     nameController.dispose();
     heightController.dispose();
-    weightController.dispose();
     educationDetailsController.dispose();
     occupationDetailsController.dispose();
     incomeController.dispose();

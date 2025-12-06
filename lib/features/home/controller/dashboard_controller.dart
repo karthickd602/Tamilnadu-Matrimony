@@ -1,4 +1,6 @@
+import 'package:tamilnadu_matrimony/features/favorites/controller/unlocked_controller.dart';
 import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart';
+import 'package:tamilnadu_matrimony/features/home/screen/customer_view_page.dart';
 import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 
 import '../../../utils/constants/path_provider.dart';
@@ -17,17 +19,19 @@ class DashboardController extends GetxController {
   final RxBool isMoreLoading = false.obs;
 
   final RxInt currentPage = 1.obs;
+
   // final int pageSize = 10; // If API supports
   final RxBool hasMore = true.obs;
 
-
   final scrollController = ScrollController();
+
   @override
   void onInit() {
     super.onInit();
     fetchDashboardCustomerProfile(isInitial: true);
     scrollController.addListener(_scrollListener);
   }
+
   void _scrollListener() {
     if (!hasMore.value || isMoreLoading.value) return;
 
@@ -36,6 +40,7 @@ class DashboardController extends GetxController {
       fetchDashboardCustomerProfile(isInitial: false);
     }
   }
+
   Future<void> fetchDashboardCustomerProfile({
     bool isInitial = false,
     Map<String, dynamic>? filters,
@@ -79,7 +84,6 @@ class DashboardController extends GetxController {
 
       debugPrint("Dashboard Response = $response");
 
-
       List newData = response["profiles"] ?? [];
 
       if (newData.isNotEmpty) {
@@ -93,7 +97,6 @@ class DashboardController extends GetxController {
 
       isFirstLoad.value = false;
       isMoreLoading.value = false;
-
     } catch (e) {
       isFirstLoad.value = false;
       isMoreLoading.value = false;
@@ -156,26 +159,25 @@ class DashboardController extends GetxController {
         "user_id": storage.read(TTexts.userId),
         "liked_user_id": profileId,
       };
-
+      debugPrint("likeProfile req: $req");
       final response = await THttpHelper.post(
         ApiConstant.likeProfileEndPoint,
         req,
       );
 
+      debugPrint('likeProfile res $response');
+
       /// Toggle value for CURRENT MODEL
-      likedValue.value =
-      likedValue.value.toLowerCase() == "yes" ? "no" : "yes";
+      likedValue.value = likedValue.value.toLowerCase() == "yes" ? "no" : "yes";
 
       /// 🔥 Also update the list page (CustomerCard)
-      final index = dashboardCustomerList
-          .indexWhere((e) => e.id == profileId);
+      final index = dashboardCustomerList.indexWhere((e) => e.id == profileId);
 
       if (index != -1) {
         dashboardCustomerList[index].liked.value = likedValue.value;
-        dashboardCustomerList.refresh();   // 🔥 force rebuild UI
+        dashboardCustomerList.refresh(); // 🔥 force rebuild UI
       }
       await Get.put(LikeController()).fetchLikeList();
-
 
       debugPrint("likeProfile response: $response");
     } catch (e) {
@@ -185,6 +187,78 @@ class DashboardController extends GetxController {
       );
     } finally {
       isLikeLoading.value = false;
+    }
+  }
+
+  Future<void> unlockProfile({
+    required int profileId,
+    required RxString unlockValue,
+  }) async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TLoaders.errorSnackBar(
+          title: "No Internet",
+          message: "No Internet Connection",
+        );
+        return;
+      }
+
+      TFullScreenLoader.popUpCircular();
+      // final req = {
+      //   "current_user": storage.read(TTexts.userId),
+      //   "target_user": profileId,
+      // };
+
+      final req = {
+        "current_user": storage.read(TTexts.userId),
+        // "current_user": 11622,
+        "target_user": profileId,
+      };
+      debugPrint("unlockProfile req: $req");
+      final response = await THttpHelper.post(
+        ApiConstant.userUnlockProfileEndPoint,
+        req,
+      );
+      debugPrint("unlockProfile response: $response");
+      if (response['statusCode'] == 204||response['statusCode']==403) {
+        TFullScreenLoader.stopLoading();
+        TLoaders.warningSnackBar(
+          title: "Send Interest Failed",
+          message: response['message'],
+        );
+
+        Get.toNamed(TRoutes.subscription);
+        return;
+      }
+
+      /// Toggle value for CURRENT MODEL
+      unlockValue.value = unlockValue.value.toLowerCase() == "true"
+          ? "false"
+          : "true";
+
+
+      /// 🔥 Also update the list page (CustomerCard)
+      final index = dashboardCustomerList.indexWhere((e) => e.id == profileId);
+
+      if (index != -1) {
+        dashboardCustomerList[index].isUnlocked.value = unlockValue.value;
+        dashboardCustomerList.refresh(); // 🔥 force rebuild UI
+      }      TFullScreenLoader.stopLoading();
+      await fetchCustomerPage(profileId);
+      Get.to(()=>CustomerDetailsView());
+
+      await Get.put(UnlockedController()).fetchUnlockList();
+
+      TLoaders.successSnackBar(
+        title: "Send Interest",
+        message: response['message'],
+      );
+
+    } catch (e) {
+      TFullScreenLoader.stopLoading();
+      debugPrint("unlockProfile Error: $e");
+      TLoaders.errorSnackBar(title: "Send Interest", message: e.toString());
     }
   }
 
@@ -219,46 +293,6 @@ class DashboardController extends GetxController {
     } catch (e) {
       TFullScreenLoader.stopLoading();
 
-      TLoaders.errorSnackBar(title: "Send Interest", message: e.toString());
-    }
-  }
-  Future<void> unlockProfile({required int profileId}) async {
-    try {
-      final isConnected = await NetworkManager.instance.isConnected();
-      if (!isConnected) {
-        TLoaders.errorSnackBar(
-          title: "No Internet",
-          message: "No Internet Connection",
-        );
-        return;
-      }
-
-      TFullScreenLoader.popUpCircular();
-      // final req = {
-      //   "current_user": storage.read(TTexts.userId),
-      //   "target_user": profileId,
-      // };
-
-      final req = {
-        "current_user": "11622",
-        "target_user": profileId,
-      };
-      debugPrint("unlockProfile req: $req");
-      final response = await THttpHelper.post(
-        ApiConstant.userUnlockProfileEndPoint,
-        req,
-      );
-
-      debugPrint("unlockProfile response: $response");
-      TLoaders.successSnackBar(
-        title: "Send Interest",
-        message: response['message'],
-      );
-
-      TFullScreenLoader.stopLoading();
-    } catch (e) {
-      TFullScreenLoader.stopLoading();
-debugPrint("unlockProfile Error: $e");
       TLoaders.errorSnackBar(title: "Send Interest", message: e.toString());
     }
   }

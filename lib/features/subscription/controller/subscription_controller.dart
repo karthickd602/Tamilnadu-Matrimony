@@ -1,5 +1,5 @@
-import 'package:get/get.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
+
 import '../../../utils/popups/full_screen_loader.dart';
 import '../model/subscription_model.dart';
 
@@ -11,6 +11,12 @@ class SubscriptionController extends GetxController {
   SubscriptionPlan? get selectedPlan =>
       plans.isNotEmpty ? plans[selectedIndex.value] : null;
 
+  // Selected plan index
+  var status = "Active".obs;
+  var package = "Basic".obs;
+  var issueDate = "18 Jul, 2025".obs;
+  var expiryDate = "18 Jul, 2026".obs;
+  var daysLeft = "260 Days Left".obs;
   @override
   void onInit() async{
     super.onInit();

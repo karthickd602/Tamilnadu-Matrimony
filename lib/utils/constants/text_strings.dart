@@ -129,6 +129,7 @@ class TTexts {
   static const String filter = "filter";
   static const String verified = "verified";
   static const String unlockNumber = "unlock_number";
+  static const String viewDetails = "view_details";
   // Categories
 
   static const String marriageType = "marriage_type";

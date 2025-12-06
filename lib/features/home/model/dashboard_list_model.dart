@@ -30,6 +30,7 @@ class CustomerProfileListModel {
   final String? horosApprove;
   final String? horosCheck;
   RxString liked = "no".obs;
+  RxString isUnlocked = "false".obs;
   final String? verified;
 
   CustomerProfileListModel({
@@ -62,9 +63,11 @@ class CustomerProfileListModel {
     this.horosApprove,
     this.horosCheck,
     String? liked,
+    String? isUnlocked,
     this.verified,
   }) {
     this.liked.value = liked ?? "no";
+    this.isUnlocked.value = isUnlocked ?? "false";
   }
 
   /// EMPTY MODEL
@@ -99,6 +102,7 @@ class CustomerProfileListModel {
       horosApprove : "",
       horosCheck : "",
       liked:'',
+      isUnlocked:'',
       verified : "",
     );
   }
@@ -134,6 +138,7 @@ class CustomerProfileListModel {
       horosApprove: json['HorosApprove'],
       horosCheck: json['Horoscheck'],
       liked: json['liked'] ?? "no",
+      isUnlocked: json['is_unlocked'] ?? "false",
       verified: json['verified'] ?? "no",
     );
   }
@@ -169,6 +174,7 @@ class CustomerProfileListModel {
       'HorosApprove': horosApprove,
       'Horoscheck': horosCheck,
       'liked': liked.value,
+      'isUnlocked': isUnlocked.value,
       'verified': verified,
     };
   }

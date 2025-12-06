@@ -4,7 +4,7 @@ import '../../model/dashboard_list_model.dart';
 import '../customer_view_page.dart';
 
 class CustomerCard extends StatelessWidget {
-  const CustomerCard({super.key, required this.customerProfile});
+  const   CustomerCard({super.key, required this.customerProfile});
 
   final CustomerProfileListModel customerProfile;
 
@@ -177,26 +177,37 @@ class CustomerCard extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          controller.unlockProfile(profileId: customerProfile.id??0);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          backgroundColor: TColors.primary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
+                      child: Obx(
+                        () {
+                          debugPrint("CustomerCard isUnlocked: ${customerProfile.isUnlocked}");
+                          debugPrint("CustomerCard isUnlocked: ${customerProfile.name}");
+
+                          return ElevatedButton.icon(
+                          onPressed: () {
+                            controller.unlockProfile(profileId: customerProfile.id??0,unlockValue: customerProfile.isUnlocked);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            backgroundColor: TColors.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            elevation: 3,
                           ),
-                          elevation: 3,
-                        ),
-                        icon: const Icon(
-                          Icons.lock_outline,
-                          color: Colors.white,
-                        ),
-                        label: Text(
-                          TTexts.unlockNumber.tr,
-                          style: const TextStyle(color: Colors.white),
-                        ),
+                          icon:  Icon(
+                            customerProfile.isUnlocked.toLowerCase() == "true"?Icons.lock_open_outlined:
+                            Icons.lock_outline,
+                            color: Colors.white,
+                          ),
+                          label: Text(
+                         customerProfile.isUnlocked.toLowerCase() == "true"
+                            ? TTexts.viewDetails.tr
+                            :
+                            TTexts.unlockNumber.tr,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                        },
                       ),
                     ),
                     const SizedBox(width: 12),

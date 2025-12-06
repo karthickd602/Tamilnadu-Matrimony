@@ -1,5 +1,3 @@
-import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
-
 import '../../../utils/constants/path_provider.dart';
 import '../model/notification_model.dart';
 

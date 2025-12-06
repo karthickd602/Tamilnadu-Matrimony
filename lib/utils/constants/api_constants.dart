@@ -14,6 +14,8 @@ class ApiConstant {
   static const String getCountryDD = "get_country_data";
   static const String getStateDD = "get_state_data";
   static const String getCityDD = "get_city_data";
+  static const String basicRegisterEndpoint = "basic_details";
+  static const String familyRegisterEndpoint = "family_details";
   static const String dashboardListEndPoint = "dashboard";
   static const String customerProfilePage = "get_user_data";
   static const String likeProfileEndPoint = "liked_profile";
@@ -25,5 +27,7 @@ class ApiConstant {
   static const String likeListEndPoint = "view_liked_profile";
   static const String unlockListEndPoint = "view_unlocked_profile";
   static const String subscriptionPlans = "get_subscription_plan";
+  static const String viewUserProfileEndpoint = "view_profile";
+  static const String updateUserPhotoEndpoint = "profile_upload";
 
 }

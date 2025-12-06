@@ -21,7 +21,7 @@ class THelperFunctions {
     );
 
     if (pickedDate != null) {
-      controller.text = DateFormat('dd-MMM-yyyy').format(pickedDate);
+      controller.text = DateFormat('dd-MM-yyyy').format(pickedDate);
     }
   }
 
@@ -117,7 +117,7 @@ class THelperFunctions {
   }
 
   static String getFormattedDate(DateTime date,
-      {String format = 'dd-MMM-yyyy'}) {
+      {String format = 'dd-MM-yyyy'}) {
     return DateFormat(format).format(date);
   }
 

@@ -3,8 +3,11 @@ import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dar
 import 'package:tamilnadu_matrimony/features/profile/screen/verified_profile/verify_profile.dart';
 
 import '../../../common/widgets/dialog/logout_dialog.dart';
+import '../../../common/widgets/images/t_circular_image.dart';
+import '../../../common/widgets/images/t_image_picker.dart';
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/helpers/url_launcher.dart';
+import '../controller/profile_controller.dart';
 import 'edit_profile/edit_profile_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -13,125 +16,200 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    // final isDark = THelperFunctions.isDarkMode(context);
-
+    final profileController = Get.put(ProfileController());
+    // final controller = Get.put()
     return Scaffold(
       appBar: TAppBar(title: TTexts.profile.tr),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              /// Profile Header
-              Column(
-                children: [
-                  InkWell(
-                    onTap: () => Get.to(
-                          () => ImagePreviewPage(imageUrl: TImages.sampleUser),
-                    ),
-                    borderRadius: BorderRadius.circular(100),
-                    child: TRoundedImage(
-                      width: 110,
-                      height: 110,
-                      imageType: ImageType.asset,
-                      image: TImages.sampleUser,
-                      fit: BoxFit.cover,
-                      borderRadius: 100,
-                    ),
-                  ),
-                  const SizedBox(height: TSizes.sm),
+        child: RefreshIndicator(
+          onRefresh: () {
+            return profileController.fetchUserProfile();
+          },
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
+            child: Obx(() {
+              if (profileController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              final user = profileController.userProfile.value;
+
+              //
+              // if(profileController.isLoading.value){
+              //   return const Center(child: CircularProgressIndicator());
+              // }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  /// Profile Header
+                  Column(
                     children: [
-                      Text(
-                        "Karthick, 35",
-                        style: textTheme.headlineMedium
-                            ?.copyWith(fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(width: 6),
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
-                              blurRadius: 4,
+                      Stack(
+                        children: [
+                          InkWell(
+                            onTap: () => Get.to(
+                              () => ImagePreviewPage(
+                                imageUrl:
+                                    profileController
+                                        .userProfile
+                                        .value
+                                        ?.photo1 ??
+                                    '',
+                                imageType: ImageType.network,
+                              ),
                             ),
-                          ],
-                        ),
-                        child: Icon(
-                          Icons.verified,
-                          color: Colors.blueAccent.shade700,
-                          size: 20,
+                            borderRadius: BorderRadius.circular(100),
+                            child: TCircularImage(
+                              width: 110,
+                              height: 110,
+                              imageType:
+                                  profileController.userProfile.value?.photo1 !=
+                                      null
+                                  ? ImageType.network
+                                  : ImageType.asset,
+                              image:
+                                  profileController.userProfile.value?.photo1 ??
+                                  TImages.defaultProfilePic,
+                              fit: BoxFit.cover,
+                              // borderRadius: 100,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: InkWell(
+                              onTap: () async {
+                                final file =
+                                    await TImagePickerHelper.pickImageFromUser(
+                                      context,
+                                    );
+
+                                if (file != null) {
+                                  profileController.updateProfileImage(file);
+                                }
+                              },
+                              borderRadius: BorderRadius.circular(30),
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.6),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.camera_alt,
+                                  size: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: TSizes.sm),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${user?.name ?? ''}, ${profileController.userProfile.value?.age ?? ''}",
+                            style: textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.15),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.verified,
+                              color: Colors.blueAccent.shade700,
+                              size: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "${user?.matriId} | Active Member",
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey[600],
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "ID: MAT123456 | Active Member",
-                    style:
-                    textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+
+                  const SizedBox(height: TSizes.spaceBtwItems),
+                  const Divider(),
+
+                  /// Menu Items
+                  _buildMenuItem(
+                    context,
+                    Icons.person_outline,
+                    TTexts.editProfile.tr,
+                    () {
+                      Get.to(() => const EditProfilePage());
+                    },
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.camera_alt_outlined,
+                    TTexts.updatePhoto.tr,
+                    () {},
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.verified_outlined,
+                    TTexts.verifyProfile.tr,
+                    () => Get.to(() => const VerifyProfile()),
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.headset_mic_outlined,
+                    TTexts.helpSupport.tr,
+                    () => _showHelpDialog(context),
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.card_membership_outlined,
+                    TTexts.membershipDetails.tr,
+                    () => Get.toNamed(TRoutes.subscription),
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.share_outlined,
+                    TTexts.shareProfile.tr,
+                    () {},
+                  ),
+                  const Divider(height: 30),
+
+                  /// Danger Section
+                  _buildMenuItem(
+                    context,
+                    Icons.logout_outlined,
+                    TTexts.logout.tr,
+                    () => showLogoutDialog(context),
+                    isDanger: true,
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.delete_forever_outlined,
+                    TTexts.deleteProfile.tr,
+                    () {},
+                    isDanger: true,
                   ),
                 ],
-              ),
-
-              const SizedBox(height: TSizes.spaceBtwItems),
-              const Divider(),
-
-              /// Menu Items
-              _buildMenuItem(context, Icons.person_outline,
-                  TTexts.editProfile.tr, () {
-                Get.to(()=> const EditProfilePage());
-                  }),
-              _buildMenuItem(context, Icons.camera_alt_outlined,
-                  TTexts.updatePhoto.tr, () {}),
-              _buildMenuItem(
-                context,
-                Icons.verified_outlined,
-                TTexts.verifyProfile.tr,
-                    () => Get.to(() => const VerifyProfile()),
-              ),
-              _buildMenuItem(
-                context,
-                Icons.headset_mic_outlined,
-                TTexts.helpSupport.tr,
-                    () => _showHelpDialog(context),
-              ),
-              _buildMenuItem(
-                context,
-                Icons.card_membership_outlined,
-                TTexts.membershipDetails.tr,
-                    () => Get.toNamed(TRoutes.subscription),
-              ),
-              _buildMenuItem(
-                context,
-                Icons.share_outlined,
-                TTexts.shareProfile.tr,
-                    () {},
-              ),
-              const Divider(height: 30),
-
-              /// Danger Section
-              _buildMenuItem(
-                context,
-                Icons.logout_outlined,
-                TTexts.logout.tr,
-                    () => showLogoutDialog(context),
-                isDanger: true,
-              ),
-              _buildMenuItem(
-                context,
-                Icons.delete_forever_outlined,
-                TTexts.deleteProfile.tr,
-                    () {},
-                isDanger: true,
-              ),
-            ],
+              );
+            }),
           ),
         ),
       ),
@@ -154,14 +232,18 @@ class ProfilePage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.support_agent,
-                      color: Colors.blueAccent, size: 28),
+                  const Icon(
+                    Icons.support_agent,
+                    color: Colors.blueAccent,
+                    size: 28,
+                  ),
                   const SizedBox(width: 10),
                   Text(
                     "Help & Support",
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueAccent.shade700),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent.shade700,
+                    ),
                   ),
                 ],
               ),
@@ -170,12 +252,21 @@ class ProfilePage extends StatelessWidget {
 
               /// Info Rows
               _infoRow(Icons.phone_in_talk, "Call", "0452-4380101"),
-              _infoRow(Icons.email_outlined, "Mail",
-                  "info@tamilnadumatrimony.net"),
-              _infoRow(Icons.location_on_outlined, "Address",
-                  "Tamilnadu Matrimony,\n95, Northveli Street,\nSimmakal Bus Stop,\nMadurai - 625001."),
               _infoRow(
-                  Icons.access_time_outlined, "Timing", "10:00 AM - 6:30 PM"),
+                Icons.email_outlined,
+                "Mail",
+                "info@tamilnadumatrimony.net",
+              ),
+              _infoRow(
+                Icons.location_on_outlined,
+                "Address",
+                "Tamilnadu Matrimony,\n95, Northveli Street,\nSimmakal Bus Stop,\nMadurai - 625001.",
+              ),
+              _infoRow(
+                Icons.access_time_outlined,
+                "Timing",
+                "10:00 AM - 6:30 PM",
+              ),
 
               const SizedBox(height: 25),
 
@@ -184,7 +275,7 @@ class ProfilePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton.icon(
-                    onPressed: (){
+                    onPressed: () {
                       TUrlLauncher.callPhone("04524380101");
                     },
                     // onPressed: () => _launchCaller("04524380101"),
@@ -194,14 +285,19 @@ class ProfilePage extends StatelessWidget {
                       backgroundColor: TColors.green,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                     ),
                   ),
                   ElevatedButton.icon(
-                    onPressed: (){
-                      TUrlLauncher.sendMail(email: "info@tamilnadumatrimony.net");
+                    onPressed: () {
+                      TUrlLauncher.sendMail(
+                        email: "info@tamilnadumatrimony.net",
+                      );
                     },
                     // onPressed: () => _launchEmail(
                     //     "info@tamilnaduMatrimony.net", "Tamilnadu Matrimony"),
@@ -212,9 +308,12 @@ class ProfilePage extends StatelessWidget {
                       side: BorderSide(color: Colors.blueAccent),
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                     ),
                   ),
                 ],
@@ -254,9 +353,13 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 15)),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
                 const SizedBox(height: 2),
                 Text(
                   value,
@@ -293,12 +396,12 @@ class ProfilePage extends StatelessWidget {
 
   /// --- Menu item builder ---
   Widget _buildMenuItem(
-      BuildContext context,
-      IconData icon,
-      String title,
-      VoidCallback onTap, {
-        bool isDanger = false,
-      }) {
+    BuildContext context,
+    IconData icon,
+    String title,
+    VoidCallback onTap, {
+    bool isDanger = false,
+  }) {
     final isDark = THelperFunctions.isDarkMode(context);
 
     return ListTile(
@@ -308,8 +411,11 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: isDanger
             ? Colors.red.withOpacity(0.1)
             : TColors.primary.withOpacity(0.1),
-        child:
-        Icon(icon, color: isDanger ? Colors.red : TColors.primary, size: 22),
+        child: Icon(
+          icon,
+          color: isDanger ? Colors.red : TColors.primary,
+          size: 22,
+        ),
       ),
       title: Text(
         title,
@@ -320,8 +426,11 @@ class ProfilePage extends StatelessWidget {
           fontWeight: isDanger ? FontWeight.w600 : FontWeight.normal,
         ),
       ),
-      trailing:
-      const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+      trailing: const Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: Colors.grey,
+      ),
     );
   }
 }

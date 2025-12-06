@@ -26,8 +26,7 @@ class UnlockedPage extends StatelessWidget {
         }
 
         return ListView.separated(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.only(top: 16),
+          physics: const BouncingScrollPhysics(),
           itemCount: controller.unlockList.length,
           separatorBuilder: (_, i) =>
               const SizedBox(height: TSizes.spaceBtwItems),

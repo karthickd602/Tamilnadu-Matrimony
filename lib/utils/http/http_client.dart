@@ -13,6 +13,52 @@ class THttpHelper {
     final response = await http.get(Uri.parse('$_baseUrl/$endpoint'));
     return _handleResponse(response);
   }
+  static Future<Map<String, dynamic>> multipartPost(
+      String endpoint,
+      Map<String, dynamic> body, {
+        required String filePath,
+        String fileFieldName = "file",
+      }) async {
+    final url = Uri.parse("$_baseUrl/$endpoint");
+    final request = http.MultipartRequest("POST", url);
+
+    // Convert dynamic body → String fields safely
+    body.forEach((key, value) {
+      if (value != null) {
+        request.fields[key] = value.toString();
+      }
+    });
+
+    // Add file
+    final file = File(filePath);
+    final fileStream = http.ByteStream(file.openRead());
+    final fileLength = await file.length();
+
+    final multipartFile = http.MultipartFile(
+      fileFieldName,
+      fileStream,
+      fileLength,
+      filename: file.path.split("/").last,
+    );
+
+    request.files.add(multipartFile);
+
+    // Send request
+    final response = await request.send();
+    final responseData = await response.stream.bytesToString();
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return json.decode(responseData);
+    }
+
+    // If error contains message
+    try {
+      final decoded = json.decode(responseData);
+      throw decoded["message"] ?? "Upload failed";
+    } catch (_) {
+      throw "Upload failed: ${response.statusCode}";
+    }
+  }
 
   // Helper method to make a POST request
   static Future<Map<String, dynamic>> post(

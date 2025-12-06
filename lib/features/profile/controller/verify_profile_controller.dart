@@ -17,31 +17,33 @@ class VerifyProfileController extends GetxController{
   }
   void showImageSourceSheet({required RxString imagePath}) {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Camera'),
-              onTap: () {
-                pickImage(ImageSource.camera,imagePath: imagePath);
-                Get.back();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo),
-              title: const Text('Gallery'),
-              onTap: () {
-                pickImage(ImageSource.gallery,imagePath: imagePath);
-                Get.back();
-              },
-            ),
-          ],
+      SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Camera'),
+                onTap: () {
+                  pickImage(ImageSource.camera,imagePath: imagePath);
+                  Get.back();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo),
+                title: const Text('Gallery'),
+                onTap: () {
+                  pickImage(ImageSource.gallery,imagePath: imagePath);
+                  Get.back();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

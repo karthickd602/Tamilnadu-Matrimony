@@ -1,7 +1,6 @@
 import 'package:tamilnadu_matrimony/features/alerts/model/alert_profile_model.dart';
 
 import '../../../utils/constants/path_provider.dart';
-import '../../../utils/popups/full_screen_loader.dart';
 
 class AlertInterestSendController extends GetxController {
   static AlertInterestSendController get instance => Get.find();

@@ -39,6 +39,7 @@ dependencies:
   iconly: ^1.0.1
   url_launcher: ^6.3.2
   dropdown_search: ^6.0.2
+  flutter_image_compress: ^2.4.0
 #  dynamic_path_url_strategy: ^1.0.0
 
 dev_dependencies:

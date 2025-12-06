@@ -1,44 +1,47 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:tamilnadu_matrimony/utils/constants/image_strings.dart';
 
 import '../../../utils/constants/enums.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
-import '../shimmers/shimmer.dart';
+import '../shimmers/shimmer.dart'; // your shimmer widget
 
 class TRoundedImage extends StatelessWidget {
   const TRoundedImage({
     super.key,
-    this.image,
+    required this.imageType,
+    required this.image,
     this.file,
-    this.border,
+    this.memoryImage,
+    this.borderRadius = TSizes.md,
     this.width = 56,
     this.height = 56,
-    this.memoryImage,
-    this.overlayColor,
-    required this.imageType,
+    this.fit = BoxFit.cover,
+    this.applyRadius = true,
+    this.border,
     this.backgroundColor,
-    this.padding = TSizes.sm,
     this.margin,
-    this.fit = BoxFit.contain,
-    this.applyImageRadius = true,
-    this.borderRadius = TSizes.md,
+    this.padding = TSizes.sm,
   });
 
-  final bool applyImageRadius;
-  final BoxBorder? border;
-  final double borderRadius;
-  final BoxFit? fit;
-  final String? image;
+  final String image;
   final File? file;
-  final ImageType imageType;
-  final Color? overlayColor;
-  final Color? backgroundColor;
   final Uint8List? memoryImage;
-  final double width, height, padding;
+  final ImageType imageType;
+
+  final double width;
+  final double height;
+  final double borderRadius;
+  final bool applyRadius;
+  final double padding;
   final double? margin;
+
+  final BoxBorder? border;
+  final Color? backgroundColor;
+  final BoxFit fit;
 
   @override
   Widget build(BuildContext context) {
@@ -48,102 +51,102 @@ class TRoundedImage extends StatelessWidget {
       margin: margin != null ? EdgeInsets.all(margin!) : null,
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-          border: border,
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(borderRadius)),
-      child: _buildImageWidget(),
+        color: backgroundColor,
+        border: border,
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+      child: ClipRRect(
+        borderRadius:
+        applyRadius ? BorderRadius.circular(borderRadius) : BorderRadius.zero,
+        child: _buildImage(),
+      ),
     );
   }
 
-  Widget _buildImageWidget() {
-    Widget imageWidget;
-
+  /// MAIN IMAGE BUILDER
+  Widget _buildImage() {
     switch (imageType) {
       case ImageType.network:
-        imageWidget = _buildNetworkImage();
-        break;
-      case ImageType.memory:
-        imageWidget = _buildMemoryImage();
-        break;
+        return _networkImage();
       case ImageType.file:
-        imageWidget = _buildFileImage();
-        break;
+        return _fileImage();
+      case ImageType.memory:
+        return _memoryImage();
       case ImageType.asset:
-        imageWidget = _buildAssetImage();
-        break;
+        return _assetImage();
+    }
+  }
+
+  // -----------------------------
+  // NETWORK IMAGE (Shimmer + Fade)
+  // -----------------------------
+  Widget _networkImage() {
+    if (image == null || image!.isEmpty) {
+      return _fallbackImage();
     }
 
-    // Apply ClipRRect directly to the image widget
-    return ClipRRect(
-      borderRadius: applyImageRadius
-          ? BorderRadius.circular(borderRadius)
-          : BorderRadius.zero,
-      child: imageWidget,
+    return CachedNetworkImage(
+      fit: fit,
+      imageUrl: image!,
+      progressIndicatorBuilder: (_, __, downloadProgress) =>
+          TShimmerEffect(width: width, height: height),
+      errorWidget: (context,url,error)=>Icon(Icons.error),
+    );
+
+    // return Image.network(
+    //   image!,
+    //   fit: fit,
+    //   loadingBuilder: (context, child, loading) {
+    //     if (loading == null) return _fadeIn(child);
+    //     return TShimmerEffect(width: width, height: height);
+    //   },
+    //   errorBuilder: (context, error, stackTrace) => _fallbackImage(),
+    // );
+  }
+
+  // -----------------------------
+  // FILE IMAGE
+  // -----------------------------
+  Widget _fileImage() {
+    if (file == null) return _fallbackImage();
+    return _fadeIn(Image.file(file!, fit: fit));
+  }
+
+  // -----------------------------
+  // MEMORY IMAGE
+  // -----------------------------
+  Widget _memoryImage() {
+    if (memoryImage == null) return _fallbackImage();
+    return _fadeIn(Image.memory(memoryImage!, fit: fit));
+  }
+
+  // -----------------------------
+  // ASSET IMAGE
+  // -----------------------------
+  Widget _assetImage() {
+    if (image == null) return _fallbackImage();
+    return _fadeIn(Image.asset(image!, fit: fit));
+  }
+
+  // -----------------------------
+  // FADE-IN ANIMATION
+  // -----------------------------
+  Widget _fadeIn(Widget child) {
+    return AnimatedOpacity(
+      opacity: 1,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeIn,
+      child: child,
     );
   }
 
-  // Function to build the network image widget
-  Widget _buildNetworkImage() {
-    if (image != null) {
-      return Image.network(
-        image!,
-        fit: fit,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return TShimmerEffect(width: width, height: height);
-        },
-        errorBuilder: (context, error, stackTrace) {
-          // return Icon(Icons.error, size: 50, color: Colors.red);
-          return Image.asset(TImages.defaultProfilePic);
-        },
-      );
-
-      // Use CachedNetworkImage for efficient loading and caching of network images // Not working in Web but just for loading
-      // return CachedNetworkImage(
-      //   fit: fit,
-      //   color: overlayColor,
-      //   imageUrl: image!,
-      //   errorWidget: (context, url, error) => const Icon(Icons.error),
-      //   progressIndicatorBuilder: (context, url, downloadProgress) =>
-      //       TShimmerEffect(width: width, height: height),
-      // );
-    } else {
-      // Return an empty container if no image is provided
-      return Container();
-    }
-  }
-
-  // Function to build the memory image widget
-  Widget _buildMemoryImage() {
-    if (memoryImage != null) {
-      // Display image from memory using Image widget
-      return Image(
-          fit: fit, image: MemoryImage(memoryImage!), color: overlayColor);
-    } else {
-      // Return an empty container if no image is provided
-      return Container();
-    }
-  }
-
-  // Function to build the asset image widget
-  Widget _buildFileImage() {
-    if (file != null) {
-      // Display image from assets using Image widget
-      return Image(fit: fit, image: FileImage(file!), color: overlayColor);
-    } else {
-      // Return an empty container if no image is provided
-      return Container();
-    }
-  }
-
-  // Function to build the asset image widget
-  Widget _buildAssetImage() {
-    if (image != null) {
-      // Display image from assets using Image widget
-      return Image(fit: fit, image: AssetImage(image!), color: overlayColor);
-    } else {
-      // Return an empty container if no image is provided
-      return Container();
-    }
+  // -----------------------------
+  // FALLBACK DEFAULT IMAGE
+  // -----------------------------
+  Widget _fallbackImage() {
+    return Image.asset(
+      TImages.defaultProfilePic,
+      fit: BoxFit.cover,
+    );
   }
 }

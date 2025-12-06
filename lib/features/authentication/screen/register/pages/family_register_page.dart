@@ -1,4 +1,5 @@
 import 'package:iconly/iconly.dart';
+import 'package:tamilnadu_matrimony/utils/validators/validation.dart';
 
 import '../../../../../utils/constants/path_provider.dart';
 import '../../../controller/register/register_controller.dart';
@@ -16,27 +17,28 @@ class FamilyDetails extends StatelessWidget {
       body: Form(
         key: controller.familyFormKey,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
               TFormField(
                 labelText: TTexts.fatherName.tr,
-                controller: TextEditingController(),
+                controller: controller.fatherNameController,
                 icon: Iconsax.user,
+                validator:(v)=> TValidator.validateEmptyText(TTexts.fatherName.tr, v.toString()),
               ),
               TFormField(
                 labelText: TTexts.fatherOccupation.tr,
-                controller: TextEditingController(),
+                controller: controller.fatherOccupationController,
                 icon: Iconsax.briefcase,
               ),
               TFormField(
                 labelText: TTexts.motherName.tr,
-                controller: TextEditingController(),
+                controller: controller.motherNameController,
                 icon: IconlyLight.user,
               ),
               TFormField(
                 labelText: TTexts.motherOccupation.tr,
-                controller: TextEditingController(),
+                controller: controller.motherOccupationController,
                 icon: Iconsax.briefcase,
               ),
               TFormField(
@@ -44,7 +46,9 @@ class FamilyDetails extends StatelessWidget {
                 isDropdown: true,
                 icon: IconlyLight.home,
                 items: ["Middle Class", "Upper Middle", "Rich", "Affluent"],
-                onChanged: (v) {},
+                onChanged: (v) {
+                  controller.familyStatusController.value = v?? '';
+                },
               ),
 
               Row(
@@ -52,7 +56,7 @@ class FamilyDetails extends StatelessWidget {
                   Expanded(
                     child: TFormField(
                       labelText: TTexts.brothers.tr,
-                      controller: TextEditingController(),
+                      controller: controller.brothersController,
                       hintText: "0",
                       icon: Icons.male_outlined,
                       keyboardType: TextInputType.number,
@@ -62,8 +66,9 @@ class FamilyDetails extends StatelessWidget {
                   Expanded(
                     child: TFormField(
                       labelText: TTexts.sisters.tr,
-                      controller: TextEditingController(),
+                      controller: controller.sistersController,
                       hintText: "0",
+
                       icon: Icons.female_outlined,
                       keyboardType: TextInputType.number,
                     ),
@@ -74,7 +79,7 @@ class FamilyDetails extends StatelessWidget {
                   Expanded(
                     child: TFormField(
                       labelText: TTexts.marriedBrothers.tr,
-                      controller: TextEditingController(),
+                      controller: controller.marriedBrothersController,
                       hintText: "0",
                       keyboardType: TextInputType.number,
                       icon: Icons.male_outlined,
@@ -84,7 +89,7 @@ class FamilyDetails extends StatelessWidget {
                   Expanded(
                     child: TFormField(
                       labelText: TTexts.marriedSisters.tr,
-                      controller: TextEditingController(),
+                      controller: controller.marriedSistersController,
                       keyboardType: TextInputType.number,
                       hintText: "0",
                       icon: Icons.female_outlined,
@@ -94,7 +99,7 @@ class FamilyDetails extends StatelessWidget {
               ),
               TFormField(
                 labelText: TTexts.nativePlace.tr,
-                controller: TextEditingController(),
+                controller: controller.nativePlaceController,
                 icon: IconlyLight.location,
               ),
               const SizedBox(height: 24),

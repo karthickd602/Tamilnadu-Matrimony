@@ -1,5 +1,4 @@
 import '../../../utils/constants/path_provider.dart';
-import '../../../utils/popups/full_screen_loader.dart';
 import '../../home/model/dashboard_list_model.dart';
 
 class UnlockedController extends GetxController {
@@ -45,9 +44,7 @@ class UnlockedController extends GetxController {
           .map((e) => CustomerProfileListModel.fromJson(e))
           .toList();
 
-      TFullScreenLoader.stopLoading();
     } catch (e) {
-      TFullScreenLoader.stopLoading();
       debugPrint("fetchUnlockList Error: $e");
       TLoaders.errorSnackBar(title: "Error", message: e.toString());
     } finally {

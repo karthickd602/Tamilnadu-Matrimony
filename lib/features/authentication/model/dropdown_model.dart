@@ -1,13 +1,13 @@
 
 
 class OccupationDDModel {
-  final int? id;
+  final int id;
   final String? name;
   final int? sortOrder;
   final String? status;
 
   OccupationDDModel({
-    this.id,
+    required this.id,
     this.name,
     this.sortOrder,
     this.status,
@@ -15,7 +15,7 @@ class OccupationDDModel {
 
   factory OccupationDDModel.fromJson(Map<String, dynamic> json) {
     return OccupationDDModel(
-      id: json['id'] as int?,
+      id: json['id'] ,
       name: json['name'] as String?,
       sortOrder: json['sortorder'] as int?,
       status: json['status'] as String?,

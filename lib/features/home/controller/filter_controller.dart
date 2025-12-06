@@ -1,10 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import '../../../utils/constants/path_provider.dart';
-  import '../../../utils/popups/full_screen_loader.dart';
-import '../../../utils/helpers/network_manager.dart';
-import '../../../utils/http/http_client.dart';
+import '../../../utils/popups/full_screen_loader.dart';
 import '../../authentication/model/dropdown_model.dart';
 import '../controller/dashboard_controller.dart';
 

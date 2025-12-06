@@ -82,7 +82,7 @@ class TImageUploader extends StatelessWidget {
                 backgroundColor: TColors.primaryBackground,
               )
             : TRoundedImage(
-                image: image,
+                image: image!,
                 width: width,
                 height: height,
                 imageType: imageType,

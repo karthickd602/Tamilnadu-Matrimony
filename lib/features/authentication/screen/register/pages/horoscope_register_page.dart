@@ -64,23 +64,13 @@ class HoroscopeDetails extends StatelessWidget {
        TSearchDropdownField<String>(
                 label: TTexts.isDoshamHave.tr,
                 items: [TTexts.yes.tr, TTexts.no.tr, TTexts.iDontKnow.tr],
-                selectedItem: controller.selectedDasa.value,
+                selectedItem: controller.areYouHaveDhosam.value,
                 onChanged: (v) => controller.isDoshamHave.value = v??'',
                 prefixIcon: Icons.warning_amber_rounded,
          validator: (value) =>
              TValidator.validateEmptyText(TTexts.isDoshamHave.tr, value),
               ),
-              // const SizedBox(height: TSizes.md),
 
-              // TFormField(
-              //   labelText: TTexts.isDoshamHave.tr,
-              //   validator: (value) =>
-              //       TValidator.validateEmptyText(TTexts.isDoshamHave.tr, value),
-              //   isDropdown: true,
-              //   icon: Icons.warning_amber_rounded,
-              //   items: [TTexts.yes.tr, TTexts.no.tr, TTexts.iDontKnow.tr],
-              //   onChanged: (v) => controller.isDoshamHave.value = v ?? '',
-              // ),
 
               SizedBox(height: TSizes.md),
               // const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -94,13 +84,14 @@ class HoroscopeDetails extends StatelessWidget {
                       prefixIcon: Icons.warning_amber,
                     )
                   : const SizedBox(),
+              SizedBox(height: TSizes.md),
 
               /// --- Upload Horoscope Image ---
               ImagePickerBox(
                 title: TTexts.uploadHoroscopeImage.tr,
-                onPickImage: () => controller.showImageSourceSheet(
-                  imagePath: controller.horoscopeImagePath,
-                ),
+                onPickImage: () {
+             controller.selectHoroscopeImage(context);
+                },
                 imagePath: controller.horoscopeImagePath,
               ),
 

@@ -30,13 +30,7 @@ class ContactDetails extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            /// --- WhatsApp Number ---
-            // TFormField(
-            //   controller: controller.whatsappController,
-            //   labelText: TTexts.whatsappNumber.tr,
-            //   icon: Icons.message,
-            //   keyboardType: TextInputType.phone,
-            // ),
+
 
             /// --- Alternate Mobile ---
             TFormField(
@@ -125,9 +119,7 @@ class ContactDetails extends StatelessWidget {
 
             ImagePickerBox(
               title: TTexts.profile.tr,
-              onPickImage: () => controller.showImageSourceSheet(
-                imagePath: controller.profileImagePath,
-              ),
+              onPickImage: () => controller.selectHoroscopeImage(context),
               imagePath: controller.profileImagePath,
             ),
             Obx(
