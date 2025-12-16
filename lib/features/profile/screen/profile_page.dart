@@ -111,10 +111,12 @@ class ProfilePage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "${user?.name ?? ''}, ${profileController.userProfile.value?.age ?? ''}",
-                            style: textTheme.headlineMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
+                          Obx(
+                            ()=> Text(
+                              "${user?.name ?? ''}, ${profileController.userProfile.value?.age ?? ''}",
+                              style: textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 6),

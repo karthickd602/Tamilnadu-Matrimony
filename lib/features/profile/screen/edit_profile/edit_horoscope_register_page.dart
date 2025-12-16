@@ -121,9 +121,9 @@ class EditHoroscopeDetails extends StatelessWidget {
               // ),
               ImagePickerBox(
                 title: TTexts.uploadHoroscopeImage.tr,
-                onPickImage: () => controller.showImageSourceSheet(
-                  imagePath: controller.horoscopeImagePath,
-                ),
+                onPickImage: () {
+                  controller.selectHoroscopeImage(context);
+                },
                 imagePath: controller.horoscopeImagePath,
               ),
 

@@ -227,6 +227,9 @@ class RegistrationController extends GetxController {
     await fetchCountryDropdown();
   }
 
+
+
+
   Future<void> fetchOccupationDropdown() async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -510,47 +513,47 @@ class RegistrationController extends GetxController {
         return;
       }
 
-      final request = {
-        // 'id': 0,
-        "Name": nameController.text,
-        // "Gender": gender.value,
-        "Gender": "1",
-        // "DOB": dobController.text,
-        "DOB": '1996-02-01',
-        "Height": heightController.text,
-        "Complexion": colorComplexion.value,
-        "Maritalstatus": maritalStatus.value,
-        // "childCount": noOfChildren.value.isEmpty ? "0" : noOfChildren.value,
-        "childrenlivingstatus": childLivingStatus.value,
-        "Education": selectedEducation.value?.id,
-        "EducationDetails": educationDetailsController.text,
-        "occupation": selectedOccupation.value?.id,
-        "workplace": occupationDetailsController.text,
-        "Annualincome": incomeController.text,
-        "Religion": selectedReligion.value?.id,
-        "Caste": selectedCaste.value?.id,
-        "Subcaste": subCasteController.text,
-        "spe_cases": isDisablePerson.value,
-      };
-
       // final request = {
-      //   "Name": "dinesh",
+      //   // 'id': 0,
+      //   "Name": nameController.text,
+      //   // "Gender": gender.value,
       //   "Gender": "1",
-      //   "DOB": "1996-02-01",
-      //   "Height": "11",
-      //   "Complexion": "சிவப்பு",
-      //   "Maritalstatus": "திருமணம் ஆகாதவர்",
-      //   "childrenlivingstatus": "Living with me",
-      //   "Education": "7",
-      //   "EducationDetails": "csc",
-      //   "occupation": "52",
-      //   "workplace": "app developer",
-      //   "Annualincome": "30000",
-      //   "Religion": "1",
-      //   "Caste": "24",
-      //   "Subcaste": "Kakkanad",
-      //   "spe_cases": "No",
+      //   // "DOB": dobController.text,
+      //   "DOB": '1996-02-01',
+      //   "Height": heightController.text,
+      //   "Complexion": colorComplexion.value,
+      //   "Maritalstatus": maritalStatus.value,
+      //   // "childCount": noOfChildren.value.isEmpty ? "0" : noOfChildren.value,
+      //   "childrenlivingstatus": childLivingStatus.value,
+      //   "Religion": selectedReligion.value?.id.toString(),
+      //   "Caste": selectedCaste.value?.id.toString(),
+      //   "Education": selectedEducation.value?.id.toString(),
+      //   "EducationDetails": educationDetailsController.text,
+      //   "occupation": selectedOccupation.value?.id.toString(),
+      //   "workplace": occupationDetailsController.text,
+      //   "Annualincome": incomeController.text,
+      //   "Subcaste": subCasteController.text,
+      //   "spe_cases": isDisablePerson.value,
       // };
+
+      final request = {
+        "Name": "raj",
+        "Gender": "1",
+        "DOB": "1996-02-01",
+        "Height": "11",
+        "Complexion": "மாநிறம்",
+        "Maritalstatus": "துணையை இழந்தவர்",
+        "childrenlivingstatus": "Living with me",
+        "Religion": "2",
+        "Caste": "100",
+        "Education": "1",
+        "EducationDetails": "fr",
+        "occupation": "2",
+        "workplace": "ttt",
+        "Annualincome": "2222",
+        "Subcaste": "tt",
+        "spe_cases": "No"
+      };
 
       debugPrint("Basic Register : $request");
 

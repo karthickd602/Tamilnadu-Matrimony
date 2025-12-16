@@ -95,9 +95,8 @@ class EditContactDetails extends StatelessWidget {
 
             ImagePickerBox(
               title: TTexts.profile.tr,
-              onPickImage: () => controller.showImageSourceSheet(
-                imagePath: controller.profileImagePath,
-              ),
+              onPickImage: () => controller.selectHoroscopeImage(context),
+
               imagePath: controller.profileImagePath,
             ),
             Obx(

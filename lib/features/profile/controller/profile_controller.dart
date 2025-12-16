@@ -1,56 +1,46 @@
 import 'dart:io';
 
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image_picker/image_picker.dart';
-
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/popups/full_screen_loader.dart';
 import '../model/user_profile_model.dart';
+import '../repository/profile_repository.dart';
 
 class ProfileController extends GetxController {
   static ProfileController get instance => Get.find();
 
   final storage = GetStorage();
+  // final repo = Get.put(ProfileRepository());
+final repo = ProfileRepository.instance;
   final isLoading = false.obs;
   final isUpdateProfileLoading = false.obs;
 
-  final userProfile = Rxn<FetchUserProfileModel>(null);
+  final userProfile = Rxn<FetchUserProfileModel>();
   final pickedImage = Rxn<File>();
 
   @override
-  void onInit() {
-    super.onInit();
+  void onReady() {
+    super.onReady();
     fetchUserProfile();
   }
+
 
   /* ========================================================
    *  FETCH USER PROFILE
    * ======================================================== */
   Future<void> fetchUserProfile() async {
     try {
-      final isConnected = await NetworkManager.instance.isConnected();
-      if (!isConnected) {
-        TLoaders.errorSnackBar(
-            title: "No Internet", message: "No Internet Connection");
-        return;
-      }
-
-      TFullScreenLoader.popUpCircular();
       isLoading.value = true;
+      TFullScreenLoader.popUpCircular();
 
-      final req = {"id": storage.read(TTexts.userId)};
-      debugPrint("fetchUserProfile req: $req");
-
-      final response =
-      await THttpHelper.post(ApiConstant.viewUserProfileEndpoint, req);
-
-      debugPrint("fetchUserProfile response: $response");
-
-      userProfile.value = FetchUserProfileModel.fromJson(response["data"]);
+      final userId = storage.read(TTexts.userId);
+      final response = await repo.fetchUserProfile( userId: userId);
+debugPrint("Profile Response : $response");
+      userProfile.value =
+          FetchUserProfileModel.fromJson(response["data"]);
     } catch (e) {
-      debugPrint("fetchUserProfile Error: $e");
+      debugPrint("Profile Error : $e");
       TLoaders.errorSnackBar(
-        title: "Error loading profile",
+        title: "Profile Error",
         message: e.toString(),
       );
     } finally {
@@ -59,32 +49,20 @@ class ProfileController extends GetxController {
     }
   }
 
-
   /* ========================================================
-   *  UPLOAD PROFILE IMAGE (MULTIPART)
+   *  UPDATE PROFILE IMAGE
    * ======================================================== */
   Future<void> updateProfileImage(File file) async {
     try {
-      final isConnected = await NetworkManager.instance.isConnected();
-      if (!isConnected) {
-        TLoaders.errorSnackBar(
-            title: "No Internet", message: "No Internet Connection");
-        return;
-      }
-
-      TFullScreenLoader.popUpCircular();
       isUpdateProfileLoading.value = true;
+      TFullScreenLoader.popUpCircular();
 
-      final req = {"user_id": storage.read(TTexts.userId)};
+      final userId = storage.read(TTexts.userId);
 
-      final response = await THttpHelper.multipartPost(
-        ApiConstant.updateUserPhotoEndpoint,
-        req,
-        filePath: file.path,
-        fileFieldName: "file",
+      final response = await repo.updateProfileImage(
+        userId: userId,
+        imageFile: file,
       );
-
-      debugPrint("updateProfileImage => $response");
 
       TLoaders.successSnackBar(
         title: "Profile Updated",
@@ -93,7 +71,6 @@ class ProfileController extends GetxController {
 
       await fetchUserProfile();
     } catch (e) {
-      debugPrint("Upload Error: $e");
       TLoaders.errorSnackBar(
         title: "Upload Failed",
         message: e.toString(),
@@ -101,25 +78,6 @@ class ProfileController extends GetxController {
     } finally {
       isUpdateProfileLoading.value = false;
       TFullScreenLoader.stopLoading();
-    }
-  }
-
-  /* ========================================================
-   *  DELETE PROFILE (Future Use)
-   * ======================================================== */
-  Future<void> deleteProfile() async {
-    try {
-      final isConnected = await NetworkManager.instance.isConnected();
-      if (!isConnected) {
-        TLoaders.errorSnackBar(
-            title: "No Internet", message: "No Internet Connection");
-      }
-
-      final req = {"user_id": storage.read(TTexts.userId)};
-
-      // TODO → Call your delete API
-    } catch (e) {
-      debugPrint("deleteProfile Error: $e");
     }
   }
 }

@@ -1,6 +1,8 @@
 import 'package:iconly/iconly.dart';
+import 'package:tamilnadu_matrimony/features/authentication/model/dropdown_model.dart';
 import 'package:tamilnadu_matrimony/utils/validators/validation.dart';
 
+import '../../../../../common/widgets/dropdown/dropdown_with_search.dart';
 import '../../../../../utils/constants/path_provider.dart';
 import '../../controller/edit_profile_controller/edit_profile_controller.dart';
 
@@ -15,14 +17,15 @@ class EditBasicDetails extends StatelessWidget {
     return Form(
       key: controller.basicFormKey,
       child: SingleChildScrollView(
-        padding:  EdgeInsets.all(TSizes.defaultSpace),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             TFormField(
               labelText: TTexts.name.tr,
               controller: controller.nameController,
               icon: IconlyLight.profile,
-              // validator: (v) => TValidator.validateEmptyText(TTexts.name.tr, v),
+              validator: (v) =>
+                  TValidator.validateEmptyText(TTexts.name.tr, v.toString()),
             ),
             TFormField(
               labelText: TTexts.gender.tr,
@@ -46,8 +49,8 @@ class EditBasicDetails extends StatelessWidget {
                   hintText: "DD-MM-YYYY",
                   icon: IconlyLight.calendar,
                   controller: controller.dobController,
-                  // validator: (v) =>
-                  //     TValidator.validateEmptyText(TTexts.dob.tr, v),
+                  validator: (v) =>
+                      TValidator.validateEmptyText(TTexts.dob.tr, v.toString()),
                 ),
               ),
             ),
@@ -62,54 +65,88 @@ class EditBasicDetails extends StatelessWidget {
               labelText: TTexts.complexion.tr,
               isDropdown: true,
               icon: Icons.color_lens_outlined,
-              items: ["சிவப்பு","மாநிறம்", "புது நிறம்", "கருப்பு"],
+              items: ["சிவப்பு", "மாநிறம்", "புது நிறம்", "கருப்பு"],
               onChanged: (v) => controller.colorComplexion.value = v ?? '',
-            ),TFormField(
+            ),
+            TFormField(
               labelText: TTexts.maritalStatus.tr,
               isDropdown: true,
               icon: Icons.join_inner_outlined,
-              items: ["திருமணம் ஆகாதவர்", " துணையை இழந்தவர்", "விவாகரத்து ஆனவர்","பிரிந்து வாழ்பவர்"],
+              items: [
+                "திருமணம் ஆகாதவர்",
+                " துணையை இழந்தவர்",
+                "விவாகரத்து ஆனவர்",
+                "பிரிந்து வாழ்பவர்",
+              ],
               onChanged: (v) => controller.maritalStatus.value = v ?? '',
             ),
 
             Obx(
-              ()=>(controller.maritalStatus.value == "திருமணம் ஆகாதவர்"|| controller.maritalStatus.value =='')?SizedBox(): TFormField(
+                  () =>
+              (controller.maritalStatus.value == "திருமணம் ஆகாதவர்" ||
+                  controller.maritalStatus.value == '')
+                  ? SizedBox()
+                  : TFormField(
                 labelText: TTexts.noOfChildren.tr,
                 isDropdown: true,
                 icon: Icons.baby_changing_station_outlined,
-                items: ["0", "1", "2","3","4"],
+                items: ["0", "1", "2", "3", "4"],
                 onChanged: (v) => controller.noOfChildren.value = v ?? '',
               ),
             ),
 
             Obx(
-              ()=> (controller.noOfChildren.value == "0"|| controller.noOfChildren.value =='')?SizedBox():TFormField(
+                  () =>
+              (controller.noOfChildren.value == "0" ||
+                  controller.noOfChildren.value == '')
+                  ? SizedBox()
+                  : TFormField(
                 labelText: TTexts.childrenLivingStatus.tr,
                 isDropdown: true,
                 icon: Icons.baby_changing_station_outlined,
                 items: ["Living with me", "Not living with me"],
-                onChanged: (v) => controller.maritalStatus.value = v ?? '',
+                onChanged: (v) =>
+                controller.childLivingStatus.value = v ?? '',
               ),
             ),
-            TFormField(
-              isDropdown: true,
-              items: ["BE","ME","B.Sc"],
-              labelText: TTexts.highEducation.tr,
-              onChanged: (v) => controller.eduction.value = v ?? '',
-              icon: Icons.school_outlined,
+            TSearchDropdownField<EducationDDModel>(
+              label: TTexts.highEducation.tr,
+              items: controller.educationDDList,
+              prefixIcon: Icons.school_outlined,
+              selectedItem: controller.selectedEducation.value,
+              itemAsString: (item) => item.name.toString(),
+              compareFn: (a, b) => a.name == b.name,
+              onChanged: (value) {
+                if (value == null) return;
+                controller.selectedEducation.value = value;
+              },
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.occupationDetails.tr,
+                value?.name,
+              ),
             ),
             TFormField(
               labelText: TTexts.educationDetails.tr,
               controller: controller.educationDetailsController,
               icon: Icons.school_outlined,
             ),
-            TFormField(
-              isDropdown: true,
-              items: ["IT","Accountant",'Business'],
-              labelText: TTexts.occupationDetails.tr,
-              onChanged: (v) => controller.occupation.value = v ?? '',
-              icon: IconlyLight.bag_2,
+            TSearchDropdownField<OccupationDDModel>(
+              label: TTexts.occupationDetails.tr,
+              items: controller.occupationDDList,
+              prefixIcon: Icons.school_outlined,
+              selectedItem: controller.selectedOccupation.value,
+              itemAsString: (item) => item.name.toString(),
+              compareFn: (a, b) => a.name == b.name,
+              onChanged: (value) {
+                if (value == null) return;
+                controller.selectedOccupation.value = value;
+              },
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.occupationDetails.tr,
+                value?.name,
+              ),
             ),
+
             TFormField(
               labelText: TTexts.occupation.tr,
               controller: controller.occupationDetailsController,
@@ -117,23 +154,51 @@ class EditBasicDetails extends StatelessWidget {
             ),
             TFormField(
               labelText: TTexts.income.tr,
+              keyboardType: TextInputType.number,
               controller: controller.incomeController,
               icon: IconlyLight.wallet,
             ),
-            TFormField(
-              labelText: TTexts.religion.tr,
-              isDropdown: true,
-              icon: Icons.temple_hindu_outlined,
-              items: ["Hindu", "Muslim", "Christian", "Others"],
-              onChanged: (v) => controller.religion.value = v ?? '',
+            TSearchDropdownField<ReligionDDModel>(
+              prefixIcon: Icons.temple_hindu_outlined,
+              label: TTexts.religion.tr,
+              items: controller.religionDDList,
+              selectedItem: controller.selectedReligion.value,
+              itemAsString: (item) => item.name.toString(),
+              compareFn: (a, b) => a.name == b.name,
+              onChanged: (value) {
+                if (value == null) return;
+                controller.selectedReligion.value = value;
+                controller.fetchCasteDropdown(religionId: value.id);
+              },
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.religion.tr, value?.name),
             ),
-            TFormField(
-              labelText: TTexts.caste.tr,
-              isDropdown: true,
-              icon: IconlyLight.user,
-              items: ["Brahmin", "Naidu", "Gounder", "Others"],
-              onChanged: (v) => controller.caste.value = v ?? '',
+            Obx(
+                  () => controller.selectedReligion.value == null
+                  ? SizedBox()
+                  : SizedBox(height: TSizes.sm),
             ),
+            Obx(
+                  () => controller.selectedReligion.value == null
+                  ? SizedBox()
+                  : TSearchDropdownField<CasteDDModel>(
+                prefixIcon: IconlyLight.user,
+                label: TTexts.caste.tr,
+                items: controller.casteDDList,
+                selectedItem: controller.selectedCaste.value,
+                itemAsString: (item) => item.name.toString(),
+                compareFn: (a, b) => a.name == b.name,
+                onChanged: (value) {
+                  if (value == null) return;
+                  controller.selectedCaste.value = value;
+                },
+                validator: (value) => TValidator.validateEmptyText(
+                  TTexts.caste.tr,
+                  value?.name,
+                ),
+              ),
+            ),
+
             TFormField(
               labelText: TTexts.subCaste.tr,
               controller: controller.subCasteController,
@@ -143,7 +208,7 @@ class EditBasicDetails extends StatelessWidget {
               labelText: TTexts.disablePerson.tr,
               isDropdown: true,
               icon: Icons.check_box_outlined,
-              items: ["Yes", "No",],
+              items: ["Yes", "No"],
               value: controller.isDisablePerson.value,
               onChanged: (v) => controller.isDisablePerson.value = v ?? '',
             ),

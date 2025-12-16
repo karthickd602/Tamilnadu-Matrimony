@@ -1,24 +1,25 @@
-
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
+import '../constants/path_provider.dart';
+
 class THttpHelper {
-  static const String _baseUrl =
-      'https://www.jobsintimate.com/api';
+  static const String _baseUrl = 'https://www.jobsintimate.com/api';
 
   // Helper method to make a GET request
   static Future<Map<String, dynamic>> get(String endpoint) async {
     final response = await http.get(Uri.parse('$_baseUrl/$endpoint'));
     return _handleResponse(response);
   }
+
   static Future<Map<String, dynamic>> multipartPost(
-      String endpoint,
-      Map<String, dynamic> body, {
-        required String filePath,
-        String fileFieldName = "file",
-      }) async {
+    String endpoint,
+    Map<String, dynamic> body, {
+    required String filePath,
+    String fileFieldName = "file",
+  }) async {
     final url = Uri.parse("$_baseUrl/$endpoint");
     final request = http.MultipartRequest("POST", url);
 
@@ -62,7 +63,9 @@ class THttpHelper {
 
   // Helper method to make a POST request
   static Future<Map<String, dynamic>> post(
-      String endpoint, dynamic data) async {
+    String endpoint,
+    dynamic data,
+  ) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/$endpoint'),
       headers: {'Content-Type': 'application/json'},
@@ -71,8 +74,15 @@ class THttpHelper {
     return _handleResponse(response);
   }
 
-  static Future<Map<String, dynamic>> postWithFiles(String endpoint, Map<String, String> data, Map<String, File> files) async {
-    final request = http.MultipartRequest('POST', Uri.parse('$_baseUrl/$endpoint'));
+  static Future<Map<String, dynamic>> postWithFiles(
+    String endpoint,
+    Map<String, String> data,
+    Map<String, File> files,
+  ) async {
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$_baseUrl/$endpoint'),
+    );
     request.fields.addAll(data);
     files.forEach((key, value) async {
       request.files.add(await http.MultipartFile.fromPath(key, value.path));
@@ -107,12 +117,18 @@ class THttpHelper {
   // Handle the HTTP response
   static Map<String, dynamic> _handleResponse(http.Response response) {
     if (response.statusCode >= 200) {
+      debugPrint("StatusCode: ${response.statusCode}");
+
       return json.decode(response.body);
     }
-    if(response.statusCode == 404||response.statusCode == 400||response.statusCode==409){
+    if (response.statusCode == 404 ||
+        response.statusCode == 400 ||
+        response.statusCode == 409) {
       final message = json.decode(response.body)['message'];
+      debugPrint("StatusCode: ${response.statusCode}");
+
       throw message;
-    }else {
+    } else {
       throw Exception('Failed to load data: ${response.statusCode}');
     }
   }
