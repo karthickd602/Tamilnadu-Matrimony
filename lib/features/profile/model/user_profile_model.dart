@@ -1,28 +1,4 @@
-class ProfileResponse {
-  final String? message;
-  final int? statusCode;
-  final FetchUserProfileModel? data;
 
-  ProfileResponse({this.message, this.statusCode, this.data});
-
-  factory ProfileResponse.fromJson(Map<String, dynamic>? json) {
-    if (json == null) return ProfileResponse();
-
-    return ProfileResponse(
-      message: json['message'],
-      statusCode: json['statusCode'],
-      data: FetchUserProfileModel.fromJson(json['data']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'message': message,
-      'statusCode': statusCode,
-      'data': data?.toJson(),
-    };
-  }
-}
 
 class FetchUserProfileModel {
   int? id;

@@ -10,7 +10,7 @@ class ProfileController extends GetxController {
 
   final storage = GetStorage();
   // final repo = Get.put(ProfileRepository());
-final repo = ProfileRepository.instance;
+final repo = Get.put(ProfileRepository());
   final isLoading = false.obs;
   final isUpdateProfileLoading = false.obs;
 

@@ -8,4 +8,6 @@ class TRoutes {
   static const filter = '/filter';
   static const subscription = '/subscription';
   static const home = '/home';
+  static const viewProfile = '/viewProfile';
+  static const editProfile = '/editProfile';
 }

@@ -291,7 +291,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-
+isLoading.value = true;
       final response = await THttpHelper.get(ApiConstant.getOccupationDD);
       //
       debugPrint("occupation Response:${response.toString()}");
@@ -306,6 +306,9 @@ class EditProfileController extends GetxController {
         message: e.toString(),
       );
     }
+    finally{
+      isLoading.value = false;
+    }
   }
 
   Future<void> fetchEducationDropdown() async {
@@ -318,6 +321,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
+      isLoading.value = true;
 
       final response = await THttpHelper.get(ApiConstant.getEducationDD);
       //
@@ -335,6 +339,9 @@ class EditProfileController extends GetxController {
         message: e.toString(),
       );
     }
+    finally{
+      isLoading.value = false;
+    }
   }
 
   Future<void> fetchReligionDropdown() async {
@@ -347,7 +354,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-
+      isLoading.value = true;
       final response = await THttpHelper.get(ApiConstant.getReligionDD);
       //
       debugPrint("occupation Response:${response.toString()}");
@@ -364,6 +371,9 @@ class EditProfileController extends GetxController {
         message: e.toString(),
       );
     }
+    finally{
+      isLoading.value = false;
+    }
   }
 
   Future<void> fetchCasteDropdown({required int religionId}) async {
@@ -376,7 +386,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-
+      isLoading.value = true;
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
       //
@@ -393,6 +403,8 @@ class EditProfileController extends GetxController {
         title: "Caste Dropdown Issue",
         message: e.toString(),
       );
+    }finally{
+      isLoading.value = false;
     }
   }
 
@@ -406,7 +418,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-
+      isLoading.value = true;
       // final req = {"religion_id": religionId};
       final response = await THttpHelper.get(ApiConstant.getCountryDD);
       //
@@ -424,6 +436,8 @@ class EditProfileController extends GetxController {
         title: "Caste Dropdown Issue",
         message: e.toString(),
       );
+    }finally{
+      isLoading.value = false;
     }
   }
 
@@ -437,7 +451,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-
+      isLoading.value = true;
       final req = {"country_id": selectedCountry.value?.id};
       final response = await THttpHelper.post(ApiConstant.getStateDD, req);
       //
@@ -457,6 +471,8 @@ class EditProfileController extends GetxController {
         title: "State Dropdown Issue",
         message: e.toString(),
       );
+    }finally{
+      isLoading.value = false;
     }
   }
 
@@ -470,7 +486,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-
+      isLoading.value = true;
       final req = {"state_id": selectedState.value?.id};
       final response = await THttpHelper.post(ApiConstant.getCityDD, req);
       //
@@ -487,6 +503,8 @@ class EditProfileController extends GetxController {
         title: "District Dropdown Issue",
         message: e.toString(),
       );
+    }finally{
+      isLoading.value = false;
     }
   }
 

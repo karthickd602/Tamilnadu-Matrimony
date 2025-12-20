@@ -9,6 +9,7 @@ import '../../../utils/constants/path_provider.dart';
 import '../../../utils/helpers/url_launcher.dart';
 import '../controller/profile_controller.dart';
 import 'edit_profile/edit_profile_page.dart';
+import 'view_profile/view_profile_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -157,9 +158,17 @@ class ProfilePage extends StatelessWidget {
                   _buildMenuItem(
                     context,
                     Icons.person_outline,
+                    TTexts.viewDetails.tr,
+                    () {
+                      Get.toNamed(TRoutes.viewProfile);
+                      // Get.to(() => const CustomerViewProfilePage());
+                    },
+                  ),  _buildMenuItem(
+                    context,
+                    Icons.edit,
                     TTexts.editProfile.tr,
                     () {
-                      Get.to(() => const EditProfilePage());
+                      Get.toNamed(TRoutes.editProfile);
                     },
                   ),
                   _buildMenuItem(

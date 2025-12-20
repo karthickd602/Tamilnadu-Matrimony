@@ -20,11 +20,14 @@ class EditProfilePage extends StatelessWidget {
     final stepTitles = ['Basic Details', 'Family Details', 'Horoscope', 'Contact'];
 
     return Scaffold(
-      appBar: TAppBar(title: TTexts.editProfile.tr),
+      appBar: TAppBar(title: TTexts.editProfile.tr,isBackButtonNeed: true,),
       body: SafeArea(
         child: Column(
           children: [
             Obx(() {
+      // if(controller.isLoading.value){
+      //   return const Center(child: CircularProgressIndicator());
+      // }
               final idx = controller.currentStep.value;
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

@@ -1,3 +1,5 @@
+import 'package:tamilnadu_matrimony/features/profile/controller/profile_controller.dart';
+
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/popups/full_screen_loader.dart';
 import '../../authentication/model/dropdown_model.dart';
@@ -44,13 +46,18 @@ final martialStatus = [
   /// → Radio : int
   final selectedOptions = <String, dynamic>{}.obs;
 
+  final profileController = ProfileController.instance;
+
   // --------------------------------------------------------------
   // INIT
   // --------------------------------------------------------------
   @override
-  void onInit() {
+  void onInit()async {
     super.onInit();
-    fetchCasteFilter(religionId: 1);
+    await profileController.fetchUserProfile();
+
+
+ await   fetchCasteFilter(religionId: int.parse(profileController.userProfile.value?.religionId??"0"));
   }
 
   // --------------------------------------------------------------
@@ -70,8 +77,10 @@ final martialStatus = [
       TFullScreenLoader.popUpCircular();
 
       final req = {"religion_id": religionId};
-      final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
 
+      debugPrint("fetchCasteFilter req :$req");
+      final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
+debugPrint("fetchCasteFilter res $response");
       if (response['statusCode'] == 200) {
         casteList.value = (response['data'] as List)
             .map((e) => CasteDDModel.fromJson(e))
