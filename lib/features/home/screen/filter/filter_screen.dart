@@ -11,8 +11,17 @@ class FilterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<FilterController>();
+    final controller =   Get.put( FilterController(), permanent: true);
     final primaryColor = TColors.primary;
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+    await  controller.profileController.fetchUserProfile();
+    final profile = controller.profileController.userProfile.value;
+
+    await   controller.fetchCasteFilter(religionId:profile?.religionId??'0');
+    await controller.fetchDistrictDropdown(stateId: profile?.stateId??"0");
+
+    });
+
 
     return Scaffold(
       backgroundColor: Colors.white,

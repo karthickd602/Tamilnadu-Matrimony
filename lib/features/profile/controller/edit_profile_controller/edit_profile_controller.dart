@@ -515,14 +515,14 @@ isLoading.value = true;
 
   // Pick horoscope image
   void selectHoroscopeImage(BuildContext context) async {
-    final file = await TImagePickerHelper.pickImageFromUser(context);
+    final file = await TImagePickerHelper.pickProfilePhoto(context);
     if (file != null) {
       horoscopeImageFile.value = file;
       horoscopeImagePath.value = file.path;
     }
   }// Pick Contact image
   void selectProfileImage(BuildContext context) async {
-    final file = await TImagePickerHelper.pickImageFromUser(context);
+    final file = await TImagePickerHelper.pickProfilePhoto(context);
     if (file != null) {
       profileImageFile.value = file;
       profileImagePath.value = file.path;

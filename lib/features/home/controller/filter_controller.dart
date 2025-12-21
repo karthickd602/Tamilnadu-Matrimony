@@ -26,10 +26,11 @@ class FilterController extends GetxController {
   final casteList = <CasteDDModel>[].obs;
   final educationList = <EducationDDModel>[].obs;
   final districtList = <CountryModel>[].obs;
-final martialStatus = [
-  {"id": 1, "name": "First Marriage"},
-  {"id": 2, "name": "Second Marriage"},
-].obs;
+  final martialStatus = [
+    {"id": 1, "name": "First Marriage"},
+    {"id": 2, "name": "Second Marriage"},
+  ].obs;
+
   /// DOSHAM STATIC
   final dhosamList = [
     {"id": 1, "name": "ராகு-கேது தோஷம்"},
@@ -46,18 +47,26 @@ final martialStatus = [
   /// → Radio : int
   final selectedOptions = <String, dynamic>{}.obs;
 
-  final profileController = ProfileController.instance;
+  final profileController = Get.put(ProfileController());
 
   // --------------------------------------------------------------
   // INIT
   // --------------------------------------------------------------
   @override
-  void onInit()async {
+  void onInit() async {
     super.onInit();
-    await profileController.fetchUserProfile();
 
-
- await   fetchCasteFilter(religionId: int.parse(profileController.userProfile.value?.religionId??"0"));
+    // final profile = profileController.userProfile.value;
+    // await profileController.fetchUserProfile();
+    // await fetchCasteFilter(religionId: profile?.religionId ?? '0');
+    // await fetchDistrictDropdown(stateId: profile?.stateId ?? "0");
+    // await profileController.fetchUserProfile();
+    //
+    // await fetchCasteFilter(
+    //   religionId: int.parse(
+    //     profileController.userProfile.value?.religionId ?? "0",
+    //   ),
+    // );
   }
 
   // --------------------------------------------------------------
@@ -65,12 +74,16 @@ final martialStatus = [
   // --------------------------------------------------------------
 
   /// 🔹 Caste Fetch
-  Future<void> fetchCasteFilter({required int religionId}) async {
+  Future<void> fetchCasteFilter({required String religionId}) async {
     try {
+
+      if(casteList.isNotEmpty) return;
       final connected = await NetworkManager.instance.isConnected();
       if (!connected) {
         TLoaders.warningSnackBar(
-            title: "No Internet", message: "Check connection");
+          title: "No Internet",
+          message: "Check connection",
+        );
         return;
       }
 
@@ -80,7 +93,7 @@ final martialStatus = [
 
       debugPrint("fetchCasteFilter req :$req");
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
-debugPrint("fetchCasteFilter res $response");
+      debugPrint("fetchCasteFilter res $response");
       if (response['statusCode'] == 200) {
         casteList.value = (response['data'] as List)
             .map((e) => CasteDDModel.fromJson(e))
@@ -90,7 +103,10 @@ debugPrint("fetchCasteFilter res $response");
       TFullScreenLoader.stopLoading();
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(title: "Caste Fetch Failed", message: e.toString());
+      TLoaders.errorSnackBar(
+        title: "Caste Fetch Failed",
+        message: e.toString(),
+      );
     }
   }
 
@@ -102,7 +118,9 @@ debugPrint("fetchCasteFilter res $response");
       final connected = await NetworkManager.instance.isConnected();
       if (!connected) {
         TLoaders.warningSnackBar(
-            title: "No Internet", message: "Check connection");
+          title: "No Internet",
+          message: "Check connection",
+        );
         return;
       }
 
@@ -120,21 +138,28 @@ debugPrint("fetchCasteFilter res $response");
     } catch (e) {
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(
-          title: "Education Fetch Failed", message: e.toString());
+        title: "Education Fetch Failed",
+        message: e.toString(),
+      );
     }
   }
 
   /// 🔹 District Fetch
-  Future<void> fetchDistrictDropdown() async {
+  Future<void> fetchDistrictDropdown({required String stateId}) async {
     try {
+
+      if(districtList.isNotEmpty) return;
       final connected = await NetworkManager.instance.isConnected();
       if (!connected) {
         TLoaders.warningSnackBar(
-            title: "No Internet", message: "Check connection");
+          title: "No Internet",
+          message: "Check connection",
+        );
         return;
       }
 
-      final req = {"state_id": 35};
+      final req = {"state_id": stateId};
+      debugPrint("fetchDistrictDropdown req :$req");
       final response = await THttpHelper.post(ApiConstant.getCityDD, req);
 
       if (response['statusCode'] == 200) {
@@ -144,7 +169,9 @@ debugPrint("fetchCasteFilter res $response");
       }
     } catch (e) {
       TLoaders.errorSnackBar(
-          title: "District Fetch Failed", message: e.toString());
+        title: "District Fetch Failed",
+        message: e.toString(),
+      );
     }
   }
 
@@ -164,6 +191,7 @@ debugPrint("fetchCasteFilter res $response");
 
     selectedOptions[category] = list;
   }
+
   /// Return selected count or indicator for category
   String? getCategoryBadge(String category) {
     final value = selectedOptions[category];
@@ -194,7 +222,6 @@ debugPrint("fetchCasteFilter res $response");
     return "$start–$end";
   }
 
-
   bool isCheckboxSelected(String category, int id) {
     return (selectedOptions[category] ?? []).contains(id);
   }
@@ -207,17 +234,20 @@ debugPrint("fetchCasteFilter res $response");
   bool isRadioSelected(String category, int id) {
     return selectedOptions[category] == id;
   }
+
   /// 🔹 Change active category
   void changeCategory(int index) {
     selectedIndex.value = index;
     update();
   }
-  final lockedCategories = ["Nakshatram", ].obs;
+
+  final lockedCategories = ["Nakshatram"].obs;
 
   /// 🔹 Check if category is locked
   bool isLocked(String category) {
     return lockedCategories.contains(category);
   }
+
   int getOptionId(dynamic option) {
     if (option is Map) return option["id"];
     return option.id; // model
@@ -257,17 +287,19 @@ debugPrint("fetchCasteFilter res $response");
     final filterReq = await fetchFilter();
 
     dashboard.fetchDashboardCustomerProfile(
-        isInitial: true, filters: filterReq);
+      isInitial: true,
+      filters: filterReq,
+    );
 
     Get.back();
   }
+
   // --------------------------------------------------------------
-// RESET FILTERS
-// --------------------------------------------------------------
+  // RESET FILTERS
+  // --------------------------------------------------------------
   void resetFilters() {
     ageRange.value = const RangeValues(18, 50);
     selectedOptions.clear();
     selectedIndex.value = 0;
   }
-
 }

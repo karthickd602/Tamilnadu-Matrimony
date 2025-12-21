@@ -50,7 +50,6 @@ class FilterOptionsWidget extends StatelessWidget {
         controller.fetchEducationFilter();
         return controller.educationList;
       case "Location":
-        controller.fetchDistrictDropdown();
         return controller.districtList;
       case "Dosham":
         return controller.dhosamList;

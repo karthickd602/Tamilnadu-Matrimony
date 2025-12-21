@@ -29,5 +29,7 @@ class ApiConstant {
   static const String subscriptionPlans = "get_subscription_plan";
   static const String viewUserProfileEndpoint = "view_profile";
   static const String updateUserPhotoEndpoint = "profile_upload";
+  static const String updateVerifyDocumentEndpoint = "verify_profile";
+  static const String deleteProfileEndpoint = "del_profile";
 
 }

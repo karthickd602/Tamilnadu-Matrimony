@@ -22,7 +22,7 @@ class SplashPage extends StatelessWidget {
 
             Center(
               child: Lottie.asset(
-                'assets/logos/splash_animation.json',
+                TImages.splashAppLogoAnimation,
                 width: 250,
                 height: 250,
                 fit: BoxFit.contain,

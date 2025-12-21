@@ -17,19 +17,23 @@ class VerifyProfile extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding:  EdgeInsets.all(TSizes.defaultSpace),
+          padding: EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
               ImagePickerBox(
                 title: "Upload your PAN or Aadhaar card",
                 imagePath: controller.documentPath,
-                onPickImage:()=> controller.showImageSourceSheet(
-                  imagePath: controller.documentPath,
-                ),
+                onPickImage: () => controller.selectDocument(context),
               ),
 
-              SizedBox(height: TSizes.spaceBtwSections,),
-              SizedBox(width:140,child: ElevatedButton(onPressed: (){}, child: Text("Submit")))
+              SizedBox(height: TSizes.spaceBtwSections),
+              SizedBox(
+                width: 140,
+                child: ElevatedButton(onPressed: () {
+
+                  controller.updateVerifyDocument();
+                }, child: Text("Submit")),
+              ),
             ],
           ),
         ),

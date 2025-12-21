@@ -9,7 +9,6 @@ class ProfileController extends GetxController {
   static ProfileController get instance => Get.find();
 
   final storage = GetStorage();
-  // final repo = Get.put(ProfileRepository());
 final repo = Get.put(ProfileRepository());
   final isLoading = false.obs;
   final isUpdateProfileLoading = false.obs;
@@ -20,7 +19,7 @@ final repo = Get.put(ProfileRepository());
   @override
   void onReady() {
     super.onReady();
-    fetchUserProfile();
+    // fetchUserProfile();
   }
 
 
@@ -30,7 +29,7 @@ final repo = Get.put(ProfileRepository());
   Future<void> fetchUserProfile() async {
     try {
       isLoading.value = true;
-      TFullScreenLoader.popUpCircular();
+      debugPrint("-----------------${storage.read(TTexts.userId)}");
 
       final userId = storage.read(TTexts.userId);
       final response = await repo.fetchUserProfile( userId: userId);
@@ -45,7 +44,7 @@ debugPrint("Profile Response : $response");
       );
     } finally {
       isLoading.value = false;
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
     }
   }
 
@@ -80,4 +79,26 @@ debugPrint("Profile Response : $response");
       TFullScreenLoader.stopLoading();
     }
   }
+
+
+Future<void> deleteProfile({required String reason})async{
+    try{
+      final isConnected =await NetworkManager.instance.isConnected();
+      if(!isConnected){
+        return ;
+      }
+
+      final response = await repo.deleteProfile(reason: reason);
+      TLoaders.successSnackBar(
+        title: "Profile Deleted",
+        message: response['message'],
+      );
+
+    }catch(e){
+      TLoaders.errorSnackBar(
+        title: "Delete Failed",
+        message: e.toString(),
+      );
+    }
+}
 }

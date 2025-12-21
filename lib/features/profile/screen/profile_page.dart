@@ -8,6 +8,7 @@ import '../../../common/widgets/images/t_image_picker.dart';
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/helpers/url_launcher.dart';
 import '../controller/profile_controller.dart';
+import 'delete_profile/delete_profile_dialog.dart';
 import 'edit_profile/edit_profile_page.dart';
 import 'view_profile/view_profile_page.dart';
 
@@ -18,6 +19,9 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final profileController = Get.put(ProfileController());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await profileController.fetchUserProfile();
+    });
     // final controller = Get.put()
     return Scaffold(
       appBar: TAppBar(title: TTexts.profile.tr),
@@ -81,7 +85,7 @@ class ProfilePage extends StatelessWidget {
                             child: InkWell(
                               onTap: () async {
                                 final file =
-                                    await TImagePickerHelper.pickImageFromUser(
+                                    await TImagePickerHelper.pickProfilePhoto(
                                       context,
                                     );
 
@@ -163,14 +167,16 @@ class ProfilePage extends StatelessWidget {
                       Get.toNamed(TRoutes.viewProfile);
                       // Get.to(() => const CustomerViewProfilePage());
                     },
-                  ),  _buildMenuItem(
-                    context,
-                    Icons.edit,
-                    TTexts.editProfile.tr,
-                    () {
-                      Get.toNamed(TRoutes.editProfile);
-                    },
                   ),
+
+                  // _buildMenuItem(
+                  //   context,
+                  //   Icons.edit,
+                  //   TTexts.editProfile.tr,
+                  //   () {
+                  //     Get.toNamed(TRoutes.editProfile);
+                  //   },
+                  // ),
                   _buildMenuItem(
                     context,
                     Icons.camera_alt_outlined,
@@ -215,7 +221,19 @@ class ProfilePage extends StatelessWidget {
                     context,
                     Icons.delete_forever_outlined,
                     TTexts.deleteProfile.tr,
-                    () {},
+                    () {
+                      DeleteReasonDialog.show(
+                        title: "Delete Document",
+                        description:
+                        "Please provide a reason for deleting this document. "
+                            "This action cannot be undone.",
+                        onConfirm: (reason) {
+                          profileController.deleteProfile(reason: reason);
+                          // API call / controller logic
+                          print("Deleted because: $reason");
+                        },
+                      );
+                    },
                     isDanger: true,
                   ),
                 ],

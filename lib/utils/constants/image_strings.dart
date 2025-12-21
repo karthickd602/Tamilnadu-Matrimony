@@ -6,7 +6,7 @@ class TImages {
 
   // -- App Logos
   static const String appLogo = "assets/logos/logo.png";
-  static const String splashAppLogo = "assets/logos/splash_animation.json";
+  static const String splashAppLogoAnimation  = "assets/logos/splash_animation.json";
 
   // -- Lottie Animations
   static String noDataFoundAnimation = "assets/animation/No Data Animation.json";

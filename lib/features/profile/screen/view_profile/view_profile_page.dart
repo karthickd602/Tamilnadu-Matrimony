@@ -1,13 +1,6 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
-import 'package:tamilnadu_matrimony/routes/routes.dart';
 
 import '../../../../common/widgets/images/image_preview_page.dart';
-import '../../../../common/widgets/images/t_circular_image.dart';
 import '../../../../common/widgets/images/t_image_picker.dart';
 import '../../../../utils/constants/path_provider.dart';
 import '../../controller/profile_controller.dart';
@@ -16,18 +9,14 @@ import '../../model/user_profile_model.dart';
 class ViewProfilePage extends StatelessWidget {
   ViewProfilePage({super.key});
 
-  final ProfileController controller =
-  Get.put(ProfileController());
+  final ProfileController controller = ProfileController.instance;
 
   @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFE8A3), // soft matrimony yellow
-      appBar: const TAppBar(
-        title: "My Profile",
-        isBackButtonNeed: true,
-      ),
+      appBar: const TAppBar(title: "My Profile", isBackButtonNeed: true),
 
       bottomNavigationBar: SafeArea(
         child: Padding(
@@ -106,10 +95,7 @@ class ViewProfilePage extends StatelessWidget {
                   children: [
                     Text(
                       profile.address ?? "-",
-                      style: const TextStyle(
-                        fontSize: 14,
-                        height: 1.6,
-                      ),
+                      style: const TextStyle(fontSize: 14, height: 1.6),
                     ),
                   ],
                 ),
@@ -141,9 +127,7 @@ class ViewProfilePage extends StatelessWidget {
             flex: 5,
             child: Text(
               value?.isNotEmpty == true ? value! : "-",
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -151,14 +135,12 @@ class ViewProfilePage extends StatelessWidget {
     );
   }
 }
+
 class _ProfileHeader extends StatelessWidget {
   final FetchUserProfileModel profile;
   final ProfileController controller;
 
-  const _ProfileHeader({
-    required this.profile,
-    required this.controller,
-  });
+  const _ProfileHeader({required this.profile, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -171,22 +153,17 @@ class _ProfileHeader extends StatelessWidget {
             color: Colors.black.withOpacity(0.06),
             blurRadius: 10,
             offset: const Offset(0, 6),
-          )
+          ),
         ],
       ),
       padding: const EdgeInsets.all(TSizes.md),
       child: Row(
         children: [
           GestureDetector(
-            onTap: ()  {
+            onTap: () {
               Get.to(
-                    () => ImagePreviewPage(
-                  imageUrl:
-                  controller
-                      .userProfile
-                      .value
-                      ?.photo1 ??
-                      '',
+                () => ImagePreviewPage(
+                  imageUrl: controller.userProfile.value?.photo1 ?? '',
                   imageType: ImageType.network,
                 ),
               );
@@ -218,8 +195,7 @@ class _ProfileHeader extends StatelessWidget {
                   right: 0,
                   child: InkWell(
                     onTap: () async {
-                      final file =
-                      await TImagePickerHelper.pickImageFromUser(
+                      final file = await TImagePickerHelper.pickProfilePhoto(
                         context,
                       );
 
@@ -330,12 +306,8 @@ class _ProfileHeader extends StatelessWidget {
                 Row(
                   children: [
                     _statusChip(
-                      profile.verified == "yes"
-                          ? "Verified"
-                          : "Not Verified",
-                      profile.verified == "yes"
-                          ? Colors.green
-                          : Colors.orange,
+                      profile.verified == "yes" ? "Verified" : "Not Verified",
+                      profile.verified == "yes" ? Colors.green : Colors.orange,
                     ),
                     const SizedBox(width: 8),
                     _statusChip(
@@ -348,7 +320,7 @@ class _ProfileHeader extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -372,14 +344,12 @@ class _ProfileHeader extends StatelessWidget {
     );
   }
 }
+
 class _SectionCard extends StatelessWidget {
   final String title;
   final List<Widget> children;
 
-  const _SectionCard({
-    required this.title,
-    required this.children,
-  });
+  const _SectionCard({required this.title, required this.children});
 
   @override
   Widget build(BuildContext context) {
@@ -395,10 +365,7 @@ class _SectionCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 12),
           ...children,

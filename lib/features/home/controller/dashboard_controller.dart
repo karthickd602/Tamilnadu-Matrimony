@@ -6,6 +6,7 @@ import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 import '../../../utils/constants/path_provider.dart';
 import '../../favorites/controller/like_controller.dart';
 import '../model/dashboard_list_model.dart';
+import 'filter_controller.dart';
 
 class DashboardController extends GetxController {
   static DashboardController get instance => Get.find();
@@ -28,6 +29,7 @@ class DashboardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    Get.put( FilterController(), permanent: true);
     fetchDashboardCustomerProfile(isInitial: true);
     scrollController.addListener(_scrollListener);
   }
