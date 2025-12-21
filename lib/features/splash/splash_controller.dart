@@ -18,10 +18,10 @@ class SplashController extends GetxController{
 await storage.write(TTexts.userId,"11623");
 
 debugPrint("userId: ${storage.read(TTexts.userId)}");
-    // Get.offAllNamed(TRoutes.loginPage);
+    Get.offAllNamed(TRoutes.loginPage);
 
     // Get.offAllNamed(TRoutes.languageSelection);
-    Get.offAllNamed(TRoutes.bottomNav);
+    // Get.offAllNamed(TRoutes.bottomNav);
 
 
   }

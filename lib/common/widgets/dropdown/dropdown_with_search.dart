@@ -10,6 +10,7 @@ class TSearchDropdownField<T> extends StatelessWidget {
   final bool Function(T, T)? compareFn;
   final void Function(T?)? onChanged;
   final String? Function(T?)? validator;
+  final bool? showSearchBox;
   final IconData? prefixIcon; // ✅ Added prefix icon
 
   const TSearchDropdownField({
@@ -21,7 +22,7 @@ class TSearchDropdownField<T> extends StatelessWidget {
     this.compareFn,
     this.onChanged,
     this.validator,
-    this.prefixIcon,
+    this.prefixIcon, this.showSearchBox,
   });
 
   @override
@@ -32,13 +33,15 @@ class TSearchDropdownField<T> extends StatelessWidget {
       compareFn: compareFn,
       itemAsString: itemAsString,
       popupProps: PopupProps.menu(
-        showSearchBox: true,
+        showSearchBox: showSearchBox??true,
+
         showSelectedItems: true,
         searchFieldProps: TextFieldProps(
           decoration: const InputDecoration(
             hintText: "Search here",
           ),
         ),
+
         menuProps: MenuProps(
           borderRadius: const BorderRadius.all(Radius.circular(12)),
           backgroundColor: THelperFunctions.isDarkMode(context)

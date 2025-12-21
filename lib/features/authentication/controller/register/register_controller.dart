@@ -6,7 +6,9 @@ import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 class RegistrationController extends GetxController {
   static RegistrationController get instance => Get.find();
+final storage = GetStorage();
 
+String userId = "";
   // Total steps
   final totalSteps = 4;
 
@@ -23,10 +25,11 @@ class RegistrationController extends GetxController {
   final familyFormKey = GlobalKey<FormState>();
   final horoscopeFormKey = GlobalKey<FormState>();
   final contactFormKey = GlobalKey<FormState>();
+  final isLoading = false.obs;
 
   // Basic Details fields
   final nameController = TextEditingController();
-  final gender = ''.obs;
+  final selectedGender = ''.obs;
   final dobController = TextEditingController();
   final heightController = TextEditingController();
   final maritalStatus = ''.obs;
@@ -94,7 +97,7 @@ class RegistrationController extends GetxController {
   final selectedState = Rxn<CountryModel>();
   final districtList = <CountryModel>[].obs;
   final selectedDistrict = Rxn<CountryModel>();
-
+final genderList = [TTexts.male.tr, TTexts.female.tr].obs;
   /// --- Base Lists ---
   final raasiList = [
     "மேஷம்",
@@ -226,9 +229,6 @@ class RegistrationController extends GetxController {
     await fetchReligionDropdown();
     await fetchCountryDropdown();
   }
-
-
-
 
   Future<void> fetchOccupationDropdown() async {
     try {
@@ -451,7 +451,8 @@ class RegistrationController extends GetxController {
       horoscopeImageFile.value = file;
       horoscopeImagePath.value = file.path;
     }
-  }// Pick Contact image
+  } // Pick Contact image
+
   void selectProfileImage(BuildContext context) async {
     final file = await TImagePickerHelper.pickProfilePhoto(context);
     if (file != null) {
@@ -459,49 +460,6 @@ class RegistrationController extends GetxController {
       profileImagePath.value = file.path;
     }
   }
-
-  // Future<void> pickImage(
-  //   ImageSource source, {
-  //   required RxString imagePath,
-  // }) async {
-  //   final picker = ImagePicker();
-  //   final picked = await picker.pickImage(source: source);
-  //   if (picked != null) {
-  //     imagePath.value = picked.path;
-  //   }
-  // }
-  //
-  // void showImageSourceSheet({required RxString imagePath}) {
-  //   Get.bottomSheet(
-  //     Container(
-  //       padding: const EdgeInsets.all(16),
-  //       decoration: const BoxDecoration(
-  //         color: Colors.white,
-  //         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-  //       ),
-  //       child: Wrap(
-  //         children: [
-  //           ListTile(
-  //             leading: const Icon(Icons.camera_alt),
-  //             title: const Text('Camera'),
-  //             onTap: () {
-  //               pickImage(ImageSource.camera, imagePath: imagePath);
-  //               Get.back();
-  //             },
-  //           ),
-  //           ListTile(
-  //             leading: const Icon(Icons.photo),
-  //             title: const Text('Gallery'),
-  //             onTap: () {
-  //               pickImage(ImageSource.gallery, imagePath: imagePath);
-  //               Get.back();
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Future<void> basicFormSubmit() async {
     try {
@@ -513,58 +471,60 @@ class RegistrationController extends GetxController {
         return;
       }
 
-      // final request = {
-      //   // 'id': 0,
-      //   "Name": nameController.text,
-      //   // "Gender": gender.value,
-      //   "Gender": "1",
-      //   // "DOB": dobController.text,
-      //   "DOB": '1996-02-01',
-      //   "Height": heightController.text,
-      //   "Complexion": colorComplexion.value,
-      //   "Maritalstatus": maritalStatus.value,
-      //   // "childCount": noOfChildren.value.isEmpty ? "0" : noOfChildren.value,
-      //   "childrenlivingstatus": childLivingStatus.value,
-      //   "Religion": selectedReligion.value?.id.toString(),
-      //   "Caste": selectedCaste.value?.id.toString(),
-      //   "Education": selectedEducation.value?.id.toString(),
-      //   "EducationDetails": educationDetailsController.text,
-      //   "occupation": selectedOccupation.value?.id.toString(),
-      //   "workplace": occupationDetailsController.text,
-      //   "Annualincome": incomeController.text,
-      //   "Subcaste": subCasteController.text,
-      //   "spe_cases": isDisablePerson.value,
-      // };
+      isLoading.value =true;
 
+      final dob = THelperFunctions.convertDateFormat(
+        dobController.text,
+        fromFormat: 'dd-MM-yyyy',
+        toFormat: 'yyyy-MM-dd',
+      );
+debugPrint("33333333333333333333");
       final request = {
-        "Name": "raj",
-        "Gender": "1",
-        "DOB": "1996-02-01",
-        "Height": "11",
-        "Complexion": "மாநிறம்",
-        "Maritalstatus": "துணையை இழந்தவர்",
-        "childrenlivingstatus": "Living with me",
-        "Religion": "2",
-        "Caste": "100",
-        "Education": "1",
-        "EducationDetails": "fr",
-        "occupation": "2",
-        "workplace": "ttt",
-        "Annualincome": "2222",
-        "Subcaste": "tt",
-        "spe_cases": "No"
+        "Name": nameController.text,
+        "Gender": selectedGender.value == "Male" ? 1 : 2,
+        "DOB": dob,
+        "Height": heightController.text,
+        "Complexion": colorComplexion.value,
+        "Maritalstatus": maritalStatus.value,
+        "childrenlivingstatus":
+            int.tryParse(childLivingStatus.value.toString()) ?? 0,
+
+        // IDs as int
+        "Religion": selectedReligion.value?.id ?? 0,
+        "Caste": selectedCaste.value?.id ?? 0,
+        "Education": selectedEducation.value?.id ?? 0,
+
+        // backend expects int (based on second JSON)
+        "EducationDetails": educationDetailsController.text,
+
+        // KEY FIX: occupation → Occupation
+        "Occupation": selectedOccupation.value?.id ?? 0,
+
+        "workplace": occupationDetailsController.text,
+        "Annualincome": int.tryParse(incomeController.text) ?? 0,
+        "Subcaste": subCasteController.text,
+        "spe_cases": isDisablePerson.value.toString() == "Yes" ? 1 : 0,
       };
 
-      debugPrint("Basic Register : $request");
+
+      debugPrint(
+        "Basic Register ${ApiConstant.basicRegisterEndpoint}: $request",
+      );
 
       final response = await THttpHelper.post(
         ApiConstant.basicRegisterEndpoint,
         request,
       );
 
+      userId= response['data']['ID'].toString();
+
+     await storage.write(TTexts.userId, userId);
+
+      TLoaders.successSnackBar(title: "Success", message: response['message']);
+
       debugPrint("Basic Register Response : $response");
 
-      // currentStep.value++;
+      currentStep.value++;
     } catch (e) {
       debugPrint("basicFormSubmit - $e");
       TLoaders.errorSnackBar(
@@ -572,6 +532,9 @@ class RegistrationController extends GetxController {
         message:
             "Something went wrong in Basic Details submit, try again later",
       );
+    }
+    finally{
+      isLoading.value =false;
     }
   }
 
@@ -587,6 +550,8 @@ class RegistrationController extends GetxController {
         return;
       }
 
+      isLoading.value =true;
+
       debugPrint('"father_name": ${fatherNameController.text}');
       debugPrint('"father_occupation": ${fatherOccupationController.text}');
       debugPrint('"mother_name": ${motherNameController.text}');
@@ -599,18 +564,33 @@ class RegistrationController extends GetxController {
       debugPrint('"native_place": ${nativePlaceController.text}');
 
       final request = {
-        "id": "11622",
+        "id": userId,
         "Fathername": fatherNameController.text,
         "Fathersoccupation": fatherOccupationController.text,
         "Mothersname": motherNameController.text,
         "Mothersoccupation": motherOccupationController.text,
-        // "family_status": familyStatusController.value,
+        "FamilyStatus": familyStatusController.value,
         "noofbrothers": brothersController.text,
         "noofsisters": sistersController.text,
         "nbm": marriedBrothersController.text,
         "nsm": marriedSistersController.text,
         "irupidam": nativePlaceController.text,
+        "property": "",
       };
+      ///{
+      //   "id": 11622,
+      //   "Fathername": "சதீஷ்பரந்தி",
+      //   "Fathersoccupation": "work",
+      //   "Mothersname": "ரோதி",
+      //   "Mothersoccupation": "",
+      //   "noofbrothers": 1,
+      //   "noofsisters": 1,
+      //   "nbm": 0,
+      //   "nsm": 1,
+      //   "irupidam": "",
+      //   "property": "",
+      //   "FamilyStatus": ""
+      // }
       debugPrint('Family Register reqq $request');
 
       final response = await THttpHelper.post(
@@ -619,10 +599,9 @@ class RegistrationController extends GetxController {
       );
 
       debugPrint("Family Register Response : $response");
+TLoaders.successSnackBar(title: "Success",message: response['message']);
+      currentStep.value++;
 
-      // currentStep.value++;
-
-      print("Family : $request");
     } catch (e) {
       debugPrint("familyFormSubmit - $e");
       TLoaders.errorSnackBar(
@@ -630,6 +609,9 @@ class RegistrationController extends GetxController {
         message:
             "Something went wrong in Family Details submit, try again later",
       );
+    }
+    finally{
+      isLoading.value =false;
     }
   }
 
@@ -644,16 +626,29 @@ class RegistrationController extends GetxController {
         return;
       }
       final request = {
-        "id": "11622",
+        "id": userId,
+        "choice":4,
+        'Moonsign':selectedDasa.value,
+        "Star": nakshatraController.text,
         "rasi": rasiController.value,
-        "nakshatra": nakshatraController.text,
         "gothram": laknamController.value,
         "dosham": doshamType.value,
         "horoscope_image": horoscopeImagePath.value,
       };
-      print("Horoscope : $request");
+      debugPrint("Horoscope req : $request");
 
-      currentStep.value++;
+
+      final res = await THttpHelper.multipartPost(
+        filePath: horoscopeImagePath.value,
+        ApiConstant.horoscopeRegisterEndpoint,
+        request,
+      );
+      debugPrint("Horoscope req : $request");
+
+      TLoaders.successSnackBar(title: "Success",message: res['message']);
+
+
+      // currentStep.value++;
     } catch (e) {
       debugPrint("horoscopeFormSubmit - ${e}");
 

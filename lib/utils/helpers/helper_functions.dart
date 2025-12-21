@@ -3,21 +3,24 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class THelperFunctions {
-
-
-
-
   static void showSnackBar(String message) {
-    ScaffoldMessenger.of(Get.context!).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }/// 📅 Show Date Picker
-  static Future<void> showDatePickerField(TextEditingController controller,{DateTime? initialDate,DateTime? lastDate,DateTime? firstDate}) async {
+    ScaffoldMessenger.of(
+      Get.context!,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  /// 📅 Show Date Picker
+  static Future<void> showDatePickerField(
+    TextEditingController controller, {
+    DateTime? initialDate,
+    DateTime? lastDate,
+    DateTime? firstDate,
+  }) async {
     final DateTime? pickedDate = await showDatePicker(
       context: Get.context!,
-      initialDate:initialDate?? DateTime.now(),
-      firstDate:firstDate?? DateTime(1935),
-      lastDate: lastDate??DateTime.now(),
+      initialDate: initialDate ?? DateTime.now(),
+      firstDate: firstDate ?? DateTime(1935),
+      lastDate: lastDate ?? DateTime.now(),
     );
 
     if (pickedDate != null) {
@@ -26,19 +29,25 @@ class THelperFunctions {
   }
 
   /// ⏰ Show Time Picker
-  static Future<void> showTimePickerField(TextEditingController controller) async {
-    final TimeOfDay? pickedTime =
-    await showTimePicker(context: Get.context!, initialTime: TimeOfDay.now());
+  static Future<void> showTimePickerField(
+    TextEditingController controller,
+  ) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: Get.context!,
+      initialTime: TimeOfDay.now(),
+    );
 
     if (pickedTime != null) {
       final now = DateTime.now();
-      final formattedTime = DateFormat('HH:mm').format(DateTime(
-        now.year,
-        now.month,
-        now.day,
-        pickedTime.hour,
-        pickedTime.minute,
-      ));
+      final formattedTime = DateFormat('HH:mm').format(
+        DateTime(
+          now.year,
+          now.month,
+          now.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        ),
+      );
       controller.text = formattedTime;
     }
   }
@@ -60,6 +69,7 @@ class THelperFunctions {
       },
     );
   }
+
   static String formatDateTimeWithSecString(String? dateString) {
     if (dateString == null || dateString.isEmpty) return '-';
     try {
@@ -68,7 +78,9 @@ class THelperFunctions {
     } catch (e) {
       return dateString;
     }
-  }  static String formatDateString(String? dateString) {
+  }
+
+  static String formatDateString(String? dateString) {
     if (dateString == null || dateString.isEmpty) return '-';
     try {
       final date = DateTime.parse(dateString);
@@ -77,19 +89,26 @@ class THelperFunctions {
       return dateString;
     }
   }
+
+  static String formatAPIDateString(String? dateString) {
+    if (dateString == null || dateString.isEmpty) return '-';
+    try {
+      final date = DateTime.parse(dateString);
+      return getAPIFormattedDate(date);
+    } catch (e) {
+      return dateString;
+    }
+  }
+
   static String getFormattedDateAndTimeWithSec(
-      DateTime date, {
-        String format = 'dd-MM-yyyy - HH:mm:ss',
-      }) {
+    DateTime date, {
+    String format = 'dd-MM-yyyy - HH:mm:ss',
+  }) {
     return DateFormat(format).format(date);
   }
 
-
   static void navigateToScreen(BuildContext context, Widget screen) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => screen),
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 
   static String truncateText(String text, int maxLength) {
@@ -116,8 +135,25 @@ class THelperFunctions {
     return MediaQuery.of(Get.context!).size.width;
   }
 
-  static String getFormattedDate(DateTime date,
-      {String format = 'dd-MM-yyyy'}) {
+  static String getFormattedDate(
+    DateTime date, {
+    String format = 'dd-MM-yyyy',
+  }) {
+    return DateFormat(format).format(date);
+  }
+  static String convertDateFormat(
+      String date, {
+        String fromFormat = 'dd-MM-yyyy',
+        String toFormat = 'yyyy-MM-dd',
+      }) {
+    final parsedDate = DateFormat(fromFormat).parse(date);
+    return DateFormat(toFormat).format(parsedDate);
+  }
+
+  static String getAPIFormattedDate(
+    DateTime date, {
+    String format = 'yyyy-MM-dd',
+  }) {
     return DateFormat(format).format(date);
   }
 
@@ -129,7 +165,9 @@ class THelperFunctions {
     final wrappedList = <Widget>[];
     for (var i = 0; i < widgets.length; i += rowSize) {
       final rowChildren = widgets.sublist(
-          i, i + rowSize > widgets.length ? widgets.length : i + rowSize);
+        i,
+        i + rowSize > widgets.length ? widgets.length : i + rowSize,
+      );
       wrappedList.add(Row(children: rowChildren));
     }
     return wrappedList;

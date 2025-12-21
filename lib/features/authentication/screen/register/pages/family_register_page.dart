@@ -1,6 +1,7 @@
 import 'package:iconly/iconly.dart';
 import 'package:tamilnadu_matrimony/utils/validators/validation.dart';
 
+import '../../../../../common/widgets/dropdown/dropdown_with_search.dart';
 import '../../../../../utils/constants/path_provider.dart';
 import '../../../controller/register/register_controller.dart';
 
@@ -41,15 +42,24 @@ class FamilyDetails extends StatelessWidget {
                 controller: controller.motherOccupationController,
                 icon: Iconsax.briefcase,
               ),
-              TFormField(
-                labelText: TTexts.familyStatus.tr,
-                isDropdown: true,
-                icon: IconlyLight.home,
+              TSearchDropdownField<String>(
+                label: TTexts.familyStatus.tr,
+                showSearchBox: false,
                 items: ["Middle Class", "Upper Middle", "Rich", "Affluent"],
-                onChanged: (v) {
-                  controller.familyStatusController.value = v?? '';
+                prefixIcon: IconlyLight.home,
+                selectedItem: controller.familyStatusController.value,
+                itemAsString: (item) => item.toString(),
+                compareFn: (a, b) => a == b,
+                onChanged: (value) {
+                  if (value == null) return;
+                  controller.familyStatusController.value = value;
                 },
+                validator: (value) => TValidator.validateEmptyText(
+                  TTexts.familyStatus.tr,
+                  value,
+                ),
               ),
+
 
               Row(
                 children: [
@@ -119,19 +129,21 @@ class FamilyDetails extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    child: Obx(
+                      ()=> ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          minimumSize: const Size(double.infinity, 50),
                         ),
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
-                      onPressed:()=> controller.familyFormSubmit(),
-                      child: Text(
-                        TTexts.tContinue.tr,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        onPressed: controller.isLoading.value?null:()=> controller.familyFormSubmit(),
+                        child: controller.isLoading.value?CircularProgressIndicator():Text(
+                          TTexts.tContinue.tr,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),

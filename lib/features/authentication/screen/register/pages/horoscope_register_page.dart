@@ -33,7 +33,7 @@ class HoroscopeDetails extends StatelessWidget {
                 items: controller.raasiList,
                 selectedItem: controller.selectedRaasi.value,
                 onChanged: controller.onRaasiChanged,
-                prefixIcon: Icons.star_border,
+                prefixIcon: Icons.brightness_7_outlined,
                 validator: (v) =>
                     v == null ? "தயவுசெய்து ராசி தேர்ந்தெடுக்கவும்" : null,
               ),
@@ -45,9 +45,21 @@ class HoroscopeDetails extends StatelessWidget {
                 items: controller.starsForSelectedRaasi,
                 selectedItem: controller.selectedStar.value,
                 onChanged: controller.onStarChanged,
-                prefixIcon: Icons.auto_awesome,
+                prefixIcon: Icons.star_border,
                 validator: (v) => controller.selectedRaasi.value == null
                     ? "தயவுசெய்து நட்சத்திரம் தேர்ந்தெடுக்கவும்"
+                    : null,
+              ),
+              const SizedBox(height: TSizes.md),
+              TSearchDropdownField<String>(
+                label: "Laknam",
+                items: controller.raasiList,
+                selectedItem: controller.laknamController.value,
+                onChanged: (v) => controller.laknamController.value = v ?? '',
+                prefixIcon: Icons.auto_awesome,
+                // onChanged: controller.onStarChanged,
+                validator: (v) => controller.selectedRaasi.value == null
+                    ? "தயவுசெய்து Laknam தேர்ந்தெடுக்கவும்"
                     : null,
               ),
               const SizedBox(height: TSizes.md),
@@ -61,16 +73,15 @@ class HoroscopeDetails extends StatelessWidget {
                 prefixIcon: Icons.sunny,
               ),
               const SizedBox(height: TSizes.md),
-       TSearchDropdownField<String>(
+              TSearchDropdownField<String>(
                 label: TTexts.isDoshamHave.tr,
                 items: [TTexts.yes.tr, TTexts.no.tr, TTexts.iDontKnow.tr],
                 selectedItem: controller.areYouHaveDhosam.value,
-                onChanged: (v) => controller.isDoshamHave.value = v??'',
+                onChanged: (v) => controller.isDoshamHave.value = v ?? '',
                 prefixIcon: Icons.warning_amber_rounded,
-         validator: (value) =>
-             TValidator.validateEmptyText(TTexts.isDoshamHave.tr, value),
+                validator: (value) =>
+                    TValidator.validateEmptyText(TTexts.isDoshamHave.tr, value),
               ),
-
 
               SizedBox(height: TSizes.md),
               // const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -81,7 +92,7 @@ class HoroscopeDetails extends StatelessWidget {
                       items: controller.filteredDhosamList,
                       selectedItem: controller.selectedDhosam.value,
                       onChanged: (v) => controller.selectedDhosam.value = v,
-                      prefixIcon: Icons.warning_amber,
+                      prefixIcon: Icons.gpp_maybe_outlined,
                     )
                   : const SizedBox(),
               SizedBox(height: TSizes.md),
@@ -90,7 +101,7 @@ class HoroscopeDetails extends StatelessWidget {
               ImagePickerBox(
                 title: TTexts.uploadHoroscopeImage.tr,
                 onPickImage: () {
-             controller.selectHoroscopeImage(context);
+                  controller.selectHoroscopeImage(context);
                 },
                 imagePath: controller.horoscopeImagePath,
               ),
