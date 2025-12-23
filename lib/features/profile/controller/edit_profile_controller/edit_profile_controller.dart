@@ -11,17 +11,15 @@ import '../../repository/profile_repository.dart';
 class EditProfileController extends GetxController {
   static EditProfileController get instance => Get.find();
 
+  final storage = GetStorage();
+
+  String userId = "";
+
   // Total steps
   final totalSteps = 4;
 
   // Step index
   RxInt currentStep = 0.obs;
-
-  final userProfile = Rxn<FetchUserProfileModel>();
-
-  final repo = ProfileRepository.instance;
-  final isLoading = false.obs;
-  final storage = GetStorage();
 
   final occupationDDList = <OccupationDDModel>[].obs;
   final religionDDList = <ReligionDDModel>[].obs;
@@ -33,10 +31,11 @@ class EditProfileController extends GetxController {
   final familyFormKey = GlobalKey<FormState>();
   final horoscopeFormKey = GlobalKey<FormState>();
   final contactFormKey = GlobalKey<FormState>();
+  final isLoading = false.obs;
 
   // Basic Details fields
   final nameController = TextEditingController();
-  final gender = ''.obs;
+  final selectedGender = ''.obs;
   final dobController = TextEditingController();
   final heightController = TextEditingController();
   final maritalStatus = ''.obs;
@@ -70,10 +69,11 @@ class EditProfileController extends GetxController {
   final marriedBrothersController = TextEditingController();
   final marriedSistersController = TextEditingController();
   final nativePlaceController = TextEditingController();
+
   // Horoscope fields
   final rasiController = "".obs;
   final nakshatraController = TextEditingController();
-  final laknamController = ''.obs;
+  final selectedLaknam = ''.obs;
   RxString isDoshamHave = ''.obs;
   final doshamType = ''.obs;
   final dasaBalanceDays = TextEditingController();
@@ -103,6 +103,7 @@ class EditProfileController extends GetxController {
   final selectedState = Rxn<CountryModel>();
   final districtList = <CountryModel>[].obs;
   final selectedDistrict = Rxn<CountryModel>();
+  final genderList = [TTexts.male.tr, TTexts.female.tr].obs;
 
   /// --- Base Lists ---
   final raasiList = [
@@ -227,6 +228,11 @@ class EditProfileController extends GetxController {
     selectedDhosam.value = null;
   }
 
+
+  final userProfile = Rxn<FetchUserProfileModel>();
+
+  final repo = ProfileRepository.instance;
+
   @override
   void onInit() async {
     super.onInit();
@@ -243,12 +249,13 @@ class EditProfileController extends GetxController {
       TFullScreenLoader.popUpCircular();
 
       final userId = storage.read(TTexts.userId);
-      final response = await repo.fetchUserProfile( userId: userId);
+      final response = await repo.fetchUserProfile( userId: "11622");
+      // final response = await repo.fetchUserProfile( userId: userId);
       debugPrint("Edit Profile Response : $response");
       userProfile.value =
           FetchUserProfileModel.fromJson(response["data"]);
 
-      await fetchBasicDetails();
+      await _mapProfileToFields();
     } catch (e) {
       debugPrint("Profile Error : $e");
       TLoaders.errorSnackBar(
@@ -259,6 +266,109 @@ class EditProfileController extends GetxController {
       isLoading.value = false;
       TFullScreenLoader.stopLoading();
     }
+  }
+  Future<void> _mapProfileToFields() async {
+    final profile = userProfile.value;
+    if (profile == null) return;
+
+    /// ---------------- BASIC DETAILS ----------------
+
+    nameController.text = profile.name ?? '';
+    dobController.text = profile.dob ?? '';
+    heightController.text = profile.height ?? '';
+    maritalStatus.value = profile.maritalStatus ?? '';
+    colorComplexion.value = profile.complexion ?? '';
+    educationDetailsController.text = profile.educationDetails ?? '';
+    subCasteController.text = profile.subCaste ?? '';
+
+    selectedGender.value = profile.gender == "1" ? TTexts.male.tr : TTexts.female.tr;
+
+    isDisablePerson.value =
+    profile.speCases == "1" ? "Yes" : "No";
+
+    /// ---------------- DROPDOWNS (MATCH BY ID) ----------------
+    /// ---------------- DROPDOWNS ----------------
+
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    selectedEducation.value = educationDDList.firstWhereOrNull((e)=>e.id.toString() == profile.educationId);
+    selectedOccupation.value = occupationDDList.firstWhereOrNull((e)=>e.id.toString() == profile.occupationId);
+
+
+    /// ---------------- CASTE (DEPENDS ON RELIGION) ----------------
+selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() == profile.religionId);
+    if (selectedReligion.value != null) {
+      await fetchCasteDropdown(
+        religionId: selectedReligion.value!.id,
+      );
+
+      selectedCaste.value = casteDDList.firstWhereOrNull(
+            (e) => e.id.toString() == profile.casteId,
+      );
+    }
+
+
+
+    fatherNameController.text = profile.fatherName??'';
+    fatherOccupationController.text = profile.fathersOccupation??'';
+    motherNameController.text = profile.motherName??'';
+    motherOccupationController.text = profile.mothersOccupation??'';
+    familyStatusController.value = profile.familyStatus??'';
+    brothersController.text = profile.noOfBrothers??'';
+    sistersController.text = profile.noOfSisters??'';
+    // marriedBrothersController.text = profile.marriedBrothers??'';
+    // marriedSistersController.text = profile.marriedSisters??'';
+    nativePlaceController.text = profile.irupidam??'';
+
+
+
+
+
+    /// ---------------- LOCATION ----------------
+
+    selectedCountry.value = countryList.firstWhereOrNull(
+          (e) => e.id.toString() == profile.countryId,
+    );
+
+    if (selectedCountry.value != null) {
+      await fetchStateDropdown();
+
+      selectedState.value = stateList.firstWhereOrNull(
+            (e) => e.id.toString() == profile.stateId,
+      );
+    }
+
+    if (selectedState.value != null) {
+      await fetchDistrictDropdown();
+
+      selectedDistrict.value = districtList.firstWhereOrNull(
+            (e) => e.id.toString() == profile.cityId,
+      );
+    }
+
+    /// ---------------- CONTACT ----------------
+
+    mobileController.text = profile.phone ?? '';
+    emailController.text = profile.confirmEmail ?? '';
+    cityController.text = profile.city ?? '';
+    stateController.value = profile.state ?? '';
+    districtController.value = profile.city ?? '';
+
+    /// ---------------- HOROSCOPE ----------------
+
+    selectedRaasi.value = profile.moonsign;
+    selectedStar.value = profile.star;
+    selectedDasa.value = profile.dasaType;
+    selectedDhosam.value = profile.thosam;
+    isDoshamHave.value = profile.thoosamType ?? '';
+
+    /// ---------------- PROFILE IMAGE ----------------
+
+    if (profile.photo1 != null && profile.photo1!.isNotEmpty) {
+      profileImagePath.value = profile.photo1!;
+    }
+
+    debugPrint("✅ Profile mapped to form successfully");
   }
 
   Future<void> fetchBasicDetails() async{
@@ -291,7 +401,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-isLoading.value = true;
+
       final response = await THttpHelper.get(ApiConstant.getOccupationDD);
       //
       debugPrint("occupation Response:${response.toString()}");
@@ -306,9 +416,6 @@ isLoading.value = true;
         message: e.toString(),
       );
     }
-    finally{
-      isLoading.value = false;
-    }
   }
 
   Future<void> fetchEducationDropdown() async {
@@ -321,7 +428,6 @@ isLoading.value = true;
         );
         return;
       }
-      isLoading.value = true;
 
       final response = await THttpHelper.get(ApiConstant.getEducationDD);
       //
@@ -339,9 +445,6 @@ isLoading.value = true;
         message: e.toString(),
       );
     }
-    finally{
-      isLoading.value = false;
-    }
   }
 
   Future<void> fetchReligionDropdown() async {
@@ -354,7 +457,7 @@ isLoading.value = true;
         );
         return;
       }
-      isLoading.value = true;
+
       final response = await THttpHelper.get(ApiConstant.getReligionDD);
       //
       debugPrint("occupation Response:${response.toString()}");
@@ -371,9 +474,6 @@ isLoading.value = true;
         message: e.toString(),
       );
     }
-    finally{
-      isLoading.value = false;
-    }
   }
 
   Future<void> fetchCasteDropdown({required int religionId}) async {
@@ -386,7 +486,7 @@ isLoading.value = true;
         );
         return;
       }
-      isLoading.value = true;
+
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
       //
@@ -403,8 +503,6 @@ isLoading.value = true;
         title: "Caste Dropdown Issue",
         message: e.toString(),
       );
-    }finally{
-      isLoading.value = false;
     }
   }
 
@@ -418,7 +516,7 @@ isLoading.value = true;
         );
         return;
       }
-      isLoading.value = true;
+
       // final req = {"religion_id": religionId};
       final response = await THttpHelper.get(ApiConstant.getCountryDD);
       //
@@ -436,8 +534,6 @@ isLoading.value = true;
         title: "Caste Dropdown Issue",
         message: e.toString(),
       );
-    }finally{
-      isLoading.value = false;
     }
   }
 
@@ -451,7 +547,7 @@ isLoading.value = true;
         );
         return;
       }
-      isLoading.value = true;
+
       final req = {"country_id": selectedCountry.value?.id};
       final response = await THttpHelper.post(ApiConstant.getStateDD, req);
       //
@@ -471,8 +567,6 @@ isLoading.value = true;
         title: "State Dropdown Issue",
         message: e.toString(),
       );
-    }finally{
-      isLoading.value = false;
     }
   }
 
@@ -486,7 +580,7 @@ isLoading.value = true;
         );
         return;
       }
-      isLoading.value = true;
+
       final req = {"state_id": selectedState.value?.id};
       final response = await THttpHelper.post(ApiConstant.getCityDD, req);
       //
@@ -503,14 +597,7 @@ isLoading.value = true;
         title: "District Dropdown Issue",
         message: e.toString(),
       );
-    }finally{
-      isLoading.value = false;
     }
-  }
-
-  void submitRegistration() {
-    // You can handle API call or summary review here
-    debugPrint("Registration Submitted Successfully ✅");
   }
 
   // Pick horoscope image
@@ -520,7 +607,8 @@ isLoading.value = true;
       horoscopeImageFile.value = file;
       horoscopeImagePath.value = file.path;
     }
-  }// Pick Contact image
+  } // Pick Contact image
+
   void selectProfileImage(BuildContext context) async {
     final file = await TImagePickerHelper.pickProfilePhoto(context);
     if (file != null) {
@@ -528,49 +616,6 @@ isLoading.value = true;
       profileImagePath.value = file.path;
     }
   }
-
-  // Future<void> pickImage(
-  //   ImageSource source, {
-  //   required RxString imagePath,
-  // }) async {
-  //   final picker = ImagePicker();
-  //   final picked = await picker.pickImage(source: source);
-  //   if (picked != null) {
-  //     imagePath.value = picked.path;
-  //   }
-  // }
-  //
-  // void showImageSourceSheet({required RxString imagePath}) {
-  //   Get.bottomSheet(
-  //     Container(
-  //       padding: const EdgeInsets.all(16),
-  //       decoration: const BoxDecoration(
-  //         color: Colors.white,
-  //         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-  //       ),
-  //       child: Wrap(
-  //         children: [
-  //           ListTile(
-  //             leading: const Icon(Icons.camera_alt),
-  //             title: const Text('Camera'),
-  //             onTap: () {
-  //               pickImage(ImageSource.camera, imagePath: imagePath);
-  //               Get.back();
-  //             },
-  //           ),
-  //           ListTile(
-  //             leading: const Icon(Icons.photo),
-  //             title: const Text('Gallery'),
-  //             onTap: () {
-  //               pickImage(ImageSource.gallery, imagePath: imagePath);
-  //               Get.back();
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Future<void> basicFormSubmit() async {
     try {
@@ -582,58 +627,51 @@ isLoading.value = true;
         return;
       }
 
-      // final request = {
-      //   // 'id': 0,
-      //   "Name": nameController.text,
-      //   // "Gender": gender.value,
-      //   "Gender": "1",
-      //   // "DOB": dobController.text,
-      //   "DOB": '1996-02-01',
-      //   "Height": heightController.text,
-      //   "Complexion": colorComplexion.value,
-      //   "Maritalstatus": maritalStatus.value,
-      //   // "childCount": noOfChildren.value.isEmpty ? "0" : noOfChildren.value,
-      //   "childrenlivingstatus": childLivingStatus.value,
-      //   "Religion": selectedReligion.value?.id.toString(),
-      //   "Caste": selectedCaste.value?.id.toString(),
-      //   "Education": selectedEducation.value?.id.toString(),
-      //   "EducationDetails": educationDetailsController.text,
-      //   "occupation": selectedOccupation.value?.id.toString(),
-      //   "workplace": occupationDetailsController.text,
-      //   "Annualincome": incomeController.text,
-      //   "Subcaste": subCasteController.text,
-      //   "spe_cases": isDisablePerson.value,
-      // };
+      isLoading.value = true;
 
+      final dob = THelperFunctions.convertDateFormat(
+        dobController.text,
+        fromFormat: 'dd-MM-yyyy',
+        toFormat: 'yyyy-MM-dd',
+      );
       final request = {
-        "Name": "raj",
-        "Gender": "1",
-        "DOB": "1996-02-01",
-        "Height": "11",
-        "Complexion": "மாநிறம்",
-        "Maritalstatus": "துணையை இழந்தவர்",
-        "childrenlivingstatus": "Living with me",
-        "Religion": "2",
-        "Caste": "100",
-        "Education": "1",
-        "EducationDetails": "fr",
-        "occupation": "2",
-        "workplace": "ttt",
-        "Annualincome": "2222",
-        "Subcaste": "tt",
-        "spe_cases": "No"
+        "Name": nameController.text,
+        "Gender": selectedGender.value == "Male" ? 1 : 2,
+        "DOB": dob,
+        "Height": heightController.text,
+        "Complexion": colorComplexion.value,
+        "Maritalstatus": maritalStatus.value,
+        "childrenlivingstatus":
+        int.tryParse(childLivingStatus.value.toString()) ?? 0,
+        "Religion": selectedReligion.value?.id ?? 0,
+        "Caste": selectedCaste.value?.id ?? 0,
+        "Education": selectedEducation.value?.id ?? 0,
+        "EducationDetails": educationDetailsController.text,
+        "Occupation": selectedOccupation.value?.id ?? 0,
+        "workplace": occupationDetailsController.text,
+        "Annualincome": int.tryParse(incomeController.text) ?? 0,
+        "Subcaste": subCasteController.text,
+        "spe_cases": isDisablePerson.value.toString() == "Yes" ? 1 : 0,
       };
 
-      debugPrint("Basic Register : $request");
+      debugPrint(
+        "Basic Register ${ApiConstant.basicRegisterEndpoint}: $request",
+      );
 
       final response = await THttpHelper.post(
         ApiConstant.basicRegisterEndpoint,
         request,
       );
 
+      userId = response['data']['ID'].toString();
+
+      await storage.write(TTexts.userId, userId);
+
+      TLoaders.successSnackBar(title: "Success", message: response['message']);
+
       debugPrint("Basic Register Response : $response");
 
-      // currentStep.value++;
+      currentStep.value++;
     } catch (e) {
       debugPrint("basicFormSubmit - $e");
       TLoaders.errorSnackBar(
@@ -641,6 +679,8 @@ isLoading.value = true;
         message:
         "Something went wrong in Basic Details submit, try again later",
       );
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -656,29 +696,20 @@ isLoading.value = true;
         return;
       }
 
-      debugPrint('"father_name": ${fatherNameController.text}');
-      debugPrint('"father_occupation": ${fatherOccupationController.text}');
-      debugPrint('"mother_name": ${motherNameController.text}');
-      debugPrint('"mother_occupation": ${motherOccupationController.text}');
-      debugPrint('"family_status": ${familyStatusController.value}');
-      debugPrint('"brothers": ${brothersController.text}');
-      debugPrint('"sisters": ${sistersController.text}');
-      debugPrint('"married_brothers": ${marriedBrothersController.text}');
-      debugPrint('"married_sisters": ${marriedSistersController.text}');
-      debugPrint('"native_place": ${nativePlaceController.text}');
-
+      isLoading.value = true;
       final request = {
-        "id": "11622",
+        "id": userId,
         "Fathername": fatherNameController.text,
         "Fathersoccupation": fatherOccupationController.text,
         "Mothersname": motherNameController.text,
         "Mothersoccupation": motherOccupationController.text,
-        // "family_status": familyStatusController.value,
+        "FamilyStatus": familyStatusController.value,
         "noofbrothers": brothersController.text,
         "noofsisters": sistersController.text,
         "nbm": marriedBrothersController.text,
         "nsm": marriedSistersController.text,
         "irupidam": nativePlaceController.text,
+        "property": "",
       };
       debugPrint('Family Register reqq $request');
 
@@ -688,10 +719,8 @@ isLoading.value = true;
       );
 
       debugPrint("Family Register Response : $response");
-
-      // currentStep.value++;
-
-      print("Family : $request");
+      TLoaders.successSnackBar(title: "Success", message: response['message']);
+      currentStep.value++;
     } catch (e) {
       debugPrint("familyFormSubmit - $e");
       TLoaders.errorSnackBar(
@@ -699,6 +728,8 @@ isLoading.value = true;
         message:
         "Something went wrong in Family Details submit, try again later",
       );
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -712,15 +743,34 @@ isLoading.value = true;
       if (!horoscopeFormKey.currentState!.validate()) {
         return;
       }
+
+      if (horoscopeImagePath.value.isEmpty) {
+        TLoaders.warningSnackBar(
+          title: "No Horoscope Image",
+          message: "Please select horoscope image",
+        );
+        return;
+      }
       final request = {
-        "id": "11622",
-        "rasi": rasiController.value,
-        "nakshatra": nakshatraController.text,
-        "gothram": laknamController.value,
-        "dosham": doshamType.value,
-        "horoscope_image": horoscopeImagePath.value,
+        "id": userId,
+        // "id": "96142",
+        'Moonsign': selectedRaasi.value,
+        "Star": selectedStar.value,
+        "InLaknam": selectedLaknam.value,
+        "dasatype": selectedDasa.value,
+        "thoosamtype": isDoshamHave.value,
+        "thosam": selectedDhosam.value,
       };
-      print("Horoscope : $request");
+      debugPrint("Horoscope req : $request");
+
+      final res = await THttpHelper.multipartPost(
+        filePath: horoscopeImageFile.value.path,
+        ApiConstant.horoscopeRegisterEndpoint,
+        request,
+      );
+      debugPrint("Horoscope res : $request");
+
+      TLoaders.successSnackBar(title: "Success", message: res['message']);
 
       currentStep.value++;
     } catch (e) {
@@ -755,7 +805,6 @@ isLoading.value = true;
         "pincode": pincodeController.text,
       };
       print("Contact : $request");
-      submitRegistration();
       Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
       debugPrint("contactFormSubmit - ${e}");
@@ -782,4 +831,14 @@ isLoading.value = true;
     subCasteController.dispose();
     super.onClose();
   }
+
+  T? _findById<T>(
+      List<T> list,
+      String? id,
+      String Function(T) getId,
+      ) {
+    if (id == null || id.isEmpty) return null;
+    return list.firstWhereOrNull((e) => getId(e) == id);
+  }
+
 }

@@ -17,7 +17,7 @@ class RegistrationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(RegistrationController());
 
-    final stepTitles = ['Basic Details', 'Family Details', 'Horoscope', 'Contact'];
+    final stepTitles = ['Basic Details', 'Family Details', 'Horoscope Details', 'Contact Details'];
 
     return Scaffold(
 
@@ -40,11 +40,14 @@ class RegistrationPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 12),
+                        // if(idx ==1)
                         Text('Step ${idx + 1}/${controller.totalSteps}', style: const TextStyle(fontWeight: FontWeight.w600)),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    if(idx < controller.totalSteps - 1)
+
+
+                    // if(idx < controller.totalSteps - 1 )
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -52,6 +55,8 @@ class RegistrationPage extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Text(stepTitles[idx], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
+                        if(idx < controller.totalSteps - 1  )
+                          // if(idx==1)
                         TextButton(onPressed: () {
                           controller.currentStep.value++;
                         },

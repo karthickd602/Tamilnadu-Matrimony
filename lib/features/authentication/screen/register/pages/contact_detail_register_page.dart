@@ -12,7 +12,6 @@ class ContactDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = RegistrationController.instance;
-    final textTheme = Theme.of(context).textTheme;
     final primaryColor = TColors.primary;
 
     return Form(
@@ -22,13 +21,6 @@ class ContactDetails extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              TTexts.contactDetails.tr,
-              style: textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
 
 
 
@@ -69,7 +61,7 @@ class ContactDetails extends StatelessWidget {
                 controller.fetchStateDropdown();
               },
               validator: (value) => TValidator.validateEmptyText(
-                TTexts.occupationDetails.tr,
+                TTexts.country.tr,
                 value?.name,
               ),
             ),

@@ -1,6 +1,8 @@
 import 'package:iconly/iconly.dart';
 
 import '../../../../../utils/constants/path_provider.dart';
+import '../../../../common/widgets/dropdown/dropdown_with_search.dart';
+import '../../../../utils/validators/validation.dart';
 import '../../controller/edit_profile_controller/edit_profile_controller.dart';
 
 class EditFamilyDetails extends StatelessWidget {
@@ -16,43 +18,55 @@ class EditFamilyDetails extends StatelessWidget {
       body: Form(
         key: controller.familyFormKey,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
               TFormField(
                 labelText: TTexts.fatherName.tr,
-                controller: TextEditingController(),
+                controller: controller.fatherNameController,
                 icon: Iconsax.user,
+                validator:(v)=> TValidator.validateEmptyText(TTexts.fatherName.tr, v.toString()),
               ),
               TFormField(
                 labelText: TTexts.fatherOccupation.tr,
-                controller: TextEditingController(),
+                controller: controller.fatherOccupationController,
                 icon: Iconsax.briefcase,
               ),
               TFormField(
                 labelText: TTexts.motherName.tr,
-                controller: TextEditingController(),
+                controller: controller.motherNameController,
                 icon: IconlyLight.user,
               ),
               TFormField(
                 labelText: TTexts.motherOccupation.tr,
-                controller: TextEditingController(),
+                controller: controller.motherOccupationController,
                 icon: Iconsax.briefcase,
               ),
-              TFormField(
-                labelText: TTexts.familyStatus.tr,
-                isDropdown: true,
-                icon: IconlyLight.home,
+              TSearchDropdownField<String>(
+                label: TTexts.familyStatus.tr,
+                showSearchBox: false,
                 items: ["Middle Class", "Upper Middle", "Rich", "Affluent"],
-                onChanged: (v) {},
+                prefixIcon: IconlyLight.home,
+                selectedItem: controller.familyStatusController.value,
+                itemAsString: (item) => item.toString(),
+                compareFn: (a, b) => a == b,
+                onChanged: (value) {
+                  if (value == null) return;
+                  controller.familyStatusController.value = value;
+                },
+                validator: (value) => TValidator.validateEmptyText(
+                  TTexts.familyStatus.tr,
+                  value,
+                ),
               ),
+
 
               Row(
                 children: [
                   Expanded(
                     child: TFormField(
                       labelText: TTexts.brothers.tr,
-                      controller: TextEditingController(),
+                      controller: controller.brothersController,
                       hintText: "0",
                       icon: Icons.male_outlined,
                       keyboardType: TextInputType.number,
@@ -62,8 +76,9 @@ class EditFamilyDetails extends StatelessWidget {
                   Expanded(
                     child: TFormField(
                       labelText: TTexts.sisters.tr,
-                      controller: TextEditingController(),
+                      controller: controller.sistersController,
                       hintText: "0",
+
                       icon: Icons.female_outlined,
                       keyboardType: TextInputType.number,
                     ),
@@ -74,7 +89,7 @@ class EditFamilyDetails extends StatelessWidget {
                   Expanded(
                     child: TFormField(
                       labelText: TTexts.marriedBrothers.tr,
-                      controller: TextEditingController(),
+                      controller: controller.marriedBrothersController,
                       hintText: "0",
                       keyboardType: TextInputType.number,
                       icon: Icons.male_outlined,
@@ -84,7 +99,7 @@ class EditFamilyDetails extends StatelessWidget {
                   Expanded(
                     child: TFormField(
                       labelText: TTexts.marriedSisters.tr,
-                      controller: TextEditingController(),
+                      controller: controller.marriedSistersController,
                       keyboardType: TextInputType.number,
                       hintText: "0",
                       icon: Icons.female_outlined,
@@ -94,7 +109,7 @@ class EditFamilyDetails extends StatelessWidget {
               ),
               TFormField(
                 labelText: TTexts.nativePlace.tr,
-                controller: TextEditingController(),
+                controller: controller.nativePlaceController,
                 icon: IconlyLight.location,
               ),
               const SizedBox(height: 24),
@@ -114,19 +129,21 @@ class EditFamilyDetails extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    child: Obx(
+                          ()=> ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          minimumSize: const Size(double.infinity, 50),
                         ),
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
-                      onPressed:()=> controller.familyFormSubmit(),
-                      child: Text(
-                        TTexts.tContinue.tr,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        onPressed: controller.isLoading.value?null:()=> controller.familyFormSubmit(),
+                        child: controller.isLoading.value?CircularProgressIndicator():Text(
+                          TTexts.tContinue.tr,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),

@@ -43,6 +43,8 @@ class ProfileRepository extends GetxController {
       filePath: imageFile.path,
       fileFieldName: "file",
     );
+
+
   }
 
   Future<Map<String, dynamic>> updateVerifyDocument({

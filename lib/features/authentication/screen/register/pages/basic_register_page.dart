@@ -40,10 +40,8 @@ class StepBasicDetails extends StatelessWidget {
                 if (value == null) return;
                 controller.selectedGender.value = value;
               },
-              validator: (value) => TValidator.validateEmptyText(
-                TTexts.gender.tr,
-                value,
-              ),
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.gender.tr, value),
             ),
 
             GestureDetector(
@@ -70,63 +68,108 @@ class StepBasicDetails extends StatelessWidget {
               hintText: "in cm",
               icon: Icons.height,
             ),
-            TFormField(
-              labelText: TTexts.complexion.tr,
-              isDropdown: true,
-              icon: Icons.color_lens_outlined,
+
+            TSearchDropdownField<String>(
+              label: TTexts.complexion.tr,
+              showSearchBox: false,
               items: ["சிவப்பு", "மாநிறம்", "புது நிறம்", "கருப்பு"],
-              onChanged: (v) => controller.colorComplexion.value = v ?? '',
+              prefixIcon: Icons.color_lens_outlined,
+              selectedItem: controller.colorComplexion.value,
+              itemAsString: (item) => item.toString(),
+              compareFn: (a, b) => a == b,
+              onChanged: (value) {
+                if (value == null) return;
+                controller.colorComplexion.value = value;
+              },
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.complexion.tr, value),
             ),
-            TFormField(
-              labelText: TTexts.maritalStatus.tr,
-              isDropdown: true,
-              icon: Icons.join_inner_outlined,
+            SizedBox(height: TSizes.sm),
+
+            TSearchDropdownField<String>(
+              label: TTexts.maritalStatus.tr,
+              showSearchBox: false,
               items: [
                 "திருமணம் ஆகாதவர்",
                 " துணையை இழந்தவர்",
                 "விவாகரத்து ஆனவர்",
                 "பிரிந்து வாழ்பவர்",
               ],
-              onChanged: (v) {
-                controller.maritalStatus.value = v ?? '';
+              prefixIcon: Icons.join_inner_outlined,
+              selectedItem: controller.maritalStatus.value,
+              itemAsString: (item) => item.toString(),
+              compareFn: (a, b) => a == b,
+              onChanged: (value) {
+                if (value == null) return;
+                controller.maritalStatus.value = value ?? '';
                 controller.noOfChildren.value = '';
                 controller.childLivingStatus.value = '';
               },
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.maritalStatus.tr, value),
             ),
-
             Obx(
               () =>
                   (controller.maritalStatus.value == "திருமணம் ஆகாதவர்" ||
                       controller.maritalStatus.value == '')
                   ? SizedBox()
-                  : TFormField(
-                      labelText: TTexts.noOfChildren.tr,
-                      isDropdown: true,
-                      icon: Icons.baby_changing_station_outlined,
+                  : SizedBox(height: TSizes.sm),
+            ),
+            Obx(
+              () =>
+                  (controller.maritalStatus.value == "திருமணம் ஆகாதவர்" ||
+                      controller.maritalStatus.value == '')
+                  ? SizedBox()
+                  : TSearchDropdownField<String>(
+                      label: TTexts.noOfChildren.tr,
+                      showSearchBox: false,
                       items: ["0", "1", "2", "3", "4"],
-                      onChanged: (v) {
-                        controller.noOfChildren.value = v ?? '';
+                      prefixIcon: Icons.child_care,
+                      selectedItem: controller.noOfChildren.value,
+                      itemAsString: (item) => item.toString(),
+                      compareFn: (a, b) => a == b,
+                      onChanged: (value) {
+                        if (value == null) return;
+
+                        controller.noOfChildren.value = value ?? '';
 
                         controller.childLivingStatus.value = '';
                       },
+                      validator: (value) => TValidator.validateEmptyText(
+                        TTexts.noOfChildren.tr,
+                        value,
+                      ),
                     ),
             ),
-
+            SizedBox(height: TSizes.sm),
             Obx(
               () =>
                   (controller.maritalStatus.value == "திருமணம் ஆகாதவர்" ||
                       controller.noOfChildren.value == "0" ||
                       controller.noOfChildren.value == '')
                   ? SizedBox()
-                  : TFormField(
-                      labelText: TTexts.childrenLivingStatus.tr,
-                      isDropdown: true,
-                      icon: Icons.baby_changing_station_outlined,
+                  : TSearchDropdownField<String>(
+                      label: TTexts.childrenLivingStatus.tr,
+                      showSearchBox: false,
                       items: ["Living with me", "Not living with me"],
-                      onChanged: (v) =>
-                          controller.childLivingStatus.value = v ?? '',
+                      prefixIcon: Icons.baby_changing_station_outlined,
+                      selectedItem: controller.childLivingStatus.value,
+                      itemAsString: (item) => item.toString(),
+                      compareFn: (a, b) => a == b,
+                      onChanged: (value) {
+                        if (value == null) return;
+                        controller.childLivingStatus.value = value ?? '';
+                      },
+                      validator: (value) => TValidator.validateEmptyText(
+                        TTexts.childrenLivingStatus.tr,
+                        value,
+                      ),
                     ),
             ),
+            Obx(()=>(controller.maritalStatus.value == "திருமணம் ஆகாதவர்" ||
+                controller.noOfChildren.value == "0" ||
+                controller.noOfChildren.value == '')?SizedBox(): SizedBox(height: TSizes.sm)),
+
             TSearchDropdownField<EducationDDModel>(
               label: TTexts.highEducation.tr,
               items: controller.educationDDList,
@@ -147,6 +190,7 @@ class StepBasicDetails extends StatelessWidget {
               labelText: TTexts.educationDetails.tr,
               controller: controller.educationDetailsController,
               icon: Icons.school_outlined,
+              validator: (value)=>TValidator.validateEmptyText(TTexts.educationDetails.tr, value.toString()),
             ),
             TSearchDropdownField<OccupationDDModel>(
               label: TTexts.occupationDetails.tr,
@@ -175,6 +219,8 @@ class StepBasicDetails extends StatelessWidget {
               keyboardType: TextInputType.number,
               controller: controller.incomeController,
               icon: IconlyLight.wallet,
+              validator: (value)=>TValidator.validateEmptyText(TTexts.income.tr, value.toString()),
+
             ),
             TSearchDropdownField<ReligionDDModel>(
               prefixIcon: Icons.temple_hindu_outlined,
@@ -189,7 +235,8 @@ class StepBasicDetails extends StatelessWidget {
                 controller.selectedCaste.value = null;
                 controller.fetchCasteDropdown(religionId: value.id);
               },
-              validator: (value) => TValidator.validateEmptyText(TTexts.religion.tr, value?.name),
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.religion.tr, value?.name),
             ),
             Obx(
               () => controller.selectedReligion.value == null
@@ -197,7 +244,9 @@ class StepBasicDetails extends StatelessWidget {
                   : SizedBox(height: TSizes.sm),
             ),
             Obx(
-              () => (controller.selectedReligion.value == null|| controller.selectedReligion.value?.id!=1)
+              () =>
+                  (controller.selectedReligion.value == null ||
+                      controller.selectedReligion.value?.id != 1)
                   ? SizedBox()
                   : TSearchDropdownField<CasteDDModel>(
                       prefixIcon: IconlyLight.user,
@@ -219,11 +268,15 @@ class StepBasicDetails extends StatelessWidget {
             ),
 
             Obx(
-              ()=>(controller.selectedReligion.value == null|| controller.selectedReligion.value?.id!=1)?SizedBox(): TFormField(
-                labelText: TTexts.subCaste.tr,
-                controller: controller.subCasteController,
-                icon: IconlyLight.user,
-              ),
+              () =>
+                  (controller.selectedReligion.value == null ||
+                      controller.selectedReligion.value?.id != 1)
+                  ? SizedBox()
+                  : TFormField(
+                      labelText: TTexts.subCaste.tr,
+                      controller: controller.subCasteController,
+                      icon: IconlyLight.user,
+                    ),
             ),
             TFormField(
               labelText: TTexts.disablePerson.tr,
@@ -235,7 +288,7 @@ class StepBasicDetails extends StatelessWidget {
             ),
             const SizedBox(height: TSizes.spaceBtwSections),
             Obx(
-              ()=> ElevatedButton(
+              () => ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primary,
                   shape: RoundedRectangleBorder(
@@ -243,14 +296,18 @@ class StepBasicDetails extends StatelessWidget {
                   ),
                   minimumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: controller.isLoading.value?null: () => controller.basicFormSubmit(),
-                child: controller.isLoading.value?CircularProgressIndicator(color: TColors.primary):Text(
-                  TTexts.tContinue.tr,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                onPressed: controller.isLoading.value
+                    ? null
+                    : () => controller.basicFormSubmit(),
+                child: controller.isLoading.value
+                    ? CircularProgressIndicator(color: TColors.primary)
+                    : Text(
+                        TTexts.tContinue.tr,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
               ),
             ),
           ],

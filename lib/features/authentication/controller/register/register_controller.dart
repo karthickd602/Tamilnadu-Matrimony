@@ -6,9 +6,10 @@ import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 class RegistrationController extends GetxController {
   static RegistrationController get instance => Get.find();
-final storage = GetStorage();
+  final storage = GetStorage();
 
-String userId = "";
+  String userId = "";
+
   // Total steps
   final totalSteps = 4;
 
@@ -67,7 +68,7 @@ String userId = "";
   // Horoscope fields
   final rasiController = "".obs;
   final nakshatraController = TextEditingController();
-  final laknamController = ''.obs;
+  final selectedLaknam = ''.obs;
   RxString isDoshamHave = ''.obs;
   final doshamType = ''.obs;
   final dasaBalanceDays = TextEditingController();
@@ -97,7 +98,8 @@ String userId = "";
   final selectedState = Rxn<CountryModel>();
   final districtList = <CountryModel>[].obs;
   final selectedDistrict = Rxn<CountryModel>();
-final genderList = [TTexts.male.tr, TTexts.female.tr].obs;
+  final genderList = [TTexts.male.tr, TTexts.female.tr].obs;
+
   /// --- Base Lists ---
   final raasiList = [
     "மேஷம்",
@@ -439,11 +441,6 @@ final genderList = [TTexts.male.tr, TTexts.female.tr].obs;
     }
   }
 
-  void submitRegistration() {
-    // You can handle API call or summary review here
-    debugPrint("Registration Submitted Successfully ✅");
-  }
-
   // Pick horoscope image
   void selectHoroscopeImage(BuildContext context) async {
     final file = await TImagePickerHelper.pickProfilePhoto(context);
@@ -471,14 +468,13 @@ final genderList = [TTexts.male.tr, TTexts.female.tr].obs;
         return;
       }
 
-      isLoading.value =true;
+      isLoading.value = true;
 
       final dob = THelperFunctions.convertDateFormat(
         dobController.text,
         fromFormat: 'dd-MM-yyyy',
         toFormat: 'yyyy-MM-dd',
       );
-debugPrint("33333333333333333333");
       final request = {
         "Name": nameController.text,
         "Gender": selectedGender.value == "Male" ? 1 : 2,
@@ -488,24 +484,16 @@ debugPrint("33333333333333333333");
         "Maritalstatus": maritalStatus.value,
         "childrenlivingstatus":
             int.tryParse(childLivingStatus.value.toString()) ?? 0,
-
-        // IDs as int
         "Religion": selectedReligion.value?.id ?? 0,
         "Caste": selectedCaste.value?.id ?? 0,
         "Education": selectedEducation.value?.id ?? 0,
-
-        // backend expects int (based on second JSON)
         "EducationDetails": educationDetailsController.text,
-
-        // KEY FIX: occupation → Occupation
         "Occupation": selectedOccupation.value?.id ?? 0,
-
         "workplace": occupationDetailsController.text,
         "Annualincome": int.tryParse(incomeController.text) ?? 0,
         "Subcaste": subCasteController.text,
         "spe_cases": isDisablePerson.value.toString() == "Yes" ? 1 : 0,
       };
-
 
       debugPrint(
         "Basic Register ${ApiConstant.basicRegisterEndpoint}: $request",
@@ -516,9 +504,9 @@ debugPrint("33333333333333333333");
         request,
       );
 
-      userId= response['data']['ID'].toString();
+      userId = response['data']['ID'].toString();
 
-     await storage.write(TTexts.userId, userId);
+      await storage.write(TTexts.userId, userId);
 
       TLoaders.successSnackBar(title: "Success", message: response['message']);
 
@@ -532,9 +520,8 @@ debugPrint("33333333333333333333");
         message:
             "Something went wrong in Basic Details submit, try again later",
       );
-    }
-    finally{
-      isLoading.value =false;
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -550,19 +537,7 @@ debugPrint("33333333333333333333");
         return;
       }
 
-      isLoading.value =true;
-
-      debugPrint('"father_name": ${fatherNameController.text}');
-      debugPrint('"father_occupation": ${fatherOccupationController.text}');
-      debugPrint('"mother_name": ${motherNameController.text}');
-      debugPrint('"mother_occupation": ${motherOccupationController.text}');
-      debugPrint('"family_status": ${familyStatusController.value}');
-      debugPrint('"brothers": ${brothersController.text}');
-      debugPrint('"sisters": ${sistersController.text}');
-      debugPrint('"married_brothers": ${marriedBrothersController.text}');
-      debugPrint('"married_sisters": ${marriedSistersController.text}');
-      debugPrint('"native_place": ${nativePlaceController.text}');
-
+      isLoading.value = true;
       final request = {
         "id": userId,
         "Fathername": fatherNameController.text,
@@ -577,20 +552,6 @@ debugPrint("33333333333333333333");
         "irupidam": nativePlaceController.text,
         "property": "",
       };
-      ///{
-      //   "id": 11622,
-      //   "Fathername": "சதீஷ்பரந்தி",
-      //   "Fathersoccupation": "work",
-      //   "Mothersname": "ரோதி",
-      //   "Mothersoccupation": "",
-      //   "noofbrothers": 1,
-      //   "noofsisters": 1,
-      //   "nbm": 0,
-      //   "nsm": 1,
-      //   "irupidam": "",
-      //   "property": "",
-      //   "FamilyStatus": ""
-      // }
       debugPrint('Family Register reqq $request');
 
       final response = await THttpHelper.post(
@@ -599,9 +560,8 @@ debugPrint("33333333333333333333");
       );
 
       debugPrint("Family Register Response : $response");
-TLoaders.successSnackBar(title: "Success",message: response['message']);
+      TLoaders.successSnackBar(title: "Success", message: response['message']);
       currentStep.value++;
-
     } catch (e) {
       debugPrint("familyFormSubmit - $e");
       TLoaders.errorSnackBar(
@@ -609,9 +569,8 @@ TLoaders.successSnackBar(title: "Success",message: response['message']);
         message:
             "Something went wrong in Family Details submit, try again later",
       );
-    }
-    finally{
-      isLoading.value =false;
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -625,30 +584,36 @@ TLoaders.successSnackBar(title: "Success",message: response['message']);
       if (!horoscopeFormKey.currentState!.validate()) {
         return;
       }
+
+      if (horoscopeImagePath.value.isEmpty) {
+        TLoaders.warningSnackBar(
+          title: "No Horoscope Image",
+          message: "Please select horoscope image",
+        );
+        return;
+      }
       final request = {
         "id": userId,
-        "choice":4,
-        'Moonsign':selectedDasa.value,
-        "Star": nakshatraController.text,
-        "rasi": rasiController.value,
-        "gothram": laknamController.value,
-        "dosham": doshamType.value,
-        "horoscope_image": horoscopeImagePath.value,
+        // "id": "96142",
+        'Moonsign': selectedRaasi.value,
+        "Star": selectedStar.value,
+        "InLaknam": selectedLaknam.value,
+        "dasatype": selectedDasa.value,
+        "thoosamtype": isDoshamHave.value,
+        "thosam": selectedDhosam.value,
       };
       debugPrint("Horoscope req : $request");
 
-
       final res = await THttpHelper.multipartPost(
-        filePath: horoscopeImagePath.value,
+        filePath: horoscopeImageFile.value.path,
         ApiConstant.horoscopeRegisterEndpoint,
         request,
       );
-      debugPrint("Horoscope req : $request");
+      debugPrint("Horoscope res : $request");
 
-      TLoaders.successSnackBar(title: "Success",message: res['message']);
+      TLoaders.successSnackBar(title: "Success", message: res['message']);
 
-
-      // currentStep.value++;
+      currentStep.value++;
     } catch (e) {
       debugPrint("horoscopeFormSubmit - ${e}");
 
@@ -681,7 +646,6 @@ TLoaders.successSnackBar(title: "Success",message: response['message']);
         "pincode": pincodeController.text,
       };
       print("Contact : $request");
-      submitRegistration();
       Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
       debugPrint("contactFormSubmit - ${e}");
