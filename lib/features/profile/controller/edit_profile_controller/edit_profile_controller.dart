@@ -13,7 +13,7 @@ class EditProfileController extends GetxController {
 
   final storage = GetStorage();
 
-  String userId = "";
+  String userId = "96167";
 
   // Total steps
   final totalSteps = 4;
@@ -48,7 +48,7 @@ class EditProfileController extends GetxController {
   final selectedOccupation = Rxn<OccupationDDModel>();
   final selectedReligion = Rxn<ReligionDDModel>();
   final selectedCaste = Rxn<CasteDDModel>();
-  final colorComplexion = ''.obs;
+  final selectedComplexion = ''.obs;
   final educationDetailsController = TextEditingController();
   final occupationDetailsController = TextEditingController();
   final incomeController = TextEditingController();
@@ -228,7 +228,6 @@ class EditProfileController extends GetxController {
     selectedDhosam.value = null;
   }
 
-
   final userProfile = Rxn<FetchUserProfileModel>();
 
   final repo = ProfileRepository.instance;
@@ -248,25 +247,22 @@ class EditProfileController extends GetxController {
       isLoading.value = true;
       TFullScreenLoader.popUpCircular();
 
-      final userId = storage.read(TTexts.userId);
-      final response = await repo.fetchUserProfile( userId: "11622");
-      // final response = await repo.fetchUserProfile( userId: userId);
+      // final userId = storage.read(TTexts.userId);
+      // final userId = "96166";
+      final response = await repo.fetchUserProfile(userId: userId);
       debugPrint("Edit Profile Response : $response");
-      userProfile.value =
-          FetchUserProfileModel.fromJson(response["data"]);
+      userProfile.value = FetchUserProfileModel.fromJson(response["data"]);
 
       await _mapProfileToFields();
     } catch (e) {
       debugPrint("Profile Error : $e");
-      TLoaders.errorSnackBar(
-        title: "Profile Error",
-        message: e.toString(),
-      );
+      TLoaders.errorSnackBar(title: "Profile Error", message: e.toString());
     } finally {
       isLoading.value = false;
       TFullScreenLoader.stopLoading();
     }
   }
+
   Future<void> _mapProfileToFields() async {
     final profile = userProfile.value;
     if (profile == null) return;
@@ -277,64 +273,67 @@ class EditProfileController extends GetxController {
     dobController.text = profile.dob ?? '';
     heightController.text = profile.height ?? '';
     maritalStatus.value = profile.maritalStatus ?? '';
-    colorComplexion.value = profile.complexion ?? '';
+    selectedComplexion.value = profile.complexion ?? '';
     educationDetailsController.text = profile.educationDetails ?? '';
     subCasteController.text = profile.subCaste ?? '';
+    occupationDetailsController.text = profile.occupationDetails ?? '';
+    incomeController.text = profile.annualIncome.toString();
 
-    selectedGender.value = profile.gender == "1" ? TTexts.male.tr : TTexts.female.tr;
+    selectedGender.value = profile.gender == "1"
+        ? TTexts.male.tr
+        : TTexts.female.tr;
 
-    isDisablePerson.value =
-    profile.speCases == "1" ? "Yes" : "No";
+    isDisablePerson.value = profile.speCases == "1" ? "Yes" : "No";
 
     /// ---------------- DROPDOWNS (MATCH BY ID) ----------------
     /// ---------------- DROPDOWNS ----------------
 
     await Future.delayed(const Duration(milliseconds: 100));
 
-    selectedEducation.value = educationDDList.firstWhereOrNull((e)=>e.id.toString() == profile.educationId);
-    selectedOccupation.value = occupationDDList.firstWhereOrNull((e)=>e.id.toString() == profile.occupationId);
-
+    selectedEducation.value = educationDDList.firstWhereOrNull(
+      (e) => e.id.toString() == profile.educationId,
+    );
+    selectedOccupation.value = occupationDDList.firstWhereOrNull(
+      (e) => e.id.toString() == profile.occupationId,
+    );
 
     /// ---------------- CASTE (DEPENDS ON RELIGION) ----------------
-selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() == profile.religionId);
+    selectedReligion.value = religionDDList.firstWhereOrNull(
+      (e) => e.id.toString() == profile.religionId,
+    );
     if (selectedReligion.value != null) {
-      await fetchCasteDropdown(
-        religionId: selectedReligion.value!.id,
-      );
+      await fetchCasteDropdown(religionId: selectedReligion.value!.id);
 
       selectedCaste.value = casteDDList.firstWhereOrNull(
-            (e) => e.id.toString() == profile.casteId,
+        (e) => e.id.toString() == profile.casteId,
       );
+
+      debugPrint("✅selected Caste ${selectedCaste.value}");
     }
 
-
-
-    fatherNameController.text = profile.fatherName??'';
-    fatherOccupationController.text = profile.fathersOccupation??'';
-    motherNameController.text = profile.motherName??'';
-    motherOccupationController.text = profile.mothersOccupation??'';
-    familyStatusController.value = profile.familyStatus??'';
-    brothersController.text = profile.noOfBrothers??'';
-    sistersController.text = profile.noOfSisters??'';
-    // marriedBrothersController.text = profile.marriedBrothers??'';
-    // marriedSistersController.text = profile.marriedSisters??'';
-    nativePlaceController.text = profile.irupidam??'';
-
-
-
-
+    fatherNameController.text = profile.fatherName ?? '';
+    fatherOccupationController.text = profile.fathersOccupation ?? '';
+    motherNameController.text = profile.motherName ?? '';
+    motherOccupationController.text = profile.mothersOccupation ?? '';
+    familyStatusController.value = profile.familyStatus ?? '';
+    brothersController.text = profile.noOfBrothers ?? '';
+    sistersController.text = profile.noOfSisters ?? '';
+    marriedBrothersController.text = profile.nbm ?? '';
+    marriedSistersController.text = profile.nsm ?? '';
+    nativePlaceController.text = profile.irupidam ?? '';
+    selectedComplexion.value = profile.complexion ?? '';
 
     /// ---------------- LOCATION ----------------
 
     selectedCountry.value = countryList.firstWhereOrNull(
-          (e) => e.id.toString() == profile.countryId,
+      (e) => e.id.toString() == profile.countryId,
     );
 
     if (selectedCountry.value != null) {
       await fetchStateDropdown();
 
       selectedState.value = stateList.firstWhereOrNull(
-            (e) => e.id.toString() == profile.stateId,
+        (e) => e.id.toString() == profile.stateId,
       );
     }
 
@@ -342,7 +341,7 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
       await fetchDistrictDropdown();
 
       selectedDistrict.value = districtList.firstWhereOrNull(
-            (e) => e.id.toString() == profile.cityId,
+        (e) => e.id.toString() == profile.cityId,
       );
     }
 
@@ -358,9 +357,14 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
 
     selectedRaasi.value = profile.moonsign;
     selectedStar.value = profile.star;
+    selectedLaknam.value = profile.inLaknam ?? '';
     selectedDasa.value = profile.dasaType;
     selectedDhosam.value = profile.thosam;
+    areYouHaveDhosam.value = profile.thoosamType == 'Yes'
+        ? TTexts.yes.tr
+        : TTexts.no.tr;
     isDoshamHave.value = profile.thoosamType ?? '';
+    debugPrint(" dosham ${isDoshamHave.value}");
 
     /// ---------------- PROFILE IMAGE ----------------
 
@@ -371,22 +375,20 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
     debugPrint("✅ Profile mapped to form successfully");
   }
 
-  Future<void> fetchBasicDetails() async{
+  Future<void> fetchBasicDetails() async {
     nameController.text = userProfile.value?.name ?? '';
     dobController.text = userProfile.value?.dob ?? '';
     heightController.text = userProfile.value?.height ?? '';
     maritalStatus.value = userProfile.value?.maritalStatus ?? '';
     // childLivingStatus.value = userProfile.value?.childLivingStatus ?? '';
     // noOfChildren.value = userProfile.value?.noOfChildren ?? '';
-    colorComplexion.value = userProfile.value?.complexion ?? '';
+    selectedComplexion.value = userProfile.value?.complexion ?? '';
     educationDetailsController.text = userProfile.value?.educationDetails ?? '';
     // occupationDetailsController.text =
     //     userProfile.value?.occupationDetails ?? '';
     // incomeController.text = userProfile.value?.annualIncome ?? '';
     // subCasteController.text = userProfile.value?.subCaste ?? '';
     // isDisablePerson.value = userProfile.value?.isDisablePerson ?? '';
-
-
 
     // You can
   }
@@ -490,7 +492,7 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
       //
-      debugPrint("occupation Response:${response.toString()}");
+      debugPrint("Caste Response:${response.toString()}");
       if (response['statusCode'] == 200) {
         casteDDList.value = (response['data'] as List)
             .map((e) => CasteDDModel.fromJson(e))
@@ -635,14 +637,15 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
         toFormat: 'yyyy-MM-dd',
       );
       final request = {
+        "id": userId,
         "Name": nameController.text,
         "Gender": selectedGender.value == "Male" ? 1 : 2,
         "DOB": dob,
         "Height": heightController.text,
-        "Complexion": colorComplexion.value,
+        "Complexion": selectedComplexion.value,
         "Maritalstatus": maritalStatus.value,
         "childrenlivingstatus":
-        int.tryParse(childLivingStatus.value.toString()) ?? 0,
+            int.tryParse(childLivingStatus.value.toString()) ?? 0,
         "Religion": selectedReligion.value?.id ?? 0,
         "Caste": selectedCaste.value?.id ?? 0,
         "Education": selectedEducation.value?.id ?? 0,
@@ -654,12 +657,10 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
         "spe_cases": isDisablePerson.value.toString() == "Yes" ? 1 : 0,
       };
 
-      debugPrint(
-        "Basic Register ${ApiConstant.basicRegisterEndpoint}: $request",
-      );
+      debugPrint("Basic Register : $request");
 
       final response = await THttpHelper.post(
-        ApiConstant.basicRegisterEndpoint,
+        ApiConstant.basicEditEndpoint,
         request,
       );
 
@@ -677,7 +678,7 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
-        "Something went wrong in Basic Details submit, try again later",
+            "Something went wrong in Basic Details submit, try again later",
       );
     } finally {
       isLoading.value = false;
@@ -711,14 +712,14 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
         "irupidam": nativePlaceController.text,
         "property": "",
       };
-      debugPrint('Family Register reqq $request');
+      debugPrint('Family Edit reqq $request');
 
       final response = await THttpHelper.post(
-        ApiConstant.familyRegisterEndpoint,
+        ApiConstant.familyEditEndpoint,
         request,
       );
 
-      debugPrint("Family Register Response : $response");
+      debugPrint("Family Edit Response : $response");
       TLoaders.successSnackBar(title: "Success", message: response['message']);
       currentStep.value++;
     } catch (e) {
@@ -726,7 +727,7 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
-        "Something went wrong in Family Details submit, try again later",
+            "Something went wrong in Family Details submit, try again later",
       );
     } finally {
       isLoading.value = false;
@@ -765,21 +766,21 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
 
       final res = await THttpHelper.multipartPost(
         filePath: horoscopeImageFile.value.path,
-        ApiConstant.horoscopeRegisterEndpoint,
+        ApiConstant.horoscopeEditEndpoint,
         request,
       );
-      debugPrint("Horoscope res : $request");
+      debugPrint("Horoscope res : $res");
 
       TLoaders.successSnackBar(title: "Success", message: res['message']);
 
       currentStep.value++;
     } catch (e) {
-      debugPrint("horoscopeFormSubmit - ${e}");
+      debugPrint("horoscopeFormSubmit - $e");
 
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
-        "Something went wrong in Horoscope Details submit, try again later",
+            "Something went wrong in Horoscope Details submit, try again later",
       );
     }
   }
@@ -794,24 +795,31 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
         return;
       }
       final request = {
+        "id": userId,
         "mobile": mobileController.text,
         "whatsapp": whatsappController.text,
         "alternate_mobile": alternateMobileController.text,
         "email": emailController.text,
         "address": addressController.text,
-        "city": cityController.text,
-        "district": districtController,
-        "state": stateController,
+        "city": selectedCountry.value?.id,
+        "district": selectedDistrict.value?.id,
+        "state": selectedState.value?.id,
         "pincode": pincodeController.text,
       };
       print("Contact : $request");
-      Get.offAllNamed(TRoutes.bottomNav);
+      final response = await THttpHelper.post(
+        ApiConstant.contactEditEndpoint,
+        request,
+      );
+      debugPrint("Contact Response : $response");
+      TLoaders.successSnackBar(title: "Success", message: response['message']);
+      // Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
-      debugPrint("contactFormSubmit - ${e}");
+      debugPrint("contactFormSubmit - ${e.toString()}");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
-        "Something went wrong in Contact Details submit, try again later",
+            "Something went wrong in Contact Details submit, try again later",
       );
     }
   }
@@ -832,13 +840,8 @@ selectedReligion.value = religionDDList.firstWhereOrNull((e)=>e.id.toString() ==
     super.onClose();
   }
 
-  T? _findById<T>(
-      List<T> list,
-      String? id,
-      String Function(T) getId,
-      ) {
+  T? _findById<T>(List<T> list, String? id, String Function(T) getId) {
     if (id == null || id.isEmpty) return null;
     return list.firstWhereOrNull((e) => getId(e) == id);
   }
-
 }

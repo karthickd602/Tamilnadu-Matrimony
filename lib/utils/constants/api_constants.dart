@@ -1,8 +1,5 @@
-
 /* -- LIST OF Constants used in APIs -- */
 class ApiConstant {
-
-
   // static const String baseUrl = "https://www.jobsintimate.com/api";
 
   static const String sendOtp = "send_otp";
@@ -18,6 +15,13 @@ class ApiConstant {
   static const String familyRegisterEndpoint = "family_details";
   static const String horoscopeRegisterEndpoint = "horoscope_details";
   static const String contactRegisterEndpoint = "contact_details";
+
+  /// Edit Profile
+  static const String basicEditEndpoint = "basic_details_edit";
+  static const String familyEditEndpoint = "family_details_edit";
+  static const String horoscopeEditEndpoint = "horos_details_edit";
+  static const String contactEditEndpoint = "contact_details_edit";
+
   static const String dashboardListEndPoint = "dashboard";
   static const String customerProfilePage = "get_user_data";
   static const String likeProfileEndPoint = "liked_profile";
@@ -33,5 +37,4 @@ class ApiConstant {
   static const String updateUserPhotoEndpoint = "profile_upload";
   static const String updateVerifyDocumentEndpoint = "verify_profile";
   static const String deleteProfileEndpoint = "del_profile";
-
 }

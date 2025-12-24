@@ -37,10 +37,10 @@ class TImagePickerHelper {
    * ================================================================ */
 
   static Future<File?> _pickAndProcessImage(
-      BuildContext context, {
-        required CropType cropType,
-        required bool allowPdf,
-      }) async {
+    BuildContext context, {
+    required CropType cropType,
+    required bool allowPdf,
+  }) async {
     final PickedFileResult? picked = await _showPickerSheet(
       context,
       allowPdf: allowPdf,
@@ -76,9 +76,9 @@ class TImagePickerHelper {
    * ================================================================ */
 
   static Future<PickedFileResult?> _showPickerSheet(
-      BuildContext context, {
-        required bool allowPdf,
-      }) {
+    BuildContext context, {
+    required bool allowPdf,
+  }) {
     return Get.bottomSheet<PickedFileResult>(
       SafeArea(
         child: Container(
@@ -94,6 +94,8 @@ class TImagePickerHelper {
                 title: const Text("Camera"),
                 onTap: () async {
                   final picked = await _pickImage(ImageSource.camera);
+                  if (Get.isSnackbarOpen) Get.closeCurrentSnackbar();
+
                   Get.back(
                     result: picked == null
                         ? null
@@ -122,9 +124,7 @@ class TImagePickerHelper {
                   onTap: () async {
                     final pdf = await _pickPdf();
                     Get.back(
-                      result: pdf == null
-                          ? null
-                          : PickedFileResult.pdf(pdf),
+                      result: pdf == null ? null : PickedFileResult.pdf(pdf),
                     );
                   },
                 ),
@@ -140,10 +140,7 @@ class TImagePickerHelper {
    * ================================================================ */
 
   static Future<File?> _pickImage(ImageSource source) async {
-    final picked = await _picker.pickImage(
-      source: source,
-      imageQuality: 100,
-    );
+    final picked = await _picker.pickImage(source: source, imageQuality: 100);
     return picked == null ? null : File(picked.path);
   }
 
@@ -173,13 +170,15 @@ class TImagePickerHelper {
           : null,
       uiSettings: [
         AndroidUiSettings(
-          toolbarTitle:
-          type == CropType.profile ? 'Crop Profile Photo' : 'Crop ID Card',
+          toolbarTitle: type == CropType.profile
+              ? 'Crop Profile Photo'
+              : 'Crop ID Card',
           lockAspectRatio: type == CropType.profile,
         ),
         IOSUiSettings(
-          title:
-          type == CropType.profile ? 'Crop Profile Photo' : 'Crop ID Card',
+          title: type == CropType.profile
+              ? 'Crop Profile Photo'
+              : 'Crop ID Card',
           aspectRatioLockEnabled: type == CropType.profile,
         ),
       ],

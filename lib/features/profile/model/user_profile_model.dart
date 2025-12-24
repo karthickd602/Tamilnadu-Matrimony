@@ -9,12 +9,16 @@ class FetchUserProfileModel {
   final String? dob;
   final String? complexion;
   final String? height;
+  final int? heightId;
 
   /// EDUCATION & WORK
   final String? educationId;
   final String? educationDetails;
   final String? occupationId;
   final String? occupation;
+  final String? occupationDetails;
+  final int? annualIncome;
+  final String? workplace;
 
   /// RELIGION
   final String? religionId;
@@ -33,6 +37,9 @@ class FetchUserProfileModel {
   final String? noOfBrothers;
   final String? noOfSisters;
   final String? irupidam;
+  final String? childrenLivingStatus;
+  final String? nbm;
+  final String? nsm;
 
   /// LOCATION
   final String? countryId;
@@ -77,10 +84,14 @@ class FetchUserProfileModel {
     this.dob,
     this.complexion,
     this.height,
+    this.heightId,
     this.educationId,
     this.educationDetails,
     this.occupationId,
     this.occupation,
+    this.occupationDetails,
+    this.annualIncome,
+    this.workplace,
     this.religionId,
     this.religion,
     this.casteId,
@@ -95,6 +106,9 @@ class FetchUserProfileModel {
     this.noOfBrothers,
     this.noOfSisters,
     this.irupidam,
+    this.childrenLivingStatus,
+    this.nbm,
+    this.nsm,
     this.countryId,
     this.country,
     this.stateId,
@@ -120,26 +134,28 @@ class FetchUserProfileModel {
     this.speCases,
   });
 
-  /// EMPTY FACTORY (SAFE DEFAULT)
   factory FetchUserProfileModel.empty() => FetchUserProfileModel(id: 0);
 
-  /// JSON → MODEL
   factory FetchUserProfileModel.fromJson(Map<String, dynamic> json) {
     return FetchUserProfileModel(
       id: json['ID'],
       matriId: json['MatriID'],
       name: json['Name'],
-      age: json['Age'],
+      age: json['Age']?.toString(),
       gender: json['Gender'],
       maritalStatus: json['Maritalstatus'],
       dob: json['DOB'],
       complexion: json['Complexion'],
       height: json['Height'],
+      heightId: json['HeightID'],
 
       educationId: json['Education'],
       educationDetails: json['EducationDetails'],
       occupationId: json['OccupationID'],
       occupation: json['Occupation'],
+      occupationDetails: json['Occupationdetails'],
+      annualIncome: json['Annualincome'],
+      workplace: json['workplace'],
 
       religionId: json['ReligionID'],
       religion: json['Religion'],
@@ -156,6 +172,9 @@ class FetchUserProfileModel {
       noOfBrothers: json['noofbrothers'],
       noOfSisters: json['noofsisters'],
       irupidam: json['irupidam'],
+      childrenLivingStatus: json['childrenlivingstatus'],
+      nbm: json['nbm'],
+      nsm: json['nsm'],
 
       countryId: json['CountryID'],
       country: json['Country'],
@@ -187,7 +206,6 @@ class FetchUserProfileModel {
     );
   }
 
-  /// MODEL → JSON (for update)
   Map<String, dynamic> toJson() {
     return {
       "ID": id,
@@ -196,16 +214,14 @@ class FetchUserProfileModel {
       "DOB": dob,
       "Maritalstatus": maritalStatus,
       "Complexion": complexion,
-      "Height": height,
+      "HeightID": heightId,
       "Education": educationId,
       "EducationDetails": educationDetails,
-      "Occupation": occupationId,
-      "Religion": religionId,
-      "Caste": casteId,
-      "Subcaste": subCaste,
-      "CountryID": countryId,
-      "StateID": stateId,
-      "CityID": cityId,
+      "OccupationID": occupationId,
+      "Occupationdetails": occupationDetails,
+      "Annualincome": annualIncome,
+      "ReligionID": religionId,
+      "CasteID": casteId,
       "Address": address,
       "Postal": postal,
       "Phone": phone,

@@ -3,44 +3,38 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../constants/colors.dart';
-import '../helpers/helper_functions.dart';
 
 class TLoaders {
-  static void hideSnackBar() =>
-      ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
-
   static void customToast({required String message}) {
-    ScaffoldMessenger.of(Get.context!).showSnackBar(
-      SnackBar(
-        width: 500,
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
-        backgroundColor: Colors.transparent,
-        content: Container(
-          padding: const EdgeInsets.all(12.0),
-          margin: const EdgeInsets.symmetric(horizontal: 30),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: THelperFunctions.isDarkMode(Get.context!)
-                ? TColors.darkerGrey.withValues(alpha: 0.9)
-                : TColors.grey.withValues(alpha: 0.9),
-          ),
-          child: Center(
-              child: Text(message,
-                  style: Theme.of(Get.context!).textTheme.labelLarge)),
-        ),
-      ),
+    if (Get.isSnackbarOpen) {
+      Get.closeCurrentSnackbar();
+    }
+
+    Get.snackbar(
+      '',
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.black.withOpacity(0.85),
+      colorText: Colors.white,
+      margin: const EdgeInsets.all(20),
+      borderRadius: 30,
+      duration: const Duration(seconds: 3),
     );
   }
 
-  static void successSnackBar({required String title, message = '', int duration = 3}) {
+  static void successSnackBar({
+    required String title,
+    message = '',
+    int duration = 3,
+  }) {
+    final context = Get.context;
+    if (context == null) return;
+    if (Overlay.maybeOf(context) == null) return;
+
     Get.snackbar(
       title,
       message,
       maxWidth: 600,
-      isDismissible: true,
-      shouldIconPulse: true,
       colorText: Colors.white,
       backgroundColor: TColors.green,
       snackPosition: SnackPosition.TOP,
@@ -51,12 +45,12 @@ class TLoaders {
   }
 
   static void warningSnackBar({required String title, message = ''}) {
+    if (Get.isSnackbarOpen) Get.closeCurrentSnackbar();
+
     Get.snackbar(
       title,
       message,
       maxWidth: 600,
-      isDismissible: true,
-      shouldIconPulse: true,
       colorText: TColors.white,
       backgroundColor: Colors.orange,
       snackPosition: SnackPosition.TOP,
@@ -67,14 +61,14 @@ class TLoaders {
   }
 
   static void errorSnackBar({String title = 'Oh Snap', message = ''}) {
+    if (Get.isSnackbarOpen) Get.closeCurrentSnackbar();
+
     Get.snackbar(
       title,
       message,
       maxWidth: 600,
-      isDismissible: true,
-      shouldIconPulse: true,
       colorText: TColors.white,
-      backgroundColor: Colors.red.shade600,
+      backgroundColor: Colors.red,
       snackPosition: SnackPosition.TOP,
       duration: const Duration(seconds: 3),
       margin: const EdgeInsets.all(20),

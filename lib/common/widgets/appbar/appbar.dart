@@ -1,6 +1,4 @@
-
 import '../../../utils/constants/path_provider.dart';
-
 
 class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TAppBar({
@@ -9,7 +7,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isBackButtonNeed = false,
     this.bottom,
     this.actions,
-    this.backgroundColor
+    this.backgroundColor,
   });
 
   final String title;
@@ -27,25 +25,25 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: true,
       automaticallyImplyLeading: false,
-      backgroundColor: backgroundColor??TColors.scaffoldColor,
+      backgroundColor: backgroundColor ?? TColors.scaffoldColor,
       leading: isBackButtonNeed
           ? IconButton(
-        onPressed: () => Get.back(),
-        icon: Icon(
-          Icons.arrow_back_ios_new_rounded,
-          color: isDark ? Colors.white : Colors.black87,
-        ),
-        tooltip: "Back",
-      )
+              onPressed: () {
+                if (Get.isSnackbarOpen) Get.closeCurrentSnackbar();
+                Get.back();
+              },
+              icon: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: isDark ? Colors.white : Colors.black87,
+              ),
+              tooltip: "Back",
+            )
           : null,
       title: Column(
-        children: [
-          Text(title, style: textTheme.headlineMedium,maxLines: 2,),
-        ],
+        children: [Text(title, style: textTheme.headlineMedium, maxLines: 2)],
       ),
       actions: actions,
       bottom: bottom,
-
     );
   }
 
