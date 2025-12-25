@@ -1,10 +1,10 @@
 class TTexts {
-
   // -- Local Storage
   static const String userId = "USER_ID";
+  static const String appPages = "PAGE"; // - 0-  DASHBOARD, 1-> REGISTER
 
   // -- GLOBAL Keys
- static const String and = "and";
+  static const String and = "and";
   static const String skip = "skip";
   static const String done = "done";
   static const String submit = "submit";
@@ -27,7 +27,7 @@ class TTexts {
   static const String createAccount = "create_account";
   static const String orSignInWith = "or_sign_in_with";
   static const String orSignUpWith = "or_sign_up_with";
-  static  String iAgreeTo = "i_agree_to";
+  static String iAgreeTo = "i_agree_to";
   static const String privacyPolicy = "privacy_policy";
   static const String termsOfUse = "terms_of_use";
   static const String verificationCode = "verification_code";
@@ -50,7 +50,7 @@ class TTexts {
   static const String resend = "resend";
   static const String errorFullOtp = "error_full_otp";
   static const String otpEntered = "otp_entered";
-// -- REGISTRATION SECTIONS
+  // -- REGISTRATION SECTIONS
   static const String register = "register";
   static const String basicDetails = "basic_details";
   static const String familyDetails = "family_details";
@@ -121,7 +121,7 @@ class TTexts {
   static const String district = "district";
   static const String state = "state";
   static const String country = "country";
-    static const String pincode = "pincode";
+  static const String pincode = "pincode";
   static const String noCaste = "caste_no_bar";
 
   // Home Page
@@ -153,7 +153,6 @@ class TTexts {
   static const String highestQualification = "highest_qualification";
   static const String shareProfile = "share_profile";
 
-
   //Favorite page
   static const favorite = "favorite";
   static const liked = "liked";
@@ -171,7 +170,6 @@ class TTexts {
   static const String deleteProfile = "delete_profile";
   static const String logout = "logout";
 
-
   // Customer Details
   static const basicInfo = 'basic_info';
   static const educationOccupation = 'education_occupation';
@@ -188,13 +186,11 @@ class TTexts {
   static const siblings = 'siblings';
   static const partnerCaste = 'partner_caste';
 
-
   // -- Notification
   static const alerts = "alerts";
   static const notification = "notification";
   static const interestSent = "interestSent";
   static const interestReceived = "interestReceived";
-
 
   // Buttons
   static const horoscope = 'horoscope';

@@ -14,22 +14,79 @@ class SubscriptionController extends GetxController {
   // Selected plan index
   var status = "Active".obs;
   var package = "Basic".obs;
-  var issueDate = "18 Jul, 2025".obs;
+  var buyDate = "18 Jul, 2025".obs;
   var expiryDate = "18 Jul, 2026".obs;
   var daysLeft = "260 Days Left".obs;
+
   @override
-  void onInit() async{
+  void onInit() async {
     super.onInit();
     // run after first frame to ensure overlay/context is ready
     // WidgetsBinding.instance.addPostFrameCallback((_) {
-    await  fetchSubscriptionPlans();
+    await fetchSubscriptionPlans();
     // });
   }
 
+  Future<void> fetchUserSubscriptionPlan() async {
+    try {
+      final connected = await NetworkManager.instance.isConnected();
+      if (!connected) {
+        return;
+      }
+
+      TFullScreenLoader.popUpCircular();
+
+      final req = {"user_id": 95264};
+      final response = await THttpHelper.post(
+        ApiConstant.getSubscriptionUserPlan,
+        req,
+      );
+
+      package.value = response['data']["plan"]['plandisplayname'];
+      buyDate.value = THelperFunctions.formatDateString(
+        response['data']["order"]['orderdate'],
+      );
+      expiryDate.value = THelperFunctions.formatDateString(
+        response['data']["expiry_date"],
+      );
+
+      daysLeft.value =
+          "${calculateBalanceDays(DateTime.parse(response['data']["expiry_date"]))} Days Left";
+
+      debugPrint("getSubscriptionUserPlan response: $response");
+
+      TFullScreenLoader.stopLoading();
+      if (response['statusCode'] == 200) {
+        Get.toNamed(TRoutes.userSubscriptionPlan);
+      } else {
+        Get.toNamed(TRoutes.buySubscription);
+      }
+
+      //
+    } catch (e) {
+      TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(
+        title: "Error in fetching user subscription",
+        message: e.toString(),
+      );
+    } finally {
+      // TFullScreenLoader.stopLoading();
+    }
+  }
+
+  int calculateBalanceDays(DateTime expiryDate) {
+    final today = DateTime.now();
+    final expiry = DateTime(expiryDate.year, expiryDate.month, expiryDate.day);
+
+    final diff = expiry
+        .difference(DateTime(today.year, today.month, today.day))
+        .inDays;
+
+    return diff < 0 ? 0 : diff;
+  }
 
   Future<void> fetchSubscriptionPlans() async {
     try {
-
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
         return;

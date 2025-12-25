@@ -1,3 +1,4 @@
+import 'package:share_plus/share_plus.dart';
 import 'package:tamilnadu_matrimony/features/favorites/controller/unlocked_controller.dart';
 import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart';
 import 'package:tamilnadu_matrimony/features/home/screen/customer_view_page.dart';
@@ -29,7 +30,7 @@ class DashboardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    Get.put( FilterController(), permanent: true);
+    Get.put(FilterController(), permanent: true);
     fetchDashboardCustomerProfile(isInitial: true);
     scrollController.addListener(_scrollListener);
   }
@@ -223,14 +224,14 @@ class DashboardController extends GetxController {
         req,
       );
       debugPrint("unlockProfile response: $response");
-      if (response['statusCode'] == 204||response['statusCode']==403) {
+      if (response['statusCode'] == 204 || response['statusCode'] == 403) {
         TFullScreenLoader.stopLoading();
         TLoaders.warningSnackBar(
           title: "Send Interest Failed",
           message: response['message'],
         );
 
-        Get.toNamed(TRoutes.subscription);
+        Get.toNamed(TRoutes.buySubscription);
         return;
       }
 
@@ -239,16 +240,16 @@ class DashboardController extends GetxController {
           ? "false"
           : "true";
 
-
       /// 🔥 Also update the list page (CustomerCard)
       final index = dashboardCustomerList.indexWhere((e) => e.id == profileId);
 
       if (index != -1) {
         dashboardCustomerList[index].isUnlocked.value = unlockValue.value;
         dashboardCustomerList.refresh(); // 🔥 force rebuild UI
-      }      TFullScreenLoader.stopLoading();
+      }
+      TFullScreenLoader.stopLoading();
       await fetchCustomerPage(profileId);
-      Get.to(()=>CustomerDetailsView());
+      Get.to(() => CustomerDetailsView());
 
       await Get.put(UnlockedController()).fetchUnlockList();
 
@@ -256,7 +257,6 @@ class DashboardController extends GetxController {
         title: "Send Interest",
         message: response['message'],
       );
-
     } catch (e) {
       TFullScreenLoader.stopLoading();
       debugPrint("unlockProfile Error: $e");
@@ -296,6 +296,31 @@ class DashboardController extends GetxController {
       TFullScreenLoader.stopLoading();
 
       TLoaders.errorSnackBar(title: "Send Interest", message: e.toString());
+    }
+  }
+
+  Future<void> shareProfile(CustomerUserModel user) async {
+    try {
+      final profileUrl =
+          "https://tamilnadu-matrimony.com/profile/${user.id}"; // change if needed
+
+      final shareText =
+          '''
+🌸 ${TTexts.appName.tr} 🌸
+
+👤 Name: ${user.name ?? '-'}
+🎂 Age: ${user.age ?? '-'}
+📍 Location: ${user.city ?? '-'}, ${user.state ?? '-'}
+🎓 Education: ${user.educationDetails ?? '-'}
+💼 Occupation: ${user.occupation ?? '-'}
+
+View full profile here 👇
+$profileUrl
+''';
+
+      await Share.share(shareText, subject: "Matrimony Profile - ${user.name}");
+    } catch (e) {
+      TLoaders.errorSnackBar(title: "Share Failed", message: e.toString());
     }
   }
 }

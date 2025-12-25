@@ -21,14 +21,12 @@ class ContactDetails extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-
-
             /// --- Alternate Mobile ---
             TFormField(
               controller: controller.alternateMobileController,
               labelText: TTexts.alternateMobile.tr,
               icon: Icons.phone,
+              maxLength: 10,
               keyboardType: TextInputType.phone,
             ),
 
@@ -60,10 +58,8 @@ class ContactDetails extends StatelessWidget {
                 controller.selectedCountry.value = value;
                 controller.fetchStateDropdown();
               },
-              validator: (value) => TValidator.validateEmptyText(
-                TTexts.country.tr,
-                value?.name,
-              ),
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.country.tr, value?.name),
             ),
 
             SizedBox(height: TSizes.sm),
@@ -77,7 +73,7 @@ class ContactDetails extends StatelessWidget {
               onChanged: (value) {
                 if (value == null) return;
                 controller.selectedState.value = value;
-                controller.selectedDistrict.value=null;
+                controller.selectedDistrict.value = null;
                 controller.fetchDistrictDropdown();
               },
               validator: (value) =>
@@ -111,7 +107,7 @@ class ContactDetails extends StatelessWidget {
 
             ImagePickerBox(
               title: TTexts.profile.tr,
-              onPickImage: () => controller.selectHoroscopeImage(context),
+              onPickImage: () => controller.selectProfileImage(context),
               imagePath: controller.profileImagePath,
             ),
             Obx(

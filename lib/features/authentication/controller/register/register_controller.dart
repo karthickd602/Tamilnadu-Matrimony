@@ -4,12 +4,22 @@ import 'package:tamilnadu_matrimony/common/widgets/images/t_image_picker.dart';
 import 'package:tamilnadu_matrimony/features/authentication/model/dropdown_model.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
+import '../../../../utils/popups/full_screen_loader.dart';
+import '../../../profile/model/user_profile_model.dart';
+import '../../../profile/repository/profile_repository.dart';
+
 class RegistrationController extends GetxController {
   static RegistrationController get instance => Get.find();
   final storage = GetStorage();
 
-  String userId = "";
+  // String userId = "";
 
+  final userProfile = Rxn<FetchUserProfileModel>();
+
+  // final repo = ProfileRepository.instance;
+  final repo = Get.put(ProfileRepository());
+
+  // Total)
   // Total steps
   final totalSteps = 4;
 
@@ -43,7 +53,7 @@ class RegistrationController extends GetxController {
   final selectedOccupation = Rxn<OccupationDDModel>();
   final selectedReligion = Rxn<ReligionDDModel>();
   final selectedCaste = Rxn<CasteDDModel>();
-  final colorComplexion = ''.obs;
+  final selectedComplexion = ''.obs;
   final educationDetailsController = TextEditingController();
   final occupationDetailsController = TextEditingController();
   final incomeController = TextEditingController();
@@ -230,6 +240,140 @@ class RegistrationController extends GetxController {
     await fetchEducationDropdown();
     await fetchReligionDropdown();
     await fetchCountryDropdown();
+    await fetchUserProfile();
+  }
+
+  Future<void> fetchUserProfile() async {
+    try {
+      isLoading.value = true;
+      TFullScreenLoader.popUpCircular();
+
+      final userId = storage.read(TTexts.userId);
+      // final userId = "96166";
+      final response = await repo.fetchUserProfile(userId: userId);
+      debugPrint("Edit Profile Response : $response");
+      userProfile.value = FetchUserProfileModel.fromJson(response["data"]);
+
+      await _mapProfileToFields();
+    } catch (e) {
+      debugPrint("Profile Error : $e");
+      TLoaders.errorSnackBar(title: "Profile Error", message: e.toString());
+    } finally {
+      isLoading.value = false;
+      TFullScreenLoader.stopLoading();
+    }
+  }
+
+  Future<void> _mapProfileToFields() async {
+    final profile = userProfile.value;
+    if (profile == null) return;
+
+    /// ---------------- BASIC DETAILS ----------------
+
+    nameController.text = profile.name ?? '';
+    dobController.text = profile.dob ?? '';
+    heightController.text = profile.height ?? '';
+    maritalStatus.value = profile.maritalStatus ?? '';
+    selectedComplexion.value = profile.complexion ?? '';
+    educationDetailsController.text = profile.educationDetails ?? '';
+    subCasteController.text = profile.subCaste ?? '';
+    occupationDetailsController.text = profile.occupationDetails ?? '';
+    incomeController.text = profile.annualIncome.toString();
+
+    selectedGender.value = profile.gender == "1"
+        ? TTexts.male.tr
+        : TTexts.female.tr;
+
+    isDisablePerson.value = profile.speCases == "1" ? "Yes" : "No";
+
+    /// ---------------- DROPDOWNS (MATCH BY ID) ----------------
+    /// ---------------- DROPDOWNS ----------------
+
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    selectedEducation.value = educationDDList.firstWhereOrNull(
+      (e) => e.id.toString() == profile.educationId,
+    );
+    selectedOccupation.value = occupationDDList.firstWhereOrNull(
+      (e) => e.id.toString() == profile.occupationId,
+    );
+
+    /// ---------------- CASTE (DEPENDS ON RELIGION) ----------------
+    selectedReligion.value = religionDDList.firstWhereOrNull(
+      (e) => e.id.toString() == profile.religionId,
+    );
+    if (selectedReligion.value != null) {
+      await fetchCasteDropdown(religionId: selectedReligion.value!.id);
+
+      selectedCaste.value = casteDDList.firstWhereOrNull(
+        (e) => e.id.toString() == profile.casteId,
+      );
+
+      debugPrint("✅selected Caste ${selectedCaste.value}");
+    }
+
+    fatherNameController.text = profile.fatherName ?? '';
+    fatherOccupationController.text = profile.fathersOccupation ?? '';
+    motherNameController.text = profile.motherName ?? '';
+    motherOccupationController.text = profile.mothersOccupation ?? '';
+    familyStatusController.value = profile.familyStatus ?? '';
+    brothersController.text = profile.noOfBrothers ?? '';
+    sistersController.text = profile.noOfSisters ?? '';
+    marriedBrothersController.text = profile.nbm ?? '';
+    marriedSistersController.text = profile.nsm ?? '';
+    nativePlaceController.text = profile.irupidam ?? '';
+    selectedComplexion.value = profile.complexion ?? '';
+
+    /// ---------------- LOCATION ----------------
+
+    selectedCountry.value = countryList.firstWhereOrNull(
+      (e) => e.id.toString() == profile.countryId,
+    );
+
+    if (selectedCountry.value != null) {
+      await fetchStateDropdown();
+
+      selectedState.value = stateList.firstWhereOrNull(
+        (e) => e.id.toString() == profile.stateId,
+      );
+    }
+
+    if (selectedState.value != null) {
+      await fetchDistrictDropdown();
+
+      selectedDistrict.value = districtList.firstWhereOrNull(
+        (e) => e.id.toString() == profile.cityId,
+      );
+    }
+
+    /// ---------------- CONTACT ----------------
+
+    mobileController.text = profile.phone ?? '';
+    emailController.text = profile.confirmEmail ?? '';
+    cityController.text = profile.city ?? '';
+    stateController.value = profile.state ?? '';
+    districtController.value = profile.city ?? '';
+
+    /// ---------------- HOROSCOPE ----------------
+
+    selectedRaasi.value = profile.moonsign;
+    selectedStar.value = profile.star;
+    selectedLaknam.value = profile.inLaknam ?? '';
+    selectedDasa.value = profile.dasaType;
+    selectedDhosam.value = profile.thosam;
+    areYouHaveDhosam.value = profile.thoosamType == 'Yes'
+        ? TTexts.yes.tr
+        : TTexts.no.tr;
+    isDoshamHave.value = profile.thoosamType ?? '';
+    debugPrint(" dosham ${isDoshamHave.value}");
+
+    /// ---------------- PROFILE IMAGE ----------------
+
+    if (profile.photo1 != null && profile.photo1!.isNotEmpty) {
+      profileImagePath.value = profile.photo1!;
+    }
+
+    debugPrint("✅ Profile mapped to form successfully");
   }
 
   Future<void> fetchOccupationDropdown() async {
@@ -476,11 +620,12 @@ class RegistrationController extends GetxController {
         toFormat: 'yyyy-MM-dd',
       );
       final request = {
+        "ID": storage.read(TTexts.userId),
         "Name": nameController.text,
         "Gender": selectedGender.value == "Male" ? 1 : 2,
         "DOB": dob,
         "Height": heightController.text,
-        "Complexion": colorComplexion.value,
+        "Complexion": selectedComplexion.value,
         "Maritalstatus": maritalStatus.value,
         "childrenlivingstatus":
             int.tryParse(childLivingStatus.value.toString()) ?? 0,
@@ -504,9 +649,9 @@ class RegistrationController extends GetxController {
         request,
       );
 
-      userId = response['data']['ID'].toString();
+      // userId = response['data']['ID'].toString();
 
-      await storage.write(TTexts.userId, userId);
+      // await storage.write(TTexts.userId, userId);
 
       TLoaders.successSnackBar(title: "Success", message: response['message']);
 
@@ -539,7 +684,7 @@ class RegistrationController extends GetxController {
 
       isLoading.value = true;
       final request = {
-        "id": userId,
+        "id": storage.read(TTexts.userId),
         "Fathername": fatherNameController.text,
         "Fathersoccupation": fatherOccupationController.text,
         "Mothersname": motherNameController.text,
@@ -593,7 +738,7 @@ class RegistrationController extends GetxController {
         return;
       }
       final request = {
-        "id": userId,
+        "id": storage.read(TTexts.userId),
         // "id": "96142",
         'Moonsign': selectedRaasi.value,
         "Star": selectedStar.value,
@@ -635,18 +780,31 @@ class RegistrationController extends GetxController {
         return;
       }
       final request = {
-        "mobile": mobileController.text,
-        "whatsapp": whatsappController.text,
-        "alternate_mobile": alternateMobileController.text,
-        "email": emailController.text,
-        "address": addressController.text,
-        "city": cityController.text,
-        "district": districtController,
-        "state": stateController,
-        "pincode": pincodeController.text,
+        "id": storage.read(TTexts.userId),
+        "Phone": alternateMobileController.text,
+        "ConfirmEmail": emailController.text,
+        "Address": addressController.text,
+        "Country": selectedCountry.value?.id,
+        "State": selectedState.value?.id,
+        "city": selectedDistrict.value?.id,
+        "Postal": pincodeController.text,
+        "nocaste": noCasteChecked.value ? "Yes" : "No",
       };
       print("Contact : $request");
-      Get.offAllNamed(TRoutes.bottomNav);
+
+      // final response = await THttpHelper.post(
+      //   ApiConstant.contactRegisterEndpoint,
+      //   request,
+      // );
+
+      final res = await THttpHelper.multipartPost(
+        filePath: profileImageFile.value.path,
+        ApiConstant.contactRegisterEndpoint,
+        request,
+      );
+      debugPrint("Contact Register Response : $res");
+
+      // Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
       debugPrint("contactFormSubmit - ${e}");
       TLoaders.errorSnackBar(

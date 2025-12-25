@@ -10,6 +10,8 @@ class OtpController extends GetxController {
   late Timer _timer;
   final otpTextController = TextEditingController();
 
+  final storage = GetStorage();
+
   // final List<TextEditingController> otpControllers = List.generate(
   //   6,
   //   (_) => TextEditingController(),
@@ -34,20 +36,29 @@ class OtpController extends GetxController {
 
       TFullScreenLoader.popUpCircular();
 
-
       final loginController = LoginController.instance;
       final request = {
-        "mobile_no":loginController.mobileNoT.text,
-        "otp":otpTextController.text,
-
+        "mobile_no": loginController.mobileNoT.text,
+        "otp": otpTextController.text,
       };
       debugPrint("OTP Verify1 : $request");
-      // final response = await THttpHelper.post(ApiConstant.verifyOtp, request);
-      // debugPrint("OTP Verify : $response");
-      TFullScreenLoader.stopLoading();
-      Get.offAllNamed(TRoutes.register);
-    } catch (e) {
+      final response = await THttpHelper.post(ApiConstant.verifyOtp, request);
+      debugPrint("OTP Verify : $response");
+      if (response['statusCode'] == 200) {
+        storage.write(TTexts.userId, response['user_id'].toString());
+        storage.write(TTexts.appPages, response['app_page']);
+        TFullScreenLoader.stopLoading();
 
+        if (storage.read(TTexts.appPages) == 0) {
+          Get.offAllNamed(TRoutes.bottomNav);
+        } else {
+          Get.offAllNamed(TRoutes.register);
+        }
+      }
+      // TFullScreenLoader.stopLoading();
+
+      // Get.offAllNamed(TRoutes.register);
+    } catch (e) {
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: "Failed", message: e.toString());
     }

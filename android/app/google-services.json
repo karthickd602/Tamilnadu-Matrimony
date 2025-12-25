@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "131978041655",
+    "project_id": "tamilnadumatrimony-34a08",
+    "storage_bucket": "tamilnadumatrimony-34a08.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131978041655:android:de071000f68ad847f7e2b2",
+        "android_client_info": {
+          "package_name": "com.maac.tamilnadumatrimony"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg2oZg6Lu7T0F6t7sLWIAoBXHwyBQ0Jlw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

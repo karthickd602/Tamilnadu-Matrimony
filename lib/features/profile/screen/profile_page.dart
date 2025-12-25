@@ -7,10 +7,9 @@ import '../../../common/widgets/images/t_circular_image.dart';
 import '../../../common/widgets/images/t_image_picker.dart';
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/helpers/url_launcher.dart';
+import '../../subscription/controller/subscription_controller.dart';
 import '../controller/profile_controller.dart';
 import 'delete_profile/delete_profile_dialog.dart';
-import 'edit_profile/edit_profile_page.dart';
-import 'view_profile/view_profile_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -39,10 +38,6 @@ class ProfilePage extends StatelessWidget {
 
               final user = profileController.userProfile.value;
 
-              //
-              // if(profileController.isLoading.value){
-              //   return const Center(child: CircularProgressIndicator());
-              // }
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -117,7 +112,7 @@ class ProfilePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Obx(
-                            ()=> Text(
+                            () => Text(
                               "${user?.name ?? ''}, ${profileController.userProfile.value?.age ?? ''}",
                               style: textTheme.headlineMedium?.copyWith(
                                 fontWeight: FontWeight.w600,
@@ -199,7 +194,12 @@ class ProfilePage extends StatelessWidget {
                     context,
                     Icons.card_membership_outlined,
                     TTexts.membershipDetails.tr,
-                    () => Get.toNamed(TRoutes.subscription),
+                    () async {
+                      await Get.put(
+                        SubscriptionController(),
+                      ).fetchUserSubscriptionPlan();
+                      // Get.toNamed(TRoutes.buySubscription);
+                    },
                   ),
                   _buildMenuItem(
                     context,
@@ -225,7 +225,7 @@ class ProfilePage extends StatelessWidget {
                       DeleteReasonDialog.show(
                         title: "Delete Document",
                         description:
-                        "Please provide a reason for deleting this document. "
+                            "Please provide a reason for deleting this document. "
                             "This action cannot be undone.",
                         onConfirm: (reason) {
                           profileController.deleteProfile(reason: reason);

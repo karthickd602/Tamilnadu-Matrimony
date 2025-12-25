@@ -25,8 +25,10 @@ class CustomerDetailsView extends StatelessWidget {
         isBackButtonNeed: true,
         actions: [
           IconButton(
-            tooltip: "Share",
-            onPressed: () async {},
+            tooltip: "Share Profile",
+            onPressed: () {
+              controller.shareProfile(userModel);
+            },
             icon: const Icon(Icons.share_outlined),
             color: TColors.primary,
             iconSize: 26,
@@ -97,7 +99,9 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.cake,
                           "label": TTexts.dob.tr,
-                          "value": THelperFunctions.formatDateString(userModel.dob),
+                          "value": THelperFunctions.formatDateString(
+                            userModel.dob,
+                          ),
                         },
                       ],
                       primaryColor,
@@ -218,19 +222,22 @@ class CustomerDetailsView extends StatelessWidget {
                     ),
 
                     /// Horoscope Button
-
-                    if(userModel.horosApprove.toLowerCase() == "yes")
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          Get.to(
-                                  () => ImagePreviewPage( imageUrl: userModel.horosCheck, imageType: ImageType.network,));
-                        },
-                        icon: const Icon(Icons.remove_red_eye),
-                        label: Text(TTexts.horoscope.tr),
+                    if (userModel.horosApprove.toLowerCase() == "yes")
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Get.to(
+                              () => ImagePreviewPage(
+                                imageUrl: userModel.horosCheck,
+                                imageType: ImageType.network,
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.remove_red_eye),
+                          label: Text(TTexts.horoscope.tr),
+                        ),
                       ),
-                    ),
                     SizedBox(height: TSizes.spaceBtwSections),
                   ],
                 ),
@@ -282,16 +289,15 @@ class CustomerDetailsView extends StatelessWidget {
                 Row(
                   children: [
                     Obx(
-                      ()=> IconButton(
+                      () => IconButton(
                         tooltip: "Like",
                         onPressed: () {
                           controller.likeProfile(
                             profileId: userModel.id,
                             likedValue: userModel.liked,
                           );
-
                         },
-                        icon:controller.isLikeLoading.value
+                        icon: controller.isLikeLoading.value
                             ? CircularProgressIndicator(color: Colors.red)
                             : userModel.liked.value.toLowerCase() == "yes"
                             ? Icon(Icons.favorite, color: TColors.error)

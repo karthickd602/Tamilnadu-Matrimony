@@ -6,7 +6,8 @@ class TRoutes {
   static const otp = '/otp';
   static const bottomNav = '/bottomNav';
   static const filter = '/filter';
-  static const subscription = '/subscription';
+  static const buySubscription = '/subscription';
+  static const userSubscriptionPlan = '/userSubscriptionPlan';
   static const home = '/home';
   static const viewProfile = '/viewProfile';
   static const editProfile = '/editProfile';
