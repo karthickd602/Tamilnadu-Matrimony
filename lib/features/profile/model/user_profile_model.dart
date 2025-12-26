@@ -9,6 +9,7 @@ class FetchUserProfileModel {
   final String? dob;
   final String? complexion;
   final String? height;
+  final int? heightID;
   final int? heightId;
 
   /// EDUCATION & WORK
@@ -132,6 +133,7 @@ class FetchUserProfileModel {
     this.photo1Approve,
     this.verified,
     this.speCases,
+    this.heightID,
   });
 
   factory FetchUserProfileModel.empty() => FetchUserProfileModel(id: 0);

@@ -12,10 +12,9 @@ class ViewProfilePage extends StatelessWidget {
   final ProfileController controller = ProfileController.instance;
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFE8A3), // soft matrimony yellow
+      backgroundColor: const Color(0xFFFFE8A3),
       appBar: const TAppBar(title: "My Profile", isBackButtonNeed: true),
 
       bottomNavigationBar: SafeArea(
@@ -47,59 +46,123 @@ class ViewProfilePage extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final profile = controller.userProfile.value;
+          final FetchUserProfileModel? profile = controller.userProfile.value;
+
           if (profile == null) {
             return const Center(child: Text("No profile data"));
           }
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                _ProfileHeader(profile: profile, controller: controller),
-                const SizedBox(height: 18),
+          return RefreshIndicator(
+            onRefresh: () {
+              return controller.fetchUserProfile();
+            },
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  /// PROFILE HEADER
+                  _ProfileHeader(profile: profile, controller: controller),
+                  const SizedBox(height: 18),
 
-                _SectionCard(
-                  title: "Basic Information",
-                  children: [
-                    _info("Age", profile.age),
-                    _info("Height", profile.height),
-                    _info("Complexion", profile.complexion),
-                    _info("Marital Status", profile.maritalStatus),
-                    _info("Religion", profile.religion),
-                    _info("Caste", profile.caste),
-                    _info("Location", "${profile.city}, ${profile.state}"),
-                  ],
-                ),
+                  /// BASIC INFO
+                  _SectionCard(
+                    title: "Basic Information",
+                    children: [
+                      _info("Name", profile.name),
+                      _info("Matri ID", profile.matriId),
+                      _info("Age", profile.age),
+                      _info("Gender", profile.gender),
+                      _info("Date of Birth", profile.dob),
+                      _info("Height", profile.height),
+                      _info("Complexion", profile.complexion),
+                      _info("Marital Status", profile.maritalStatus),
+                      _info("Religion", profile.religion),
+                      _info("Caste", profile.caste),
+                      _info("Sub Caste", profile.subCaste),
+                    ],
+                  ),
 
-                _SectionCard(
-                  title: "Education & Profession",
-                  children: [
-                    _info("Education", profile.educationDetails),
-                    _info("Occupation", profile.occupation),
-                  ],
-                ),
+                  /// EDUCATION & PROFESSION
+                  _SectionCard(
+                    title: "Education & Profession",
+                    children: [
+                      _info("Education", profile.educationDetails),
+                      _info("Occupation", profile.occupation),
+                      _info("Occupation Details", profile.occupationDetails),
+                      _info(
+                        "Annual Income",
+                        profile.annualIncome != null
+                            ? "₹ ${profile.annualIncome}"
+                            : null,
+                      ),
+                      _info("Workplace", profile.workplace),
+                    ],
+                  ),
 
-                _SectionCard(
-                  title: "Family Details",
-                  children: [
-                    _info("Father Name", profile.fatherName),
-                    _info("Mother Name", profile.motherName),
-                    _info("Brothers", profile.noOfBrothers),
-                    _info("Sisters", profile.noOfSisters),
-                  ],
-                ),
+                  /// FAMILY
+                  _SectionCard(
+                    title: "Family Details",
+                    children: [
+                      _info("Father Name", profile.fatherName),
+                      _info("Father Occupation", profile.fathersOccupation),
+                      _info("Mother Name", profile.motherName),
+                      _info("Mother Occupation", profile.mothersOccupation),
+                      _info("Family Status", profile.familyStatus),
+                      _info("Brothers", profile.noOfBrothers),
+                      _info("Sisters", profile.noOfSisters),
+                      _info(
+                        "Children Living Status",
+                        profile.childrenLivingStatus,
+                      ),
+                    ],
+                  ),
 
-                _SectionCard(
-                  title: "Address",
-                  children: [
-                    Text(
-                      profile.address ?? "-",
-                      style: const TextStyle(fontSize: 14, height: 1.6),
-                    ),
-                  ],
-                ),
-              ],
+                  /// LOCATION
+                  _SectionCard(
+                    title: "Location",
+                    children: [
+                      _info("Country", profile.country),
+                      _info("State", profile.state),
+                      _info("City", profile.city),
+                      _info("Postal Code", profile.postal),
+                      const SizedBox(height: 6),
+                      Text(
+                        profile.address?.isNotEmpty == true
+                            ? profile.address!
+                            : "-",
+                        style: const TextStyle(fontSize: 14, height: 1.6),
+                      ),
+                    ],
+                  ),
+
+                  /// CONTACT
+                  _SectionCard(
+                    title: "Contact Information",
+                    children: [
+                      _info("Phone", profile.phone),
+                      _info("Mobile", profile.mobile),
+                      _info("Email", profile.confirmEmail),
+                    ],
+                  ),
+
+                  /// HOROSCOPE
+                  _SectionCard(
+                    title: "Horoscope Details",
+                    children: [
+                      _info("Moon Sign", profile.moonsign),
+                      _info("Star", profile.star),
+                      _info("Dasa Type", profile.dasaType),
+                      _info("Thosam", profile.thosam),
+                      _info("Thosam Type", profile.thoosamType),
+                      _info("Laknam", profile.inLaknam),
+                      _info(
+                        "Horoscope Status",
+                        profile.horosApprove == "Yes" ? "Approved" : "Pending",
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         }),
@@ -107,11 +170,12 @@ class ViewProfilePage extends StatelessWidget {
     );
   }
 
-  /// 🔹 Info row
+  /// COMMON INFO ROW
   static Widget _info(String label, String? value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             flex: 3,
@@ -126,7 +190,7 @@ class ViewProfilePage extends StatelessWidget {
           Expanded(
             flex: 5,
             child: Text(
-              value?.isNotEmpty == true ? value! : "-",
+              value?.trim().isNotEmpty == true ? value! : "-",
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
@@ -135,6 +199,8 @@ class ViewProfilePage extends StatelessWidget {
     );
   }
 }
+
+/// ================= PROFILE HEADER =================
 
 class _ProfileHeader extends StatelessWidget {
   final FetchUserProfileModel profile;
@@ -163,7 +229,7 @@ class _ProfileHeader extends StatelessWidget {
             onTap: () {
               Get.to(
                 () => ImagePreviewPage(
-                  imageUrl: controller.userProfile.value?.photo1 ?? '',
+                  imageUrl: profile.photo1 ?? '',
                   imageType: ImageType.network,
                 ),
               );
@@ -181,15 +247,6 @@ class _ProfileHeader extends StatelessWidget {
                       ? const Icon(Icons.person, size: 42)
                       : null,
                 ),
-                // Container(
-                //   padding: const EdgeInsets.all(6),
-                //   decoration: const BoxDecoration(
-                //     color: Colors.blue,
-                //     shape: BoxShape.circle,
-                //   ),
-                //   child: const Icon(Icons.camera_alt,
-                //       size: 16, color: Colors.white),
-                // ),
                 Positioned(
                   bottom: 0,
                   right: 0,
@@ -198,12 +255,10 @@ class _ProfileHeader extends StatelessWidget {
                       final file = await TImagePickerHelper.pickProfilePhoto(
                         context,
                       );
-
                       if (file != null) {
                         controller.updateProfileImage(file);
                       }
                     },
-                    borderRadius: BorderRadius.circular(30),
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
@@ -222,67 +277,6 @@ class _ProfileHeader extends StatelessWidget {
             ),
           ),
 
-          // Stack(
-          //   children: [
-          //     InkWell(
-          //       onTap: () => Get.to(
-          //             () => ImagePreviewPage(
-          //           imageUrl:
-          //           controller
-          //               .userProfile
-          //               .value
-          //               ?.photo1 ??
-          //               '',
-          //           imageType: ImageType.network,
-          //         ),
-          //       ),
-          //       borderRadius: BorderRadius.circular(100),
-          //       child: TCircularImage(
-          //         width: 44,
-          //         height: 44,
-          //         imageType:
-          //         controller.userProfile.value?.photo1 !=
-          //             null
-          //             ? ImageType.network
-          //             : ImageType.asset,
-          //         image:
-          //         controller.userProfile.value?.photo1 ??
-          //             TImages.defaultProfilePic,
-          //         fit: BoxFit.cover,
-          //         // borderRadius: 100,
-          //       ),
-          //     ),
-          //     Positioned(
-          //       bottom: 0,
-          //       right: 0,
-          //       child: InkWell(
-          //         onTap: () async {
-          //           final file =
-          //           await TImagePickerHelper.pickImageFromUser(
-          //             context,
-          //           );
-          //
-          //           if (file != null) {
-          //             controller.updateProfileImage(file);
-          //           }
-          //         },
-          //         borderRadius: BorderRadius.circular(30),
-          //         child: Container(
-          //           padding: const EdgeInsets.all(6),
-          //           decoration: BoxDecoration(
-          //             color: Colors.black.withOpacity(0.6),
-          //             shape: BoxShape.circle,
-          //           ),
-          //           child: const Icon(
-          //             Icons.camera_alt,
-          //             size: 18,
-          //             color: Colors.white,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
           const SizedBox(width: TSizes.md),
 
           Expanded(
@@ -302,7 +296,6 @@ class _ProfileHeader extends StatelessWidget {
                   style: const TextStyle(color: Colors.grey),
                 ),
                 const SizedBox(height: 10),
-
                 Row(
                   children: [
                     _statusChip(
@@ -345,6 +338,8 @@ class _ProfileHeader extends StatelessWidget {
   }
 }
 
+/// ================= SECTION CARD =================
+
 class _SectionCard extends StatelessWidget {
   final String title;
   final List<Widget> children;
@@ -354,6 +349,7 @@ class _SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       margin: const EdgeInsets.only(bottom: 18),
       decoration: BoxDecoration(
         color: Colors.white,

@@ -27,9 +27,7 @@ class TLoaders {
     message = '',
     int duration = 3,
   }) {
-    final context = Get.context;
-    if (context == null) return;
-    if (Overlay.maybeOf(context) == null) return;
+    if (Get.isSnackbarOpen) Get.closeCurrentSnackbar();
 
     Get.snackbar(
       title,

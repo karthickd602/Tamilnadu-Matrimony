@@ -23,15 +23,17 @@ class EditContactDetails extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-
-
             /// --- Alternate Mobile ---
             TFormField(
               controller: controller.alternateMobileController,
               labelText: TTexts.alternateMobile.tr,
               icon: Icons.phone,
+              maxLength: 10,
               keyboardType: TextInputType.phone,
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.mobileNo.tr,
+                value.toString(),
+              ),
             ),
 
             /// --- Email ---
@@ -40,6 +42,10 @@ class EditContactDetails extends StatelessWidget {
               labelText: TTexts.email.tr,
               icon: Icons.email_outlined,
               keyboardType: TextInputType.emailAddress,
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.email.tr,
+                value.toString(),
+              ),
             ),
 
             /// --- Address ---
@@ -48,6 +54,10 @@ class EditContactDetails extends StatelessWidget {
               labelText: TTexts.address.tr,
               icon: Icons.home_outlined,
               keyboardType: TextInputType.streetAddress,
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.address.tr,
+                value.toString(),
+              ),
             ),
 
             TSearchDropdownField<CountryModel>(
@@ -62,10 +72,8 @@ class EditContactDetails extends StatelessWidget {
                 controller.selectedCountry.value = value;
                 controller.fetchStateDropdown();
               },
-              validator: (value) => TValidator.validateEmptyText(
-                TTexts.country.tr,
-                value?.name,
-              ),
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.country.tr, value?.name),
             ),
 
             SizedBox(height: TSizes.sm),
@@ -79,7 +87,7 @@ class EditContactDetails extends StatelessWidget {
               onChanged: (value) {
                 if (value == null) return;
                 controller.selectedState.value = value;
-                controller.selectedDistrict.value=null;
+                controller.selectedDistrict.value = null;
                 controller.fetchDistrictDropdown();
               },
               validator: (value) =>
@@ -108,11 +116,21 @@ class EditContactDetails extends StatelessWidget {
               controller: controller.pincodeController,
               labelText: TTexts.pincode.tr,
               icon: Icons.local_post_office_outlined,
+              maxLength: 6,
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.pincode.tr,
+                value.toString(),
+              ),
               keyboardType: TextInputType.number,
             ),
 
+            ImagePickerBox(
+              title: TTexts.profile.tr,
+              onPickImage: () => controller.selectProfileImage(context),
+              imagePath: controller.profileImagePath,
+            ),
             Obx(
-                  () => Row(
+              () => Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Checkbox(

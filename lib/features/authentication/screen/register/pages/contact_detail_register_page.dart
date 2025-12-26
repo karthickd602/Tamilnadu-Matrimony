@@ -28,6 +28,10 @@ class ContactDetails extends StatelessWidget {
               icon: Icons.phone,
               maxLength: 10,
               keyboardType: TextInputType.phone,
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.mobileNo.tr,
+                value.toString(),
+              ),
             ),
 
             /// --- Email ---
@@ -36,6 +40,10 @@ class ContactDetails extends StatelessWidget {
               labelText: TTexts.email.tr,
               icon: Icons.email_outlined,
               keyboardType: TextInputType.emailAddress,
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.email.tr,
+                value.toString(),
+              ),
             ),
 
             /// --- Address ---
@@ -44,6 +52,10 @@ class ContactDetails extends StatelessWidget {
               labelText: TTexts.address.tr,
               icon: Icons.home_outlined,
               keyboardType: TextInputType.streetAddress,
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.address.tr,
+                value.toString(),
+              ),
             ),
 
             TSearchDropdownField<CountryModel>(
@@ -102,6 +114,11 @@ class ContactDetails extends StatelessWidget {
               controller: controller.pincodeController,
               labelText: TTexts.pincode.tr,
               icon: Icons.local_post_office_outlined,
+              maxLength: 6,
+              validator: (value) => TValidator.validateEmptyText(
+                TTexts.pincode.tr,
+                value.toString(),
+              ),
               keyboardType: TextInputType.number,
             ),
 

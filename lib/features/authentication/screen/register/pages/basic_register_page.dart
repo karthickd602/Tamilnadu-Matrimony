@@ -65,13 +65,30 @@ class StepBasicDetails extends StatelessWidget {
                 ),
               ),
 
-              TFormField(
-                labelText: TTexts.height.tr,
-                controller: controller.heightController,
-                hintText: "in cm",
-                icon: Icons.height,
+              // TFormField(
+              //   labelText: TTexts.height.tr,
+              //   controller: controller.heightController,
+              //   hintText: "in cm",
+              //   icon: Icons.height,
+              // ),
+              TSearchDropdownField<HeightOption>(
+                label: TTexts.height.tr,
+                showSearchBox: false,
+                items: controller.heightList,
+                prefixIcon: Icons.color_lens_outlined,
+                selectedItem: controller.selectedHeight.value,
+                itemAsString: (item) => item.label.toString(),
+                compareFn: (a, b) => a.label == b.label,
+                onChanged: (value) {
+                  if (value == null) return;
+                  controller.selectedHeight.value = value;
+                },
+                validator: (value) => TValidator.validateEmptyText(
+                  TTexts.height.tr,
+                  value.toString(),
+                ),
               ),
-
+              SizedBox(height: TSizes.sm),
               TSearchDropdownField<String>(
                 label: TTexts.complexion.tr,
                 showSearchBox: false,

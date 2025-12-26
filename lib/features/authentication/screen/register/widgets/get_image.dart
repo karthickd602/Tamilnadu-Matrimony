@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 class ImagePickerBox extends StatelessWidget {
   final String title;
-  final RxString imagePath;
+  final RxString imagePath; // can be URL or local path
   final VoidCallback onPickImage;
   final Color? primaryColor;
   final TextTheme? textTheme;
@@ -19,8 +19,10 @@ class ImagePickerBox extends StatelessWidget {
     this.textTheme,
   });
 
-  bool _isPdf(String path) =>
-      path.toLowerCase().endsWith('.pdf');
+  bool _isPdf(String path) => path.toLowerCase().endsWith('.pdf');
+
+  bool _isNetworkImage(String path) =>
+      path.startsWith('http://') || path.startsWith('https://');
 
   @override
   Widget build(BuildContext context) {
@@ -40,40 +42,66 @@ class ImagePickerBox extends StatelessWidget {
         const SizedBox(height: 8),
 
         /// Preview Container
-        Obx(
-              () => GestureDetector(
-            onTap: onPickImage,
+        Obx(() {
+          final path = imagePath.value;
+
+          return GestureDetector(
+            onTap: onPickImage, // always allow update
             child: Container(
               width: double.infinity,
-              height:  _isPdf(imagePath.value)
-                  ?80:180,
+              height: _isPdf(path) ? 80 : 180,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.grey.shade300),
               ),
-              child: imagePath.value.isEmpty
+              child: path.isEmpty
                   ? _buildPlaceholder(theme, color)
                   : Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: _isPdf(imagePath.value)
-                        ? _buildPdfPreview(imagePath.value)
-                        : Image.file(
-                      File(imagePath.value),
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.cover,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: _buildPreview(path),
+                        ),
+                        _buildRemoveButton(),
+                      ],
                     ),
-                  ),
-                  _buildRemoveButton(),
-                ],
-              ),
             ),
-          ),
-        ),
+          );
+        }),
       ],
+    );
+  }
+
+  /* ================================================================
+   * PREVIEW HANDLER
+   * ================================================================ */
+
+  Widget _buildPreview(String path) {
+    if (_isPdf(path)) {
+      return _buildPdfPreview(path);
+    }
+
+    if (_isNetworkImage(path)) {
+      return Image.network(
+        path,
+        width: double.infinity,
+        height: double.infinity,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) =>
+            const Center(child: Icon(Icons.broken_image)),
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
+    }
+
+    return Image.file(
+      File(path),
+      width: double.infinity,
+      height: double.infinity,
+      fit: BoxFit.cover,
     );
   }
 
@@ -89,9 +117,7 @@ class ImagePickerBox extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           "Tap to upload".tr,
-          style: theme.bodyMedium?.copyWith(
-            color: Colors.grey[600],
-          ),
+          style: theme.bodyMedium?.copyWith(color: Colors.grey[600]),
         ),
       ],
     );
@@ -107,20 +133,14 @@ class ImagePickerBox extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          const Icon(
-            Icons.picture_as_pdf,
-            size: 48,
-            color: Colors.red,
-          ),
+          const Icon(Icons.picture_as_pdf, size: 48, color: Colors.red),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               path.split('/').last,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -141,11 +161,7 @@ class ImagePickerBox extends StatelessWidget {
         backgroundColor: Colors.black54,
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: const Icon(
-            Icons.close,
-            size: 18,
-            color: Colors.white,
-          ),
+          icon: const Icon(Icons.close, size: 18, color: Colors.white),
           onPressed: () => imagePath.value = '',
         ),
       ),

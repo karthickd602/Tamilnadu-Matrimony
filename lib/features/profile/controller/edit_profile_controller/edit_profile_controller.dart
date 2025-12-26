@@ -10,11 +10,16 @@ import '../../repository/profile_repository.dart';
 
 class EditProfileController extends GetxController {
   static EditProfileController get instance => Get.find();
-
   final storage = GetStorage();
 
-  String userId = "96167";
+  // String userId = "";
 
+  final userProfile = Rxn<FetchUserProfileModel>();
+
+  // final repo = ProfileRepository.instance;
+  final repo = Get.put(ProfileRepository());
+
+  // Total)
   // Total steps
   final totalSteps = 4;
 
@@ -104,6 +109,47 @@ class EditProfileController extends GetxController {
   final districtList = <CountryModel>[].obs;
   final selectedDistrict = Rxn<CountryModel>();
   final genderList = [TTexts.male.tr, TTexts.female.tr].obs;
+  final selectedHeight = Rxn<HeightOption>();
+
+  final List<HeightOption> heightList = [
+    HeightOption(id: 0, label: "4ft (121 cm)"),
+    HeightOption(id: 1, label: "4ft 1in (124 cm)"),
+    HeightOption(id: 2, label: "4ft 2in (127 cm)"),
+    HeightOption(id: 3, label: "4ft 3in (129 cm)"),
+    HeightOption(id: 4, label: "4ft 4in (132 cm)"),
+    HeightOption(id: 5, label: "4ft 5in (134 cm)"),
+    HeightOption(id: 6, label: "4ft 6in (137 cm)"),
+    HeightOption(id: 7, label: "4ft 7in (139 cm)"),
+    HeightOption(id: 8, label: "4ft 8in (142 cm)"),
+    HeightOption(id: 9, label: "4ft 9in (144 cm)"),
+    HeightOption(id: 10, label: "4ft 10in (147 cm)"),
+    HeightOption(id: 11, label: "4ft 11in (149 cm)"),
+    HeightOption(id: 12, label: "5ft (152 cm)"),
+    HeightOption(id: 13, label: "5ft 1in (154 cm)"),
+    HeightOption(id: 14, label: "5ft 2in (157 cm)"),
+    HeightOption(id: 15, label: "5ft 3in (160 cm)"),
+    HeightOption(id: 16, label: "5ft 4in (162 cm)"),
+    HeightOption(id: 17, label: "5ft 5in (165 cm)"),
+    HeightOption(id: 18, label: "5ft 6in (167 cm)"),
+    HeightOption(id: 19, label: "5ft 7in (170 cm)"),
+    HeightOption(id: 20, label: "5ft 8in (172 cm)"),
+    HeightOption(id: 21, label: "5ft 9in (175 cm)"),
+    HeightOption(id: 22, label: "5ft 10in (177 cm)"),
+    HeightOption(id: 23, label: "5ft 11in (180 cm)"),
+    HeightOption(id: 24, label: "6ft (182 cm)"),
+    HeightOption(id: 25, label: "6ft 1in (185 cm)"),
+    HeightOption(id: 26, label: "6ft 2in (187 cm)"),
+    HeightOption(id: 27, label: "6ft 3in (190 cm)"),
+    HeightOption(id: 28, label: "6ft 4in (193 cm)"),
+    HeightOption(id: 29, label: "6ft 5in (195 cm)"),
+    HeightOption(id: 30, label: "6ft 6in (198 cm)"),
+    HeightOption(id: 31, label: "6ft 7in (200 cm)"),
+    HeightOption(id: 32, label: "6ft 8in (203 cm)"),
+    HeightOption(id: 33, label: "6ft 9in (205 cm)"),
+    HeightOption(id: 34, label: "6ft 10in (208 cm)"),
+    HeightOption(id: 35, label: "6ft 11in (210 cm)"),
+    HeightOption(id: 36, label: "7ft (213 cm)"),
+  ];
 
   /// --- Base Lists ---
   final raasiList = [
@@ -228,10 +274,6 @@ class EditProfileController extends GetxController {
     selectedDhosam.value = null;
   }
 
-  final userProfile = Rxn<FetchUserProfileModel>();
-
-  final repo = ProfileRepository.instance;
-
   @override
   void onInit() async {
     super.onInit();
@@ -247,7 +289,7 @@ class EditProfileController extends GetxController {
       isLoading.value = true;
       TFullScreenLoader.popUpCircular();
 
-      // final userId = storage.read(TTexts.userId);
+      final userId = storage.read(TTexts.userId);
       // final userId = "96166";
       final response = await repo.fetchUserProfile(userId: userId);
       debugPrint("Edit Profile Response : $response");
@@ -276,7 +318,7 @@ class EditProfileController extends GetxController {
     selectedComplexion.value = profile.complexion ?? '';
     educationDetailsController.text = profile.educationDetails ?? '';
     subCasteController.text = profile.subCaste ?? '';
-    occupationDetailsController.text = profile.occupationDetails ?? '';
+    occupationDetailsController.text = profile.workplace ?? '';
     incomeController.text = profile.annualIncome.toString();
 
     selectedGender.value = profile.gender == "1"
@@ -322,11 +364,16 @@ class EditProfileController extends GetxController {
     marriedSistersController.text = profile.nsm ?? '';
     nativePlaceController.text = profile.irupidam ?? '';
     selectedComplexion.value = profile.complexion ?? '';
+    occupationDetailsController.text = profile.occupationDetails ?? '';
 
     /// ---------------- LOCATION ----------------
 
     selectedCountry.value = countryList.firstWhereOrNull(
       (e) => e.id.toString() == profile.countryId,
+    );
+
+    selectedHeight.value = heightList.firstWhereOrNull(
+      (e) => e.id.toString() == profile.heightID,
     );
 
     if (selectedCountry.value != null) {
@@ -347,11 +394,17 @@ class EditProfileController extends GetxController {
 
     /// ---------------- CONTACT ----------------
 
-    mobileController.text = profile.phone ?? '';
+    mobileController.text = profile.phone ?? profile.mobile ?? '';
     emailController.text = profile.confirmEmail ?? '';
     cityController.text = profile.city ?? '';
     stateController.value = profile.state ?? '';
     districtController.value = profile.city ?? '';
+    pincodeController.text = profile.postal ?? '';
+    addressController.text = profile.address ?? '';
+    isDisablePerson.value = profile.speCases == "yes" ? "Yes" : "No";
+    noCasteChecked.value = profile.noCaste.toString().toLowerCase() == "yes"
+        ? true
+        : false;
 
     /// ---------------- HOROSCOPE ----------------
 
@@ -368,29 +421,11 @@ class EditProfileController extends GetxController {
 
     /// ---------------- PROFILE IMAGE ----------------
 
-    if (profile.photo1 != null && profile.photo1!.isNotEmpty) {
-      profileImagePath.value = profile.photo1!;
-    }
+    // if (profile.photo1 != null && profile.photo1!.isNotEmpty) {
+    //   profileImagePath.value = profile.photo1!;
+    // }
 
     debugPrint("✅ Profile mapped to form successfully");
-  }
-
-  Future<void> fetchBasicDetails() async {
-    nameController.text = userProfile.value?.name ?? '';
-    dobController.text = userProfile.value?.dob ?? '';
-    heightController.text = userProfile.value?.height ?? '';
-    maritalStatus.value = userProfile.value?.maritalStatus ?? '';
-    // childLivingStatus.value = userProfile.value?.childLivingStatus ?? '';
-    // noOfChildren.value = userProfile.value?.noOfChildren ?? '';
-    selectedComplexion.value = userProfile.value?.complexion ?? '';
-    educationDetailsController.text = userProfile.value?.educationDetails ?? '';
-    // occupationDetailsController.text =
-    //     userProfile.value?.occupationDetails ?? '';
-    // incomeController.text = userProfile.value?.annualIncome ?? '';
-    // subCasteController.text = userProfile.value?.subCaste ?? '';
-    // isDisablePerson.value = userProfile.value?.isDisablePerson ?? '';
-
-    // You can
   }
 
   Future<void> fetchOccupationDropdown() async {
@@ -492,7 +527,7 @@ class EditProfileController extends GetxController {
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
       //
-      debugPrint("Caste Response:${response.toString()}");
+      debugPrint("occupation Response:${response.toString()}");
       if (response['statusCode'] == 200) {
         casteDDList.value = (response['data'] as List)
             .map((e) => CasteDDModel.fromJson(e))
@@ -637,11 +672,11 @@ class EditProfileController extends GetxController {
         toFormat: 'yyyy-MM-dd',
       );
       final request = {
-        "id": userId,
+        "ID": storage.read(TTexts.userId),
         "Name": nameController.text,
         "Gender": selectedGender.value == "Male" ? 1 : 2,
         "DOB": dob,
-        "Height": heightController.text,
+        "Height": selectedHeight.value?.id,
         "Complexion": selectedComplexion.value,
         "Maritalstatus": maritalStatus.value,
         "childrenlivingstatus":
@@ -657,16 +692,18 @@ class EditProfileController extends GetxController {
         "spe_cases": isDisablePerson.value.toString() == "Yes" ? 1 : 0,
       };
 
-      debugPrint("Basic Register : $request");
+      debugPrint(
+        "Basic Register ${ApiConstant.basicRegisterEndpoint}: $request",
+      );
 
       final response = await THttpHelper.post(
-        ApiConstant.basicEditEndpoint,
+        ApiConstant.basicRegisterEndpoint,
         request,
       );
 
-      userId = response['data']['ID'].toString();
+      // userId = response['data']['ID'].toString();
 
-      await storage.write(TTexts.userId, userId);
+      // await storage.write(TTexts.userId, userId);
 
       TLoaders.successSnackBar(title: "Success", message: response['message']);
 
@@ -699,7 +736,7 @@ class EditProfileController extends GetxController {
 
       isLoading.value = true;
       final request = {
-        "id": userId,
+        "id": storage.read(TTexts.userId),
         "Fathername": fatherNameController.text,
         "Fathersoccupation": fatherOccupationController.text,
         "Mothersname": motherNameController.text,
@@ -712,14 +749,14 @@ class EditProfileController extends GetxController {
         "irupidam": nativePlaceController.text,
         "property": "",
       };
-      debugPrint('Family Edit reqq $request');
+      debugPrint('Family Register reqq $request');
 
       final response = await THttpHelper.post(
-        ApiConstant.familyEditEndpoint,
+        ApiConstant.familyRegisterEndpoint,
         request,
       );
 
-      debugPrint("Family Edit Response : $response");
+      debugPrint("Family Register Response : $response");
       TLoaders.successSnackBar(title: "Success", message: response['message']);
       currentStep.value++;
     } catch (e) {
@@ -753,7 +790,7 @@ class EditProfileController extends GetxController {
         return;
       }
       final request = {
-        "id": userId,
+        "id": storage.read(TTexts.userId),
         // "id": "96142",
         'Moonsign': selectedRaasi.value,
         "Star": selectedStar.value,
@@ -766,16 +803,16 @@ class EditProfileController extends GetxController {
 
       final res = await THttpHelper.multipartPost(
         filePath: horoscopeImageFile.value.path,
-        ApiConstant.horoscopeEditEndpoint,
+        ApiConstant.horoscopeRegisterEndpoint,
         request,
       );
-      debugPrint("Horoscope res : $res");
+      debugPrint("Horoscope res : $request");
 
       TLoaders.successSnackBar(title: "Success", message: res['message']);
 
       currentStep.value++;
     } catch (e) {
-      debugPrint("horoscopeFormSubmit - $e");
+      debugPrint("horoscopeFormSubmit - ${e}");
 
       TLoaders.errorSnackBar(
         title: "Failed",
@@ -795,27 +832,37 @@ class EditProfileController extends GetxController {
         return;
       }
       final request = {
-        "id": userId,
-        "mobile": mobileController.text,
-        "whatsapp": whatsappController.text,
-        "alternate_mobile": alternateMobileController.text,
-        "email": emailController.text,
-        "address": addressController.text,
-        "city": selectedCountry.value?.id,
-        "district": selectedDistrict.value?.id,
-        "state": selectedState.value?.id,
-        "pincode": pincodeController.text,
+        "id": storage.read(TTexts.userId),
+        "Phone": alternateMobileController.text,
+        "ConfirmEmail": emailController.text,
+        "Address": addressController.text,
+        "Country": selectedCountry.value?.id,
+        "State": selectedState.value?.id,
+        "City": selectedDistrict.value?.id,
+        "Postal": pincodeController.text,
+        "nocaste": noCasteChecked.value ? "Yes" : "No",
       };
+
       print("Contact : $request");
-      final response = await THttpHelper.post(
-        ApiConstant.contactEditEndpoint,
+
+      // final response = await THttpHelper.post(
+      //   ApiConstant.contactRegisterEndpoint,
+      //   request,
+      // );
+
+      final response = await THttpHelper.multipartPost(
+        filePath: profileImageFile.value.path,
+        ApiConstant.contactRegisterEndpoint,
         request,
+        fileFieldName: "photo1",
       );
-      debugPrint("Contact Response : $response");
+      debugPrint("Contact Register Response : $response");
+
       TLoaders.successSnackBar(title: "Success", message: response['message']);
-      // Get.offAllNamed(TRoutes.bottomNav);
+      storage.write(TTexts.appPages, 0);
+      Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
-      debugPrint("contactFormSubmit - ${e.toString()}");
+      debugPrint("contactFormSubmit - ${e}");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
@@ -839,9 +886,11 @@ class EditProfileController extends GetxController {
     subCasteController.dispose();
     super.onClose();
   }
+}
 
-  T? _findById<T>(List<T> list, String? id, String Function(T) getId) {
-    if (id == null || id.isEmpty) return null;
-    return list.firstWhereOrNull((e) => getId(e) == id);
-  }
+class HeightOption {
+  final int id;
+  final String label;
+
+  HeightOption({required this.id, required this.label});
 }

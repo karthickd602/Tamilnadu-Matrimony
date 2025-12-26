@@ -65,13 +65,30 @@ class EditBasicDetails extends StatelessWidget {
                 ),
               ),
 
-              TFormField(
-                labelText: TTexts.height.tr,
-                controller: controller.heightController,
-                hintText: "in cm",
-                icon: Icons.height,
+              // TFormField(
+              //   labelText: TTexts.height.tr,
+              //   controller: controller.heightController,
+              //   hintText: "in cm",
+              //   icon: Icons.height,
+              // ),
+              TSearchDropdownField<HeightOption>(
+                label: TTexts.height.tr,
+                showSearchBox: false,
+                items: controller.heightList,
+                prefixIcon: Icons.color_lens_outlined,
+                selectedItem: controller.selectedHeight.value,
+                itemAsString: (item) => item.label.toString(),
+                compareFn: (a, b) => a.label == b.label,
+                onChanged: (value) {
+                  if (value == null) return;
+                  controller.selectedHeight.value = value;
+                },
+                validator: (value) => TValidator.validateEmptyText(
+                  TTexts.height.tr,
+                  value.toString(),
+                ),
               ),
-
+              SizedBox(height: TSizes.sm),
               TSearchDropdownField<String>(
                 label: TTexts.complexion.tr,
                 showSearchBox: false,
@@ -192,7 +209,7 @@ class EditBasicDetails extends StatelessWidget {
                   controller.selectedEducation.value = value;
                 },
                 validator: (value) => TValidator.validateEmptyText(
-                  TTexts.occupationDetails.tr,
+                  TTexts.highEducation.tr,
                   value?.name,
                 ),
               ),
@@ -226,9 +243,9 @@ class EditBasicDetails extends StatelessWidget {
                 labelText: TTexts.occupationDetails.tr,
                 controller: controller.occupationDetailsController,
                 icon: IconlyLight.bag_2,
-                validator: (v) => TValidator.validateEmptyText(
-                  TTexts.occupationDetails.tr,
-                  v.toString(),
+                validator: (value) => TValidator.validateEmptyText(
+                  TTexts.occupationDetails,
+                  value.toString(),
                 ),
               ),
               TFormField(
@@ -265,7 +282,9 @@ class EditBasicDetails extends StatelessWidget {
                     : SizedBox(height: TSizes.sm),
               ),
               Obx(
-                () => controller.selectedReligion.value == null
+                () =>
+                    (controller.selectedReligion.value == null ||
+                        controller.selectedReligion.value?.id != 1)
                     ? SizedBox()
                     : TSearchDropdownField<CasteDDModel>(
                         prefixIcon: IconlyLight.user,

@@ -123,9 +123,11 @@ class THttpHelper {
     }
     if (response.statusCode == 404 ||
         response.statusCode == 400 ||
-        response.statusCode == 409) {
+        response.statusCode == 409 ||
+        response.statusCode == 302) {
       final message = json.decode(response.body)['message'];
       debugPrint("StatusCode: ${response.statusCode}");
+      debugPrint("StatusCode: ${response.body}");
 
       throw message;
     } else {
