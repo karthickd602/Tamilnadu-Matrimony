@@ -4,7 +4,6 @@ import '../../../../common/widgets/dropdown/dropdown_with_search.dart';
 import '../../../../utils/constants/path_provider.dart';
 import '../../../../utils/validators/validation.dart';
 import '../../../authentication/model/dropdown_model.dart';
-import '../../../authentication/screen/register/widgets/get_image.dart';
 
 class EditContactDetails extends StatelessWidget {
   const EditContactDetails({super.key});
@@ -124,11 +123,6 @@ class EditContactDetails extends StatelessWidget {
               keyboardType: TextInputType.number,
             ),
 
-            ImagePickerBox(
-              title: TTexts.profile.tr,
-              onPickImage: () => controller.selectProfileImage(context),
-              imagePath: controller.profileImagePath,
-            ),
             Obx(
               () => Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

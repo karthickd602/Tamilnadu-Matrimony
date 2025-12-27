@@ -118,6 +118,7 @@ class THttpHelper {
   static Map<String, dynamic> _handleResponse(http.Response response) {
     if (response.statusCode >= 200) {
       debugPrint("StatusCode: ${response.statusCode}");
+      // debugPrint("StatusCode: ${response.body}");
 
       return json.decode(response.body);
     }
@@ -127,7 +128,7 @@ class THttpHelper {
         response.statusCode == 302) {
       final message = json.decode(response.body)['message'];
       debugPrint("StatusCode: ${response.statusCode}");
-      debugPrint("StatusCode: ${response.body}");
+      // debugPrint("StatusCode: ${response.body}");
 
       throw message;
     } else {

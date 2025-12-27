@@ -10,7 +10,6 @@ class FetchUserProfileModel {
   final String? complexion;
   final String? height;
   final int? heightID;
-  final int? heightId;
 
   /// EDUCATION & WORK
   final String? educationId;
@@ -85,7 +84,7 @@ class FetchUserProfileModel {
     this.dob,
     this.complexion,
     this.height,
-    this.heightId,
+    this.heightID,
     this.educationId,
     this.educationDetails,
     this.occupationId,
@@ -133,7 +132,6 @@ class FetchUserProfileModel {
     this.photo1Approve,
     this.verified,
     this.speCases,
-    this.heightID,
   });
 
   factory FetchUserProfileModel.empty() => FetchUserProfileModel(id: 0);
@@ -149,7 +147,7 @@ class FetchUserProfileModel {
       dob: json['DOB'],
       complexion: json['Complexion'],
       height: json['Height'],
-      heightId: json['HeightID'],
+      heightID: json['HeightID'],
 
       educationId: json['Education'],
       educationDetails: json['EducationDetails'],
@@ -216,7 +214,7 @@ class FetchUserProfileModel {
       "DOB": dob,
       "Maritalstatus": maritalStatus,
       "Complexion": complexion,
-      "HeightID": heightId,
+      "HeightID": heightID,
       "Education": educationId,
       "EducationDetails": educationDetails,
       "OccupationID": occupationId,

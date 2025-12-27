@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
             children: [
               Expanded(
                 child: Obx(() {
-                  if(controller.isFirstLoad.value){
+                  if (controller.isFirstLoad.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (controller.dashboardCustomerList.isEmpty) {
@@ -57,30 +57,25 @@ class HomePage extends StatelessWidget {
                     );
                   }
                   return ListView.separated(
-                          controller: controller.scrollController,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount:
-                              controller.dashboardCustomerList.length +
-                              (controller.hasMore.value ? 1 : 0),
-                          separatorBuilder: (_, i) =>
-                              const SizedBox(height: 20),
-                          itemBuilder: (context, index) {
-                            if (index ==
-                                controller.dashboardCustomerList.length) {
-                              // Pagination Loader
-                              return const Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            }
-
-                            final customer =
-                                controller.dashboardCustomerList[index];
-                            return CustomerCard(customerProfile: customer);
-                          },
+                    controller: controller.scrollController,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount:
+                        controller.dashboardCustomerList.length +
+                        (controller.hasMore.value ? 1 : 0),
+                    separatorBuilder: (_, i) => const SizedBox(height: 20),
+                    itemBuilder: (context, index) {
+                      if (index == controller.dashboardCustomerList.length) {
+                        // Pagination Loader
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(child: CircularProgressIndicator()),
                         );
+                      }
+
+                      final customer = controller.dashboardCustomerList[index];
+                      return CustomerCard(customerProfile: customer);
+                    },
+                  );
                 }),
               ),
             ],

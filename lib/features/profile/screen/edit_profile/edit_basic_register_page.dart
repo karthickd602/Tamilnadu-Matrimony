@@ -65,12 +65,6 @@ class EditBasicDetails extends StatelessWidget {
                 ),
               ),
 
-              // TFormField(
-              //   labelText: TTexts.height.tr,
-              //   controller: controller.heightController,
-              //   hintText: "in cm",
-              //   icon: Icons.height,
-              // ),
               TSearchDropdownField<HeightOption>(
                 label: TTexts.height.tr,
                 showSearchBox: false,
@@ -110,10 +104,10 @@ class EditBasicDetails extends StatelessWidget {
                 label: TTexts.maritalStatus.tr,
                 showSearchBox: false,
                 items: [
-                  "திருமணம் ஆகாதவர்",
-                  " துணையை இழந்தவர்",
-                  "விவாகரத்து ஆனவர்",
-                  "பிரிந்து வாழ்பவர்",
+                  TTexts.unMarried.tr,
+                  TTexts.widowed.tr,
+                  TTexts.divorced.tr,
+                  TTexts.separated.tr,
                 ],
                 prefixIcon: Icons.join_inner_outlined,
                 selectedItem: controller.maritalStatus.value,
@@ -132,14 +126,14 @@ class EditBasicDetails extends StatelessWidget {
               ),
               Obx(
                 () =>
-                    (controller.maritalStatus.value == "திருமணம் ஆகாதவர்" ||
+                    (controller.maritalStatus.value == TTexts.unMarried.tr ||
                         controller.maritalStatus.value == '')
                     ? SizedBox()
                     : SizedBox(height: TSizes.sm),
               ),
               Obx(
                 () =>
-                    (controller.maritalStatus.value == "திருமணம் ஆகாதவர்" ||
+                    (controller.maritalStatus.value == TTexts.unMarried.tr ||
                         controller.maritalStatus.value == '')
                     ? SizedBox()
                     : TSearchDropdownField<String>(
@@ -166,7 +160,7 @@ class EditBasicDetails extends StatelessWidget {
               SizedBox(height: TSizes.sm),
               Obx(
                 () =>
-                    (controller.maritalStatus.value == "திருமணம் ஆகாதவர்" ||
+                    (controller.maritalStatus.value == TTexts.unMarried.tr ||
                         controller.noOfChildren.value == "0" ||
                         controller.noOfChildren.value == '')
                     ? SizedBox()
@@ -190,7 +184,7 @@ class EditBasicDetails extends StatelessWidget {
               ),
               Obx(
                 () =>
-                    (controller.maritalStatus.value == "திருமணம் ஆகாதவர்" ||
+                    (controller.maritalStatus.value == TTexts.unMarried.tr ||
                         controller.noOfChildren.value == "0" ||
                         controller.noOfChildren.value == '')
                     ? SizedBox()
@@ -244,7 +238,7 @@ class EditBasicDetails extends StatelessWidget {
                 controller: controller.occupationDetailsController,
                 icon: IconlyLight.bag_2,
                 validator: (value) => TValidator.validateEmptyText(
-                  TTexts.occupationDetails,
+                  TTexts.occupationDetails.tr,
                   value.toString(),
                 ),
               ),

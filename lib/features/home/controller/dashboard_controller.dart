@@ -120,10 +120,10 @@ class DashboardController extends GetxController {
 
       TFullScreenLoader.popUpCircular();
       final req = {
-        "view_user_id": profileId,
         "user_id": storage.read(TTexts.userId),
+        "view_user_id": profileId,
       };
-      // final req = {"id": 11622};
+      // final req = {"view_user_id": 11623, "user_id": 11622};
 
       debugPrint("fetchCustomerPage req: $req");
       final response = await THttpHelper.post(

@@ -310,17 +310,19 @@ class RegistrationController extends GetxController {
     if (profile == null) return;
 
     /// ---------------- BASIC DETAILS ----------------
+    String children = profile.childrenLivingStatus.toString();
+    List<String> childrenList = children.split('-');
+    noOfChildren.value = childrenList[0].trim();
+    childLivingStatus.value = childrenList[1].trim();
 
     nameController.text = profile.name ?? '';
     dobController.text = profile.dob ?? '';
-    heightController.text = profile.height ?? '';
+    // heightController.text = profile.height ?? '';
     maritalStatus.value = profile.maritalStatus ?? '';
     selectedComplexion.value = profile.complexion ?? '';
     educationDetailsController.text = profile.educationDetails ?? '';
     subCasteController.text = profile.subCaste ?? '';
-    occupationDetailsController.text = profile.workplace ?? '';
     incomeController.text = profile.annualIncome.toString();
-
     selectedGender.value = profile.gender == "1"
         ? TTexts.male.tr
         : TTexts.female.tr;
@@ -331,7 +333,10 @@ class RegistrationController extends GetxController {
     /// ---------------- DROPDOWNS ----------------
 
     await Future.delayed(const Duration(milliseconds: 100));
-
+    occupationDetailsController.text = profile.workplace ?? '';
+    debugPrint(
+      'occupation Details : ${profile.workplace}---${occupationDetailsController.text}',
+    );
     selectedEducation.value = educationDDList.firstWhereOrNull(
       (e) => e.id.toString() == profile.educationId,
     );
@@ -350,6 +355,9 @@ class RegistrationController extends GetxController {
         (e) => e.id.toString() == profile.casteId,
       );
 
+      selectedHeight.value = heightList.firstWhereOrNull(
+        (e) => e.id.toString() == profile.heightID.toString(),
+      );
       debugPrint("✅selected Caste ${selectedCaste.value}");
     }
 
@@ -364,7 +372,7 @@ class RegistrationController extends GetxController {
     marriedSistersController.text = profile.nsm ?? '';
     nativePlaceController.text = profile.irupidam ?? '';
     selectedComplexion.value = profile.complexion ?? '';
-    occupationDetailsController.text = profile.occupationDetails ?? '';
+    noOfChildren.value = profile.childrenLivingStatus.toString()[0] ?? '';
 
     /// ---------------- LOCATION ----------------
 
@@ -372,9 +380,12 @@ class RegistrationController extends GetxController {
       (e) => e.id.toString() == profile.countryId,
     );
 
-    selectedHeight.value = heightList.firstWhereOrNull(
-      (e) => e.id.toString() == profile.id,
-    );
+    // selectedHeight.value = heightList.firstWhereOrNull(
+    //   (e) => e.id.toString() == profile.heightID.toString(),
+    // );
+
+    // debugPrint(" height id : ${profile.heightID}");
+    // debugPrint("selected height id : ${selectedHeight.value?.id}");
 
     if (selectedCountry.value != null) {
       await fetchStateDropdown();
@@ -438,7 +449,7 @@ class RegistrationController extends GetxController {
         );
         return;
       }
-
+      TFullScreenLoader.popUpCircular();
       final response = await THttpHelper.get(ApiConstant.getOccupationDD);
       //
       debugPrint("occupation Response:${response.toString()}");
@@ -481,6 +492,8 @@ class RegistrationController extends GetxController {
         title: "Education Dropdown Failed",
         message: e.toString(),
       );
+    } finally {
+      TFullScreenLoader.stopLoading();
     }
   }
 
@@ -494,6 +507,7 @@ class RegistrationController extends GetxController {
         );
         return;
       }
+      TFullScreenLoader.popUpCircular();
 
       final response = await THttpHelper.get(ApiConstant.getReligionDD);
       //
@@ -510,6 +524,8 @@ class RegistrationController extends GetxController {
         title: "Religion Dropdown Failed",
         message: e.toString(),
       );
+    } finally {
+      TFullScreenLoader.stopLoading();
     }
   }
 
@@ -523,7 +539,7 @@ class RegistrationController extends GetxController {
         );
         return;
       }
-
+      TFullScreenLoader.popUpCircular();
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
       //
@@ -540,6 +556,8 @@ class RegistrationController extends GetxController {
         title: "Caste Dropdown Issue",
         message: e.toString(),
       );
+    } finally {
+      TFullScreenLoader.stopLoading();
     }
   }
 
@@ -678,9 +696,17 @@ class RegistrationController extends GetxController {
         "DOB": dob,
         "Height": selectedHeight.value?.id,
         "Complexion": selectedComplexion.value,
-        "Maritalstatus": maritalStatus.value,
+        "Maritalstatus": maritalStatus.value == TTexts.unMarried.tr
+            ? "Un-Married"
+            : maritalStatus.value == TTexts.separated.tr
+            ? "Separated"
+            : maritalStatus.value == TTexts.divorced.tr
+            ? "Divorced"
+            : maritalStatus.value,
         "childrenlivingstatus":
-            int.tryParse(childLivingStatus.value.toString()) ?? 0,
+            "${noOfChildren.value}-${childLivingStatus.value.toString()}",
+        // "childrenlivingstatus":
+        //     int.tryParse(childLivingStatus.value.toString()) ?? 0,
         "Religion": selectedReligion.value?.id ?? 0,
         "Caste": selectedCaste.value?.id ?? 0,
         "Education": selectedEducation.value?.id ?? 0,
@@ -831,6 +857,7 @@ class RegistrationController extends GetxController {
       if (!contactFormKey.currentState!.validate()) {
         return;
       }
+
       final request = {
         "id": storage.read(TTexts.userId),
         "Phone": alternateMobileController.text,
@@ -840,7 +867,7 @@ class RegistrationController extends GetxController {
         "State": selectedState.value?.id,
         "City": selectedDistrict.value?.id,
         "Postal": pincodeController.text,
-        "nocaste": noCasteChecked.value ? "Yes" : "No",
+        "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
       print("Contact : $request");

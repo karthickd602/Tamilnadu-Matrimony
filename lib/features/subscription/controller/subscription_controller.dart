@@ -13,10 +13,12 @@ class SubscriptionController extends GetxController {
 
   // Selected plan index
   var status = "Active".obs;
-  var package = "Basic".obs;
-  var buyDate = "18 Jul, 2025".obs;
-  var expiryDate = "18 Jul, 2026".obs;
-  var daysLeft = "260 Days Left".obs;
+  var packageName = "".obs;
+  var buyDate = "".obs;
+  var expiryDate = "".obs;
+  var daysLeft = "".obs;
+
+  final storage = GetStorage();
 
   @override
   void onInit() async {
@@ -36,22 +38,23 @@ class SubscriptionController extends GetxController {
 
       TFullScreenLoader.popUpCircular();
 
-      final req = {"user_id": 95264};
+      final req = {"user_id": storage.read(TTexts.userId)};
       final response = await THttpHelper.post(
         ApiConstant.getSubscriptionUserPlan,
         req,
       );
+      if (response['statusCode'] == 200) {
+        packageName.value = response['data']["plan"]['plandisplayname'];
+        buyDate.value = THelperFunctions.formatDateString(
+          response['data']["order"]['orderdate'],
+        );
+        expiryDate.value = THelperFunctions.formatDateString(
+          response['data']["expiry_date"],
+        );
 
-      package.value = response['data']["plan"]['plandisplayname'];
-      buyDate.value = THelperFunctions.formatDateString(
-        response['data']["order"]['orderdate'],
-      );
-      expiryDate.value = THelperFunctions.formatDateString(
-        response['data']["expiry_date"],
-      );
-
-      daysLeft.value =
-          "${calculateBalanceDays(DateTime.parse(response['data']["expiry_date"]))} Days Left";
+        daysLeft.value =
+            "${calculateBalanceDays(DateTime.parse(response['data']["expiry_date"]))} Days Left";
+      }
 
       debugPrint("getSubscriptionUserPlan response: $response");
 

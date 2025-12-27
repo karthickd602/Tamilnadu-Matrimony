@@ -64,6 +64,10 @@ class TTexts {
   static const String female = "female";
   static const String dob = "dob";
   static const String dateOfTime = "date_of_time";
+  static const String unMarried = "unMarried";
+  static const String divorced = "divorced";
+  static const String widowed = "widowed";
+  static const String separated = "Separated";
   static const String time = "time";
   static const String age = "age";
   static const String height = "height";

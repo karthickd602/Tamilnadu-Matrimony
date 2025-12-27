@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:tamilnadu_matrimony/common/widgets/images/t_image_picker.dart';
 import 'package:tamilnadu_matrimony/features/authentication/model/dropdown_model.dart';
+import 'package:tamilnadu_matrimony/features/profile/controller/profile_controller.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 import '../../../../utils/popups/full_screen_loader.dart';
@@ -18,6 +19,7 @@ class EditProfileController extends GetxController {
 
   // final repo = ProfileRepository.instance;
   final repo = Get.put(ProfileRepository());
+  final profileController = ProfileController.instance;
 
   // Total)
   // Total steps
@@ -281,6 +283,7 @@ class EditProfileController extends GetxController {
     await fetchEducationDropdown();
     await fetchReligionDropdown();
     await fetchCountryDropdown();
+    // await loadAllDropdown();
     await fetchUserProfile();
   }
 
@@ -310,17 +313,19 @@ class EditProfileController extends GetxController {
     if (profile == null) return;
 
     /// ---------------- BASIC DETAILS ----------------
+    String children = profile.childrenLivingStatus.toString();
+    List<String> childrenList = children.split('-');
+    noOfChildren.value = childrenList[0].trim();
+    childLivingStatus.value = childrenList[1].trim();
 
     nameController.text = profile.name ?? '';
     dobController.text = profile.dob ?? '';
-    heightController.text = profile.height ?? '';
+    // heightController.text = profile.height ?? '';
     maritalStatus.value = profile.maritalStatus ?? '';
     selectedComplexion.value = profile.complexion ?? '';
     educationDetailsController.text = profile.educationDetails ?? '';
     subCasteController.text = profile.subCaste ?? '';
-    occupationDetailsController.text = profile.workplace ?? '';
     incomeController.text = profile.annualIncome.toString();
-
     selectedGender.value = profile.gender == "1"
         ? TTexts.male.tr
         : TTexts.female.tr;
@@ -331,7 +336,10 @@ class EditProfileController extends GetxController {
     /// ---------------- DROPDOWNS ----------------
 
     await Future.delayed(const Duration(milliseconds: 100));
-
+    occupationDetailsController.text = profile.workplace ?? '';
+    debugPrint(
+      'occupation Details : ${profile.workplace}---${occupationDetailsController.text}',
+    );
     selectedEducation.value = educationDDList.firstWhereOrNull(
       (e) => e.id.toString() == profile.educationId,
     );
@@ -350,6 +358,9 @@ class EditProfileController extends GetxController {
         (e) => e.id.toString() == profile.casteId,
       );
 
+      selectedHeight.value = heightList.firstWhereOrNull(
+        (e) => e.id.toString() == profile.heightID.toString(),
+      );
       debugPrint("✅selected Caste ${selectedCaste.value}");
     }
 
@@ -364,7 +375,7 @@ class EditProfileController extends GetxController {
     marriedSistersController.text = profile.nsm ?? '';
     nativePlaceController.text = profile.irupidam ?? '';
     selectedComplexion.value = profile.complexion ?? '';
-    occupationDetailsController.text = profile.occupationDetails ?? '';
+    noOfChildren.value = profile.childrenLivingStatus.toString()[0] ?? '';
 
     /// ---------------- LOCATION ----------------
 
@@ -372,9 +383,12 @@ class EditProfileController extends GetxController {
       (e) => e.id.toString() == profile.countryId,
     );
 
-    selectedHeight.value = heightList.firstWhereOrNull(
-      (e) => e.id.toString() == profile.heightID,
-    );
+    // selectedHeight.value = heightList.firstWhereOrNull(
+    //   (e) => e.id.toString() == profile.heightID.toString(),
+    // );
+
+    // debugPrint(" height id : ${profile.heightID}");
+    // debugPrint("selected height id : ${selectedHeight.value?.id}");
 
     if (selectedCountry.value != null) {
       await fetchStateDropdown();
@@ -438,7 +452,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-
+      TFullScreenLoader.popUpCircular();
       final response = await THttpHelper.get(ApiConstant.getOccupationDD);
       //
       debugPrint("occupation Response:${response.toString()}");
@@ -481,6 +495,8 @@ class EditProfileController extends GetxController {
         title: "Education Dropdown Failed",
         message: e.toString(),
       );
+    } finally {
+      TFullScreenLoader.stopLoading();
     }
   }
 
@@ -494,6 +510,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
+      TFullScreenLoader.popUpCircular();
 
       final response = await THttpHelper.get(ApiConstant.getReligionDD);
       //
@@ -510,6 +527,8 @@ class EditProfileController extends GetxController {
         title: "Religion Dropdown Failed",
         message: e.toString(),
       );
+    } finally {
+      TFullScreenLoader.stopLoading();
     }
   }
 
@@ -523,7 +542,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-
+      TFullScreenLoader.popUpCircular();
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
       //
@@ -540,6 +559,8 @@ class EditProfileController extends GetxController {
         title: "Caste Dropdown Issue",
         message: e.toString(),
       );
+    } finally {
+      TFullScreenLoader.stopLoading();
     }
   }
 
@@ -678,9 +699,17 @@ class EditProfileController extends GetxController {
         "DOB": dob,
         "Height": selectedHeight.value?.id,
         "Complexion": selectedComplexion.value,
-        "Maritalstatus": maritalStatus.value,
+        "Maritalstatus": maritalStatus.value == TTexts.unMarried.tr
+            ? "Un-Married"
+            : maritalStatus.value == TTexts.separated.tr
+            ? "Separated"
+            : maritalStatus.value == TTexts.divorced.tr
+            ? "Divorced"
+            : maritalStatus.value,
         "childrenlivingstatus":
-            int.tryParse(childLivingStatus.value.toString()) ?? 0,
+            "${noOfChildren.value}-${childLivingStatus.value.toString()}",
+        // "childrenlivingstatus":
+        //     int.tryParse(childLivingStatus.value.toString()) ?? 0,
         "Religion": selectedReligion.value?.id ?? 0,
         "Caste": selectedCaste.value?.id ?? 0,
         "Education": selectedEducation.value?.id ?? 0,
@@ -693,7 +722,7 @@ class EditProfileController extends GetxController {
       };
 
       debugPrint(
-        "Basic Register ${ApiConstant.basicRegisterEndpoint}: $request",
+        "Basic Register Request ${ApiConstant.basicRegisterEndpoint}: $request",
       );
 
       final response = await THttpHelper.post(
@@ -701,10 +730,7 @@ class EditProfileController extends GetxController {
         request,
       );
 
-      // userId = response['data']['ID'].toString();
-
-      // await storage.write(TTexts.userId, userId);
-
+      await profileController.fetchUserProfile();
       TLoaders.successSnackBar(title: "Success", message: response['message']);
 
       debugPrint("Basic Register Response : $response");
@@ -755,7 +781,7 @@ class EditProfileController extends GetxController {
         ApiConstant.familyRegisterEndpoint,
         request,
       );
-
+      await profileController.fetchUserProfile();
       debugPrint("Family Register Response : $response");
       TLoaders.successSnackBar(title: "Success", message: response['message']);
       currentStep.value++;
@@ -807,7 +833,7 @@ class EditProfileController extends GetxController {
         request,
       );
       debugPrint("Horoscope res : $request");
-
+      await profileController.fetchUserProfile();
       TLoaders.successSnackBar(title: "Success", message: res['message']);
 
       currentStep.value++;
@@ -840,27 +866,28 @@ class EditProfileController extends GetxController {
         "State": selectedState.value?.id,
         "City": selectedDistrict.value?.id,
         "Postal": pincodeController.text,
-        "nocaste": noCasteChecked.value ? "Yes" : "No",
+        "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
       print("Contact : $request");
 
-      // final response = await THttpHelper.post(
-      //   ApiConstant.contactRegisterEndpoint,
-      //   request,
-      // );
-
-      final response = await THttpHelper.multipartPost(
-        filePath: profileImageFile.value.path,
+      final response = await THttpHelper.post(
         ApiConstant.contactRegisterEndpoint,
         request,
-        fileFieldName: "photo1",
       );
+      //
+      // final response = await THttpHelper.multipartPost(
+      //   filePath: profileImageFile.value.path,
+      //   ApiConstant.contactRegisterEndpoint,
+      //   request,
+      //   fileFieldName: "photo1",
+      // );
       debugPrint("Contact Register Response : $response");
-
+      await profileController.fetchUserProfile();
       TLoaders.successSnackBar(title: "Success", message: response['message']);
-      storage.write(TTexts.appPages, 0);
-      Get.offAllNamed(TRoutes.bottomNav);
+      Get.offNamed(TRoutes.viewProfile);
+      // storage.write(TTexts.appPages, 0);
+      // Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
       debugPrint("contactFormSubmit - ${e}");
       TLoaders.errorSnackBar(

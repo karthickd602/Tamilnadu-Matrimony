@@ -30,7 +30,7 @@ class ActiveSubscriptionPage extends StatelessWidget {
               const SizedBox(height: 20),
 
               _buildRow("Status", controller.status),
-              _buildRow("Package", controller.package),
+              _buildRow("Package", controller.packageName),
               _buildRow("Issue Date", controller.buyDate),
               _buildRow(
                 "Expiry Date",

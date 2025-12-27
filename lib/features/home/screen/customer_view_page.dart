@@ -1,8 +1,8 @@
-import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
 import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
+import '../../../common/widgets/appbar/appbar.dart';
 import '../controller/dashboard_controller.dart';
 
 class CustomerDetailsView extends StatelessWidget {
@@ -205,6 +205,38 @@ class CustomerDetailsView extends StatelessWidget {
                       ],
                       primaryColor,
                     ),
+
+                    /// CONTACT DETAILS (ONLY IF UNLOCKED)
+                    if (userModel.isUnlocked)
+                      _infoCard(
+                        userModel: userModel,
+                        TTexts.contactDetails.tr,
+                        Icons.contact_phone,
+                        [
+                          {
+                            "icon": Icons.call,
+                            "label": TTexts.mobileNo.tr,
+                            "value": userModel.mobile.isEmpty
+                                ? "-"
+                                : userModel.mobile,
+                          },
+                          {
+                            "icon": Icons.phone,
+                            "label": TTexts.mobileNo.tr,
+                            "value": userModel.phone.isEmpty
+                                ? "-"
+                                : userModel.phone,
+                          },
+                          {
+                            "icon": Icons.home,
+                            "label": TTexts.address.tr,
+                            "value": userModel.address.isEmpty
+                                ? "-"
+                                : userModel.address,
+                          },
+                        ],
+                        primaryColor,
+                      ),
 
                     /// PARTNER PREFERENCE PLACEHOLDER
                     _infoCard(

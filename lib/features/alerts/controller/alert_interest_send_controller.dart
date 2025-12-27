@@ -37,18 +37,19 @@ class AlertInterestSendController extends GetxController {
         ApiConstant.alertListSendEndPoint,
         req,
       );
+      if (response['statusCode'] == 204) {
+        return;
+      }
 
       debugPrint("fetchAlertSendProfile response: $response");
 
       sendAlertProfileModel.value = (response["data"] as List)
           .map((e) => AlertProfileModel.fromJson(e))
           .toList();
-
     } catch (e) {
       debugPrint("fetchAlertSendProfile Error: $e");
       TLoaders.errorSnackBar(title: "Error", message: e.toString());
-    }
-    finally{
+    } finally {
       isSendAlertLoading.value = false;
     }
   }
@@ -64,7 +65,7 @@ class AlertInterestSendController extends GetxController {
         return;
       }
 
-isReceiveAlertLoading.value = true;
+      isReceiveAlertLoading.value = true;
       final req = {"user_id": storage.read(TTexts.userId)};
       // final req = {"user_id": "5"};
       debugPrint("fetchAlertReceiveProfile req: $req");
@@ -72,18 +73,19 @@ isReceiveAlertLoading.value = true;
         ApiConstant.alertListReceiveEndPoint,
         req,
       );
+      if (response['statusCode'] == 204) {
+        return;
+      }
 
       debugPrint("fetchAlertReceiveProfile response: $response");
 
       receiveAlertProfileModel.value = (response["data"] as List)
           .map((e) => AlertProfileModel.fromJson(e))
           .toList();
-
     } catch (e) {
       debugPrint("fetchAlertReceiveProfile Error: $e");
       TLoaders.errorSnackBar(title: "Error", message: e.toString());
-    }
-    finally{
+    } finally {
       isReceiveAlertLoading.value = false;
     }
   }

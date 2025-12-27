@@ -55,18 +55,6 @@ class FilterController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-
-    // final profile = profileController.userProfile.value;
-    // await profileController.fetchUserProfile();
-    // await fetchCasteFilter(religionId: profile?.religionId ?? '0');
-    // await fetchDistrictDropdown(stateId: profile?.stateId ?? "0");
-    // await profileController.fetchUserProfile();
-    //
-    // await fetchCasteFilter(
-    //   religionId: int.parse(
-    //     profileController.userProfile.value?.religionId ?? "0",
-    //   ),
-    // );
   }
 
   // --------------------------------------------------------------
@@ -76,8 +64,7 @@ class FilterController extends GetxController {
   /// 🔹 Caste Fetch
   Future<void> fetchCasteFilter({required String religionId}) async {
     try {
-
-      if(casteList.isNotEmpty) return;
+      if (casteList.isNotEmpty) return;
       final connected = await NetworkManager.instance.isConnected();
       if (!connected) {
         TLoaders.warningSnackBar(
@@ -147,8 +134,7 @@ class FilterController extends GetxController {
   /// 🔹 District Fetch
   Future<void> fetchDistrictDropdown({required String stateId}) async {
     try {
-
-      if(districtList.isNotEmpty) return;
+      if (districtList.isNotEmpty) return;
       final connected = await NetworkManager.instance.isConnected();
       if (!connected) {
         TLoaders.warningSnackBar(
@@ -270,7 +256,7 @@ class FilterController extends GetxController {
       "City": selectedOptions["Location"] ?? [],
       "thosam": selectedOptions["Dosham"] ?? [],
       "Maritalstatus": selectedOptions["Marriage Type"] ?? 0,
-      "no_caste_bar": selectedOptions["No Caste Bar"] ?? 0,
+      "no_caste_bar": selectedOptions["No Caste Bar"] == 1 ? 'no_caste' : '',
       "disability": selectedOptions["Disability"] ?? 0,
       "from_age": ageRange.value.start.toInt(),
       "to_age": ageRange.value.end.toInt(),
@@ -285,7 +271,7 @@ class FilterController extends GetxController {
     final dashboard = DashboardController.instance;
 
     final filterReq = await fetchFilter();
-
+    debugPrint("filterReq: $filterReq");
     dashboard.fetchDashboardCustomerProfile(
       isInitial: true,
       filters: filterReq,

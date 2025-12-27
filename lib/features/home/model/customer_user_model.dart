@@ -1,13 +1,10 @@
-
-
-import '../../../utils/constants/path_provider.dart';
+import 'package:get/get.dart';
 
 class CustomerUserModel {
   int id;
   String matriId;
   String name;
   String age;
-  String address;
   String occupation;
   String educationDetails;
   String moonSign;
@@ -29,18 +26,20 @@ class CustomerUserModel {
   String mothersOccupation;
   String noOfBrothers;
   String noOfSisters;
+  String address;
+  String mobile;
+  String phone;
+  bool isUnlocked;
   String horosApprove;
   String horosCheck;
   RxString liked = "no".obs;
   String verified;
 
-  /// Default constructor
   CustomerUserModel({
     required this.id,
     required this.matriId,
     required this.name,
     required this.age,
-    required this.address,
     required this.occupation,
     required this.educationDetails,
     required this.moonSign,
@@ -62,22 +61,25 @@ class CustomerUserModel {
     required this.mothersOccupation,
     required this.noOfBrothers,
     required this.noOfSisters,
+    required this.address,
+    required this.mobile,
+    required this.phone,
+    required this.isUnlocked,
     required this.horosApprove,
     required this.horosCheck,
     String? liked,
     required this.verified,
-  }){
+  }) {
     this.liked.value = liked ?? "no";
   }
 
-  /// 🔥 Empty Default Model
+  /// 🔥 Empty Model
   factory CustomerUserModel.empty() {
     return CustomerUserModel(
       id: 0,
       matriId: "",
       name: "",
       age: "",
-      address: "",
       occupation: "",
       educationDetails: "",
       moonSign: "",
@@ -99,6 +101,10 @@ class CustomerUserModel {
       mothersOccupation: "",
       noOfBrothers: "",
       noOfSisters: "",
+      address: "",
+      mobile: "",
+      phone: "",
+      isUnlocked: false,
       horosApprove: "",
       horosCheck: "",
       liked: "no",
@@ -106,14 +112,13 @@ class CustomerUserModel {
     );
   }
 
-  /// 🔄 Convert JSON → Model
+  /// 🔄 JSON → Model
   factory CustomerUserModel.fromJson(Map<String, dynamic> json) {
     return CustomerUserModel(
       id: json["ID"] ?? 0,
       matriId: json["MatriID"] ?? "",
       name: json["Name"] ?? "",
-      age: json["Age"] ?? "",
-      address: json["Address"] ?? "",
+      age: json["Age"]?.toString() ?? "",
       occupation: json["Occupation"] ?? "",
       educationDetails: json["EducationDetails"] ?? "",
       moonSign: json["Moonsign"] ?? "",
@@ -135,11 +140,14 @@ class CustomerUserModel {
       mothersOccupation: json["Mothersoccupation"] ?? "",
       noOfBrothers: json["noofbrothers"]?.toString() ?? "",
       noOfSisters: json["noofsisters"]?.toString() ?? "",
+      address: json["address"] ?? "",
+      mobile: json["mobile"] ?? "",
+      phone: json["phone"] ?? "",
+      isUnlocked: json["is_unlocked"].toString() == "true",
       horosApprove: json["HorosApprove"] ?? "",
-      horosCheck: json["Horoscheck"]?.toString() ?? "",
-      liked: json['liked'] ?? "no",
+      horosCheck: json["Horoscheck"] ?? "",
+      liked: json["liked"] ?? "no",
       verified: json["verified"] ?? "",
     );
   }
-
 }

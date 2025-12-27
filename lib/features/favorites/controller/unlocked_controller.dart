@@ -26,7 +26,7 @@ class UnlockedController extends GetxController {
       }
       isUnlockLoading.value = true;
       // TFullScreenLoader.popUpCircular();
-      final req = {"user_id": 11622};
+      final req = {"user_id": storage.read(TTexts.userId)};
 
       debugPrint("fetchUnlockList req: $req");
       final response = await THttpHelper.post(
@@ -43,7 +43,6 @@ class UnlockedController extends GetxController {
       unlockList.value = (response["data"] as List)
           .map((e) => CustomerProfileListModel.fromJson(e))
           .toList();
-
     } catch (e) {
       debugPrint("fetchUnlockList Error: $e");
       TLoaders.errorSnackBar(title: "Error", message: e.toString());

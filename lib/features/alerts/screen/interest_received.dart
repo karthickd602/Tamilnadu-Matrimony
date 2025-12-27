@@ -2,6 +2,8 @@ import 'package:tamilnadu_matrimony/features/alerts/controller/alert_interest_se
 
 import '../../../common/widgets/loaders/animation_loader.dart';
 import '../../../utils/constants/path_provider.dart';
+import '../../home/controller/dashboard_controller.dart';
+import '../../home/screen/customer_view_page.dart';
 import 'widget/interest_user_card.dart';
 
 class InterestReceived extends StatelessWidget {
@@ -10,6 +12,7 @@ class InterestReceived extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = AlertInterestSendController.instance;
+    final dashboardController = DashboardController.instance;
 
     return RefreshIndicator(
       onRefresh: () => controller.fetchAlertReceiveProfile(),
@@ -32,7 +35,16 @@ class InterestReceived extends StatelessWidget {
               const SizedBox(height: TSizes.sm),
           itemBuilder: (context, index) {
             final alert = controller.receiveAlertProfileModel[index];
-            return InterestUserCard(isReceived: true, alertProfileModel: alert);
+            return InkWell(
+              onTap: () async {
+                await dashboardController.fetchCustomerPage(alert.id);
+                Get.to(() => CustomerDetailsView());
+              },
+              child: InterestUserCard(
+                isReceived: true,
+                alertProfileModel: alert,
+              ),
+            );
           },
         );
       }),
