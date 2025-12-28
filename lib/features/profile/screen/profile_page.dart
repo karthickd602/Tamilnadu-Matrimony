@@ -164,20 +164,6 @@ class ProfilePage extends StatelessWidget {
                     },
                   ),
 
-                  // _buildMenuItem(
-                  //   context,
-                  //   Icons.edit,
-                  //   TTexts.editProfile.tr,
-                  //   () {
-                  //     Get.toNamed(TRoutes.editProfile);
-                  //   },
-                  // ),
-                  // _buildMenuItem(
-                  //   context,
-                  //   Icons.camera_alt_outlined,
-                  //   TTexts.updatePhoto.tr,
-                  //   () {},
-                  // ),
                   _buildMenuItem(
                     context,
                     Icons.verified_outlined,

@@ -41,10 +41,10 @@ class EditContactDetails extends StatelessWidget {
               labelText: TTexts.email.tr,
               icon: Icons.email_outlined,
               keyboardType: TextInputType.emailAddress,
-              validator: (value) => TValidator.validateEmptyText(
-                TTexts.email.tr,
-                value.toString(),
-              ),
+              // validator: (value) => TValidator.validateEmptyText(
+              //   TTexts.email.tr,
+              //   value.toString(),
+              // ),
             ),
 
             /// --- Address ---

@@ -54,7 +54,7 @@ class FilterOptionsWidget extends StatelessWidget {
       case "Dosham":
         return controller.dhosamList;
       case "Marriage Type":
-        return controller.martialStatus;
+        return controller.martialStatusList;
       case "No Caste Bar":
         return [
           {"id": 1, "name": "Yes"},

@@ -227,7 +227,7 @@ class DashboardController extends GetxController {
       if (response['statusCode'] == 204 || response['statusCode'] == 403) {
         TFullScreenLoader.stopLoading();
         TLoaders.warningSnackBar(
-          title: "Send Interest Failed",
+          title: "Subscribe to Unlock",
           message: response['message'],
         );
 

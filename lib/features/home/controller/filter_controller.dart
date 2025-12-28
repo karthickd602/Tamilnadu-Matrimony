@@ -15,7 +15,7 @@ class FilterController extends GetxController {
     "Age",
     "Education",
     "Marriage Type",
-    "Nakshatram",
+    // "Nakshatram",
     "Location",
     "Dosham",
     "No Caste Bar",
@@ -26,10 +26,23 @@ class FilterController extends GetxController {
   final casteList = <CasteDDModel>[].obs;
   final educationList = <EducationDDModel>[].obs;
   final districtList = <CountryModel>[].obs;
-  final martialStatus = [
-    {"id": 1, "name": "First Marriage"},
-    {"id": 2, "name": "Second Marriage"},
+  final martialStatusList = [
+    {'id': 1, 'name': TTexts.unMarried.tr},
+    {'id': 2, 'name': TTexts.widowed.tr},
+    {'id': 3, 'name': TTexts.divorced.tr},
+    {'id': 4, 'name': TTexts.separated.tr},
   ].obs;
+
+  // final martialStatus = [
+  //   // TTexts.unMarried.tr,
+  //   // TTexts.widowed.tr,
+  //   // TTexts.divorced.tr,
+  //   // TTexts.separated.tr,
+  // ].obs;
+  // final martialStatus = [
+  //   {"id": 1, "name": "First Marriage"},
+  //   {"id": 2, "name": "Second Marriage"},
+  // ].obs;
 
   /// DOSHAM STATIC
   final dhosamList = [
@@ -227,7 +240,7 @@ class FilterController extends GetxController {
     update();
   }
 
-  final lockedCategories = ["Nakshatram"].obs;
+  final lockedCategories = ["Location"].obs;
 
   /// 🔹 Check if category is locked
   bool isLocked(String category) {
@@ -249,13 +262,24 @@ class FilterController extends GetxController {
   // --------------------------------------------------------------
 
   Future<Map<String, dynamic>> fetchFilter() async {
+    final selectedMarriageId = selectedOptions["Marriage Type"];
+    final selectedMartial = selectedMarriageId == 1
+        ? "Unmarried"
+        : selectedMarriageId == 2
+        ? "Separated"
+        : selectedMarriageId == 3
+        ? "Divorced"
+        : selectedMarriageId == 4
+        ? "Widowed"
+        : "";
+
     return {
       "id": storage.read(TTexts.userId),
       "Caste": selectedOptions["Caste"] ?? [],
       "EducationDetails": selectedOptions["Education"] ?? [],
       "City": selectedOptions["Location"] ?? [],
       "thosam": selectedOptions["Dosham"] ?? [],
-      "Maritalstatus": selectedOptions["Marriage Type"] ?? 0,
+      "Maritalstatus": selectedMartial,
       "no_caste_bar": selectedOptions["No Caste Bar"] == 1 ? 'no_caste' : '',
       "disability": selectedOptions["Disability"] ?? 0,
       "from_age": ageRange.value.start.toInt(),

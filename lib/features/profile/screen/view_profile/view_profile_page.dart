@@ -68,10 +68,13 @@ class ViewProfilePage extends StatelessWidget {
                   _SectionCard(
                     title: "Basic Information",
                     children: [
-                      _info("Name", profile.name),
+                      _info(TTexts.name.tr, profile.name),
                       _info("Matri ID", profile.matriId),
                       _info("Age", profile.age),
-                      _info("Gender", profile.gender),
+                      _info(
+                        "Gender",
+                        profile.gender == '1' ? "Male" : "Female",
+                      ),
                       _info("Date of Birth", profile.dob),
                       _info("Height", profile.height),
                       _info("Complexion", profile.complexion),
@@ -86,11 +89,14 @@ class ViewProfilePage extends StatelessWidget {
                   _SectionCard(
                     title: "Education & Profession",
                     children: [
-                      _info("Education", profile.educationDetails),
-                      _info("Occupation", profile.occupation),
-                      _info("Occupation Details", profile.occupationDetails),
+                      _info(TTexts.education.tr, profile.educationDetails),
+                      _info(TTexts.occupation.tr, profile.occupation),
                       _info(
-                        "Annual Income",
+                        TTexts.occupationDetails.tr,
+                        profile.occupationDetails,
+                      ),
+                      _info(
+                        TTexts.income.tr,
                         profile.annualIncome != null
                             ? "₹ ${profile.annualIncome}"
                             : null,
@@ -103,15 +109,21 @@ class ViewProfilePage extends StatelessWidget {
                   _SectionCard(
                     title: "Family Details",
                     children: [
-                      _info("Father Name", profile.fatherName),
-                      _info("Father Occupation", profile.fathersOccupation),
-                      _info("Mother Name", profile.motherName),
-                      _info("Mother Occupation", profile.mothersOccupation),
-                      _info("Family Status", profile.familyStatus),
-                      _info("Brothers", profile.noOfBrothers),
-                      _info("Sisters", profile.noOfSisters),
+                      _info(TTexts.fatherName.tr, profile.fatherName),
                       _info(
-                        "Children Living Status",
+                        TTexts.fatherOccupation.tr,
+                        profile.fathersOccupation,
+                      ),
+                      _info(TTexts.motherName.tr, profile.motherName),
+                      _info(
+                        TTexts.motherOccupation.tr,
+                        profile.mothersOccupation,
+                      ),
+                      _info(TTexts.familyStatus.tr, profile.familyStatus),
+                      _info(TTexts.brothers.tr, profile.noOfBrothers),
+                      _info(TTexts.sisters.tr, profile.noOfSisters),
+                      _info(
+                        TTexts.childrenLivingStatus.tr,
                         profile.childrenLivingStatus,
                       ),
                     ],

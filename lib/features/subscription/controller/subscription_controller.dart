@@ -15,6 +15,7 @@ class SubscriptionController extends GetxController {
   var status = "Active".obs;
   var packageName = "".obs;
   var buyDate = "".obs;
+  var creditLeft = "".obs;
   var expiryDate = "".obs;
   var daysLeft = "".obs;
 
@@ -48,6 +49,7 @@ class SubscriptionController extends GetxController {
         buyDate.value = THelperFunctions.formatDateString(
           response['data']["order"]['orderdate'],
         );
+        creditLeft.value = response['data']["Noofcontacts"].toString();
         expiryDate.value = THelperFunctions.formatDateString(
           response['data']["expiry_date"],
         );

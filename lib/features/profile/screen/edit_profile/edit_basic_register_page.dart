@@ -4,6 +4,7 @@ import 'package:tamilnadu_matrimony/utils/validators/validation.dart';
 
 import '../../../../../common/widgets/dropdown/dropdown_with_search.dart';
 import '../../../../../utils/constants/path_provider.dart';
+import '../../../authentication/dropdown_list.dart';
 import '../../controller/edit_profile_controller/edit_profile_controller.dart';
 
 class EditBasicDetails extends StatelessWidget {
@@ -103,12 +104,7 @@ class EditBasicDetails extends StatelessWidget {
               TSearchDropdownField<String>(
                 label: TTexts.maritalStatus.tr,
                 showSearchBox: false,
-                items: [
-                  TTexts.unMarried.tr,
-                  TTexts.widowed.tr,
-                  TTexts.divorced.tr,
-                  TTexts.separated.tr,
-                ],
+                items: controller.martialStatusList,
                 prefixIcon: Icons.join_inner_outlined,
                 selectedItem: controller.maritalStatus.value,
                 itemAsString: (item) => item.toString(),
@@ -131,38 +127,60 @@ class EditBasicDetails extends StatelessWidget {
                     ? SizedBox()
                     : SizedBox(height: TSizes.sm),
               ),
+
               Obx(
                 () =>
                     (controller.maritalStatus.value == TTexts.unMarried.tr ||
                         controller.maritalStatus.value == '')
                     ? SizedBox()
-                    : TSearchDropdownField<String>(
+                    : TSearchDropdownField<ChildCountModel>(
                         label: TTexts.noOfChildren.tr,
                         showSearchBox: false,
-                        items: ["0", "1", "2", "3", "4"],
+                        items: controller.childCountList,
                         prefixIcon: Icons.child_care,
-                        selectedItem: controller.noOfChildren.value,
-                        itemAsString: (item) => item.toString(),
-                        compareFn: (a, b) => a == b,
+                        selectedItem: controller.selectedNoOfChildren.value,
+                        itemAsString: (item) => item.label.toString(),
+                        compareFn: (a, b) => a.label == b.label,
                         onChanged: (value) {
                           if (value == null) return;
+                          controller.selectedNoOfChildren.value = value;
 
-                          controller.noOfChildren.value = value ?? '';
+                          // controller.noOfChildren.value = value.label ?? '';
 
                           controller.childLivingStatus.value = '';
                         },
                         validator: (value) => TValidator.validateEmptyText(
                           TTexts.noOfChildren.tr,
-                          value,
+                          value.toString(),
                         ),
                       ),
+                // : TSearchDropdownField<String>(
+                //     label: TTexts.noOfChildren.tr,
+                //     showSearchBox: false,
+                //     items: ["0", "1", "2", "3", "4 and above"],
+                //     prefixIcon: Icons.child_care,
+                //     selectedItem: controller.noOfChildren.value,
+                //     itemAsString: (item) => item.toString(),
+                //     compareFn: (a, b) => a == b,
+                //     onChanged: (value) {
+                //       if (value == null) return;
+                //
+                //       controller.noOfChildren.value = value ?? '';
+                //
+                //       controller.childLivingStatus.value = '';
+                //     },
+                //     validator: (value) => TValidator.validateEmptyText(
+                //       TTexts.noOfChildren.tr,
+                //       value,
+                //     ),
+                //   ),
               ),
               SizedBox(height: TSizes.sm),
               Obx(
                 () =>
                     (controller.maritalStatus.value == TTexts.unMarried.tr ||
-                        controller.noOfChildren.value == "0" ||
-                        controller.noOfChildren.value == '')
+                        controller.selectedNoOfChildren.value?.id == "0" ||
+                        controller.selectedNoOfChildren.value?.id == '')
                     ? SizedBox()
                     : TSearchDropdownField<String>(
                         label: TTexts.childrenLivingStatus.tr,
