@@ -6,6 +6,7 @@ import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 
 import '../../../utils/constants/path_provider.dart';
 import '../../favorites/controller/like_controller.dart';
+import 'package:tamilnadu_matrimony/data/services/dynamic_link_service.dart';
 import '../model/dashboard_list_model.dart';
 import 'filter_controller.dart';
 
@@ -301,8 +302,9 @@ class DashboardController extends GetxController {
 
   Future<void> shareProfile(CustomerUserModel user) async {
     try {
-      final profileUrl =
-          "https://tamilnadu-matrimony.com/profile/${user.id}"; // change if needed
+      // Use DynamicLinkService to create a share link
+      final String shortLink = DynamicLinkService.instance
+          .createProfileShareLink(user.id.toString());
 
       final shareText =
           '''
@@ -315,11 +317,12 @@ class DashboardController extends GetxController {
 💼 Occupation: ${user.occupation ?? '-'}
 
 View full profile here 👇
-$profileUrl
+$shortLink
 ''';
 
       await Share.share(shareText, subject: "Matrimony Profile - ${user.name}");
     } catch (e) {
+      TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: "Share Failed", message: e.toString());
     }
   }
