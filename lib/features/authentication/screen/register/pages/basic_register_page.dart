@@ -336,7 +336,8 @@ class StepBasicDetails extends StatelessWidget {
                 labelText: TTexts.disablePerson.tr,
                 isDropdown: true,
                 icon: Icons.check_box_outlined,
-                items: ["Yes", "No"],
+                items: [TTexts.yes.tr, TTexts.no.tr],
+
                 value: controller.isDisablePerson.value,
                 onChanged: (v) => controller.isDisablePerson.value = v ?? '',
               ),

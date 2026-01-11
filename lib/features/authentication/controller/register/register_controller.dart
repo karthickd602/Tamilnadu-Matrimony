@@ -312,6 +312,10 @@ class RegistrationController extends GetxController {
       // final userId = "96166";
       final response = await repo.fetchUserProfile(userId: userId);
       debugPrint("Edit Profile Response : $response");
+      if (response["data"]['Name'] == null || response["data"]['Name'] == '') {
+        return;
+      }
+
       userProfile.value = FetchUserProfileModel.fromJson(response["data"]);
 
       await _mapProfileToFields();
@@ -324,29 +328,180 @@ class RegistrationController extends GetxController {
     }
   }
 
+  // Future<void> _mapProfileToFields() async {
+  //   final profile = userProfile.value;
+  //   if (profile == null) return;
+  //
+  //   /// ---------------- BASIC DETAILS ----------------
+  //   String children = profile.childrenLivingStatus.toString();
+  //   List<String> childrenList = children.split('-');
+  //   noOfChildren.value = childrenList[0].trim();
+  //   childLivingStatus.value = childrenList[1].trim();
+  //
+  //   nameController.text = profile.name ?? '';
+  //   dobController.text = profile.dob ?? '';
+  //   // heightController.text = profile.height ?? '';
+  //   maritalStatus.value = profile.maritalStatus ?? '';
+  //   selectedComplexion.value = profile.complexion ?? '';
+  //   educationDetailsController.text = profile.educationDetails ?? '';
+  //   subCasteController.text = profile.subCaste ?? '';
+  //   incomeController.text = profile.annualIncome.toString();
+  //   selectedGender.value = profile.gender == "1"
+  //       ? TTexts.male.tr
+  //       : TTexts.female.tr;
+  //
+  //   isDisablePerson.value = profile.speCases == "1" ? "Yes" : "No";
+  //
+  //   /// ---------------- DROPDOWNS (MATCH BY ID) ----------------
+  //   /// ---------------- DROPDOWNS ----------------
+  //
+  //   await Future.delayed(const Duration(milliseconds: 100));
+  //   occupationDetailsController.text = profile.workplace ?? '';
+  //   debugPrint(
+  //     'occupation Details : ${profile.workplace}---${occupationDetailsController.text}',
+  //   );
+  //   selectedEducation.value = educationDDList.firstWhereOrNull(
+  //     (e) => e.id.toString() == profile.educationId,
+  //   );
+  //   selectedOccupation.value = occupationDDList.firstWhereOrNull(
+  //     (e) => e.id.toString() == profile.occupationId,
+  //   );
+  //
+  //   /// ---------------- CASTE (DEPENDS ON RELIGION) ----------------
+  //   selectedReligion.value = religionDDList.firstWhereOrNull(
+  //     (e) => e.id.toString() == profile.religionId,
+  //   );
+  //   if (selectedReligion.value != null) {
+  //     await fetchCasteDropdown(religionId: selectedReligion.value!.id);
+  //
+  //     selectedCaste.value = casteDDList.firstWhereOrNull(
+  //       (e) => e.id.toString() == profile.casteId,
+  //     );
+  //
+  //     selectedHeight.value = heightList.firstWhereOrNull(
+  //       (e) => e.id.toString() == profile.heightID.toString(),
+  //     );
+  //     debugPrint("✅selected Caste ${selectedCaste.value}");
+  //   }
+  //
+  //   fatherNameController.text = profile.fatherName ?? '';
+  //   fatherOccupationController.text = profile.fathersOccupation ?? '';
+  //   motherNameController.text = profile.motherName ?? '';
+  //   motherOccupationController.text = profile.mothersOccupation ?? '';
+  //   familyStatusController.value = profile.familyStatus ?? '';
+  //   brothersController.text = profile.noOfBrothers ?? '';
+  //   sistersController.text = profile.noOfSisters ?? '';
+  //   marriedBrothersController.text = profile.nbm ?? '';
+  //   marriedSistersController.text = profile.nsm ?? '';
+  //   nativePlaceController.text = profile.irupidam ?? '';
+  //   selectedComplexion.value = profile.complexion ?? '';
+  //   noOfChildren.value = profile.childrenLivingStatus.toString()[0] ?? '';
+  //
+  //   /// ---------------- LOCATION ----------------
+  //
+  //   selectedCountry.value = countryList.firstWhereOrNull(
+  //     (e) => e.id.toString() == profile.countryId,
+  //   );
+  //
+  //   // selectedHeight.value = heightList.firstWhereOrNull(
+  //   //   (e) => e.id.toString() == profile.heightID.toString(),
+  //   // );
+  //
+  //   // debugPrint(" height id : ${profile.heightID}");
+  //   // debugPrint("selected height id : ${selectedHeight.value?.id}");
+  //
+  //   if (selectedCountry.value != null) {
+  //     await fetchStateDropdown();
+  //
+  //     selectedState.value = stateList.firstWhereOrNull(
+  //       (e) => e.id.toString() == profile.stateId,
+  //     );
+  //   }
+  //
+  //   if (selectedState.value != null) {
+  //     await fetchDistrictDropdown();
+  //
+  //     selectedDistrict.value = districtList.firstWhereOrNull(
+  //       (e) => e.id.toString() == profile.cityId,
+  //     );
+  //   }
+  //
+  //   /// ---------------- CONTACT ----------------
+  //
+  //   mobileController.text = profile.phone ?? profile.mobile ?? '';
+  //   emailController.text = profile.confirmEmail ?? '';
+  //   cityController.text = profile.city ?? '';
+  //   stateController.value = profile.state ?? '';
+  //   districtController.value = profile.city ?? '';
+  //   pincodeController.text = profile.postal ?? '';
+  //   addressController.text = profile.address ?? '';
+  //   isDisablePerson.value = profile.speCases == "yes" ? "Yes" : "No";
+  //   noCasteChecked.value = profile.noCaste.toString().toLowerCase() == "yes"
+  //       ? true
+  //       : false;
+  //
+  //   /// ---------------- HOROSCOPE ----------------
+  //
+  //   selectedRaasi.value = profile.moonsign;
+  //   selectedStar.value = profile.star;
+  //   selectedLaknam.value = profile.inLaknam ?? '';
+  //   selectedDasa.value = profile.dasaType;
+  //   selectedDhosam.value = profile.thosam;
+  //   areYouHaveDhosam.value = profile.thoosamType == 'Yes'
+  //       ? TTexts.yes.tr
+  //       : TTexts.no.tr;
+  //   isDoshamHave.value = profile.thoosamType ?? '';
+  //   debugPrint(" dosham ${isDoshamHave.value}");
+  //
+  //   /// ---------------- PROFILE IMAGE ----------------
+  //
+  //   // if (profile.photo1 != null && profile.photo1!.isNotEmpty) {
+  //   //   profileImagePath.value = profile.photo1!;
+  //   // }
+  //
+  //   debugPrint("✅ Profile mapped to form successfully");
+  // }
   Future<void> _mapProfileToFields() async {
     final profile = userProfile.value;
     if (profile == null) return;
 
     /// ---------------- BASIC DETAILS ----------------
+
+    /// split the child cound and living status
     String children = profile.childrenLivingStatus.toString();
     List<String> childrenList = children.split('-');
-    noOfChildren.value = childrenList[0].trim();
-    childLivingStatus.value = childrenList[1].trim();
 
+    childLivingStatus.value = childrenList[1].trim() == 'Yes'
+        ? "Living with me"
+        : "Not living with me";
+
+    selectedNoOfChildren.value = childCountList.firstWhereOrNull(
+      (e) => e.id.toString() == childrenList[0].trim(),
+    );
     nameController.text = profile.name ?? '';
     dobController.text = profile.dob ?? '';
-    // heightController.text = profile.height ?? '';
-    maritalStatus.value = profile.maritalStatus ?? '';
-    selectedComplexion.value = profile.complexion ?? '';
-    educationDetailsController.text = profile.educationDetails ?? '';
-    subCasteController.text = profile.subCaste ?? '';
-    incomeController.text = profile.annualIncome.toString();
+
     selectedGender.value = profile.gender == "1"
         ? TTexts.male.tr
         : TTexts.female.tr;
 
-    isDisablePerson.value = profile.speCases == "1" ? "Yes" : "No";
+    maritalStatus.value = profile.maritalStatus == "Unmarried"
+        ? TTexts.unMarried.tr
+        : profile.maritalStatus == 'Separated'
+        ? TTexts.separated.tr
+        : profile.maritalStatus == 'Divorced'
+        ? TTexts.divorced.tr
+        : profile.maritalStatus == 'widowed'
+        ? TTexts.widowed
+        : '';
+    selectedComplexion.value = profile.complexion ?? '';
+    educationDetailsController.text = profile.educationDetails ?? '';
+    subCasteController.text = profile.subCaste ?? '';
+    incomeController.text = profile.annualIncome.toString();
+
+    isDisablePerson.value = profile.speCases == "1"
+        ? TTexts.yes.tr
+        : TTexts.no.tr;
 
     /// ---------------- DROPDOWNS (MATCH BY ID) ----------------
     /// ---------------- DROPDOWNS ----------------
@@ -359,6 +514,7 @@ class RegistrationController extends GetxController {
     selectedEducation.value = educationDDList.firstWhereOrNull(
       (e) => e.id.toString() == profile.educationId,
     );
+
     selectedOccupation.value = occupationDDList.firstWhereOrNull(
       (e) => e.id.toString() == profile.occupationId,
     );
@@ -391,20 +547,12 @@ class RegistrationController extends GetxController {
     marriedSistersController.text = profile.nsm ?? '';
     nativePlaceController.text = profile.irupidam ?? '';
     selectedComplexion.value = profile.complexion ?? '';
-    noOfChildren.value = profile.childrenLivingStatus.toString()[0] ?? '';
 
     /// ---------------- LOCATION ----------------
 
     selectedCountry.value = countryList.firstWhereOrNull(
       (e) => e.id.toString() == profile.countryId,
     );
-
-    // selectedHeight.value = heightList.firstWhereOrNull(
-    //   (e) => e.id.toString() == profile.heightID.toString(),
-    // );
-
-    // debugPrint(" height id : ${profile.heightID}");
-    // debugPrint("selected height id : ${selectedHeight.value?.id}");
 
     if (selectedCountry.value != null) {
       await fetchStateDropdown();
@@ -431,7 +579,6 @@ class RegistrationController extends GetxController {
     districtController.value = profile.city ?? '';
     pincodeController.text = profile.postal ?? '';
     addressController.text = profile.address ?? '';
-    isDisablePerson.value = profile.speCases == "yes" ? "Yes" : "No";
     noCasteChecked.value = profile.noCaste.toString().toLowerCase() == "yes"
         ? true
         : false;
@@ -446,7 +593,7 @@ class RegistrationController extends GetxController {
     areYouHaveDhosam.value = profile.thoosamType == 'Yes'
         ? TTexts.yes.tr
         : TTexts.no.tr;
-    isDoshamHave.value = profile.thoosamType ?? '';
+    isDoshamHave.value = profile.thoosamType ?? 'No';
     debugPrint(" dosham ${isDoshamHave.value}");
 
     /// ---------------- PROFILE IMAGE ----------------
@@ -599,7 +746,7 @@ class RegistrationController extends GetxController {
         countryList.value = (response['data'] as List)
             .map((e) => CountryModel.fromJson(e))
             .toList();
-        // selectedCountry.value = countryList.where((e)=>e.id==101,);
+        selectedCountry.value = countryList.firstWhere((e) => e.id == 101);
       } else {
         countryList.value = <CountryModel>[];
       }

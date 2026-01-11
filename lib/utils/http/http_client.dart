@@ -116,13 +116,14 @@ class THttpHelper {
 
   // Handle the HTTP response
   static Map<String, dynamic> _handleResponse(http.Response response) {
-    if (response.statusCode >= 200) {
+    if (response.statusCode == 200 ||
+        response.statusCode == 201 ||
+        response.statusCode == 204) {
       debugPrint("StatusCode: ${response.statusCode}");
       // debugPrint("StatusCode: ${response.body}");
 
       return json.decode(response.body);
-    }
-    if (response.statusCode == 404 ||
+    } else if (response.statusCode == 404 ||
         response.statusCode == 400 ||
         response.statusCode == 409 ||
         response.statusCode == 302) {
@@ -131,6 +132,11 @@ class THttpHelper {
       // debugPrint("StatusCode: ${response.body}");
 
       throw message;
+    } else if (response.statusCode == 500) {
+      debugPrint("StatusCode 500: ${response.statusCode}");
+
+      // final message = json.decode(response.body)['message'];
+      throw "Something went wrong";
     } else {
       throw Exception('Failed to load data: ${response.statusCode}');
     }

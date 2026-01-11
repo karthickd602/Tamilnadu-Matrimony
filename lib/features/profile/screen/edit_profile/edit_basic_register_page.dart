@@ -112,7 +112,7 @@ class EditBasicDetails extends StatelessWidget {
                 onChanged: (value) {
                   if (value == null) return;
                   controller.maritalStatus.value = value ?? '';
-                  controller.noOfChildren.value = '';
+                  controller.selectedNoOfChildren.value = null;
                   controller.childLivingStatus.value = '';
                 },
                 validator: (value) => TValidator.validateEmptyText(
@@ -203,8 +203,8 @@ class EditBasicDetails extends StatelessWidget {
               Obx(
                 () =>
                     (controller.maritalStatus.value == TTexts.unMarried.tr ||
-                        controller.noOfChildren.value == "0" ||
-                        controller.noOfChildren.value == '')
+                        controller.selectedNoOfChildren.value?.id == "0" ||
+                        controller.selectedNoOfChildren.value == null)
                     ? SizedBox()
                     : SizedBox(height: TSizes.sm),
               ),
@@ -332,7 +332,7 @@ class EditBasicDetails extends StatelessWidget {
                 labelText: TTexts.disablePerson.tr,
                 isDropdown: true,
                 icon: Icons.check_box_outlined,
-                items: ["Yes", "No"],
+                items: [TTexts.yes.tr, TTexts.no.tr],
                 value: controller.isDisablePerson.value,
                 onChanged: (v) => controller.isDisablePerson.value = v ?? '',
               ),

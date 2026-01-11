@@ -48,7 +48,7 @@ class EditProfileController extends GetxController {
   final heightController = TextEditingController();
   final maritalStatus = ''.obs;
   final childLivingStatus = ''.obs;
-  final noOfChildren = ''.obs;
+  // final noOfChildren = ''.obs;
   final selectedNoOfChildren = Rxn<ChildCountModel>();
 
   // final eduction = ''.obs;
@@ -62,7 +62,7 @@ class EditProfileController extends GetxController {
   final occupationDetailsController = TextEditingController();
   final incomeController = TextEditingController();
 
-  final isDisablePerson = 'No'.obs;
+  final isDisablePerson = ''.obs;
   final subCasteController = TextEditingController();
 
   // Family Details fields
@@ -244,24 +244,42 @@ class EditProfileController extends GetxController {
     if (profile == null) return;
 
     /// ---------------- BASIC DETAILS ----------------
+
+    /// split the child cound and living status
     String children = profile.childrenLivingStatus.toString();
     List<String> childrenList = children.split('-');
-    noOfChildren.value = childrenList[0].trim();
-    childLivingStatus.value = childrenList[1].trim();
 
+    childLivingStatus.value = childrenList[1].trim() == 'Yes'
+        ? "Living with me"
+        : "Not living with me";
+
+    selectedNoOfChildren.value = childCountList.firstWhereOrNull(
+      (e) => e.id.toString() == childrenList[0].trim(),
+    );
     nameController.text = profile.name ?? '';
     dobController.text = profile.dob ?? '';
-    // heightController.text = profile.height ?? '';
-    maritalStatus.value = profile.maritalStatus ?? '';
-    selectedComplexion.value = profile.complexion ?? '';
-    educationDetailsController.text = profile.educationDetails ?? '';
-    subCasteController.text = profile.subCaste ?? '';
-    incomeController.text = profile.annualIncome.toString();
+
     selectedGender.value = profile.gender == "1"
         ? TTexts.male.tr
         : TTexts.female.tr;
 
-    isDisablePerson.value = profile.speCases == "1" ? "Yes" : "No";
+    maritalStatus.value = profile.maritalStatus == "Unmarried"
+        ? TTexts.unMarried.tr
+        : profile.maritalStatus == 'Separated'
+        ? TTexts.separated.tr
+        : profile.maritalStatus == 'Divorced'
+        ? TTexts.divorced.tr
+        : profile.maritalStatus == 'widowed'
+        ? TTexts.widowed
+        : '';
+    selectedComplexion.value = profile.complexion ?? '';
+    educationDetailsController.text = profile.educationDetails ?? '';
+    subCasteController.text = profile.subCaste ?? '';
+    incomeController.text = profile.annualIncome.toString();
+
+    isDisablePerson.value = profile.speCases == "1"
+        ? TTexts.yes.tr
+        : TTexts.no.tr;
 
     /// ---------------- DROPDOWNS (MATCH BY ID) ----------------
     /// ---------------- DROPDOWNS ----------------
@@ -274,6 +292,7 @@ class EditProfileController extends GetxController {
     selectedEducation.value = educationDDList.firstWhereOrNull(
       (e) => e.id.toString() == profile.educationId,
     );
+
     selectedOccupation.value = occupationDDList.firstWhereOrNull(
       (e) => e.id.toString() == profile.occupationId,
     );
@@ -306,20 +325,12 @@ class EditProfileController extends GetxController {
     marriedSistersController.text = profile.nsm ?? '';
     nativePlaceController.text = profile.irupidam ?? '';
     selectedComplexion.value = profile.complexion ?? '';
-    noOfChildren.value = profile.childrenLivingStatus.toString()[0] ?? '';
 
     /// ---------------- LOCATION ----------------
 
     selectedCountry.value = countryList.firstWhereOrNull(
       (e) => e.id.toString() == profile.countryId,
     );
-
-    // selectedHeight.value = heightList.firstWhereOrNull(
-    //   (e) => e.id.toString() == profile.heightID.toString(),
-    // );
-
-    // debugPrint(" height id : ${profile.heightID}");
-    // debugPrint("selected height id : ${selectedHeight.value?.id}");
 
     if (selectedCountry.value != null) {
       await fetchStateDropdown();
@@ -346,7 +357,6 @@ class EditProfileController extends GetxController {
     districtController.value = profile.city ?? '';
     pincodeController.text = profile.postal ?? '';
     addressController.text = profile.address ?? '';
-    isDisablePerson.value = profile.speCases == "yes" ? "Yes" : "No";
     noCasteChecked.value = profile.noCaste.toString().toLowerCase() == "yes"
         ? true
         : false;
@@ -623,17 +633,20 @@ class EditProfileController extends GetxController {
         fromFormat: 'dd-MM-yyyy',
         toFormat: 'yyyy-MM-dd',
       );
-      final childrenCount = selectedNoOfChildren.value?.id == '0'
-          ? '0'
-          : selectedNoOfChildren.value?.id == '1'
-          ? 'One'
-          : selectedNoOfChildren.value?.id == '2'
-          ? 'Two'
-          : selectedNoOfChildren.value?.id == '3'
-          ? 'Three'
-          : selectedNoOfChildren.value?.id == '4 and above'
-          ? 'Four and above'
-          : '';
+      // final childrenCount = selectedNoOfChildren.value?.label == '0'
+      //     ? '0'
+      //     : selectedNoOfChildren.value?.label == '1'
+      //     ? 'One'
+      //     : selectedNoOfChildren.value?.id == '2'
+      //     ? 'Two'
+      //     : selectedNoOfChildren.value?.id == '3'
+      //     ? 'Three'
+      //     : selectedNoOfChildren.value?.id == '4 and above'
+      //     ? 'Four and above'
+      //     : '';
+      // debugPrint(
+      //   'childrenCountsssss: $childrenCount  -- ${selectedNoOfChildren.value!.id}',
+      // );
 
       final childLiving = childLivingStatus.value == "Living with me"
           ? "Yes"
@@ -652,9 +665,11 @@ class EditProfileController extends GetxController {
             ? "Separated"
             : maritalStatus.value == TTexts.divorced.tr
             ? "Divorced"
+            : maritalStatus.value == TTexts.widowed
+            ? "Widowed"
             : maritalStatus.value,
         "childrenlivingstatus":
-            "${childrenCount.toString()}-${childLiving.toString()}",
+            "${selectedNoOfChildren.value!.id.toString()}-${childLiving.toString()}",
         // "childrenlivingstatus":
         //     int.tryParse(childLivingStatus.value.toString()) ?? 0,
         "Religion": selectedReligion.value?.id ?? 0,
@@ -836,7 +851,7 @@ class EditProfileController extends GetxController {
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
-      print("Contact : $request");
+      print("Contact req : $request");
 
       final response = await THttpHelper.post(
         ApiConstant.contactRegisterEndpoint,

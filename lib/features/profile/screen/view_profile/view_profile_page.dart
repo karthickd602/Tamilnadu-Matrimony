@@ -91,17 +91,14 @@ class ViewProfilePage extends StatelessWidget {
                     children: [
                       _info(TTexts.education.tr, profile.educationDetails),
                       _info(TTexts.occupation.tr, profile.occupation),
-                      _info(
-                        TTexts.occupationDetails.tr,
-                        profile.occupationDetails,
-                      ),
+                      _info(TTexts.occupationDetails.tr, profile.workplace),
                       _info(
                         TTexts.income.tr,
                         profile.annualIncome != null
                             ? "₹ ${profile.annualIncome}"
                             : null,
                       ),
-                      _info("Workplace", profile.workplace),
+                      // _info("Workplace", profile.workplace),
                     ],
                   ),
 
@@ -137,13 +134,14 @@ class ViewProfilePage extends StatelessWidget {
                       _info("State", profile.state),
                       _info("City", profile.city),
                       _info("Postal Code", profile.postal),
-                      const SizedBox(height: 6),
-                      Text(
-                        profile.address?.isNotEmpty == true
-                            ? profile.address!
-                            : "-",
-                        style: const TextStyle(fontSize: 14, height: 1.6),
-                      ),
+                      // const SizedBox(height: 6),
+                      _info(TTexts.address.tr, profile.address),
+                      // Text(
+                      //   profile.address?.isNotEmpty == true
+                      //       ? profile.address!
+                      //       : "-",
+                      //   style: const TextStyle(fontSize: 14, height: 1.6),
+                      // ),
                     ],
                   ),
 
@@ -199,6 +197,7 @@ class ViewProfilePage extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(width: TSizes.xs),
           Expanded(
             flex: 5,
             child: Text(
