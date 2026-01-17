@@ -267,6 +267,7 @@ class ProfilePage extends StatelessWidget {
 
               /// Info Rows
               _infoRow(Icons.phone_in_talk, "Call", "0452-4380101"),
+              _infoRow(Icons.phone_android, "Call", "9585410101"),
               _infoRow(
                 Icons.email_outlined,
                 "Mail",

@@ -89,7 +89,9 @@ class LogoutDialogContent extends StatelessWidget {
                     ),
                     onPressed: () async {
                       final storage = GetStorage();
+                      await storage.remove(TTexts.userId);
                       await storage.erase();
+
                       Get.offAllNamed(TRoutes.loginPage);
                     },
                     child: const Text(

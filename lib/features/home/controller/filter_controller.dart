@@ -45,6 +45,14 @@ class FilterController extends GetxController {
   // ].obs;
 
   /// DOSHAM STATIC
+
+  // final dhosamList = [
+  //   {"id": "ராகு-கேது தோஷம்", "name": "ராகு-கேது தோஷம்"},
+  //   {"id": "செவ்வாய் தோஷம்", "name": "செவ்வாய் தோஷம்"},
+  //   {"id": "நாக தோஷம்", "name": "நாக தோஷம்"},
+  //   {"id": "கால சர்ப்ப தோஷம்", "name": "கால சர்ப்ப தோஷம்"},
+  // ].obs;
+
   final dhosamList = [
     {"id": 1, "name": "ராகு-கேது தோஷம்"},
     {"id": 2, "name": "செவ்வாய் தோஷம்"},
@@ -61,14 +69,6 @@ class FilterController extends GetxController {
   final selectedOptions = <String, dynamic>{}.obs;
 
   final profileController = Get.put(ProfileController());
-
-  // --------------------------------------------------------------
-  // INIT
-  // --------------------------------------------------------------
-  @override
-  void onInit() async {
-    super.onInit();
-  }
 
   // --------------------------------------------------------------
   // API CALLS

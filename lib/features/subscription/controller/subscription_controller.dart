@@ -44,6 +44,10 @@ class SubscriptionController extends GetxController {
         ApiConstant.getSubscriptionUserPlan,
         req,
       );
+
+      if (response['statusCode'] == 204) {
+        return;
+      }
       if (response['statusCode'] == 200) {
         packageName.value = response['data']["plan"]['plandisplayname'];
         buyDate.value = THelperFunctions.formatDateString(
@@ -60,7 +64,7 @@ class SubscriptionController extends GetxController {
 
       debugPrint("getSubscriptionUserPlan response: $response");
 
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
       if (response['statusCode'] == 200) {
         Get.toNamed(TRoutes.userSubscriptionPlan);
       } else {
@@ -69,13 +73,13 @@ class SubscriptionController extends GetxController {
 
       //
     } catch (e) {
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(
         title: "Error in fetching user subscription",
         message: e.toString(),
       );
     } finally {
-      // TFullScreenLoader.stopLoading();
+      TFullScreenLoader.stopLoading();
     }
   }
 

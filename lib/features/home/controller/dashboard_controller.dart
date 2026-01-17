@@ -1,4 +1,6 @@
 import 'package:share_plus/share_plus.dart';
+import 'package:tamilnadu_matrimony/data/services/dynamic_link_service.dart';
+import 'package:tamilnadu_matrimony/features/alerts/controller/alert_interest_send_controller.dart';
 import 'package:tamilnadu_matrimony/features/favorites/controller/unlocked_controller.dart';
 import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart';
 import 'package:tamilnadu_matrimony/features/home/screen/customer_view_page.dart';
@@ -6,7 +8,6 @@ import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 
 import '../../../utils/constants/path_provider.dart';
 import '../../favorites/controller/like_controller.dart';
-import 'package:tamilnadu_matrimony/data/services/dynamic_link_service.dart';
 import '../model/dashboard_list_model.dart';
 import 'filter_controller.dart';
 
@@ -251,8 +252,9 @@ class DashboardController extends GetxController {
       TFullScreenLoader.stopLoading();
       await fetchCustomerPage(profileId);
       Get.to(() => CustomerDetailsView());
-
-      await Get.put(UnlockedController()).fetchUnlockList();
+      final unlockedController = UnlockedController.instance;
+      await unlockedController.fetchUnlockList();
+      // await Get.put(UnlockedController()).fetchUnlockList();
 
       TLoaders.successSnackBar(
         title: "Send Interest",
@@ -291,7 +293,8 @@ class DashboardController extends GetxController {
         title: "Send Interest",
         message: response['message'],
       );
-
+      final controller = AlertInterestSendController.instance;
+      await controller.fetchAlertSendProfile();
       TFullScreenLoader.stopLoading();
     } catch (e) {
       TFullScreenLoader.stopLoading();

@@ -246,16 +246,35 @@ class EditProfileController extends GetxController {
     /// ---------------- BASIC DETAILS ----------------
 
     /// split the child cound and living status
-    String children = profile.childrenLivingStatus.toString();
-    List<String> childrenList = children.split('-');
+    String children = profile.childrenLivingStatus?.toString() ?? '';
 
-    childLivingStatus.value = childrenList[1].trim() == 'Yes'
-        ? "Living with me"
-        : "Not living with me";
+    if (children.contains('-')) {
+      final childrenList = children.split('-');
 
-    selectedNoOfChildren.value = childCountList.firstWhereOrNull(
-      (e) => e.id.toString() == childrenList[0].trim(),
-    );
+      if (childrenList.length > 1) {
+        childLivingStatus.value = childrenList[1].trim().toLowerCase() == 'yes'
+            ? 'Living with me'
+            : 'Not living';
+        selectedNoOfChildren.value = childCountList.firstWhereOrNull(
+          (e) => e.id.toString() == childrenList[0].trim(),
+        );
+      } else {
+        childLivingStatus.value = '';
+      }
+    } else {
+      childLivingStatus.value = '';
+    }
+
+    // String children = profile.childrenLivingStatus.toString();
+    // List<String> childrenList = children.split('-');
+    //
+    // childLivingStatus.value = childrenList[1].trim() == 'Yes'
+    //     ? "Living with me"
+    //     : "Not living with me";
+    //
+    // selectedNoOfChildren.value = childCountList.firstWhereOrNull(
+    //   (e) => e.id.toString() == childrenList[0].trim(),
+    // );
     nameController.text = profile.name ?? '';
     dobController.text = profile.dob ?? '';
 

@@ -4,7 +4,7 @@ import '../../model/dashboard_list_model.dart';
 import '../customer_view_page.dart';
 
 class CustomerCard extends StatelessWidget {
-  const   CustomerCard({super.key, required this.customerProfile});
+  const CustomerCard({super.key, required this.customerProfile});
 
   final CustomerProfileListModel customerProfile;
 
@@ -39,7 +39,7 @@ class CustomerCard extends StatelessWidget {
                     imageType: ImageType.network,
                     image: customerProfile.image ?? '',
                     backgroundColor: TColors.white,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                   ),
                 ),
 
@@ -96,13 +96,16 @@ class CustomerCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          customerProfile.matriId.toString().toUpperCase(),
-                          style: Theme.of(context).textTheme.bodySmall!
-                              .copyWith(color: Colors.white70),
+                          "${customerProfile.name},${customerProfile.age}",
+                          style: Theme.of(context).textTheme.headlineMedium!
+                              .copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                         Text(
-                          "${customerProfile.name},${customerProfile.age}",
-                          style: Theme.of(context).textTheme.headlineSmall!
+                          customerProfile.matriId.toString().toUpperCase(),
+                          style: Theme.of(context).textTheme.bodySmall!
                               .copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -146,29 +149,29 @@ class CustomerCard extends StatelessWidget {
             color: TColors.white,
             padding: EdgeInsets.all(TSizes.xs),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Wrap(
-                  spacing: 8,
+                  spacing: 2,
                   runSpacing: 6,
                   children: [
                     _buildChip(
-                      Icons.auto_awesome,
-                      customerProfile.address ?? '',
+                      Icons.join_inner_rounded,
+                      customerProfile.maritalStatus ?? '',
                     ),
-                    _buildChip(Icons.work, customerProfile.occupation ?? ''),
-                    _buildChip(
-                      Icons.school,
-                      customerProfile.educationDetails ?? '',
-                    ),
+                    _buildChip(Icons.auto_awesome, customerProfile.caste ?? ''),
+                    _buildChip(Icons.location_on, customerProfile.city ?? ''),
+
                     _buildChip(
                       Icons.stars,
                       "Rasi: ${customerProfile.moonSign ?? ''}",
                     ),
+
                     _buildChip(Icons.star, customerProfile.star ?? ''),
-                    _buildChip(Icons.location_on, customerProfile.city ?? ''),
+                    _buildChip(Icons.work, customerProfile.occupation ?? ''),
                     _buildChip(
-                      Icons.join_inner_rounded,
-                      customerProfile.maritalStatus ?? '',
+                      Icons.school,
+                      customerProfile.educationDetails ?? '',
                     ),
                   ],
                 ),
@@ -177,14 +180,20 @@ class CustomerCard extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Obx(
-                        () {
-                          debugPrint("CustomerCard isUnlocked: ${customerProfile.isUnlocked}");
-                          debugPrint("CustomerCard isUnlocked: ${customerProfile.name}");
+                      child: Obx(() {
+                        debugPrint(
+                          "CustomerCard isUnlocked: ${customerProfile.isUnlocked}",
+                        );
+                        debugPrint(
+                          "CustomerCard isUnlocked: ${customerProfile.name}",
+                        );
 
-                          return ElevatedButton.icon(
+                        return ElevatedButton.icon(
                           onPressed: () {
-                            controller.unlockProfile(profileId: customerProfile.id??0,unlockValue: customerProfile.isUnlocked);
+                            controller.unlockProfile(
+                              profileId: customerProfile.id ?? 0,
+                              unlockValue: customerProfile.isUnlocked,
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
@@ -194,27 +203,28 @@ class CustomerCard extends StatelessWidget {
                             ),
                             elevation: 3,
                           ),
-                          icon:  Icon(
-                            customerProfile.isUnlocked.toLowerCase() == "true"?Icons.lock_open_outlined:
-                            Icons.lock_outline,
+                          icon: Icon(
+                            customerProfile.isUnlocked.toLowerCase() == "true"
+                                ? Icons.lock_open_outlined
+                                : Icons.lock_outline,
                             color: Colors.white,
                           ),
                           label: Text(
-                         customerProfile.isUnlocked.toLowerCase() == "true"
-                            ? TTexts.viewDetails.tr
-                            :
-                            TTexts.unlockNumber.tr,
+                            customerProfile.isUnlocked.toLowerCase() == "true"
+                                ? TTexts.viewDetails.tr
+                                : TTexts.unlockNumber.tr,
                             style: const TextStyle(color: Colors.white),
                           ),
                         );
-                        },
-                      ),
+                      }),
                     ),
                     const SizedBox(width: 12),
                     InkWell(
                       borderRadius: BorderRadius.circular(12),
-                      onTap: ()async {
-                       await controller.fetchCustomerPage(customerProfile.id??0);
+                      onTap: () async {
+                        await controller.fetchCustomerPage(
+                          customerProfile.id ?? 0,
+                        );
                         // controller.fetchCustomerPage(customerProfile.id??0);
                         Get.to(() => CustomerDetailsView());
                       },

@@ -5,11 +5,16 @@ import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 
 import '../../../../utils/constants/path_provider.dart';
 import '../../model/login_otp_model.dart';
+import '../../screen/otp/sms_retriever_impl.dart';
+import 'package:pinput/pinput.dart';
+import 'package:smart_auth/smart_auth.dart';
 
 class OtpController extends GetxController {
   var secondsRemaining = 300.obs;
   late Timer _timer;
   final otpTextController = TextEditingController();
+  late final SmsRetriever smsRetriever;
+  late final SmartAuth smartAuth;
 
   final storage = GetStorage();
 
@@ -24,6 +29,8 @@ class OtpController extends GetxController {
   void onInit() {
     super.onInit();
     startTimer();
+    smartAuth = SmartAuth.instance;
+    smsRetriever = SmsRetrieverImpl(smartAuth);
   }
 
   Future<void> verifyOtpApi() async {

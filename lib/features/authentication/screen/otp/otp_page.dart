@@ -89,6 +89,7 @@ class OtpPage extends StatelessWidget {
             border: Border.all(color: Theme.of(context).primaryColor, width: 2),
           ),
         ),
+        smsRetriever: controller.smsRetriever,
         onCompleted: (pin) {},
       ),
     );

@@ -328,13 +328,24 @@ class EditBasicDetails extends StatelessWidget {
                         icon: IconlyLight.user,
                       ),
               ),
-              TFormField(
-                labelText: TTexts.disablePerson.tr,
-                isDropdown: true,
-                icon: Icons.check_box_outlined,
+              SizedBox(height: TSizes.sm),
+
+              TSearchDropdownField<String>(
+                label: TTexts.disablePerson.tr,
+                showSearchBox: false,
                 items: [TTexts.yes.tr, TTexts.no.tr],
-                value: controller.isDisablePerson.value,
-                onChanged: (v) => controller.isDisablePerson.value = v ?? '',
+                prefixIcon: Icons.check_box_outlined,
+                selectedItem: controller.isDisablePerson.value,
+                itemAsString: (item) => item.toString(),
+                compareFn: (a, b) => a == b,
+                onChanged: (value) {
+                  if (value == null) return;
+                  controller.isDisablePerson.value;
+                },
+                validator: (value) => TValidator.validateEmptyText(
+                  TTexts.disablePerson.tr,
+                  value,
+                ),
               ),
               const SizedBox(height: TSizes.spaceBtwSections),
               Obx(
