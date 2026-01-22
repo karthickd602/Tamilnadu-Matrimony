@@ -16,11 +16,6 @@ final repo = Get.put(ProfileRepository());
   final userProfile = Rxn<FetchUserProfileModel>();
   final pickedImage = Rxn<File>();
 
-  @override
-  void onReady() {
-    super.onReady();
-    // fetchUserProfile();
-  }
 
 
   /* ========================================================

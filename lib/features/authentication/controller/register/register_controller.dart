@@ -328,139 +328,6 @@ class RegistrationController extends GetxController {
     }
   }
 
-  // Future<void> _mapProfileToFields() async {
-  //   final profile = userProfile.value;
-  //   if (profile == null) return;
-  //
-  //   /// ---------------- BASIC DETAILS ----------------
-  //   String children = profile.childrenLivingStatus.toString();
-  //   List<String> childrenList = children.split('-');
-  //   noOfChildren.value = childrenList[0].trim();
-  //   childLivingStatus.value = childrenList[1].trim();
-  //
-  //   nameController.text = profile.name ?? '';
-  //   dobController.text = profile.dob ?? '';
-  //   // heightController.text = profile.height ?? '';
-  //   maritalStatus.value = profile.maritalStatus ?? '';
-  //   selectedComplexion.value = profile.complexion ?? '';
-  //   educationDetailsController.text = profile.educationDetails ?? '';
-  //   subCasteController.text = profile.subCaste ?? '';
-  //   incomeController.text = profile.annualIncome.toString();
-  //   selectedGender.value = profile.gender == "1"
-  //       ? TTexts.male.tr
-  //       : TTexts.female.tr;
-  //
-  //   isDisablePerson.value = profile.speCases == "1" ? "Yes" : "No";
-  //
-  //   /// ---------------- DROPDOWNS (MATCH BY ID) ----------------
-  //   /// ---------------- DROPDOWNS ----------------
-  //
-  //   await Future.delayed(const Duration(milliseconds: 100));
-  //   occupationDetailsController.text = profile.workplace ?? '';
-  //   debugPrint(
-  //     'occupation Details : ${profile.workplace}---${occupationDetailsController.text}',
-  //   );
-  //   selectedEducation.value = educationDDList.firstWhereOrNull(
-  //     (e) => e.id.toString() == profile.educationId,
-  //   );
-  //   selectedOccupation.value = occupationDDList.firstWhereOrNull(
-  //     (e) => e.id.toString() == profile.occupationId,
-  //   );
-  //
-  //   /// ---------------- CASTE (DEPENDS ON RELIGION) ----------------
-  //   selectedReligion.value = religionDDList.firstWhereOrNull(
-  //     (e) => e.id.toString() == profile.religionId,
-  //   );
-  //   if (selectedReligion.value != null) {
-  //     await fetchCasteDropdown(religionId: selectedReligion.value!.id);
-  //
-  //     selectedCaste.value = casteDDList.firstWhereOrNull(
-  //       (e) => e.id.toString() == profile.casteId,
-  //     );
-  //
-  //     selectedHeight.value = heightList.firstWhereOrNull(
-  //       (e) => e.id.toString() == profile.heightID.toString(),
-  //     );
-  //     debugPrint("✅selected Caste ${selectedCaste.value}");
-  //   }
-  //
-  //   fatherNameController.text = profile.fatherName ?? '';
-  //   fatherOccupationController.text = profile.fathersOccupation ?? '';
-  //   motherNameController.text = profile.motherName ?? '';
-  //   motherOccupationController.text = profile.mothersOccupation ?? '';
-  //   familyStatusController.value = profile.familyStatus ?? '';
-  //   brothersController.text = profile.noOfBrothers ?? '';
-  //   sistersController.text = profile.noOfSisters ?? '';
-  //   marriedBrothersController.text = profile.nbm ?? '';
-  //   marriedSistersController.text = profile.nsm ?? '';
-  //   nativePlaceController.text = profile.irupidam ?? '';
-  //   selectedComplexion.value = profile.complexion ?? '';
-  //   noOfChildren.value = profile.childrenLivingStatus.toString()[0] ?? '';
-  //
-  //   /// ---------------- LOCATION ----------------
-  //
-  //   selectedCountry.value = countryList.firstWhereOrNull(
-  //     (e) => e.id.toString() == profile.countryId,
-  //   );
-  //
-  //   // selectedHeight.value = heightList.firstWhereOrNull(
-  //   //   (e) => e.id.toString() == profile.heightID.toString(),
-  //   // );
-  //
-  //   // debugPrint(" height id : ${profile.heightID}");
-  //   // debugPrint("selected height id : ${selectedHeight.value?.id}");
-  //
-  //   if (selectedCountry.value != null) {
-  //     await fetchStateDropdown();
-  //
-  //     selectedState.value = stateList.firstWhereOrNull(
-  //       (e) => e.id.toString() == profile.stateId,
-  //     );
-  //   }
-  //
-  //   if (selectedState.value != null) {
-  //     await fetchDistrictDropdown();
-  //
-  //     selectedDistrict.value = districtList.firstWhereOrNull(
-  //       (e) => e.id.toString() == profile.cityId,
-  //     );
-  //   }
-  //
-  //   /// ---------------- CONTACT ----------------
-  //
-  //   mobileController.text = profile.phone ?? profile.mobile ?? '';
-  //   emailController.text = profile.confirmEmail ?? '';
-  //   cityController.text = profile.city ?? '';
-  //   stateController.value = profile.state ?? '';
-  //   districtController.value = profile.city ?? '';
-  //   pincodeController.text = profile.postal ?? '';
-  //   addressController.text = profile.address ?? '';
-  //   isDisablePerson.value = profile.speCases == "yes" ? "Yes" : "No";
-  //   noCasteChecked.value = profile.noCaste.toString().toLowerCase() == "yes"
-  //       ? true
-  //       : false;
-  //
-  //   /// ---------------- HOROSCOPE ----------------
-  //
-  //   selectedRaasi.value = profile.moonsign;
-  //   selectedStar.value = profile.star;
-  //   selectedLaknam.value = profile.inLaknam ?? '';
-  //   selectedDasa.value = profile.dasaType;
-  //   selectedDhosam.value = profile.thosam;
-  //   areYouHaveDhosam.value = profile.thoosamType == 'Yes'
-  //       ? TTexts.yes.tr
-  //       : TTexts.no.tr;
-  //   isDoshamHave.value = profile.thoosamType ?? '';
-  //   debugPrint(" dosham ${isDoshamHave.value}");
-  //
-  //   /// ---------------- PROFILE IMAGE ----------------
-  //
-  //   // if (profile.photo1 != null && profile.photo1!.isNotEmpty) {
-  //   //   profileImagePath.value = profile.photo1!;
-  //   // }
-  //
-  //   debugPrint("✅ Profile mapped to form successfully");
-  // }
   Future<void> _mapProfileToFields() async {
     final profile = userProfile.value;
     if (profile == null) return;
@@ -1039,7 +906,7 @@ class RegistrationController extends GetxController {
 
       currentStep.value++;
     } catch (e) {
-      debugPrint("horoscopeFormSubmit - ${e}");
+      debugPrint("horoscopeFormSubmit - $e");
 
       TLoaders.errorSnackBar(
         title: "Failed",
@@ -1071,7 +938,7 @@ class RegistrationController extends GetxController {
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
-      print("Contact : $request");
+      debugPrint("Contact : $request");
 
       // final response = await THttpHelper.post(
       //   ApiConstant.contactRegisterEndpoint,
@@ -1090,7 +957,7 @@ class RegistrationController extends GetxController {
       storage.write(TTexts.appPages, 0);
       Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
-      debugPrint("contactFormSubmit - ${e}");
+      debugPrint("contactFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:

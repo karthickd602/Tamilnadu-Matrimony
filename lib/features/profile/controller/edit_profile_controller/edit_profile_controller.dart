@@ -870,7 +870,7 @@ class EditProfileController extends GetxController {
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
-      print("Contact req : $request");
+      debugPrint("Contact req : $request");
 
       final response = await THttpHelper.post(
         ApiConstant.contactRegisterEndpoint,
@@ -890,7 +890,7 @@ class EditProfileController extends GetxController {
       // storage.write(TTexts.appPages, 0);
       // Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
-      debugPrint("contactFormSubmit - ${e}");
+      debugPrint("contactFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:

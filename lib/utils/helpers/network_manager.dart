@@ -23,8 +23,8 @@ class NetworkManager extends GetxController {
 
   void _listenToConnectivityChanges() {
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen((
-        List<ConnectivityResult> result,
-        ) {
+      List<ConnectivityResult> result,
+    ) {
       _handleConnectionChange(result);
     });
   }
@@ -61,6 +61,7 @@ class NetworkManager extends GetxController {
       }
     }
   }
+
   Future<bool> isConnected() async {
     try {
       final result = await _connectivity.checkConnectivity();
@@ -75,7 +76,6 @@ class NetworkManager extends GetxController {
       return false;
     }
   }
-
 
   @override
   void onClose() {
@@ -96,7 +96,7 @@ class NetworkSpeedChecker {
       stopwatch.stop();
       final ping = stopwatch.elapsedMilliseconds;
 
-      print("📡 Network Ping: $ping ms");
+      debugPrint("📡 Network Ping: $ping ms");
 
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         if (ping > 800) return false;

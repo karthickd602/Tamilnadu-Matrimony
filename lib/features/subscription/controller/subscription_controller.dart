@@ -118,7 +118,7 @@ class SubscriptionController extends GetxController {
       }
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      print("Error fetching plans: $e");
+      debugPrint("Error fetching plans: $e");
     }
   }
 

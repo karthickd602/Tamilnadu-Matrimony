@@ -9,7 +9,7 @@ class GeneralBinding extends Bindings {
     // final storage = GetStorage();
     // await storage.write(TTexts.userId,"11623");
 
-    // TODO: implement dependencies
+    // Dependencies
     Get.lazyPut(() => NetworkManager(), fenix: true);
     Get.lazyPut(() => ProfileRepository());
     Get.put(DynamicLinkService());

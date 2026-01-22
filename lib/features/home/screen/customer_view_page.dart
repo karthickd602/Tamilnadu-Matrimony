@@ -45,7 +45,7 @@ class CustomerDetailsView extends StatelessWidget {
               GestureDetector(
                 onTap: () => Get.to(
                   () => ImagePreviewPage(
-                    imageUrl: userModel.photo1 ?? TImages.sampleUser,
+                    imageUrl: userModel.photo1,
                     imageType: userModel.photo1 == ""
                         ? ImageType.asset
                         : ImageType.network,
@@ -60,7 +60,7 @@ class CustomerDetailsView extends StatelessWidget {
                   imageType: userModel.photo1 == ""
                       ? ImageType.asset
                       : ImageType.network,
-                  image: userModel.photo1 ?? TImages.sampleUser,
+                  image: userModel.photo1,
                   backgroundColor: TColors.white,
                   fit: BoxFit.cover,
                 ),
@@ -82,19 +82,17 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.badge,
                           "label": TTexts.nameAge.tr,
-                          "value":
-                              "${userModel.name ?? ''}, ${userModel.age ?? ''} yrs",
+                          "value": "${userModel.name}, ${userModel.age} yrs",
                         },
                         {
                           "icon": Icons.location_on,
                           "label": TTexts.location.tr,
-                          "value":
-                              "${userModel.city ?? ''}, ${userModel.state ?? ''}",
+                          "value": "${userModel.city}, ${userModel.state}",
                         },
                         {
                           "icon": Icons.favorite,
                           "label": TTexts.maritalStatus.tr,
-                          "value": userModel.maritalStatus ?? "-",
+                          "value": userModel.maritalStatus,
                         },
                         {
                           "icon": Icons.cake,
@@ -117,12 +115,12 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.menu_book,
                           "label": TTexts.degree.tr,
-                          "value": userModel.educationDetails ?? "-",
+                          "value": userModel.educationDetails,
                         },
                         {
                           "icon": Icons.work_outline,
                           "label": TTexts.occupation.tr,
-                          "value": userModel.occupation ?? "-",
+                          "value": userModel.occupation,
                         },
                       ],
                       primaryColor,
@@ -137,22 +135,22 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.self_improvement,
                           "label": TTexts.religion.tr,
-                          "value": userModel.religion ?? "-",
+                          "value": userModel.religion,
                         },
                         {
                           "icon": Icons.groups,
                           "label": TTexts.caste.tr,
-                          "value": userModel.caste ?? "-",
+                          "value": userModel.caste,
                         },
                         {
                           "icon": Icons.star_rate,
                           "label": TTexts.star.tr,
-                          "value": userModel.star ?? "-",
+                          "value": userModel.star,
                         },
                         {
                           "icon": Icons.wb_sunny,
                           "label": TTexts.lagnam.tr,
-                          "value": userModel.inLaknam ?? "-",
+                          "value": userModel.inLaknam,
                         },
                       ],
                       primaryColor,
@@ -167,12 +165,12 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.height,
                           "label": TTexts.height.tr,
-                          "value": userModel.height ?? "-",
+                          "value": userModel.height,
                         },
                         {
                           "icon": Icons.face_retouching_natural,
                           "label": TTexts.complexion.tr,
-                          "value": userModel.complexion ?? "-",
+                          "value": userModel.complexion,
                         },
                       ],
                       primaryColor,
@@ -188,19 +186,19 @@ class CustomerDetailsView extends StatelessWidget {
                           "icon": Icons.man,
                           "label": TTexts.father.tr,
                           "value":
-                              "${userModel.fatherName ?? ''} (${userModel.fathersOccupation ?? ''})",
+                              "${userModel.fatherName} (${userModel.fathersOccupation})",
                         },
                         {
                           "icon": Icons.woman,
                           "label": TTexts.mother.tr,
                           "value":
-                              "${userModel.motherName ?? ''} (${userModel.mothersOccupation ?? ''})",
+                              "${userModel.motherName} (${userModel.mothersOccupation})",
                         },
                         {
                           "icon": Icons.people,
                           "label": TTexts.siblings.tr,
                           "value":
-                              "${userModel.noOfBrothers ?? '0'} Brothers | ${userModel.noOfSisters ?? '0'} Sisters",
+                              "${userModel.noOfBrothers} Brothers | ${userModel.noOfSisters} Sisters",
                         },
                       ],
                       primaryColor,
@@ -247,7 +245,7 @@ class CustomerDetailsView extends StatelessWidget {
                         {
                           "icon": Icons.groups_2,
                           "label": TTexts.caste.tr,
-                          "value": userModel.caste ?? "-",
+                          "value": userModel.caste,
                         },
                       ],
                       primaryColor,
@@ -302,7 +300,7 @@ class CustomerDetailsView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.15),
+                  color: primaryColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(icon, color: primaryColor, size: 26),

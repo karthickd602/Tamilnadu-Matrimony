@@ -81,13 +81,13 @@ class TRoundedImage extends StatelessWidget {
   // NETWORK IMAGE (Shimmer + Fade)
   // -----------------------------
   Widget _networkImage() {
-    if (image == null || image!.isEmpty) {
+    if (image.isEmpty) {
       return _fallbackImage();
     }
 
     return CachedNetworkImage(
       fit: fit,
-      imageUrl: image!,
+      imageUrl: image,
       progressIndicatorBuilder: (_, __, downloadProgress) =>
           TShimmerEffect(width: width, height: height),
       errorWidget: (context,url,error)=>Icon(Icons.error),
@@ -124,8 +124,7 @@ class TRoundedImage extends StatelessWidget {
   // ASSET IMAGE
   // -----------------------------
   Widget _assetImage() {
-    if (image == null) return _fallbackImage();
-    return _fadeIn(Image.asset(image!, fit: fit));
+    return _fadeIn(Image.asset(image, fit: fit));
   }
 
   // -----------------------------

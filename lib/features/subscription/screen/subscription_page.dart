@@ -105,13 +105,13 @@ class SubscriptionPage extends StatelessWidget {
                           ? () {
                               Get.snackbar(
                                 "Selected Plan",
-                                "${selected!.name} ₹${selected.price}",
+                                "${selected.name} ₹${selected.price}",
                               );
                             }
                           : null,
                       child: Text(
                         enabled
-                            ? "Buy package for ₹ ${selected!.price}"
+                            ? "Buy package for ₹ ${selected.price}"
                             : "Loading plans...",
                         style: const TextStyle(
                           color: Colors.white,

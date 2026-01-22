@@ -2,6 +2,7 @@ import 'package:tamilnadu_matrimony/features/profile/controller/profile_controll
 
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/popups/full_screen_loader.dart';
+import '../../authentication/dropdown_list.dart';
 import '../../authentication/model/dropdown_model.dart';
 import '../controller/dashboard_controller.dart';
 
@@ -17,6 +18,7 @@ class FilterController extends GetxController {
     "Marriage Type",
     // "Nakshatram",
     "Location",
+    "Star",
     "Dosham",
     "No Caste Bar",
     "Disability",
@@ -32,6 +34,8 @@ class FilterController extends GetxController {
     {'id': 3, 'name': TTexts.divorced.tr},
     {'id': 4, 'name': TTexts.separated.tr},
   ].obs;
+
+  final starList = ProfileDropdowns.allStarsList;
 
   // final martialStatus = [
   //   // TTexts.unMarried.tr,
@@ -179,16 +183,25 @@ class FilterController extends GetxController {
   // --------------------------------------------------------------
 
   /// MULTIPLE (CHECKBOX)
-  void toggleCheckbox(String category, int id) {
-    final List<int> list = List<int>.from(selectedOptions[category] ?? []);
+  void toggleCheckbox(String category, int id, {String? value}) {
+    List<dynamic> list = List<dynamic>.from(selectedOptions[category] ?? []);
 
-    if (list.contains(id)) {
-      list.remove(id);
+    if (category == "Star" && value != null) {
+      if (list.contains(value)) {
+        list.remove(value);
+      } else {
+        list.add(value);
+      }
     } else {
-      list.add(id);
+      if (list.contains(id)) {
+        list.remove(id);
+      } else {
+        list.add(id);
+      }
     }
 
     selectedOptions[category] = list;
+    debugPrint("✅ Selected $category: $list");
   }
 
   /// Return selected count or indicator for category
@@ -221,7 +234,12 @@ class FilterController extends GetxController {
     return "$start–$end";
   }
 
-  bool isCheckboxSelected(String category, int id) {
+  bool isCheckboxSelected(String category, int id, {String? value}) {
+    // For string-based lists like Star, we might need to check by value if ID isn't available/unique
+    if (category == "Star" && value != null) {
+      final list = selectedOptions[category] ?? [];
+      return list.contains(value);
+    }
     return (selectedOptions[category] ?? []).contains(id);
   }
 
@@ -240,7 +258,7 @@ class FilterController extends GetxController {
     update();
   }
 
-  final lockedCategories = ["Location"].obs;
+  final lockedCategories = [""].obs;
 
   /// 🔹 Check if category is locked
   bool isLocked(String category) {
@@ -249,11 +267,17 @@ class FilterController extends GetxController {
 
   int getOptionId(dynamic option) {
     if (option is Map) return option["id"];
+    if (option is String) {
+      return 0;
+    }
     return option.id; // model
   }
 
   String getOptionName(dynamic option) {
     if (option is Map) return option["name"];
+    if (option is String) {
+      return option;
+    }
     return option.name; // model
   }
 
@@ -262,23 +286,27 @@ class FilterController extends GetxController {
   // --------------------------------------------------------------
 
   Future<Map<String, dynamic>> fetchFilter() async {
-    final selectedMarriageId = selectedOptions["Marriage Type"];
-    final selectedMartial = selectedMarriageId == 1
-        ? "Unmarried"
-        : selectedMarriageId == 2
-        ? "Separated"
-        : selectedMarriageId == 3
-        ? "Divorced"
-        : selectedMarriageId == 4
-        ? "Widowed"
-        : "";
+    final selectedMarriageIds = selectedOptions["Marriage Type"];
+    String selectedMartial = "";
+
+    if (selectedMarriageIds != null && selectedMarriageIds is List) {
+      final List<String> statusList = [];
+      for (var id in selectedMarriageIds) {
+        if (id == 1) statusList.add("Unmarried");
+        if (id == 2) statusList.add("Widowed");
+        if (id == 3) statusList.add("Divorced");
+        if (id == 4) statusList.add("Separated");
+      }
+      selectedMartial = statusList.join(",");
+    }
 
     return {
       "id": storage.read(TTexts.userId),
       "Caste": selectedOptions["Caste"] ?? [],
       "EducationDetails": selectedOptions["Education"] ?? [],
       "City": selectedOptions["Location"] ?? [],
-      "thosam": selectedOptions["Dosham"] ?? [],
+      "thosam": _getDoshamNames(),
+      "star": selectedOptions["Star"] ?? [],
       "Maritalstatus": selectedMartial,
       "no_caste_bar": selectedOptions["No Caste Bar"] == 1 ? 'no_caste' : '',
       "disability": selectedOptions["Disability"] ?? 0,
@@ -311,5 +339,15 @@ class FilterController extends GetxController {
     ageRange.value = const RangeValues(18, 50);
     selectedOptions.clear();
     selectedIndex.value = 0;
+  }
+
+  List<String> _getDoshamNames() {
+    final selectedIds = List<dynamic>.from(selectedOptions["Dosham"] ?? []);
+    if (selectedIds.isEmpty) return [];
+
+    return dhosamList
+        .where((e) => selectedIds.contains(e["id"]))
+        .map((e) => e["name"].toString())
+        .toList();
   }
 }
