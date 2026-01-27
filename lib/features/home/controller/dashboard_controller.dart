@@ -252,9 +252,8 @@ class DashboardController extends GetxController {
       TFullScreenLoader.stopLoading();
       await fetchCustomerPage(profileId);
       Get.to(() => CustomerDetailsView());
-      final unlockedController = UnlockedController.instance;
+      final unlockedController = Get.put(UnlockedController());
       await unlockedController.fetchUnlockList();
-      // await Get.put(UnlockedController()).fetchUnlockList();
 
       TLoaders.successSnackBar(
         title: "Send Interest",

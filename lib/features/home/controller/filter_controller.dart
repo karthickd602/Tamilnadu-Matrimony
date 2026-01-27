@@ -4,6 +4,7 @@ import '../../../utils/constants/path_provider.dart';
 import '../../../utils/popups/full_screen_loader.dart';
 import '../../authentication/dropdown_list.dart';
 import '../../authentication/model/dropdown_model.dart';
+import '../model/dashboard_list_model.dart';
 import '../controller/dashboard_controller.dart';
 
 class FilterController extends GetxController {
@@ -306,7 +307,7 @@ class FilterController extends GetxController {
       "EducationDetails": selectedOptions["Education"] ?? [],
       "City": selectedOptions["Location"] ?? [],
       "thosam": _getDoshamNames(),
-      "star": selectedOptions["Star"] ?? [],
+      "Star": selectedOptions["Star"] ?? [],
       "Maritalstatus": selectedMartial,
       "no_caste_bar": selectedOptions["No Caste Bar"] == 1 ? 'no_caste' : '',
       "disability": selectedOptions["Disability"] ?? 0,
@@ -349,5 +350,85 @@ class FilterController extends GetxController {
         .where((e) => selectedIds.contains(e["id"]))
         .map((e) => e["name"].toString())
         .toList();
+  }
+
+  // --------------------------------------------------------------
+  // SPECIAL FILTER LOGIC
+  // --------------------------------------------------------------
+  final specialFilterProfiles = <CustomerProfileListModel>[].obs;
+  final isSpecialLoading = false.obs;
+  final RxString selectedSpecialCategory = "".obs;
+
+  void setSpecialFilter(String type) {
+    if (selectedSpecialCategory.value == type) {
+      selectedSpecialCategory.value = "";
+      specialFilterProfiles.clear();
+      return;
+    }
+
+    selectedSpecialCategory.value = type;
+    fetchSpecialFilterProfiles();
+  }
+
+  Future<void> fetchSpecialFilterProfiles() async {
+    try {
+      final connected = await NetworkManager.instance.isConnected();
+      if (!connected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Check connection",
+        );
+        return;
+      }
+
+      isSpecialLoading.value = true;
+      specialFilterProfiles.clear();
+
+      Map<String, dynamic> req = {"id": storage.read(TTexts.userId)};
+
+      switch (selectedSpecialCategory.value) {
+        case "unmarried":
+          req["Maritalstatus"] = "Unmarried";
+          break;
+        case "no_caste":
+          req["nocaste"] = "no_caste";
+          break;
+        case "disable_person":
+          req["spe_cases"] = "yes";
+          break;
+        case "dhosam_having":
+          req["thoosamtype"] = "yes";
+          break;
+        default:
+          isSpecialLoading.value = false;
+          return;
+      }
+
+      debugPrint("fetchSpecialFilterProfiles req: $req");
+      final response = await THttpHelper.post(
+        ApiConstant.specialFilterEndPoint,
+        req,
+      );
+      debugPrint("fetchSpecialFilterProfiles res: $response");
+
+      if (response['statusCode'] == 200) {
+        final List profiles = response['profiles'] ?? [];
+        specialFilterProfiles.value = profiles
+            .map((e) => CustomerProfileListModel.fromJson(e))
+            .toList();
+
+        if (specialFilterProfiles.isEmpty) {
+          // No profiles found
+        }
+      }
+
+      isSpecialLoading.value = false;
+    } catch (e) {
+      isSpecialLoading.value = false;
+      TLoaders.errorSnackBar(
+        title: "Special Filter Failed",
+        message: e.toString(),
+      );
+    }
   }
 }

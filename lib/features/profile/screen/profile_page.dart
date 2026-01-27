@@ -7,7 +7,6 @@ import '../../../common/widgets/images/t_circular_image.dart';
 import '../../../common/widgets/images/t_image_picker.dart';
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/helpers/url_launcher.dart';
-import '../../subscription/controller/subscription_controller.dart';
 import '../controller/profile_controller.dart';
 import 'delete_profile/delete_profile_dialog.dart';
 
@@ -181,10 +180,12 @@ class ProfilePage extends StatelessWidget {
                     Icons.card_membership_outlined,
                     TTexts.membershipDetails.tr,
                     () async {
-                      await Get.put(
-                        SubscriptionController(),
-                      ).fetchUserSubscriptionPlan();
-                      // Get.toNamed(TRoutes.buySubscription);
+                      Get.toNamed(TRoutes.userSubscriptionPlan);
+                      // final controller = Get.put(SubscriptionController());
+                      // await controller.fetchUserSubscriptionPlan();
+                      // await Get.put(
+                      //   SubscriptionController(),
+                      // ).fetchUserSubscriptionPlan();
                     },
                   ),
                   _buildMenuItem(

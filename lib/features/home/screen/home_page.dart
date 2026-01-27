@@ -2,7 +2,8 @@ import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/features/home/controller/dashboard_controller.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
-import '../../../common/widgets/loaders/animation_loader.dart';
+import 'package:tamilnadu_matrimony/common/widgets/loaders/animation_loader.dart';
+import 'package:tamilnadu_matrimony/features/home/screen/filter/special_filter_page.dart';
 import 'widget/customer_card.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,6 +17,24 @@ class HomePage extends StatelessWidget {
       appBar: TAppBar(
         title: TTexts.appName.tr,
         actions: [
+          InkWell(
+            onTap: () {
+              Get.to(() => const SpecialFilterPage());
+            },
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.stars_rounded,
+                  size: TSizes.iconMd,
+                  color: TColors.primary,
+                ),
+                const SizedBox(width: TSizes.xs / 2),
+                Text("Special", style: Theme.of(context).textTheme.bodyLarge),
+                const SizedBox(width: TSizes.xs),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
           InkWell(
             onTap: () {
               Get.toNamed(TRoutes.filter);

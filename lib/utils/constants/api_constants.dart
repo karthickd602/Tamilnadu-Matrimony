@@ -38,4 +38,5 @@ class ApiConstant {
   static const String updateUserPhotoEndpoint = "profile_upload";
   static const String updateVerifyDocumentEndpoint = "verify_profile";
   static const String deleteProfileEndpoint = "del_profile";
+  static const String specialFilterEndPoint = "special_filter";
 }
