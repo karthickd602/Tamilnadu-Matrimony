@@ -1,13 +1,13 @@
 import 'dart:async';
 
+import 'package:pinput/pinput.dart';
+import 'package:smart_auth/smart_auth.dart';
 import 'package:tamilnadu_matrimony/features/authentication/controller/login/login_controller.dart';
 import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 
 import '../../../../utils/constants/path_provider.dart';
 import '../../model/login_otp_model.dart';
 import '../../screen/otp/sms_retriever_impl.dart';
-import 'package:pinput/pinput.dart';
-import 'package:smart_auth/smart_auth.dart';
 
 class OtpController extends GetxController {
   var secondsRemaining = 300.obs;
@@ -61,6 +61,7 @@ class OtpController extends GetxController {
       debugPrint("OTP Verify : $response");
       if (response['statusCode'] == 200) {
         storage.write(TTexts.userId, response['user_id'].toString());
+        storage.write(TTexts.barerToken, response['token'].toString());
         storage.write(TTexts.appPages, response['app_page']);
         TFullScreenLoader.stopLoading();
 

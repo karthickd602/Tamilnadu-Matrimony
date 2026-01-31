@@ -6,7 +6,6 @@
   "app_name": "Tamilnadu Matrimony",
   "continue": "Continue",
   "back": "Back",
-
   "login": "Login",
   "first_name": "First Name",
   "last_name": "Last Name",
@@ -27,14 +26,10 @@
   "verification_code": "Verification Code",
   "resend_email": "Resend Email",
   "resend_email_in": "Resend email in",
-
   "select_language": "Choose Your Language",
   "continue_text": "Continue",
-
   "login_page_header": "Enter your phone number to get started",
   "login_page_notifier": "You will receive an OTP on this number",
-
-
   "enter_otp": "Enter OTP",
   "auto_fetching": "Auto-fetching OTP",
   "did_not_receive": "Didn't receive the OTP?",
@@ -42,10 +37,8 @@
   "resend": "Resend OTP",
   "error_full_otp": "Please enter full OTP",
   "otp_entered": "OTP Entered",
-
   "contact_details": "Contact Details",
   "review_submit": "Review & Submit",
-
   "name": "Name",
   "gender": "Gender",
   "male": "Male",
@@ -67,7 +60,6 @@
   "caste": "Caste",
   "sub_caste": "Sub Caste",
   "disablePerson": "Disable person",
-
   "father_name": "Father's Name",
   "mother_name": "Mother's Name",
   "father_occupation": "Father's Occupation",
@@ -79,9 +71,7 @@
   "family_type": "Family Type",
   "family_status": "Family Status",
   "native_place": "Native Place",
-
   "star": "Star",
-
   "lagnam": "Lagnam",
   "birth_time": "Birth Time",
   "birth_place": "Birth Place",
@@ -89,8 +79,6 @@
   "whatsapp_number": "WhatsApp Number",
   "alternate_mobile": "Alternate Mobile",
   "district": "District",
-
-
   "horoscope_details_title": "Horoscope Details",
   "horoscope_details": "Horoscope Details",
   "rasi": "Rasi",
@@ -98,14 +86,13 @@
   "laknam": "Laknam",
   "dosham": "Dosham",
   "is_dosham_have": "Are you have Dosham?",
-  "dasa_Type": "Dasa Type",
+  "dasa_type": "Dasa Type",
   "dasa_balance_days": "Dasa Balance Days",
   "yes": "Yes",
   "no": "No",
   "i_dont_know": "I Don't Know",
   "upload_horoscope_image": "Upload Horoscope Image",
   "tap_to_upload": "Tap to Upload Horoscope",
-
   "mobile_number": "Mobile Number",
   "alternate_number": "Alternate Number",
   "address": "Address",
@@ -126,7 +113,6 @@
   "physical_status": "Physical Status",
   "family_details": "Family Details",
   "partner_preference": "Partner Preference",
-
   "name_age": "Name & Age",
   "dob": "Date of Birth",
   "date_of_time": "Date of Time",
@@ -138,7 +124,6 @@
   "mother": "Mother",
   "siblings": "Siblings",
   "partner_caste": "Caste",
-
   "horoscope": "Horoscope",
   "sent_interest": "Send Interest",
   "register": "Register",
@@ -152,7 +137,6 @@
   "basic_details": "Basic Details",
   "occupation_details": "Occupation Details",
   "education_details": "Education Details",
-
   "date_of_birth": "Date of birth",
   "location": "Location",
   "mother_tongue": "Mother tongue",
@@ -161,16 +145,13 @@
   "salary": "Salary",
   "highest_qualification": "Highest Qualification",
   "share_profile": "Share Profile",
-
   "favorite": "Favorite",
   "liked": "Liked",
   "unlocked": "Un-Locked",
-
   "alerts": "Alerts",
   "notification": "Notification",
   "interestSent": "Interest Sent",
   "interestReceived": "Interest Received",
-
   "profile": "Profile",
   "edit_profile": "Edit Profile",
   "update_photo": "Update Photo",
@@ -180,5 +161,16 @@
   "membership_details": "Membership Details",
   "share_app": "Share",
   "delete_profile": "Delete Profile",
-  "logout": "Logout"
+  "logout": "Logout",
+  "matri_id": "Matri ID",
+  "postal_code": "Postal Code",
+  "phone": "Phone",
+  "thosam_type": "Thosam Type",
+  "horoscope_status": "Horoscope Status",
+  "approved": "Approved",
+  "pending": "Pending",
+  "not_verified": "Not Verified",
+  "photo_approved": "Photo Approved",
+  "photo_pending": "Photo Pending",
+  "no_profile_data": "No profile data"
 }

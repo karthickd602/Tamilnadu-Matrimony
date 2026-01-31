@@ -154,27 +154,7 @@ class EditBasicDetails extends StatelessWidget {
                           value.toString(),
                         ),
                       ),
-                // : TSearchDropdownField<String>(
-                //     label: TTexts.noOfChildren.tr,
-                //     showSearchBox: false,
-                //     items: ["0", "1", "2", "3", "4 and above"],
-                //     prefixIcon: Icons.child_care,
-                //     selectedItem: controller.noOfChildren.value,
-                //     itemAsString: (item) => item.toString(),
-                //     compareFn: (a, b) => a == b,
-                //     onChanged: (value) {
-                //       if (value == null) return;
-                //
-                //       controller.noOfChildren.value = value ?? '';
-                //
-                //       controller.childLivingStatus.value = '';
-                //     },
-                //     validator: (value) => TValidator.validateEmptyText(
-                //       TTexts.noOfChildren.tr,
-                //       value,
-                //     ),
-                //   ),
-              ),
+               ),
               SizedBox(height: TSizes.sm),
               Obx(
                 () =>

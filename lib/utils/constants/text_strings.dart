@@ -1,6 +1,8 @@
 class TTexts {
   // -- Local Storage
   static const String userId = "USER_ID";
+  static const String barerToken = "BARER_TOKEN";
+  static const String languageCode = "LANGUAGE_CODE";
   static const String appPages = "PAGE"; // - 0-  DASHBOARD, 1-> REGISTER
 
   // -- GLOBAL Keys
@@ -8,7 +10,7 @@ class TTexts {
   static const String skip = "skip";
   static const String done = "done";
   static const String submit = "submit";
-  static const String appName = "Tamilnadu Matrimony";
+  static const String appName = "app_name";
   static const String tContinue = "continue";
   static const String back = "back";
 
@@ -199,4 +201,15 @@ class TTexts {
   // Buttons
   static const horoscope = 'horoscope';
   static const sentInterest = 'sent_interest';
+  static const String matriId = "matri_id";
+  static const String postalCode = "postal_code";
+  static const String phone = "phone";
+  static const String thosamType = "thosam_type";
+  static const String horoscopeStatus = "horoscope_status";
+  static const String approved = "approved";
+  static const String pending = "pending";
+  static const String notVerified = "not_verified";
+  static const String photoApproved = "photo_approved";
+  static const String photoPending = "photo_pending";
+  static const String noProfileData = "no_profile_data";
 }

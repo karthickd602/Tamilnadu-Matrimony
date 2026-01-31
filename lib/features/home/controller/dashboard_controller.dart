@@ -26,6 +26,7 @@ class DashboardController extends GetxController {
 
   // final int pageSize = 10; // If API supports
   final RxBool hasMore = true.obs;
+  final searchIdController = TextEditingController();
 
   final scrollController = ScrollController();
 
@@ -74,6 +75,10 @@ class DashboardController extends GetxController {
         "id": storage.read(TTexts.userId),
         "page": currentPage.value,
       };
+
+      if (searchIdController.text.isNotEmpty) {
+        req["search_id"] = searchIdController.text.trim();
+      }
 
       /// 🔥 MERGE FILTERS IF PROVIDED
       if (filters != null && filters.isNotEmpty) {

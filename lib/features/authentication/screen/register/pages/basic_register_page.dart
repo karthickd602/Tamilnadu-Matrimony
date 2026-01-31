@@ -207,8 +207,8 @@ class StepBasicDetails extends StatelessWidget {
               Obx(
                 () =>
                     (controller.maritalStatus.value == TTexts.unMarried.tr ||
-                        controller.noOfChildren.value == "0" ||
-                        controller.noOfChildren.value == '')
+                        controller.selectedNoOfChildren.value?.id == "0" ||
+                        controller.selectedNoOfChildren.value == null)
                     ? SizedBox()
                     : SizedBox(height: TSizes.sm),
               ),
@@ -274,6 +274,7 @@ class StepBasicDetails extends StatelessWidget {
                   value.toString(),
                 ),
               ),
+
               TSearchDropdownField<ReligionDDModel>(
                 prefixIcon: Icons.temple_hindu_outlined,
                 label: TTexts.religion.tr,
@@ -320,7 +321,6 @@ class StepBasicDetails extends StatelessWidget {
                         ),
                       ),
               ),
-
               Obx(
                 () =>
                     (controller.selectedReligion.value == null ||
@@ -332,15 +332,25 @@ class StepBasicDetails extends StatelessWidget {
                         icon: IconlyLight.user,
                       ),
               ),
-              TFormField(
-                labelText: TTexts.disablePerson.tr,
-                isDropdown: true,
-                icon: Icons.check_box_outlined,
+              SizedBox(height: TSizes.sm),
+              TSearchDropdownField<String>(
+                label: TTexts.disablePerson.tr,
+                showSearchBox: false,
                 items: [TTexts.yes.tr, TTexts.no.tr],
-
-                value: controller.isDisablePerson.value,
-                onChanged: (v) => controller.isDisablePerson.value = v ?? '',
+                prefixIcon: Icons.check_box_outlined,
+                selectedItem: controller.isDisablePerson.value,
+                itemAsString: (item) => item.toString(),
+                compareFn: (a, b) => a == b,
+                onChanged: (value) {
+                  if (value == null) return;
+                  controller.isDisablePerson.value;
+                },
+                validator: (value) => TValidator.validateEmptyText(
+                  TTexts.disablePerson.tr,
+                  value,
+                ),
               ),
+
               const SizedBox(height: TSizes.spaceBtwSections),
               Obx(
                 () => ElevatedButton(

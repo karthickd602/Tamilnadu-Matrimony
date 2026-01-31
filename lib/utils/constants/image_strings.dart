@@ -1,17 +1,17 @@
-
 /* -- App Image Strings -- */
 
 /// This class contains all the App Images in String formats.
 class TImages {
-
   // -- App Logos
   static const String appLogo = "assets/logos/logo.png";
-  static const String splashAppLogoAnimation  = "assets/logos/splash_animation.json";
+  static const String splashAppLogoAnimation =
+      "assets/logos/splash_animation.json";
+  static const String splashScreen = "assets/logos/splash_screen.jpeg";
 
   // -- Lottie Animations
-  static String noDataFoundAnimation = "assets/animation/No Data Animation.json";
+  static String noDataFoundAnimation =
+      "assets/animation/No Data Animation.json";
   // static String defaultLoaderAnimation = "assets/images/animations/default-loader-animation.json";
-
 
   /// -- Banner
   static const String banner1 = "assets/images/banner/banner 1.png";
@@ -22,4 +22,3 @@ class TImages {
   static const String sampleUser2 = "assets/images/content/user2.png";
   static const String defaultProfilePic = "assets/images/content/user.png";
 }
-

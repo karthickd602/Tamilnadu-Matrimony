@@ -7,6 +7,7 @@ import '../constants/path_provider.dart';
 
 class THttpHelper {
   static const String _baseUrl = 'https://www.jobsintimate.com/api';
+  static final storage = GetStorage();
 
   // Helper method to make a GET request
   static Future<Map<String, dynamic>> get(String endpoint) async {
@@ -23,6 +24,11 @@ class THttpHelper {
     final url = Uri.parse("$_baseUrl/$endpoint");
     final request = http.MultipartRequest("POST", url);
 
+    request.headers.addAll({
+      'Accept-Language': storage.read(TTexts.languageCode) ?? "en",
+      'x-authorization': 'Bearer ${storage.read(TTexts.barerToken)}',
+    });
+    debugPrint('Bearer token:Bearer ${storage.read(TTexts.barerToken)}');
     // Convert dynamic body → String fields safely
     body.forEach((key, value) {
       if (value != null) {
@@ -52,6 +58,14 @@ class THttpHelper {
       return json.decode(responseData);
     }
 
+    if (response.statusCode == 401) {
+      debugPrint("multipartPost StatusCode: ${response.statusCode}");
+      storage.remove(TTexts.barerToken);
+      storage.remove(TTexts.userId);
+      Get.offAllNamed(TRoutes.loginPage);
+      throw "Unauthorized";
+    }
+
     // If error contains message
     try {
       final decoded = json.decode(responseData);
@@ -68,9 +82,16 @@ class THttpHelper {
   ) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/$endpoint'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Accept-Language': storage.read(TTexts.languageCode) ?? "en",
+        'x-authorization': 'Bearer ${storage.read(TTexts.barerToken)}',
+      },
       body: json.encode(data),
     );
+    debugPrint('Headers: ${response.request?.headers}');
+    // debugPrint('Body: ${response.request?.body}')
     return _handleResponse(response);
   }
 
@@ -83,6 +104,10 @@ class THttpHelper {
       'POST',
       Uri.parse('$_baseUrl/$endpoint'),
     );
+    request.headers.addAll({
+      'Accept-Language': storage.read(TTexts.languageCode) ?? "en",
+      'x-authorization': 'Bearer ${storage.read(TTexts.barerToken)}',
+    });
     request.fields.addAll(data);
     files.forEach((key, value) async {
       request.files.add(await http.MultipartFile.fromPath(key, value.path));
@@ -93,6 +118,12 @@ class THttpHelper {
 
     if (response.statusCode == 200) {
       return json.decode(responseBody);
+    } else if (response.statusCode == 401) {
+      debugPrint("postWithFiles StatusCode: ${response.statusCode}");
+      storage.remove(TTexts.barerToken);
+      storage.remove(TTexts.userId);
+      Get.offAllNamed(TRoutes.languageSelection);
+      throw "Unauthorized";
     } else {
       throw Exception('Failed to load data: ${response.statusCode}');
     }
@@ -137,6 +168,12 @@ class THttpHelper {
 
       // final message = json.decode(response.body)['message'];
       throw "Something went wrong";
+    } else if (response.statusCode == 401) {
+      debugPrint("StatusCode: ${response.statusCode}");
+      storage.remove(TTexts.barerToken);
+      storage.remove(TTexts.userId);
+      Get.offAllNamed(TRoutes.loginPage);
+      throw "Unauthorized";
     } else {
       throw Exception('Failed to load data: ${response.statusCode}');
     }

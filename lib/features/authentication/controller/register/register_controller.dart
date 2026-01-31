@@ -59,7 +59,7 @@ class RegistrationController extends GetxController {
   final occupationDetailsController = TextEditingController();
   final incomeController = TextEditingController();
 
-  final isDisablePerson = 'No'.obs;
+  final isDisablePerson = TTexts.no.tr.obs;
   final subCasteController = TextEditingController();
 
   // Family Details fields
@@ -636,13 +636,13 @@ class RegistrationController extends GetxController {
       );
       final childrenCount = selectedNoOfChildren.value?.id == '0'
           ? '0'
-          : selectedNoOfChildren.value?.id == '1'
+          : selectedNoOfChildren.value?.id == 'One'
           ? 'One'
-          : selectedNoOfChildren.value?.id == '2'
+          : selectedNoOfChildren.value?.id == 'Two'
           ? 'Two'
-          : selectedNoOfChildren.value?.id == '3'
+          : selectedNoOfChildren.value?.id == 'Three'
           ? 'Three'
-          : selectedNoOfChildren.value?.id == '4 and above'
+          : selectedNoOfChildren.value?.id == 'Four and above'
           ? 'Four and above'
           : '';
 
@@ -678,7 +678,7 @@ class RegistrationController extends GetxController {
         "workplace": occupationDetailsController.text,
         "Annualincome": int.tryParse(incomeController.text) ?? 0,
         "Subcaste": subCasteController.text,
-        "spe_cases": isDisablePerson.value.toString() == "Yes" ? 1 : 0,
+        "spe_cases": isDisablePerson.value.toString() == TTexts.yes.tr ? 1 : 0,
       };
 
       debugPrint(
@@ -795,6 +795,7 @@ class RegistrationController extends GetxController {
         );
         return;
       }
+      TFullScreenLoader.popUpCircular();
       final request = {
         "id": storage.read(TTexts.userId),
         // "id": "96142",
@@ -812,12 +813,13 @@ class RegistrationController extends GetxController {
         ApiConstant.horoscopeRegisterEndpoint,
         request,
       );
-      debugPrint("Horoscope res : $request");
-
+      debugPrint("Horoscope res : $res");
+      TFullScreenLoader.stopLoading();
       TLoaders.successSnackBar(title: "Success", message: res['message']);
 
       currentStep.value++;
     } catch (e) {
+      TFullScreenLoader.stopLoading();
       debugPrint("horoscopeFormSubmit - $e");
 
       TLoaders.errorSnackBar(
@@ -837,7 +839,7 @@ class RegistrationController extends GetxController {
       if (!contactFormKey.currentState!.validate()) {
         return;
       }
-
+      TFullScreenLoader.popUpCircular();
       final request = {
         "id": storage.read(TTexts.userId),
         "Phone": alternateMobileController.text,
@@ -863,12 +865,14 @@ class RegistrationController extends GetxController {
         request,
         fileFieldName: "photo1",
       );
+      TFullScreenLoader.stopLoading();
       debugPrint("Contact Register Response : $response");
 
       TLoaders.successSnackBar(title: "Success", message: response['message']);
       storage.write(TTexts.appPages, 0);
       Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
+      TFullScreenLoader.stopLoading();
       debugPrint("contactFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",

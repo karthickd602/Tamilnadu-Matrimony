@@ -16,26 +16,7 @@ class HomePage extends StatelessWidget {
       backgroundColor: TColors.scaffoldColor,
       appBar: TAppBar(
         title: TTexts.appName.tr,
-        actions: [
-          InkWell(
-            onTap: () {
-              Get.to(() => const SpecialFilterPage());
-            },
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.stars_rounded,
-                  size: TSizes.iconMd,
-                  color: TColors.primary,
-                ),
-                const SizedBox(width: TSizes.xs / 2),
-                Text("Special", style: Theme.of(context).textTheme.bodyLarge),
-                const SizedBox(width: TSizes.xs),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          InkWell(
+        actions: [InkWell(
             onTap: () {
               Get.toNamed(TRoutes.filter);
             },
@@ -62,6 +43,49 @@ class HomePage extends StatelessWidget {
           padding: EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: controller.searchIdController,
+                      onFieldSubmitted: (value) => controller
+                          .fetchDashboardCustomerProfile(isInitial: true),
+                      onChanged: (value) {
+                        if (value.isEmpty) {
+                          controller.fetchDashboardCustomerProfile(
+                            isInitial: true,
+                          );
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'Search by ID',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: TSizes.spaceBtwItems),
+                  InkWell(
+                    onTap: () {
+                      Get.to(() => const SpecialFilterPage());
+                    },
+                    borderRadius: BorderRadius.circular(TSizes.borderRadiusLg),
+                    child: Container(
+                      padding: const EdgeInsets.all(TSizes.md),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: TColors.grey),
+                        borderRadius: BorderRadius.circular(
+                          TSizes.borderRadiusLg,
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.stars_rounded,
+                        color: TColors.primary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
               Expanded(
                 child: Obx(() {
                   if (controller.isFirstLoad.value) {
