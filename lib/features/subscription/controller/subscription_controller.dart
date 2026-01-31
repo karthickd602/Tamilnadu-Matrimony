@@ -2,6 +2,7 @@ import 'package:app_links/app_links.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../utils/popups/full_screen_loader.dart';
 import '../model/subscription_model.dart';
 
 class SubscriptionController extends GetxController
@@ -75,7 +76,7 @@ class SubscriptionController extends GetxController
       // but let's stick to standard behavior for now or verify context.
       // Use checks if Get.isDialogOpen ?? false
 
-      // TFullScreenLoader.popUpCircular();
+      TFullScreenLoader.popUpCircular();
       // Use silent load or handle loader carefully so we don't stack them if resumed rapidly
 
       final req = {"user_id": storage.read(TTexts.userId)};
@@ -105,25 +106,22 @@ class SubscriptionController extends GetxController
           }
           debugPrint("Response structure is Active");
 
-          // Navigate only if not already there to avoid duplicates?
-          // Get.toNamed(TRoutes.userSubscriptionPlan);
-          // Actually, if we are purely updating state, we might not need to force navigate if we are already viewing it.
-          // But based on current flow, let's keep it.
+          TFullScreenLoader.stopLoading();
           Get.offNamed(TRoutes.userSubscriptionPlan);
         } else {
           debugPrint("Response structure is not Active");
           await fetchSubscriptionPlans();
+          TFullScreenLoader.stopLoading();
+
           Get.offNamed(TRoutes.buySubscription);
         }
-      } else if (response['statusCode'] == 204) {
-        Get.offNamed(TRoutes.buySubscription);
       } else {
-        // Any other non-success status
-        // TLoaders.errorSnackBar(title: "Notice", message: response['message'] ?? "No active subscription found.");
+        TFullScreenLoader.stopLoading();
         Get.offNamed(TRoutes.buySubscription);
       }
     } catch (e) {
-      // TLoaders.errorSnackBar(title: "Error", message: e.toString());
+      TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(title: "Error", message: e.toString());
     } finally {
       // TFullScreenLoader.stopLoading(); // If we removed loader start, remove stop
     }

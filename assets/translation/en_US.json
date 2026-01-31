@@ -172,5 +172,13 @@
   "not_verified": "Not Verified",
   "photo_approved": "Photo Approved",
   "photo_pending": "Photo Pending",
-  "no_profile_data": "No profile data"
+  "no_profile_data": "No profile data",
+  "call": "Call",
+  "mail": "Mail",
+  "timing": "Timing",
+  "call_now": "Call Now",
+  "send_mail": "Send Mail",
+  "close": "Close",
+  "contact_address": "Contact Address",
+  "office_address": "Tamilnadu Matrimony,\n95, Northveli Street,\nSimmakal Bus Stop,\nMadurai - 625001."
 }

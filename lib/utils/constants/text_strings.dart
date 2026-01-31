@@ -212,4 +212,14 @@ class TTexts {
   static const String photoApproved = "photo_approved";
   static const String photoPending = "photo_pending";
   static const String noProfileData = "no_profile_data";
+
+  // Help Dialog
+  static const String call = "call";
+  static const String mail = "mail";
+  static const String timing = "timing";
+  static const String callNow = "call_now";
+  static const String sendMail = "send_mail";
+  static const String close = "close";
+  static const String contactAddress = "contact_address";
+  static const String officeAddress = "office_address";
 }

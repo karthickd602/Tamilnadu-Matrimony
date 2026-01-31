@@ -11,7 +11,7 @@ class HoroscopeDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = RegistrationController.instance;
-    final textTheme = Theme.of(context).textTheme;
+    final storage = GetStorage();
 
     return Form(
       key: controller.horoscopeFormKey,
@@ -27,33 +27,39 @@ class HoroscopeDetails extends StatelessWidget {
                 selectedItem: controller.selectedRaasi.value,
                 onChanged: controller.onRaasiChanged,
                 prefixIcon: Icons.brightness_7_outlined,
-                validator: (v) =>
-                    TValidator.validateEmptyText(v.toString(), v.toString()),
-                // v == null ? "தயவுசெய்து ராசி தேர்ந்தெடுக்கவும்" : null,
+                validator: (v) => v == null
+                    ? storage.read(TTexts.languageCode) == 'ta'
+                          ? "தயவுசெய்து ராசி தேர்ந்தெடுக்கவும்"
+                          : "choose Rasi"
+                    : null,
               ),
               const SizedBox(height: TSizes.md),
 
               /// STAR depends on RASSI
               TSearchDropdownField<String>(
-                label: "நட்சத்திரம்",
+                label: TTexts.star.tr,
                 items: controller.starsForSelectedRaasi,
                 selectedItem: controller.selectedStar.value,
                 onChanged: controller.onStarChanged,
                 prefixIcon: Icons.star_border,
-                validator: (v) => controller.selectedRaasi.value == null
-                    ? "தயவுசெய்து நட்சத்திரம் தேர்ந்தெடுக்கவும்"
+                validator: (v) => controller.selectedStar.value == null
+                    ? storage.read(TTexts.languageCode) == 'ta'
+                          ? "தயவுசெய்து நட்சத்திரம் தேர்ந்தெடுக்கவும்"
+                          : "Choose Star"
                     : null,
               ),
               const SizedBox(height: TSizes.md),
               TSearchDropdownField<String>(
-                label: TTexts.laknam,
+                label: TTexts.laknam.tr,
                 items: controller.raasiList,
                 selectedItem: controller.selectedLaknam.value,
                 onChanged: (v) => controller.selectedLaknam.value = v ?? '',
                 prefixIcon: Icons.auto_awesome,
                 // onChanged: controller.onStarChanged,
                 validator: (v) => controller.selectedRaasi.value == null
-                    ? "தயவுசெய்து Laknam தேர்ந்தெடுக்கவும்"
+                    ? storage.read(TTexts.languageCode) == 'ta'
+                          ? "தயவுசெய்து லக்னம் தேர்ந்தெடுக்கவும்"
+                          : "Choose Laknam"
                     : null,
               ),
               const SizedBox(height: TSizes.md),

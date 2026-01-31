@@ -70,10 +70,10 @@ class RegistrationController extends GetxController {
   final familyStatusController = ''.obs;
 
   // final familyTypeController = TextEditingController();
-  final brothersController = TextEditingController();
-  final sistersController = TextEditingController();
-  final marriedBrothersController = TextEditingController();
-  final marriedSistersController = TextEditingController();
+  final brothersController = TextEditingController(text: "0");
+  final sistersController = TextEditingController(text: "0");
+  final marriedBrothersController = TextEditingController(text: "0");
+  final marriedSistersController = TextEditingController(text: "0");
   final nativePlaceController = TextEditingController();
 
   // Horoscope fields

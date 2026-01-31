@@ -4,8 +4,8 @@ import '../../../utils/constants/path_provider.dart';
 import '../../../utils/popups/full_screen_loader.dart';
 import '../../authentication/dropdown_list.dart';
 import '../../authentication/model/dropdown_model.dart';
-import '../model/dashboard_list_model.dart';
 import '../controller/dashboard_controller.dart';
+import '../model/dashboard_list_model.dart';
 
 class FilterController extends GetxController {
   final selectedIndex = 0.obs;
@@ -394,10 +394,10 @@ class FilterController extends GetxController {
           req["nocaste"] = "no_caste";
           break;
         case "disable_person":
-          req["spe_cases"] = "yes";
+          req["spe_cases"] = "ஆம்";
           break;
         case "dhosam_having":
-          req["thoosamtype"] = "yes";
+          req["thoosamtype"] = "ஆம்";
           break;
         default:
           isSpecialLoading.value = false;

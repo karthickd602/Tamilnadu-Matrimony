@@ -297,7 +297,7 @@ class DashboardController extends GetxController {
         title: "Send Interest",
         message: response['message'],
       );
-      final controller = AlertInterestSendController.instance;
+      final controller = Get.put(AlertInterestSendController());
       await controller.fetchAlertSendProfile();
       TFullScreenLoader.stopLoading();
     } catch (e) {
