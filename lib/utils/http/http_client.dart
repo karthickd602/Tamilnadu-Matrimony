@@ -37,15 +37,9 @@ class THttpHelper {
     });
 
     // Add file
-    final file = File(filePath);
-    final fileStream = http.ByteStream(file.openRead());
-    final fileLength = await file.length();
-
-    final multipartFile = http.MultipartFile(
+    final multipartFile = await http.MultipartFile.fromPath(
       fileFieldName,
-      fileStream,
-      fileLength,
-      filename: file.path.split("/").last,
+      filePath,
     );
 
     request.files.add(multipartFile);

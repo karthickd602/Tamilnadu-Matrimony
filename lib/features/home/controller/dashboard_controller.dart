@@ -243,6 +243,14 @@ class DashboardController extends GetxController {
       }
 
       /// Toggle value for CURRENT MODEL
+
+      if (unlockValue.value.toLowerCase() == "true") {
+        TFullScreenLoader.stopLoading();
+
+        await fetchCustomerPage(profileId);
+        Get.to(() => CustomerDetailsView());
+        return;
+      }
       unlockValue.value = unlockValue.value.toLowerCase() == "true"
           ? "false"
           : "true";

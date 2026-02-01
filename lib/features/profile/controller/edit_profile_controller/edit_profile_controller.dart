@@ -666,7 +666,6 @@ class EditProfileController extends GetxController {
       // debugPrint(
       //   'childrenCountsssss: $childrenCount  -- ${selectedNoOfChildren.value!.id}',
       // );
-
       final childLiving = childLivingStatus.value == "Living with me"
           ? "Yes"
           : "No";
@@ -688,7 +687,7 @@ class EditProfileController extends GetxController {
             ? "Widowed"
             : maritalStatus.value,
         "childrenlivingstatus":
-            "${selectedNoOfChildren.value!.id.toString()}-${childLiving.toString()}",
+            "${selectedNoOfChildren.value?.id ?? '0'.toString()}-${childLiving.toString()}",
         // "childrenlivingstatus":
         //     int.tryParse(childLivingStatus.value.toString()) ?? 0,
         "Religion": selectedReligion.value?.id ?? 0,
@@ -801,6 +800,7 @@ class EditProfileController extends GetxController {
         return;
       }
 
+      TFullScreenLoader.popUpCircular();
       if (!horoscopeFormKey.currentState!.validate()) {
         return;
       }
@@ -824,12 +824,11 @@ class EditProfileController extends GetxController {
       };
       debugPrint("Horoscope req : $request");
 
-      TFullScreenLoader.popUpCircular();
-
       final res = await THttpHelper.multipartPost(
         filePath: horoscopeImageFile.value.path,
         ApiConstant.horoscopeRegisterEndpoint,
         request,
+        fileFieldName: "file",
       );
       debugPrint("Horoscope res : $request");
       await profileController.fetchUserProfile();
@@ -855,6 +854,8 @@ class EditProfileController extends GetxController {
       if (!isConnected) {
         return;
       }
+
+      TFullScreenLoader.popUpCircular();
       if (!contactFormKey.currentState!.validate()) {
         return;
       }
@@ -896,6 +897,8 @@ class EditProfileController extends GetxController {
         message:
             "Something went wrong in Contact Details submit, try again later",
       );
+    } finally {
+      TFullScreenLoader.stopLoading();
     }
   }
 
