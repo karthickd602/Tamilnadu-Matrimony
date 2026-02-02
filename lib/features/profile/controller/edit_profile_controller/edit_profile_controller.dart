@@ -14,11 +14,8 @@ class EditProfileController extends GetxController {
   static EditProfileController get instance => Get.find();
   final storage = GetStorage();
 
-  // String userId = "";
-
   final userProfile = Rxn<FetchUserProfileModel>();
 
-  // final repo = ProfileRepository.instance;
   final repo = Get.put(ProfileRepository());
   final profileController = ProfileController.instance;
 
@@ -210,18 +207,31 @@ class EditProfileController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await fetchOccupationDropdown();
-    await fetchEducationDropdown();
-    await fetchReligionDropdown();
-    await fetchCountryDropdown();
-    // await loadAllDropdown();
-    await fetchUserProfile();
+    await Future.delayed(const Duration(milliseconds: 100));
+    await loadAllDropdownAndProfile();
+  }
+
+  Future<void> loadAllDropdownAndProfile() async {
+    try {
+      TFullScreenLoader.popUpCircular();
+      await fetchOccupationDropdown();
+      await fetchEducationDropdown();
+      await fetchReligionDropdown();
+      await fetchCountryDropdown();
+      await fetchUserProfile();
+      TFullScreenLoader.stopLoading();
+    } catch (e) {
+      TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(
+        title: "Failed",
+        message: "Something went wrong, try again later",
+      );
+    }
   }
 
   Future<void> fetchUserProfile() async {
     try {
       isLoading.value = true;
-      TFullScreenLoader.popUpCircular();
 
       final userId = storage.read(TTexts.userId);
       // final userId = "96166";
@@ -235,7 +245,7 @@ class EditProfileController extends GetxController {
       TLoaders.errorSnackBar(title: "Profile Error", message: e.toString());
     } finally {
       isLoading.value = false;
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
     }
   }
 
@@ -265,16 +275,6 @@ class EditProfileController extends GetxController {
       childLivingStatus.value = '';
     }
 
-    // String children = profile.childrenLivingStatus.toString();
-    // List<String> childrenList = children.split('-');
-    //
-    // childLivingStatus.value = childrenList[1].trim() == 'Yes'
-    //     ? "Living with me"
-    //     : "Not living with me";
-    //
-    // selectedNoOfChildren.value = childCountList.firstWhereOrNull(
-    //   (e) => e.id.toString() == childrenList[0].trim(),
-    // );
     nameController.text = profile.name ?? '';
     dobController.text = profile.dob ?? '';
 
@@ -412,7 +412,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-      TFullScreenLoader.popUpCircular();
+      // TFullScreenLoader.popUpCircular();
       final response = await THttpHelper.get(ApiConstant.getOccupationDD);
       //
       debugPrint("occupation Response:${response.toString()}");
@@ -456,7 +456,7 @@ class EditProfileController extends GetxController {
         message: e.toString(),
       );
     } finally {
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
     }
   }
 
@@ -470,7 +470,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-      TFullScreenLoader.popUpCircular();
+      // TFullScreenLoader.popUpCircular();
 
       final response = await THttpHelper.get(ApiConstant.getReligionDD);
       //
@@ -488,7 +488,7 @@ class EditProfileController extends GetxController {
         message: e.toString(),
       );
     } finally {
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
     }
   }
 
@@ -502,7 +502,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-      TFullScreenLoader.popUpCircular();
+      // TFullScreenLoader.popUpCircular();
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
       //
@@ -520,7 +520,7 @@ class EditProfileController extends GetxController {
         message: e.toString(),
       );
     } finally {
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
     }
   }
 
@@ -821,12 +821,24 @@ class EditProfileController extends GetxController {
         "dasatype": selectedDasa.value,
         "thoosamtype": isDoshamHave.value,
         "thosam": selectedDhosam.value,
+        // "choice": "4",
       };
       debugPrint("Horoscope req : $request");
 
+      if (horoscopeImageFile.value.path.isEmpty) {
+        debugPrint("❌ ERROR: Horoscope image path is empty!");
+      } else {
+        final f = File(horoscopeImageFile.value.path);
+        debugPrint("✅ Image Path: ${f.path}");
+        debugPrint("✅ Image Exists: ${f.existsSync()}");
+        if (f.existsSync()) {
+          debugPrint("✅ Image Bytes: ${await f.length()}");
+        }
+      }
+
       final res = await THttpHelper.multipartPost(
         filePath: horoscopeImageFile.value.path,
-        ApiConstant.horoscopeRegisterEndpoint,
+        ApiConstant.horoscopeEditEndpoint,
         request,
         fileFieldName: "file",
       );

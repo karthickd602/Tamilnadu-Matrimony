@@ -14,7 +14,7 @@ class TLoaders {
       '',
       message,
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.black.withOpacity(0.85),
+      backgroundColor: Colors.black.withValues(alpha: 0.85),
       colorText: Colors.white,
       margin: const EdgeInsets.all(20),
       borderRadius: 30,

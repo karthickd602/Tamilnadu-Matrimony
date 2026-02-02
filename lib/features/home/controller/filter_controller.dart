@@ -38,26 +38,6 @@ class FilterController extends GetxController {
 
   final starList = ProfileDropdowns.allStarsList;
 
-  // final martialStatus = [
-  //   // TTexts.unMarried.tr,
-  //   // TTexts.widowed.tr,
-  //   // TTexts.divorced.tr,
-  //   // TTexts.separated.tr,
-  // ].obs;
-  // final martialStatus = [
-  //   {"id": 1, "name": "First Marriage"},
-  //   {"id": 2, "name": "Second Marriage"},
-  // ].obs;
-
-  /// DOSHAM STATIC
-
-  // final dhosamList = [
-  //   {"id": "ராகு-கேது தோஷம்", "name": "ராகு-கேது தோஷம்"},
-  //   {"id": "செவ்வாய் தோஷம்", "name": "செவ்வாய் தோஷம்"},
-  //   {"id": "நாக தோஷம்", "name": "நாக தோஷம்"},
-  //   {"id": "கால சர்ப்ப தோஷம்", "name": "கால சர்ப்ப தோஷம்"},
-  // ].obs;
-
   final dhosamList = [
     {"id": 1, "name": "ராகு-கேது தோஷம்"},
     {"id": 2, "name": "செவ்வாய் தோஷம்"},
@@ -75,7 +55,15 @@ class FilterController extends GetxController {
 
   final profileController = Get.put(ProfileController());
 
-  // --------------------------------------------------------------
+  @override
+  void onInit() async {
+    super.onInit();
+    await profileController.fetchUserProfile();
+    final profile = profileController.userProfile.value;
+
+    await fetchCasteFilter(religionId: profile?.religionId ?? '0');
+    await fetchDistrictDropdown(stateId: profile?.stateId ?? "0");
+  } // --------------------------------------------------------------
   // API CALLS
   // --------------------------------------------------------------
 

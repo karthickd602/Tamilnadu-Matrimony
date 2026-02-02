@@ -44,6 +44,11 @@ class THttpHelper {
 
     request.files.add(multipartFile);
 
+    debugPrint('Multipart Body Fields: ${request.fields}');
+    debugPrint(
+      'Multipart Files: ${request.files.map((f) => 'Field: ${f.field}, File: ${f.filename}').toList()}',
+    );
+
     // Send request
     final response = await request.send();
     final responseData = await response.stream.bytesToString();

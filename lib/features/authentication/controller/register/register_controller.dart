@@ -526,6 +526,7 @@ class RegistrationController extends GetxController {
             .map((e) => CountryModel.fromJson(e))
             .toList();
         selectedCountry.value = countryList.firstWhere((e) => e.id == 101);
+        await fetchStateDropdown();
       } else {
         countryList.value = <CountryModel>[];
       }

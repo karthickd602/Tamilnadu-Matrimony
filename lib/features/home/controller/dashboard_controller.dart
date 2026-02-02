@@ -215,14 +215,8 @@ class DashboardController extends GetxController {
       }
 
       TFullScreenLoader.popUpCircular();
-      // final req = {
-      //   "current_user": storage.read(TTexts.userId),
-      //   "target_user": profileId,
-      // };
-
       final req = {
         "current_user": storage.read(TTexts.userId),
-        // "current_user": 11622,
         "target_user": profileId,
       };
       debugPrint("unlockProfile req: $req");

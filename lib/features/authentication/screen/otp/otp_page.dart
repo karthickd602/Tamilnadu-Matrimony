@@ -90,7 +90,9 @@ class OtpPage extends StatelessWidget {
           ),
         ),
         smsRetriever: controller.smsRetriever,
-        onCompleted: (pin) {},
+        onCompleted: (pin) {
+          controller.verifyOtpApi();
+        },
       ),
     );
   }
