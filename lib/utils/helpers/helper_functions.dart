@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class THelperFunctions {
+  static void makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
+    await launchUrl(launchUri);
+  }
+
   static void showSnackBar(String message) {
     ScaffoldMessenger.of(
       Get.context!,
@@ -141,11 +147,12 @@ class THelperFunctions {
   }) {
     return DateFormat(format).format(date);
   }
+
   static String convertDateFormat(
-      String date, {
-        String fromFormat = 'dd-MM-yyyy',
-        String toFormat = 'yyyy-MM-dd',
-      }) {
+    String date, {
+    String fromFormat = 'dd-MM-yyyy',
+    String toFormat = 'yyyy-MM-dd',
+  }) {
     final parsedDate = DateFormat(fromFormat).parse(date);
     return DateFormat(toFormat).format(parsedDate);
   }

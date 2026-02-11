@@ -105,7 +105,7 @@ class CustomerCard extends StatelessWidget {
                         ),
                         Text(
                           customerProfile.matriId.toString().toUpperCase(),
-                          style: Theme.of(context).textTheme.bodySmall!
+                          style: Theme.of(context).textTheme.titleMedium!
                               .copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -255,7 +255,7 @@ class CustomerCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.15),
+        color: Colors.black.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(

@@ -203,6 +203,7 @@ class DashboardController extends GetxController {
   Future<void> unlockProfile({
     required int profileId,
     required RxString unlockValue,
+    bool navigateToView = true,
   }) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -242,7 +243,9 @@ class DashboardController extends GetxController {
         TFullScreenLoader.stopLoading();
 
         await fetchCustomerPage(profileId);
-        Get.to(() => CustomerDetailsView());
+        if (navigateToView) {
+          Get.to(() => CustomerDetailsView());
+        }
         return;
       }
       unlockValue.value = unlockValue.value.toLowerCase() == "true"
@@ -258,18 +261,20 @@ class DashboardController extends GetxController {
       }
       TFullScreenLoader.stopLoading();
       await fetchCustomerPage(profileId);
-      Get.to(() => CustomerDetailsView());
+      if (navigateToView) {
+        Get.to(() => CustomerDetailsView());
+      }
       final unlockedController = Get.put(UnlockedController());
       await unlockedController.fetchUnlockList();
 
       TLoaders.successSnackBar(
-        title: "Send Interest",
+        title: "Unlock Success",
         message: response['message'],
       );
     } catch (e) {
       TFullScreenLoader.stopLoading();
       debugPrint("unlockProfile Error: $e");
-      TLoaders.errorSnackBar(title: "Send Interest", message: e.toString());
+      TLoaders.errorSnackBar(title: "Unlock Failed", message: e.toString());
     }
   }
 

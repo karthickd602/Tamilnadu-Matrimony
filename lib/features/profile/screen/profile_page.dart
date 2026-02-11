@@ -8,6 +8,7 @@ import '../../../common/widgets/images/t_circular_image.dart';
 import '../../../common/widgets/images/t_image_picker.dart';
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/helpers/url_launcher.dart';
+import '../../authentication/controller/language/language_selection_controller.dart';
 import '../controller/profile_controller.dart';
 import 'delete_profile/delete_profile_dialog.dart';
 
@@ -203,6 +204,12 @@ class ProfilePage extends StatelessWidget {
                           "Check out my profile on Tamilnadu Matrimony!\n\nName: $name ($matriId)\n\nTap to view profile: $deepLink\n\nDownload App: $appLink";
                       Share.share(shareText);
                     },
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.language,
+                    TTexts.selectLanguage.tr,
+                    () => _showLanguageBottomSheet(context),
                   ),
                   const Divider(height: 30),
 
@@ -454,6 +461,83 @@ class ProfilePage extends StatelessWidget {
   //         backgroundColor: Colors.red, colorText: Colors.white);
   //   }
   // }
+
+  void _showLanguageBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        final languageController = Get.put(LanguageController());
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  TTexts.selectLanguage.tr,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: TSizes.spaceBtwItems),
+                Obx(
+                  () => Column(
+                    children: [
+                      _languageOption(
+                        context,
+                        "English",
+                        "en",
+                        languageController.selectedLang.value == "en",
+                        () {
+                          languageController.changeLanguage("en");
+                          Get.back();
+                        },
+                      ),
+                      _languageOption(
+                        context,
+                        "தமிழ்",
+                        "ta",
+                        languageController.selectedLang.value == "ta",
+                        () {
+                          languageController.changeLanguage("ta");
+                          Get.back();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _languageOption(
+    BuildContext context,
+    String language,
+    String code,
+    bool isSelected,
+    VoidCallback onTap,
+  ) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(language, style: Theme.of(context).textTheme.bodyLarge),
+            if (isSelected)
+              const Icon(Icons.check_circle, color: TColors.primary),
+          ],
+        ),
+      ),
+    );
+  }
 
   /// --- Menu item builder ---
   Widget _buildMenuItem(

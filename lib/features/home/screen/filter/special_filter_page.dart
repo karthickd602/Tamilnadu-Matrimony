@@ -13,7 +13,7 @@ class SpecialFilterPage extends StatelessWidget {
 
     return Scaffold(
       // backgroundColor: Colors.grey.shade50,
-      appBar: const TAppBar(title: "Special Filters", isBackButtonNeed: true),
+      appBar: const TAppBar(title: "Special Filters"),
       body: SafeArea(
         child: Column(
           children: [

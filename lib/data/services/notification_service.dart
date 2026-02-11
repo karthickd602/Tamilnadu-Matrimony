@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../../utils/constants/path_provider.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -43,6 +45,9 @@ class NotificationService {
       String? token = await _firebaseMessaging.getToken();
       if (kDebugMode) {
         debugPrint('FCM Token: $token');
+        final storage = GetStorage();
+        await storage.write(TTexts.fcmToken, token);
+        debugPrint('FCM Token: ${storage.read(TTexts.fcmToken)}');
       }
     } catch (e) {
       if (kDebugMode) {

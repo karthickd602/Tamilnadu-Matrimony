@@ -123,6 +123,15 @@ class EditContactDetails extends StatelessWidget {
               keyboardType: TextInputType.number,
             ),
 
+            /// --- Expectations ---
+            TFormField(
+              controller: controller.expectationsController,
+              labelText: "Expectations",
+              icon: Icons.description_outlined,
+              maxLines: 3,
+              maxLength: 50,
+            ),
+
             Obx(
               () => Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

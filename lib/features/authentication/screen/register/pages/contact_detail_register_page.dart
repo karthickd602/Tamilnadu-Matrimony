@@ -122,6 +122,16 @@ class ContactDetails extends StatelessWidget {
               keyboardType: TextInputType.number,
             ),
 
+            /// --- Expectations ---
+            TFormField(
+              controller: controller.expectationsController,
+              labelText: "Expectations",
+              icon: Icons.description_outlined,
+              maxLines: 3,
+              maxLength: 50,
+              // maxLines: 3,
+            ),
+
             ImagePickerBox(
               title: TTexts.profile.tr,
               onPickImage: () => controller.selectProfileImage(context),

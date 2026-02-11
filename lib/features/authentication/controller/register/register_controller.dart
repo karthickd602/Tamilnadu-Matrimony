@@ -97,6 +97,7 @@ class RegistrationController extends GetxController {
   RxString districtController = "".obs;
   RxString stateController = "".obs;
   final pincodeController = TextEditingController();
+  final expectationsController = TextEditingController();
 
   final profileImageFile = File('').obs;
   RxString profileImagePath = ''.obs;
@@ -661,12 +662,12 @@ class RegistrationController extends GetxController {
         "Maritalstatus": maritalStatus.value == TTexts.unMarried.tr
             ? "Unmarried"
             : maritalStatus.value == TTexts.separated.tr
-            ? "Seperated"
+            ? "Separated"
             : maritalStatus.value == TTexts.divorced.tr
             ? "Divorced"
-            : maritalStatus.value == TTexts.widowed.tr
+            : maritalStatus.value == TTexts.widowed
             ? "Widowed"
-            : '',
+            : maritalStatus.value,
         "childrenlivingstatus":
             "${childrenCount.toString()}-${childLiving.toString()}",
         // "childrenlivingstatus":
@@ -789,13 +790,13 @@ class RegistrationController extends GetxController {
         return;
       }
 
-      if (horoscopeImagePath.value.isEmpty) {
-        TLoaders.warningSnackBar(
-          title: "No Horoscope Image",
-          message: "Please select horoscope image",
-        );
-        return;
-      }
+      // if (horoscopeImagePath.value.isEmpty) {
+      //   TLoaders.warningSnackBar(
+      //     title: "No Horoscope Image",
+      //     message: "Please select horoscope image",
+      //   );
+      //   return;
+      // }
       TFullScreenLoader.popUpCircular();
       final request = {
         "id": storage.read(TTexts.userId),
@@ -809,11 +810,19 @@ class RegistrationController extends GetxController {
       };
       debugPrint("Horoscope req : $request");
 
-      final res = await THttpHelper.multipartPost(
-        filePath: horoscopeImageFile.value.path,
-        ApiConstant.horoscopeRegisterEndpoint,
-        request,
-      );
+      final res;
+      if (horoscopeImageFile.value.path.isNotEmpty) {
+        res = await THttpHelper.multipartPost(
+          filePath: horoscopeImageFile.value.path,
+          ApiConstant.horoscopeRegisterEndpoint,
+          request,
+        );
+      } else {
+        res = await THttpHelper.post(
+          ApiConstant.horoscopeRegisterEndpoint,
+          request,
+        );
+      }
       debugPrint("Horoscope res : $res");
       TFullScreenLoader.stopLoading();
       TLoaders.successSnackBar(title: "Success", message: res['message']);
@@ -850,22 +859,27 @@ class RegistrationController extends GetxController {
         "State": selectedState.value?.id,
         "City": selectedDistrict.value?.id,
         "Postal": pincodeController.text,
+        "expectations": expectationsController.text,
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
       debugPrint("Contact : $request");
 
-      // final response = await THttpHelper.post(
-      //   ApiConstant.contactRegisterEndpoint,
-      //   request,
-      // );
+      final response;
 
-      final response = await THttpHelper.multipartPost(
-        filePath: profileImageFile.value.path,
-        ApiConstant.contactRegisterEndpoint,
-        request,
-        fileFieldName: "photo1",
-      );
+      if (profileImageFile.value.path.isNotEmpty) {
+        response = await THttpHelper.multipartPost(
+          filePath: profileImageFile.value.path,
+          ApiConstant.contactRegisterEndpoint,
+          request,
+          fileFieldName: "photo1",
+        );
+      } else {
+        response = await THttpHelper.post(
+          ApiConstant.contactRegisterEndpoint,
+          request,
+        );
+      }
       TFullScreenLoader.stopLoading();
       debugPrint("Contact Register Response : $response");
 
@@ -896,6 +910,7 @@ class RegistrationController extends GetxController {
     occupationDetailsController.dispose();
     incomeController.dispose();
     subCasteController.dispose();
+    expectationsController.dispose();
     super.onClose();
   }
 }

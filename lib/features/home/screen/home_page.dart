@@ -1,9 +1,8 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
+import 'package:tamilnadu_matrimony/common/widgets/loaders/animation_loader.dart';
 import 'package:tamilnadu_matrimony/features/home/controller/dashboard_controller.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
-import 'package:tamilnadu_matrimony/common/widgets/loaders/animation_loader.dart';
-import 'package:tamilnadu_matrimony/features/home/screen/filter/special_filter_page.dart';
 import 'widget/customer_card.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,7 +15,8 @@ class HomePage extends StatelessWidget {
       backgroundColor: TColors.scaffoldColor,
       appBar: TAppBar(
         title: TTexts.appName.tr,
-        actions: [InkWell(
+        actions: [
+          InkWell(
             onTap: () {
               Get.toNamed(TRoutes.filter);
             },
@@ -63,26 +63,26 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: TSizes.spaceBtwItems),
-                  InkWell(
-                    onTap: () {
-                      Get.to(() => const SpecialFilterPage());
-                    },
-                    borderRadius: BorderRadius.circular(TSizes.borderRadiusLg),
-                    child: Container(
-                      padding: const EdgeInsets.all(TSizes.md),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: TColors.grey),
-                        borderRadius: BorderRadius.circular(
-                          TSizes.borderRadiusLg,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.stars_rounded,
-                        color: TColors.primary,
-                      ),
-                    ),
-                  ),
+                  // const SizedBox(width: TSizes.spaceBtwItems),
+                  // InkWell(
+                  //   onTap: () {
+                  //     Get.to(() => const SpecialFilterPage());
+                  //   },
+                  //   borderRadius: BorderRadius.circular(TSizes.borderRadiusLg),
+                  //   child: Container(
+                  //     padding: const EdgeInsets.all(TSizes.md),
+                  //     decoration: BoxDecoration(
+                  //       border: Border.all(color: TColors.grey),
+                  //       borderRadius: BorderRadius.circular(
+                  //         TSizes.borderRadiusLg,
+                  //       ),
+                  //     ),
+                  //     child: const Icon(
+                  //       Icons.stars_rounded,
+                  //       color: TColors.primary,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(height: 16),

@@ -5,6 +5,7 @@ import 'package:smart_auth/smart_auth.dart';
 import 'package:tamilnadu_matrimony/features/authentication/controller/login/login_controller.dart';
 import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 
+import '../../../../data/services/notification_service.dart';
 import '../../../../utils/constants/path_provider.dart';
 import '../../model/login_otp_model.dart';
 import '../../screen/otp/sms_retriever_impl.dart';
@@ -52,13 +53,18 @@ class OtpController extends GetxController {
         return;
       }
       TFullScreenLoader.popUpCircular();
+
+      await NotificationService().init();
+
+      debugPrint("Fcm 1:${storage.read(TTexts.fcmToken)}");
       final request = {
         "mobile_no": loginController.mobileNoT.text,
         "otp": otpTextController.text,
+        "fcm_token": await storage.read(TTexts.fcmToken),
       };
-      debugPrint("OTP Verify1 : $request");
+      debugPrint("OTP Verify1 request: $request");
       final response = await THttpHelper.post(ApiConstant.verifyOtp, request);
-      debugPrint("OTP Verify : $response");
+      debugPrint("OTP Verify response : $response");
       if (response['statusCode'] == 200) {
         storage.write(TTexts.userId, response['user_id'].toString());
         storage.write(TTexts.barerToken, response['token'].toString());

@@ -13,6 +13,7 @@ class TFormField<T> extends StatelessWidget {
   final IconData? icon;
   final TextInputType keyboardType;
   final int? maxLength;
+  final int? maxLines; // Added
   final bool isReadOnly;
   final T? value;
   final String Function(T)? itemLabelBuilder; // ✅ to get name from model
@@ -28,6 +29,7 @@ class TFormField<T> extends StatelessWidget {
     this.validator,
     this.icon,
     this.maxLength,
+    this.maxLines = 1, // Added with default 1
     this.keyboardType = TextInputType.text,
     this.isReadOnly = false,
     this.value,
@@ -80,6 +82,7 @@ class TFormField<T> extends StatelessWidget {
               readOnly: isReadOnly,
               controller: controller,
               keyboardType: keyboardType,
+              maxLines: maxLines, // Use the new parameter
               maxLength: maxLength,
 
               decoration: InputDecoration(

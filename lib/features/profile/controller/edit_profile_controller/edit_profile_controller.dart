@@ -97,6 +97,7 @@ class EditProfileController extends GetxController {
   RxString districtController = "".obs;
   RxString stateController = "".obs;
   final pincodeController = TextEditingController();
+  final expectationsController = TextEditingController();
 
   final profileImageFile = File('').obs;
   RxString profileImagePath = ''.obs;
@@ -239,6 +240,7 @@ class EditProfileController extends GetxController {
       debugPrint("Edit Profile Response : $response");
       userProfile.value = FetchUserProfileModel.fromJson(response["data"]);
 
+      if (isClosed) return;
       await _mapProfileToFields();
     } catch (e) {
       debugPrint("Profile Error : $e");
@@ -250,6 +252,7 @@ class EditProfileController extends GetxController {
   }
 
   Future<void> _mapProfileToFields() async {
+    if (isClosed) return;
     final profile = userProfile.value;
     if (profile == null) return;
 
@@ -880,6 +883,7 @@ class EditProfileController extends GetxController {
         "State": selectedState.value?.id,
         "City": selectedDistrict.value?.id,
         "Postal": pincodeController.text,
+        "expectations": expectationsController.text,
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
@@ -927,6 +931,7 @@ class EditProfileController extends GetxController {
     occupationDetailsController.dispose();
     incomeController.dispose();
     subCasteController.dispose();
+    expectationsController.dispose();
     super.onClose();
   }
 }

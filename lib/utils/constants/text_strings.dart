@@ -1,6 +1,7 @@
 class TTexts {
   // -- Local Storage
   static const String userId = "USER_ID";
+  static const String fcmToken = "FCM_TOKEN";
   static const String barerToken = "BARER_TOKEN";
   static const String languageCode = "LANGUAGE_CODE";
   static const String appPages = "PAGE"; // - 0-  DASHBOARD, 1-> REGISTER
@@ -10,7 +11,7 @@ class TTexts {
   static const String skip = "skip";
   static const String done = "done";
   static const String submit = "submit";
-  static const String appName = "app_name";
+  static const String appName = "Tamilnadu Matrimony";
   static const String tContinue = "continue";
   static const String back = "back";
 
@@ -222,4 +223,8 @@ class TTexts {
   static const String close = "close";
   static const String contactAddress = "contact_address";
   static const String officeAddress = "office_address";
+
+  static const String workplace = "workplace";
+  static const String specialCases = "special_cases";
+  static const String horoscopeCheck = "horoscope_check";
 }

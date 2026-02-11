@@ -27,7 +27,7 @@ class ViewProfilePage extends StatelessWidget {
               label: Text(
                 TTexts.editProfile.tr,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -87,6 +87,8 @@ class ViewProfilePage extends StatelessWidget {
                       _info(TTexts.religion.tr, profile.religion),
                       _info(TTexts.partnerCaste.tr, profile.caste),
                       _info(TTexts.subCaste.tr, profile.subCaste),
+                      _info(TTexts.noCaste.tr, profile.noCaste),
+                      _info(TTexts.specialCases.tr, profile.speCases),
                     ],
                   ),
 
@@ -96,7 +98,11 @@ class ViewProfilePage extends StatelessWidget {
                     children: [
                       _info(TTexts.education.tr, profile.educationDetails),
                       _info(TTexts.occupation.tr, profile.occupation),
-                      _info(TTexts.occupationDetails.tr, profile.workplace),
+                      _info(
+                        TTexts.occupationDetails.tr,
+                        profile.occupationDetails,
+                      ),
+                      _info(TTexts.workplace.tr, profile.workplace),
                       _info(
                         TTexts.income.tr,
                         profile.annualIncome != null
@@ -128,6 +134,9 @@ class ViewProfilePage extends StatelessWidget {
                         TTexts.childrenLivingStatus.tr,
                         profile.childrenLivingStatus,
                       ),
+                      _info(TTexts.nativePlace.tr, profile.irupidam),
+                      _info(TTexts.marriedBrothers.tr, profile.nbm),
+                      _info(TTexts.marriedSisters.tr, profile.nsm),
                     ],
                   ),
 
@@ -176,6 +185,7 @@ class ViewProfilePage extends StatelessWidget {
                             ? TTexts.approved.tr
                             : TTexts.pending.tr,
                       ),
+                      _info(TTexts.horoscopeCheck.tr, profile.horosCheck),
                     ],
                   ),
                 ],
