@@ -16,26 +16,26 @@ class EditHoroscopeDetails extends StatelessWidget {
     return Form(
       key: controller.horoscopeFormKey,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: Obx(
-              () => Column(
+          () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               TSearchDropdownField<String>(
-                  label: TTexts.rasi.tr,
-                  items: controller.raasiList,
-                  selectedItem: controller.selectedRaasi.value,
-                  onChanged: controller.onRaasiChanged,
-                  prefixIcon: Icons.brightness_7_outlined,
-                  validator: (v) =>TValidator.validateEmptyText(v.toString(), v.toString())
+                label: TTexts.rasi.tr,
+                items: controller.raasiList,
+                selectedItem: controller.selectedRaasi.value,
+                onChanged: controller.onRaasiChanged,
+                prefixIcon: Icons.brightness_7_outlined,
+                validator: (v) =>
+                    TValidator.validateEmptyText(v.toString(), v.toString()),
                 // v == null ? "தயவுசெய்து ராசி தேர்ந்தெடுக்கவும்" : null,
               ),
               const SizedBox(height: TSizes.md),
 
               /// STAR depends on RASSI
               TSearchDropdownField<String>(
-                label: "நட்சத்திரம்",
+                label: TTexts.star.tr,
                 items: controller.starsForSelectedRaasi,
                 selectedItem: controller.selectedStar.value,
                 onChanged: controller.onStarChanged,
@@ -71,7 +71,7 @@ class EditHoroscopeDetails extends StatelessWidget {
                 label: TTexts.isDoshamHave.tr,
                 items: [TTexts.yes.tr, TTexts.no.tr, TTexts.iDontKnow.tr],
                 selectedItem: controller.areYouHaveDhosam.value,
-                onChanged: (v) => controller.isDoshamHave.value = v ?? '',
+                onChanged: controller.onDoshamChanged,
                 prefixIcon: Icons.warning_amber_rounded,
                 validator: (value) =>
                     TValidator.validateEmptyText(TTexts.isDoshamHave.tr, value),
@@ -82,12 +82,12 @@ class EditHoroscopeDetails extends StatelessWidget {
               /// --- Dosham Dropdown ---
               controller.isDoshamHave.value == TTexts.yes.tr
                   ? TSearchDropdownField<String>(
-                label: "தோஷம் (Dhosam)",
-                items: controller.filteredDhosamList,
-                selectedItem: controller.selectedDhosam.value,
-                onChanged: (v) => controller.selectedDhosam.value = v,
-                prefixIcon: Icons.gpp_maybe_outlined,
-              )
+                      label: "தோஷம் (Dhosam)",
+                      items: controller.filteredDhosamList,
+                      selectedItem: controller.selectedDhosam.value,
+                      onChanged: (v) => controller.selectedDhosam.value = v,
+                      prefixIcon: Icons.gpp_maybe_outlined,
+                    )
                   : const SizedBox(),
               SizedBox(height: TSizes.md),
 

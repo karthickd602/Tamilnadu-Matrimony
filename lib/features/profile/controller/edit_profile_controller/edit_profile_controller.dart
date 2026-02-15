@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:tamilnadu_matrimony/common/widgets/images/t_image_picker.dart';
@@ -203,6 +204,16 @@ class EditProfileController extends GetxController {
     selectedStar.value = value;
     selectedDasa.value = null;
     selectedDhosam.value = null;
+  }
+
+  void onDoshamChanged(String? value) {
+    areYouHaveDhosam.value = value;
+    if (value == TTexts.yes.tr) {
+      isDoshamHave.value = "Yes";
+    } else {
+      isDoshamHave.value = "No";
+      selectedDhosam.value = null;
+    }
   }
 
   @override
@@ -808,44 +819,48 @@ class EditProfileController extends GetxController {
         return;
       }
 
-      if (horoscopeImagePath.value.isEmpty) {
+      // if (horoscopeImagePath.value.isEmpty) {
+      //   TLoaders.warningSnackBar(
+      //     title: "No Horoscope Image",
+      //     message: "Please select horoscope image",
+      //   );
+      //   return;
+      // }
+
+      final file = File(horoscopeImageFile.value.path);
+      if (!file.existsSync()) {
         TLoaders.warningSnackBar(
-          title: "No Horoscope Image",
-          message: "Please select horoscope image",
+          title: "Error",
+          message: "Image file not found",
         );
         return;
       }
+
+      final bytes = await file.readAsBytes();
+      final base64String = base64Encode(bytes);
+      final extension = file.path.split('.').last.toLowerCase();
+      String mimeType = "image/jpeg";
+      if (extension == "png") mimeType = "image/png";
+
+      final base64Image = "data:$mimeType;base64,$base64String";
+
       final request = {
         "id": storage.read(TTexts.userId),
-        // "id": "96142",
         'Moonsign': selectedRaasi.value,
         "Star": selectedStar.value,
         "InLaknam": selectedLaknam.value,
         "dasatype": selectedDasa.value,
         "thoosamtype": isDoshamHave.value,
         "thosam": selectedDhosam.value,
-        // "choice": "4",
+        "file": base64Image,
       };
       debugPrint("Horoscope req : $request");
 
-      if (horoscopeImageFile.value.path.isEmpty) {
-        debugPrint("❌ ERROR: Horoscope image path is empty!");
-      } else {
-        final f = File(horoscopeImageFile.value.path);
-        debugPrint("✅ Image Path: ${f.path}");
-        debugPrint("✅ Image Exists: ${f.existsSync()}");
-        if (f.existsSync()) {
-          debugPrint("✅ Image Bytes: ${await f.length()}");
-        }
-      }
-
-      final res = await THttpHelper.multipartPost(
-        filePath: horoscopeImageFile.value.path,
+      final res = await THttpHelper.post(
         ApiConstant.horoscopeEditEndpoint,
         request,
-        fileFieldName: "file",
       );
-      debugPrint("Horoscope res : $request");
+      debugPrint("Horoscope res : $res");
       await profileController.fetchUserProfile();
       TLoaders.successSnackBar(title: "Success", message: res['message']);
 

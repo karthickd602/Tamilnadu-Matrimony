@@ -129,6 +129,7 @@ class TTexts {
   static const String state = "state";
   static const String country = "country";
   static const String pincode = "pincode";
+  static const String expectation = "expectation";
   static const String noCaste = "caste_no_bar";
 
   // Home Page

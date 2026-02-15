@@ -125,7 +125,7 @@ class ContactDetails extends StatelessWidget {
             /// --- Expectations ---
             TFormField(
               controller: controller.expectationsController,
-              labelText: "Expectations",
+              labelText: TTexts.expectation.tr,
               icon: Icons.description_outlined,
               maxLines: 3,
               maxLength: 50,

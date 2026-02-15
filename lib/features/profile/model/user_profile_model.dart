@@ -65,6 +65,7 @@ class FetchUserProfileModel {
   final String? inLaknam;
   final String? horosApprove;
   final String? horosCheck;
+  final String? expections;
 
   /// IMAGES
   final String? photo1;
@@ -128,6 +129,7 @@ class FetchUserProfileModel {
     this.inLaknam,
     this.horosApprove,
     this.horosCheck,
+    this.expections,
     this.photo1,
     this.photo1Approve,
     this.verified,
@@ -197,6 +199,8 @@ class FetchUserProfileModel {
       inLaknam: json['InLaknam'],
       horosApprove: json['HorosApprove'],
       horosCheck: json['Horoscheck'],
+      expections: json['expections'],
+
 
       photo1: json['photo1'],
       photo1Approve: json['Photo1Approve'],
@@ -206,33 +210,4 @@ class FetchUserProfileModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      "ID": id,
-      "Name": name,
-      "Gender": gender,
-      "DOB": dob,
-      "Maritalstatus": maritalStatus,
-      "Complexion": complexion,
-      "HeightID": heightID,
-      "Education": educationId,
-      "EducationDetails": educationDetails,
-      "OccupationID": occupationId,
-      "Occupationdetails": occupationDetails,
-      "Annualincome": annualIncome,
-      "ReligionID": religionId,
-      "CasteID": casteId,
-      "Address": address,
-      "Postal": postal,
-      "Phone": phone,
-      "ConfirmEmail": confirmEmail,
-      "Moonsign": moonsign,
-      "Star": star,
-      "dasatype": dasaType,
-      "thosam": thosam,
-      "thoosamtype": thoosamType,
-      "InLaknam": inLaknam,
-      "spe_cases": speCases,
-    };
-  }
 }

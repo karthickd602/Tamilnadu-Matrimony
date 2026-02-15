@@ -89,6 +89,7 @@ class ViewProfilePage extends StatelessWidget {
                       _info(TTexts.subCaste.tr, profile.subCaste),
                       _info(TTexts.noCaste.tr, profile.noCaste),
                       _info(TTexts.specialCases.tr, profile.speCases),
+                      _info(TTexts.expectation.tr, profile.expections),
                     ],
                   ),
 
@@ -150,12 +151,6 @@ class ViewProfilePage extends StatelessWidget {
                       _info(TTexts.postalCode.tr, profile.postal),
                       // const SizedBox(height: 6),
                       _info(TTexts.address.tr, profile.address),
-                      // Text(
-                      //   profile.address?.isNotEmpty == true
-                      //       ? profile.address!
-                      //       : "-",
-                      //   style: const TextStyle(fontSize: 14, height: 1.6),
-                      // ),
                     ],
                   ),
 

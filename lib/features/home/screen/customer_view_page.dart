@@ -3,6 +3,7 @@ import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 import '../../../common/widgets/appbar/appbar.dart';
+import '../../../common/widgets/horoscope/horoscope_chart.dart';
 import '../controller/dashboard_controller.dart';
 
 class CustomerDetailsView extends StatelessWidget {
@@ -251,22 +252,29 @@ class CustomerDetailsView extends StatelessWidget {
                         primaryColor,
                       ),
 
-                      /// Horoscope Button
-                      if (userModel.horosApprove.toLowerCase() == "yes")
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              Get.to(
-                                () => ImagePreviewPage(
-                                  imageUrl: userModel.horosCheck,
-                                  imageType: ImageType.network,
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.remove_red_eye),
-                            label: Text(TTexts.horoscope.tr),
-                          ),
+                      /// Horoscope Section
+                      if (userModel.horosCheck.isNotEmpty &&
+                          userModel.horosApprove.toLowerCase() == "yes")
+                        //   SizedBox(
+                        //     width: double.infinity,
+                        //     child: ElevatedButton.icon(
+                        //       onPressed: () {
+                        //         Get.to(
+                        //           () => ImagePreviewPage(
+                        //             imageUrl: userModel.horosCheck,
+                        //             imageType: ImageType.network,
+                        //           ),
+                        //         );
+                        //       },
+                        //       icon: const Icon(Icons.remove_red_eye),
+                        //       label: Text(TTexts.horoscope.tr),
+                        //     ),
+                        //   )
+                        SizedBox()
+                      else
+                        HoroscopeChart(
+                          rasiData: userModel.rasi,
+                          amsamData: userModel.amsam,
                         ),
                       SizedBox(height: TSizes.spaceBtwSections),
                     ],
