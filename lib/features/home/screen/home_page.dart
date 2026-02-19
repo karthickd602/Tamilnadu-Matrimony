@@ -63,26 +63,6 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // const SizedBox(width: TSizes.spaceBtwItems),
-                  // InkWell(
-                  //   onTap: () {
-                  //     Get.to(() => const SpecialFilterPage());
-                  //   },
-                  //   borderRadius: BorderRadius.circular(TSizes.borderRadiusLg),
-                  //   child: Container(
-                  //     padding: const EdgeInsets.all(TSizes.md),
-                  //     decoration: BoxDecoration(
-                  //       border: Border.all(color: TColors.grey),
-                  //       borderRadius: BorderRadius.circular(
-                  //         TSizes.borderRadiusLg,
-                  //       ),
-                  //     ),
-                  //     child: const Icon(
-                  //       Icons.stars_rounded,
-                  //       color: TColors.primary,
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -92,32 +72,49 @@ class HomePage extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (controller.dashboardCustomerList.isEmpty) {
-                    return Center(
-                      child: TAnimationLoaderWidget(
-                        animation: TImages.noDataFoundAnimation,
-                        text: 'No Data Found',
+                    return RefreshIndicator(
+                      onRefresh: () => controller.fetchDashboardCustomerProfile(
+                        isInitial: true,
+                      ),
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          child: Center(
+                            child: TAnimationLoaderWidget(
+                              animation: TImages.noDataFoundAnimation,
+                              text: 'No Data Found',
+                            ),
+                          ),
+                        ),
                       ),
                     );
                   }
-                  return ListView.separated(
-                    controller: controller.scrollController,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount:
-                        controller.dashboardCustomerList.length +
-                        (controller.hasMore.value ? 1 : 0),
-                    separatorBuilder: (_, i) => const SizedBox(height: 20),
-                    itemBuilder: (context, index) {
-                      if (index == controller.dashboardCustomerList.length) {
-                        // Pagination Loader
-                        return const Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
+                  return RefreshIndicator(
+                    onRefresh: () => controller.fetchDashboardCustomerProfile(
+                      isInitial: true,
+                    ),
+                    child: ListView.separated(
+                      controller: controller.scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount:
+                          controller.dashboardCustomerList.length +
+                          (controller.hasMore.value ? 1 : 0),
+                      separatorBuilder: (_, i) => const SizedBox(height: 20),
+                      itemBuilder: (context, index) {
+                        if (index == controller.dashboardCustomerList.length) {
+                          // Pagination Loader
+                          return const Padding(
+                            padding: EdgeInsets.all(16),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
 
-                      final customer = controller.dashboardCustomerList[index];
-                      return CustomerCard(customerProfile: customer);
-                    },
+                        final customer =
+                            controller.dashboardCustomerList[index];
+                        return CustomerCard(customerProfile: customer);
+                      },
+                    ),
                   );
                 }),
               ),

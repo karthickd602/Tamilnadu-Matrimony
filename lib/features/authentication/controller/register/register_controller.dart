@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:tamilnadu_matrimony/common/widgets/images/t_image_picker.dart';
 import 'package:tamilnadu_matrimony/features/authentication/model/dropdown_model.dart';
@@ -790,39 +791,34 @@ class RegistrationController extends GetxController {
         return;
       }
 
-      // if (horoscopeImagePath.value.isEmpty) {
-      //   TLoaders.warningSnackBar(
-      //     title: "No Horoscope Image",
-      //     message: "Please select horoscope image",
-      //   );
-      //   return;
-      // }
       TFullScreenLoader.popUpCircular();
+
+      String? base64Image;
+      if (horoscopeImageFile.value.path.isNotEmpty) {
+        final bytes = await horoscopeImageFile.value.readAsBytes();
+        final extension = horoscopeImageFile.value.path.split('.').last;
+        final base64String = base64Encode(bytes);
+        base64Image = "data:image/$extension;base64,$base64String";
+      }
+
       final request = {
         "id": storage.read(TTexts.userId),
-        // "id": "96142",
+        "choice": 4,
         'Moonsign': selectedRaasi.value,
         "Star": selectedStar.value,
         "InLaknam": selectedLaknam.value,
         "dasatype": selectedDasa.value,
         "thoosamtype": isDoshamHave.value,
         "thosam": selectedDhosam.value,
+        if (base64Image != null) "file": base64Image,
       };
       debugPrint("Horoscope req : $request");
 
-      final res;
-      if (horoscopeImageFile.value.path.isNotEmpty) {
-        res = await THttpHelper.multipartPost(
-          filePath: horoscopeImageFile.value.path,
-          ApiConstant.horoscopeRegisterEndpoint,
-          request,
-        );
-      } else {
-        res = await THttpHelper.post(
-          ApiConstant.horoscopeRegisterEndpoint,
-          request,
-        );
-      }
+      final res = await THttpHelper.post(
+        ApiConstant.horoscopeRegisterEndpoint,
+        request,
+      );
+
       debugPrint("Horoscope res : $res");
       TFullScreenLoader.stopLoading();
       TLoaders.successSnackBar(title: "Success", message: res['message']);
@@ -914,11 +910,3 @@ class RegistrationController extends GetxController {
     super.onClose();
   }
 }
-
-//
-// class HeightOption {
-//   final int id;
-//   final String label;
-//
-//   HeightOption({required this.id, required this.label});
-// }

@@ -41,13 +41,18 @@ class NotificationService {
     }
 
     // Get Token
+    // Get Token
     try {
       String? token = await _firebaseMessaging.getToken();
+      if (token != null) {
+        final storage = GetStorage();
+        await storage.write(TTexts.fcmToken, token);
+      }
+
       if (kDebugMode) {
         debugPrint('FCM Token: $token');
         final storage = GetStorage();
-        await storage.write(TTexts.fcmToken, token);
-        debugPrint('FCM Token: ${storage.read(TTexts.fcmToken)}');
+        debugPrint('FCM Token stored: ${storage.read(TTexts.fcmToken)}');
       }
     } catch (e) {
       if (kDebugMode) {

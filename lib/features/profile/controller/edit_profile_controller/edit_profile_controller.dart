@@ -846,6 +846,7 @@ class EditProfileController extends GetxController {
 
       final request = {
         "id": storage.read(TTexts.userId),
+        "choice": 4,
         'Moonsign': selectedRaasi.value,
         "Star": selectedStar.value,
         "InLaknam": selectedLaknam.value,
