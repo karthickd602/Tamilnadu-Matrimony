@@ -92,6 +92,10 @@ class DashboardController extends GetxController {
         req,
       );
 
+      if (response["statusCode"] == 204) {
+        return;
+      }
+
       debugPrint("Dashboard Response = $response");
 
       List newData = response["profiles"] ?? [];

@@ -90,7 +90,7 @@ class THttpHelper {
       body: json.encode(data),
     );
     debugPrint('Headers: ${response.request?.headers}');
-    // debugPrint('Body: ${response.request?.body}')
+    debugPrint('Bearer ${storage.read(TTexts.barerToken)}');
     return _handleResponse(response);
   }
 

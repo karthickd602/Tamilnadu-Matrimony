@@ -63,7 +63,7 @@ class CustomerDetailsView extends StatelessWidget {
                         : ImageType.network,
                     image: userModel.photo1,
                     backgroundColor: TColors.white,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                   ),
                 ),
 

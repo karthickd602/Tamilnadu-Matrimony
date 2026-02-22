@@ -291,7 +291,7 @@ class FilterController extends GetxController {
 
     return {
       "id": storage.read(TTexts.userId),
-      "Caste": (selectedOptions["Caste"] as List? ?? []).join(","),
+      "Caste": (selectedOptions["Caste"] as List? ?? []) .join(","),
       "Education": (selectedOptions["Education"] as List? ?? []).join(","),
       "City": (selectedOptions["Location"] as List? ?? []).join(","),
       "thosam": _getDoshamNames().join(","),
