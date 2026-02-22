@@ -21,23 +21,24 @@ class FamilyDetails extends StatelessWidget {
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              TFormField(
+              TFormField<String>(
                 labelText: TTexts.fatherName.tr,
                 controller: controller.fatherNameController,
                 icon: Iconsax.user,
-                validator:(v)=> TValidator.validateEmptyText(TTexts.fatherName.tr, v.toString()),
+                validator: (v) =>
+                    TValidator.validateEmptyText(TTexts.fatherName.tr, v),
               ),
-              TFormField(
+              TFormField<String>(
                 labelText: TTexts.fatherOccupation.tr,
                 controller: controller.fatherOccupationController,
                 icon: Iconsax.briefcase,
               ),
-              TFormField(
+              TFormField<String>(
                 labelText: TTexts.motherName.tr,
                 controller: controller.motherNameController,
                 icon: IconlyLight.user,
               ),
-              TFormField(
+              TFormField<String>(
                 labelText: TTexts.motherOccupation.tr,
                 controller: controller.motherOccupationController,
                 icon: Iconsax.briefcase,
@@ -54,12 +55,9 @@ class FamilyDetails extends StatelessWidget {
                   if (value == null) return;
                   controller.familyStatusController.value = value;
                 },
-                validator: (value) => TValidator.validateEmptyText(
-                  TTexts.familyStatus.tr,
-                  value,
-                ),
+                validator: (value) =>
+                    TValidator.validateEmptyText(TTexts.familyStatus.tr, value),
               ),
-
 
               Row(
                 children: [
@@ -84,7 +82,8 @@ class FamilyDetails extends StatelessWidget {
                     ),
                   ),
                 ],
-              ), Row(
+              ),
+              Row(
                 children: [
                   Expanded(
                     child: TFormField(
@@ -130,7 +129,7 @@ class FamilyDetails extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Obx(
-                      ()=> ElevatedButton(
+                      () => ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: primary,
                           shape: RoundedRectangleBorder(
@@ -138,12 +137,18 @@ class FamilyDetails extends StatelessWidget {
                           ),
                           minimumSize: const Size(double.infinity, 50),
                         ),
-                        onPressed: controller.isLoading.value?null:()=> controller.familyFormSubmit(),
-                        child: controller.isLoading.value?CircularProgressIndicator():Text(
-                          TTexts.tContinue.tr,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : () => controller.familyFormSubmit(),
+                        child: controller.isLoading.value
+                            ? CircularProgressIndicator()
+                            : Text(
+                                TTexts.tContinue.tr,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
                     ),
                   ),

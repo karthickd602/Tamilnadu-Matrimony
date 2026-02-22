@@ -11,7 +11,6 @@ class EditHoroscopeDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = EditProfileController.instance;
-    final textTheme = Theme.of(context).textTheme;
 
     return Form(
       key: controller.horoscopeFormKey,
@@ -28,7 +27,7 @@ class EditHoroscopeDetails extends StatelessWidget {
                 onChanged: controller.onRaasiChanged,
                 prefixIcon: Icons.brightness_7_outlined,
                 validator: (v) =>
-                    TValidator.validateEmptyText(v.toString(), v.toString()),
+                    TValidator.validateEmptyText(TTexts.rasi.tr, v),
                 // v == null ? "தயவுசெய்து ராசி தேர்ந்தெடுக்கவும்" : null,
               ),
               const SizedBox(height: TSizes.md),
@@ -52,9 +51,8 @@ class EditHoroscopeDetails extends StatelessWidget {
                 onChanged: (v) => controller.selectedLaknam.value = v ?? '',
                 prefixIcon: Icons.auto_awesome,
                 // onChanged: controller.onStarChanged,
-                validator: (v) => controller.selectedLaknam.value == null
-                    ? "தயவுசெய்து Laknam தேர்ந்தெடுக்கவும்"
-                    : null,
+                validator: (v) =>
+                    TValidator.validateEmptyText(TTexts.laknam.tr, v),
               ),
               const SizedBox(height: TSizes.md),
 

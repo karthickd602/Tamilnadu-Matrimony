@@ -56,8 +56,9 @@ class TRoundedImage extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: ClipRRect(
-        borderRadius:
-        applyRadius ? BorderRadius.circular(borderRadius) : BorderRadius.zero,
+        borderRadius: applyRadius
+            ? BorderRadius.circular(borderRadius)
+            : BorderRadius.zero,
         child: _buildImage(),
       ),
     );
@@ -90,7 +91,8 @@ class TRoundedImage extends StatelessWidget {
       imageUrl: image,
       progressIndicatorBuilder: (_, __, downloadProgress) =>
           TShimmerEffect(width: width, height: height),
-      errorWidget: (context,url,error)=>Icon(Icons.error),
+      errorWidget: (context, url, error) =>
+          Image.asset(TImages.defaultProfilePic, fit: fit),
     );
 
     // return Image.network(
@@ -143,9 +145,6 @@ class TRoundedImage extends StatelessWidget {
   // FALLBACK DEFAULT IMAGE
   // -----------------------------
   Widget _fallbackImage() {
-    return Image.asset(
-      TImages.defaultProfilePic,
-      fit: BoxFit.cover,
-    );
+    return Image.asset(TImages.defaultProfilePic, fit: BoxFit.cover);
   }
 }

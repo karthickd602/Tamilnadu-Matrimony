@@ -56,11 +56,8 @@ class HoroscopeDetails extends StatelessWidget {
                 onChanged: (v) => controller.selectedLaknam.value = v ?? '',
                 prefixIcon: Icons.auto_awesome,
                 // onChanged: controller.onStarChanged,
-                validator: (v) => controller.selectedRaasi.value == null
-                    ? storage.read(TTexts.languageCode) == 'ta'
-                          ? "தயவுசெய்து லக்னம் தேர்ந்தெடுக்கவும்"
-                          : "Choose Laknam"
-                    : null,
+                validator: (v) =>
+                    TValidator.validateEmptyText(TTexts.laknam.tr, v),
               ),
               const SizedBox(height: TSizes.md),
 

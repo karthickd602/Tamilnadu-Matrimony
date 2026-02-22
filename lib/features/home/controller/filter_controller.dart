@@ -291,14 +291,14 @@ class FilterController extends GetxController {
 
     return {
       "id": storage.read(TTexts.userId),
-      "Caste": selectedOptions["Caste"] ?? [],
-      "EducationDetails": selectedOptions["Education"] ?? [],
-      "City": selectedOptions["Location"] ?? [],
-      "thosam": _getDoshamNames(),
-      "Star": selectedOptions["Star"] ?? [],
+      "Caste": (selectedOptions["Caste"] as List? ?? []).join(","),
+      "Education": (selectedOptions["Education"] as List? ?? []).join(","),
+      "City": (selectedOptions["Location"] as List? ?? []).join(","),
+      "thosam": _getDoshamNames().join(","),
+      "Star": (selectedOptions["Star"] as List? ?? []).join(","),
       "Maritalstatus": selectedMartial,
-      "no_caste_bar": selectedOptions["No Caste Bar"] == 1 ? 'no_caste' : '',
-      "disability": selectedOptions["Disability"] ?? 0,
+      "nocaste": selectedOptions["No Caste Bar"] == 1 ? 'no_caste' : '',
+      "spe_cases": selectedOptions["Disability"] == 1 ? "ஆம்" : "",
       "from_age": ageRange.value.start.toInt(),
       "to_age": ageRange.value.end.toInt(),
     };

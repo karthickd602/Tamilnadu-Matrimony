@@ -61,7 +61,10 @@ class TFormField<T> extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
 
-              onChanged: onChanged,
+              onChanged: (val) {
+                FocusScope.of(context).unfocus();
+                onChanged?.call(val);
+              },
               validator: validator,
               items:
                   items

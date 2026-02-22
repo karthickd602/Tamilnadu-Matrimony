@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:tamilnadu_matrimony/common/widgets/images/t_image_picker.dart';
 import 'package:tamilnadu_matrimony/features/authentication/model/dropdown_model.dart';
@@ -89,8 +89,6 @@ class RegistrationController extends GetxController {
   final horoscopeImageFile = File('').obs;
   RxString horoscopeImagePath = ''.obs;
 
-  final mobileController = TextEditingController();
-  final whatsappController = TextEditingController();
   final alternateMobileController = TextEditingController();
   final emailController = TextEditingController();
   final addressController = TextEditingController();
@@ -353,7 +351,7 @@ class RegistrationController extends GetxController {
 
     /// ---------------- CONTACT ----------------
 
-    mobileController.text = profile.phone ?? profile.mobile ?? '';
+    alternateMobileController.text = profile.phone ?? '';
     emailController.text = profile.confirmEmail ?? '';
     cityController.text = profile.city ?? '';
     stateController.value = profile.state ?? '';
@@ -855,7 +853,7 @@ class RegistrationController extends GetxController {
         "State": selectedState.value?.id,
         "City": selectedDistrict.value?.id,
         "Postal": pincodeController.text,
-        "expectations": expectationsController.text,
+        "expections": expectationsController.text,
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 

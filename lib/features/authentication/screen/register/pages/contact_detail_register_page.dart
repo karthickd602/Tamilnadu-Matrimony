@@ -22,16 +22,14 @@ class ContactDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// --- Alternate Mobile ---
-            TFormField(
+            TFormField<String>(
               controller: controller.alternateMobileController,
               labelText: TTexts.alternateMobile.tr,
               icon: Icons.phone,
               maxLength: 10,
               keyboardType: TextInputType.phone,
-              validator: (value) => TValidator.validateEmptyText(
-                TTexts.mobileNo.tr,
-                value.toString(),
-              ),
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.mobileNo.tr, value),
             ),
 
             /// --- Email ---
@@ -47,15 +45,13 @@ class ContactDetails extends StatelessWidget {
             ),
 
             /// --- Address ---
-            TFormField(
+            TFormField<String>(
               controller: controller.addressController,
               labelText: TTexts.address.tr,
               icon: Icons.home_outlined,
               keyboardType: TextInputType.streetAddress,
-              validator: (value) => TValidator.validateEmptyText(
-                TTexts.address.tr,
-                value.toString(),
-              ),
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.address.tr, value),
             ),
 
             TSearchDropdownField<CountryModel>(
@@ -110,15 +106,13 @@ class ContactDetails extends StatelessWidget {
             ),
 
             /// --- Pincode ---
-            TFormField(
+            TFormField<String>(
               controller: controller.pincodeController,
               labelText: TTexts.pincode.tr,
               icon: Icons.local_post_office_outlined,
               maxLength: 6,
-              validator: (value) => TValidator.validateEmptyText(
-                TTexts.pincode.tr,
-                value.toString(),
-              ),
+              validator: (value) =>
+                  TValidator.validateEmptyText(TTexts.pincode.tr, value),
               keyboardType: TextInputType.number,
             ),
 

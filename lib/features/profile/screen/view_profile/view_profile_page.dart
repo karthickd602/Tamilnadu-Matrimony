@@ -1,6 +1,7 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 
 import '../../../../common/widgets/images/image_preview_page.dart';
+import '../../../../common/widgets/images/t_circular_image.dart';
 import '../../../../common/widgets/images/t_image_picker.dart';
 import '../../../../utils/constants/path_provider.dart';
 import '../../controller/profile_controller.dart';
@@ -260,15 +261,17 @@ class _ProfileHeader extends StatelessWidget {
             child: Stack(
               alignment: Alignment.bottomRight,
               children: [
-                CircleAvatar(
-                  radius: 44,
-                  backgroundColor: Colors.grey.shade200,
-                  backgroundImage: profile.photo1?.isNotEmpty == true
-                      ? NetworkImage(profile.photo1!)
-                      : null,
-                  child: profile.photo1?.isEmpty == true
-                      ? const Icon(Icons.person, size: 42)
-                      : null,
+                TCircularImage(
+                  width: 88,
+                  height: 88,
+                  backgroundColor: Colors.transparent,
+                  imageType: profile.photo1?.isNotEmpty == true
+                      ? ImageType.network
+                      : ImageType.asset,
+                  image: profile.photo1?.isNotEmpty == true
+                      ? profile.photo1!
+                      : TImages.defaultProfilePic,
+                  fit: BoxFit.cover,
                 ),
                 Positioned(
                   bottom: 0,

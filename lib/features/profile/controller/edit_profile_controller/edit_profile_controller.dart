@@ -383,13 +383,14 @@ class EditProfileController extends GetxController {
 
     /// ---------------- CONTACT ----------------
 
-    mobileController.text = profile.phone ?? profile.mobile ?? '';
+    alternateMobileController.text = profile.phone ?? '';
     emailController.text = profile.confirmEmail ?? '';
     cityController.text = profile.city ?? '';
     stateController.value = profile.state ?? '';
     districtController.value = profile.city ?? '';
     pincodeController.text = profile.postal ?? '';
     addressController.text = profile.address ?? '';
+    expectationsController.text = profile.expections ?? '';
     noCasteChecked.value = profile.noCaste.toString().toLowerCase() == "yes"
         ? true
         : false;
@@ -819,30 +820,18 @@ class EditProfileController extends GetxController {
         return;
       }
 
-      // if (horoscopeImagePath.value.isEmpty) {
-      //   TLoaders.warningSnackBar(
-      //     title: "No Horoscope Image",
-      //     message: "Please select horoscope image",
-      //   );
-      //   return;
-      // }
-
-      final file = File(horoscopeImageFile.value.path);
-      if (!file.existsSync()) {
-        TLoaders.warningSnackBar(
-          title: "Error",
-          message: "Image file not found",
-        );
-        return;
+      String? base64Image;
+      if (horoscopeImageFile.value.path.isNotEmpty) {
+        final file = File(horoscopeImageFile.value.path);
+        if (file.existsSync()) {
+          final bytes = await file.readAsBytes();
+          final base64String = base64Encode(bytes);
+          final extension = file.path.split('.').last.toLowerCase();
+          String mimeType = "image/jpeg";
+          if (extension == "png") mimeType = "image/png";
+          base64Image = "data:$mimeType;base64,$base64String";
+        }
       }
-
-      final bytes = await file.readAsBytes();
-      final base64String = base64Encode(bytes);
-      final extension = file.path.split('.').last.toLowerCase();
-      String mimeType = "image/jpeg";
-      if (extension == "png") mimeType = "image/png";
-
-      final base64Image = "data:$mimeType;base64,$base64String";
 
       final request = {
         "id": storage.read(TTexts.userId),
@@ -853,7 +842,7 @@ class EditProfileController extends GetxController {
         "dasatype": selectedDasa.value,
         "thoosamtype": isDoshamHave.value,
         "thosam": selectedDhosam.value,
-        "file": base64Image,
+        if (base64Image != null) "file": base64Image,
       };
       debugPrint("Horoscope req : $request");
 
@@ -899,7 +888,7 @@ class EditProfileController extends GetxController {
         "State": selectedState.value?.id,
         "City": selectedDistrict.value?.id,
         "Postal": pincodeController.text,
-        "expectations": expectationsController.text,
+        "expections": expectationsController.text,
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
@@ -909,17 +898,11 @@ class EditProfileController extends GetxController {
         ApiConstant.contactRegisterEndpoint,
         request,
       );
-      //
-      // final response = await THttpHelper.multipartPost(
-      //   filePath: profileImageFile.value.path,
-      //   ApiConstant.contactRegisterEndpoint,
-      //   request,
-      //   fileFieldName: "photo1",
-      // );
       debugPrint("Contact Register Response : $response");
       await profileController.fetchUserProfile();
-      TLoaders.successSnackBar(title: "Success", message: response['message']);
       Get.offNamed(TRoutes.viewProfile);
+      TLoaders.successSnackBar(title: "Success", message: response['message']);
+
       // storage.write(TTexts.appPages, 0);
       // Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
