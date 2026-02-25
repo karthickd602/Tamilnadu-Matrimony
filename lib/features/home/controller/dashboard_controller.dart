@@ -28,6 +28,9 @@ class DashboardController extends GetxController {
   final RxBool hasMore = true.obs;
   final searchIdController = TextEditingController();
 
+  /// 🔥 Store applied filters to persist across pagination
+  Map<String, dynamic>? _appliedFilters;
+
   final scrollController = ScrollController();
 
   @override
@@ -57,6 +60,11 @@ class DashboardController extends GetxController {
         currentPage.value = 1;
         hasMore.value = true;
         dashboardCustomerList.clear();
+
+        /// 🔥 Update stored filters on initial load
+        if (filters != null) {
+          _appliedFilters = filters;
+        }
       } else {
         isMoreLoading.value = true;
       }
@@ -80,9 +88,10 @@ class DashboardController extends GetxController {
         req["search_id"] = searchIdController.text.trim();
       }
 
-      /// 🔥 MERGE FILTERS IF PROVIDED
-      if (filters != null && filters.isNotEmpty) {
-        req.addAll(filters);
+      /// 🔥 MERGE FILTERS IF PROVIDED OR STORED
+      final filtersToUse = filters ?? _appliedFilters;
+      if (filtersToUse != null && filtersToUse.isNotEmpty) {
+        req.addAll(filtersToUse);
       }
 
       debugPrint("Dashboard Request = $req");

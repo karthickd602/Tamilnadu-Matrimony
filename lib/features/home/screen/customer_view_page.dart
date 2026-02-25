@@ -153,6 +153,12 @@ class CustomerDetailsView extends StatelessWidget {
                             "label": TTexts.lagnam.tr,
                             "value": userModel.inLaknam,
                           },
+                          // if (userModel.doshamType != "")
+                          {
+                            "icon": Icons.warning_amber_rounded,
+                            "label": "Dosham",
+                            "value": userModel.doshamType,
+                          },
                         ],
                         primaryColor,
                       ),
@@ -173,6 +179,11 @@ class CustomerDetailsView extends StatelessWidget {
                             "label": TTexts.complexion.tr,
                             "value": userModel.complexion,
                           },
+                          {
+                            "icon": Icons.accessible,
+                            "label": "Special Cases",
+                            "value": userModel.speCases,
+                          },
                         ],
                         primaryColor,
                       ),
@@ -183,18 +194,20 @@ class CustomerDetailsView extends StatelessWidget {
                         TTexts.familyDetails.tr,
                         Icons.family_restroom,
                         [
-                          {
-                            "icon": Icons.man,
-                            "label": TTexts.father.tr,
-                            "value":
-                                "${userModel.fatherName} (${userModel.fathersOccupation})",
-                          },
-                          {
-                            "icon": Icons.woman,
-                            "label": TTexts.mother.tr,
-                            "value":
-                                "${userModel.motherName} (${userModel.mothersOccupation})",
-                          },
+                          if (userModel.fatherName != "")
+                            {
+                              "icon": Icons.man,
+                              "label": TTexts.father.tr,
+                              "value":
+                                  "${userModel.fatherName} - ${userModel.fathersOccupation}",
+                            },
+                          if (userModel.motherName != "")
+                            {
+                              "icon": Icons.woman,
+                              "label": TTexts.mother.tr,
+                              "value":
+                                  "${userModel.motherName} - ${userModel.mothersOccupation}",
+                            },
                           {
                             "icon": Icons.people,
                             "label": TTexts.siblings.tr,
@@ -248,6 +261,12 @@ class CustomerDetailsView extends StatelessWidget {
                             "label": TTexts.caste.tr,
                             "value": userModel.caste,
                           },
+                          if (userModel.expectations != "")
+                            {
+                              "icon": Icons.comment_outlined,
+                              "label": "Expectations",
+                              "value": userModel.expectations,
+                            },
                         ],
                         primaryColor,
                       ),

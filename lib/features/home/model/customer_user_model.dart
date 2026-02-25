@@ -26,6 +26,9 @@ class CustomerUserModel {
   String mothersOccupation;
   String noOfBrothers;
   String noOfSisters;
+  String expectations;
+  String speCases;
+  String doshamType;
   String address;
   String mobile;
   String phone;
@@ -63,6 +66,9 @@ class CustomerUserModel {
     required this.mothersOccupation,
     required this.noOfBrothers,
     required this.noOfSisters,
+    required this.expectations,
+    required this.speCases,
+    required this.doshamType,
     required this.address,
     required this.mobile,
     required this.phone,
@@ -105,6 +111,9 @@ class CustomerUserModel {
       mothersOccupation: "",
       noOfBrothers: "",
       noOfSisters: "",
+      expectations: "",
+      speCases: "",
+      doshamType: "",
       address: "",
       mobile: "",
       phone: "",
@@ -146,6 +155,9 @@ class CustomerUserModel {
       mothersOccupation: json["Mothersoccupation"] ?? "",
       noOfBrothers: json["noofbrothers"]?.toString() ?? "",
       noOfSisters: json["noofsisters"]?.toString() ?? "",
+      expectations: json["expections"] ?? "",
+      speCases: json["spe_cases"] ?? "",
+      doshamType: json["thoosamtype"] ?? "",
       address: json["address"] ?? "",
       mobile: json["mobile"] ?? "",
       phone: json["phone"] ?? "",
