@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.maac.tamilnadumatrimony",
+      "sha256_cert_fingerprints": [
+        "57:1D:2C:81:C3:45:9C:A7:B9:1D:B5:12:B2:C4:62:5C:D5:B3:90:A7:53:17:AE:69:55:5E:F7:0B:88:D7:1F:E5"
+      ]
+    }
+  }
+]

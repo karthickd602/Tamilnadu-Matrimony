@@ -1,6 +1,7 @@
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 
 import '../../../../common/widgets/images/image_preview_page.dart';
+import '../../../../common/widgets/images/t_circular_image.dart';
 import '../../../../common/widgets/images/t_image_picker.dart';
 import '../../../../utils/constants/path_provider.dart';
 import '../../controller/profile_controller.dart';
@@ -15,7 +16,7 @@ class ViewProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFE8A3),
-      appBar: const TAppBar(title: "My Profile", isBackButtonNeed: true),
+      appBar: TAppBar(title: TTexts.profileDetails.tr, isBackButtonNeed: true),
 
       bottomNavigationBar: SafeArea(
         child: Padding(
@@ -24,9 +25,12 @@ class ViewProfilePage extends StatelessWidget {
             height: 52,
             child: ElevatedButton.icon(
               icon: const Icon(Icons.edit),
-              label: const Text(
-                "Edit Profile",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              label: Text(
+                TTexts.editProfile.tr,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
@@ -49,7 +53,7 @@ class ViewProfilePage extends StatelessWidget {
           final FetchUserProfileModel? profile = controller.userProfile.value;
 
           if (profile == null) {
-            return const Center(child: Text("No profile data"));
+            return Center(child: Text(TTexts.noProfileData.tr));
           }
 
           return RefreshIndicator(
@@ -66,28 +70,33 @@ class ViewProfilePage extends StatelessWidget {
 
                   /// BASIC INFO
                   _SectionCard(
-                    title: "Basic Information",
+                    title: TTexts.basicInfo.tr,
                     children: [
                       _info(TTexts.name.tr, profile.name),
-                      _info("Matri ID", profile.matriId),
-                      _info("Age", profile.age),
+                      _info(TTexts.matriId.tr, profile.matriId),
+                      _info(TTexts.age.tr, profile.age),
                       _info(
-                        "Gender",
-                        profile.gender == '1' ? "Male" : "Female",
+                        TTexts.gender.tr,
+                        profile.gender == '1'
+                            ? TTexts.male.tr
+                            : TTexts.female.tr,
                       ),
-                      _info("Date of Birth", profile.dob),
-                      _info("Height", profile.height),
-                      _info("Complexion", profile.complexion),
-                      _info("Marital Status", profile.maritalStatus),
-                      _info("Religion", profile.religion),
-                      _info("Caste", profile.caste),
-                      _info("Sub Caste", profile.subCaste),
+                      _info(TTexts.dob.tr, profile.dob),
+                      _info(TTexts.height.tr, profile.height),
+                      _info(TTexts.complexion.tr, profile.complexion),
+                      _info(TTexts.maritalStatus.tr, profile.maritalStatus),
+                      _info(TTexts.religion.tr, profile.religion),
+                      _info(TTexts.partnerCaste.tr, profile.caste),
+                      _info(TTexts.subCaste.tr, profile.subCaste),
+                      _info(TTexts.noCaste.tr, profile.noCaste),
+                      _info(TTexts.specialCases.tr, profile.speCases),
+                      _info(TTexts.expectation.tr, profile.expections),
                     ],
                   ),
 
                   /// EDUCATION & PROFESSION
                   _SectionCard(
-                    title: "Education & Profession",
+                    title: TTexts.educationOccupation.tr,
                     children: [
                       _info(TTexts.education.tr, profile.educationDetails),
                       _info(TTexts.occupation.tr, profile.occupation),
@@ -95,19 +104,20 @@ class ViewProfilePage extends StatelessWidget {
                         TTexts.occupationDetails.tr,
                         profile.occupationDetails,
                       ),
+                      _info(TTexts.workplace.tr, profile.workplace),
                       _info(
                         TTexts.income.tr,
                         profile.annualIncome != null
                             ? "₹ ${profile.annualIncome}"
                             : null,
                       ),
-                      _info("Workplace", profile.workplace),
+                      // _info("Workplace", profile.workplace),
                     ],
                   ),
 
                   /// FAMILY
                   _SectionCard(
-                    title: "Family Details",
+                    title: TTexts.familyDetails.tr,
                     children: [
                       _info(TTexts.fatherName.tr, profile.fatherName),
                       _info(
@@ -126,51 +136,52 @@ class ViewProfilePage extends StatelessWidget {
                         TTexts.childrenLivingStatus.tr,
                         profile.childrenLivingStatus,
                       ),
+                      _info(TTexts.nativePlace.tr, profile.irupidam),
+                      _info(TTexts.marriedBrothers.tr, profile.nbm),
+                      _info(TTexts.marriedSisters.tr, profile.nsm),
                     ],
                   ),
 
                   /// LOCATION
                   _SectionCard(
-                    title: "Location",
+                    title: TTexts.location.tr,
                     children: [
-                      _info("Country", profile.country),
-                      _info("State", profile.state),
-                      _info("City", profile.city),
-                      _info("Postal Code", profile.postal),
-                      const SizedBox(height: 6),
-                      Text(
-                        profile.address?.isNotEmpty == true
-                            ? profile.address!
-                            : "-",
-                        style: const TextStyle(fontSize: 14, height: 1.6),
-                      ),
+                      _info(TTexts.country.tr, profile.country),
+                      _info(TTexts.state.tr, profile.state),
+                      _info(TTexts.city.tr, profile.city),
+                      _info(TTexts.postalCode.tr, profile.postal),
+                      // const SizedBox(height: 6),
+                      _info(TTexts.address.tr, profile.address),
                     ],
                   ),
 
                   /// CONTACT
                   _SectionCard(
-                    title: "Contact Information",
+                    title: TTexts.contactDetailsTitle.tr,
                     children: [
-                      _info("Phone", profile.phone),
-                      _info("Mobile", profile.mobile),
-                      _info("Email", profile.confirmEmail),
+                      _info(TTexts.phone.tr, profile.phone),
+                      _info(TTexts.mobileNumber.tr, profile.mobile),
+                      _info(TTexts.email.tr, profile.confirmEmail),
                     ],
                   ),
 
                   /// HOROSCOPE
                   _SectionCard(
-                    title: "Horoscope Details",
+                    title: TTexts.horoscopeDetailsTitle.tr,
                     children: [
-                      _info("Moon Sign", profile.moonsign),
-                      _info("Star", profile.star),
-                      _info("Dasa Type", profile.dasaType),
-                      _info("Thosam", profile.thosam),
-                      _info("Thosam Type", profile.thoosamType),
-                      _info("Laknam", profile.inLaknam),
+                      _info(TTexts.rasi.tr, profile.moonsign),
+                      _info(TTexts.star.tr, profile.star),
+                      _info(TTexts.dasaType.tr, profile.dasaType),
+                      _info(TTexts.dosham.tr, profile.thosam),
+                      _info(TTexts.thosamType.tr, profile.thoosamType),
+                      _info(TTexts.lagnam.tr, profile.inLaknam),
                       _info(
-                        "Horoscope Status",
-                        profile.horosApprove == "Yes" ? "Approved" : "Pending",
+                        TTexts.horoscopeStatus.tr,
+                        profile.horosApprove == "Yes"
+                            ? TTexts.approved.tr
+                            : TTexts.pending.tr,
                       ),
+                      _info(TTexts.horoscopeCheck.tr, profile.horosCheck),
                     ],
                   ),
                 ],
@@ -199,6 +210,7 @@ class ViewProfilePage extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(width: TSizes.xs),
           Expanded(
             flex: 5,
             child: Text(
@@ -249,15 +261,17 @@ class _ProfileHeader extends StatelessWidget {
             child: Stack(
               alignment: Alignment.bottomRight,
               children: [
-                CircleAvatar(
-                  radius: 44,
-                  backgroundColor: Colors.grey.shade200,
-                  backgroundImage: profile.photo1?.isNotEmpty == true
-                      ? NetworkImage(profile.photo1!)
-                      : null,
-                  child: profile.photo1?.isEmpty == true
-                      ? const Icon(Icons.person, size: 42)
-                      : null,
+                TCircularImage(
+                  width: 88,
+                  height: 88,
+                  backgroundColor: Colors.transparent,
+                  imageType: profile.photo1?.isNotEmpty == true
+                      ? ImageType.network
+                      : ImageType.asset,
+                  image: profile.photo1?.isNotEmpty == true
+                      ? profile.photo1!
+                      : TImages.defaultProfilePic,
+                  fit: BoxFit.cover,
                 ),
                 Positioned(
                   bottom: 0,
@@ -304,21 +318,24 @@ class _ProfileHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Matri ID : ${profile.matriId}",
+                  "${TTexts.matriId.tr} : ${profile.matriId}",
                   style: const TextStyle(color: Colors.grey),
                 ),
                 const SizedBox(height: 10),
-                Row(
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
                   children: [
                     _statusChip(
-                      profile.verified == "yes" ? "Verified" : "Not Verified",
+                      profile.verified == "yes"
+                          ? TTexts.verified.tr
+                          : TTexts.notVerified.tr,
                       profile.verified == "yes" ? Colors.green : Colors.orange,
                     ),
-                    const SizedBox(width: 8),
                     _statusChip(
                       profile.photo1Approve == "Yes"
-                          ? "Photo Approved"
-                          : "Photo Pending",
+                          ? TTexts.photoApproved.tr
+                          : TTexts.photoPending.tr,
                       Colors.blue,
                     ),
                   ],

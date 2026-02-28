@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../../utils/constants/path_provider.dart';
+import '../../../../../common/widgets/images/t_rounded_image.dart';
 
 class ImagePickerBox extends StatelessWidget {
   final String title;
@@ -83,17 +85,13 @@ class ImagePickerBox extends StatelessWidget {
     }
 
     if (_isNetworkImage(path)) {
-      return Image.network(
-        path,
+      return TRoundedImage(
+        image: path,
+        imageType: ImageType.network,
         width: double.infinity,
         height: double.infinity,
+        borderRadius: 12,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) =>
-            const Center(child: Icon(Icons.broken_image)),
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return const Center(child: CircularProgressIndicator());
-        },
       );
     }
 

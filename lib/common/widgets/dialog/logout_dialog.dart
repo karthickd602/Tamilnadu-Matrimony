@@ -88,9 +88,10 @@ class LogoutDialogContent extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () async {
-                      // final storage = GetStorage();
-                      // await storage.remove(TTexts.userEmail);
-                      // await storage.erase();
+                      final storage = GetStorage();
+                      await storage.remove(TTexts.userId);
+                      await storage.erase();
+
                       Get.offAllNamed(TRoutes.loginPage);
                     },
                     child: const Text(

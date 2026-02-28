@@ -1,3 +1,4 @@
+import 'package:share_plus/share_plus.dart';
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
 import 'package:tamilnadu_matrimony/features/profile/screen/verified_profile/verify_profile.dart';
@@ -7,7 +8,7 @@ import '../../../common/widgets/images/t_circular_image.dart';
 import '../../../common/widgets/images/t_image_picker.dart';
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/helpers/url_launcher.dart';
-import '../../subscription/controller/subscription_controller.dart';
+import '../../authentication/controller/language/language_selection_controller.dart';
 import '../controller/profile_controller.dart';
 import 'delete_profile/delete_profile_dialog.dart';
 
@@ -181,17 +182,34 @@ class ProfilePage extends StatelessWidget {
                     Icons.card_membership_outlined,
                     TTexts.membershipDetails.tr,
                     () async {
-                      await Get.put(
-                        SubscriptionController(),
-                      ).fetchUserSubscriptionPlan();
-                      // Get.toNamed(TRoutes.buySubscription);
+                      Get.toNamed(TRoutes.userSubscriptionPlan);
                     },
                   ),
                   _buildMenuItem(
                     context,
                     Icons.share_outlined,
                     TTexts.shareProfile.tr,
-                    () {},
+                    () {
+                      final name = user?.name ?? '';
+                      final matriId = user?.matriId ?? '';
+                      final profileId = user?.id; // Assuming id exists
+                      const appLink =
+                          "https://play.google.com/store/apps/details?id=com.maac.tamilnadumatrimony";
+
+                      // Use https scheme which is configured in AndroidManifest
+                      final deepLink =
+                          "https://tamilnadu-matrimony.com/profile?id=$profileId";
+
+                      final shareText =
+                          "Check out my profile on Tamilnadu Matrimony!\n\nName: $name ($matriId)\n\nTap to view profile: $deepLink\n\nDownload App: $appLink";
+                      Share.share(shareText);
+                    },
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.language,
+                    TTexts.selectLanguage.tr,
+                    () => _showLanguageBottomSheet(context),
                   ),
                   const Divider(height: 30),
 
@@ -216,7 +234,7 @@ class ProfilePage extends StatelessWidget {
                         onConfirm: (reason) {
                           profileController.deleteProfile(reason: reason);
                           // API call / controller logic
-                          print("Deleted because: $reason");
+                          debugPrint("Deleted because: $reason");
                         },
                       );
                     },
@@ -239,116 +257,134 @@ class ProfilePage extends StatelessWidget {
         elevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         insetPadding: const EdgeInsets.all(20),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.support_agent,
-                    color: Colors.blueAccent,
-                    size: 28,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    "Help & Support",
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueAccent.shade700,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.support_agent,
+                      color: Colors.blueAccent,
+                      size: 28,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              const Divider(),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        TTexts.helpSupport.tr,
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent.shade700,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Divider(),
 
-              /// Info Rows
-              _infoRow(Icons.phone_in_talk, "Call", "0452-4380101"),
-              _infoRow(
-                Icons.email_outlined,
-                "Mail",
-                "info@tamilnadumatrimony.net",
-              ),
-              _infoRow(
-                Icons.location_on_outlined,
-                "Address",
-                "Tamilnadu Matrimony,\n95, Northveli Street,\nSimmakal Bus Stop,\nMadurai - 625001.",
-              ),
-              _infoRow(
-                Icons.access_time_outlined,
-                "Timing",
-                "10:00 AM - 6:30 PM",
-              ),
+                /// Info Rows
+                _infoRow(Icons.phone_in_talk, TTexts.call.tr, "0452-4380101"),
+                _infoRow(Icons.phone_android, TTexts.call.tr, "9585410101"),
+                _infoRow(
+                  Icons.email_outlined,
+                  TTexts.mail.tr,
+                  "info@tamilnadumatrimony.net",
+                ),
+                _infoRow(
+                  Icons.location_on_outlined,
+                  TTexts.address.tr,
+                  TTexts.officeAddress.tr,
+                ),
+                _infoRow(
+                  Icons.access_time_outlined,
+                  TTexts.timing.tr,
+                  "10:00 AM - 6:30 PM",
+                ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 25),
 
-              /// Action Buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      TUrlLauncher.callPhone("04524380101");
-                    },
-                    // onPressed: () => _launchCaller("04524380101"),
-                    icon: const Icon(Icons.call, size: 20),
-                    label: const Text("Call Now"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: TColors.green,
+                /// Action Buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          TUrlLauncher.callPhone("04524380101");
+                        },
+                        // onPressed: () => _launchCaller("04524380101"),
+                        icon: const Icon(Icons.call, size: 20),
+                        label: Text(
+                          TTexts.callNow.tr,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: TColors.green,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10, // Reduced padding
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          TUrlLauncher.sendMail(
+                            email: "info@tamilnadumatrimony.net",
+                          );
+                        },
+                        // onPressed: () => _launchEmail(
+                        //     "info@tamilnaduMatrimony.net", "Tamilnadu Matrimony"),
+                        icon: const Icon(Icons.email_outlined, size: 20),
+                        label: Text(
+                          TTexts.sendMail.tr,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                          side: BorderSide(color: Colors.blueAccent),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10, // Reduced padding
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.center,
+                  child: TextButton.icon(
+                    onPressed: () => Get.back(),
+                    icon: const Icon(Icons.close, size: 18),
+                    label: Text(TTexts.close.tr),
+                    style: TextButton.styleFrom(
                       foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 12,
-                      ),
+                      backgroundColor: TColors.red,
+                      textStyle: const TextStyle(fontWeight: FontWeight.w600),
                     ),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      TUrlLauncher.sendMail(
-                        email: "info@tamilnadumatrimony.net",
-                      );
-                    },
-                    // onPressed: () => _launchEmail(
-                    //     "info@tamilnaduMatrimony.net", "Tamilnadu Matrimony"),
-                    icon: const Icon(Icons.email_outlined, size: 20),
-                    label: const Text("Send Mail"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      side: BorderSide(color: Colors.blueAccent),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 12,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-              Align(
-                alignment: Alignment.center,
-                child: TextButton.icon(
-                  onPressed: () => Get.back(),
-                  icon: const Icon(Icons.close, size: 18),
-                  label: const Text("Close"),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: TColors.red,
-                    textStyle: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -356,34 +392,51 @@ class ProfilePage extends StatelessWidget {
   }
 
   /// Reusable info display
-  Widget _infoRow(IconData icon, String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: Colors.blueAccent, size: 22),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
+  /// Reusable info display
+  Widget _infoRow(
+    IconData icon,
+    String title,
+    String value, {
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title.toUpperCase(),
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.0,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                Icon(icon, color: Colors.blueAccent, size: 18),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    value,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      height: 1.3,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  value,
-                  style: const TextStyle(color: Colors.black87, height: 1.4),
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -408,6 +461,83 @@ class ProfilePage extends StatelessWidget {
   //         backgroundColor: Colors.red, colorText: Colors.white);
   //   }
   // }
+
+  void _showLanguageBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        final languageController = Get.put(LanguageController());
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  TTexts.selectLanguage.tr,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: TSizes.spaceBtwItems),
+                Obx(
+                  () => Column(
+                    children: [
+                      _languageOption(
+                        context,
+                        "English",
+                        "en",
+                        languageController.selectedLang.value == "en",
+                        () {
+                          languageController.changeLanguage("en");
+                          Get.back();
+                        },
+                      ),
+                      _languageOption(
+                        context,
+                        "தமிழ்",
+                        "ta",
+                        languageController.selectedLang.value == "ta",
+                        () {
+                          languageController.changeLanguage("ta");
+                          Get.back();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _languageOption(
+    BuildContext context,
+    String language,
+    String code,
+    bool isSelected,
+    VoidCallback onTap,
+  ) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(language, style: Theme.of(context).textTheme.bodyLarge),
+            if (isSelected)
+              const Icon(Icons.check_circle, color: TColors.primary),
+          ],
+        ),
+      ),
+    );
+  }
 
   /// --- Menu item builder ---
   Widget _buildMenuItem(

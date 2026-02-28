@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 
 import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../utils/constants/text_strings.dart';
+import '../../../../utils/helpers/helper_functions.dart';
 import '../../controller/register/register_controller.dart';
 import 'pages/basic_register_page.dart';
 import 'pages/contact_detail_register_page.dart';
 import 'pages/family_register_page.dart';
 import 'pages/horoscope_register_page.dart';
-
 
 class RegistrationPage extends StatelessWidget {
   const RegistrationPage({super.key});
@@ -17,18 +17,37 @@ class RegistrationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(RegistrationController());
 
-    final stepTitles = ['Basic Details', 'Family Details', 'Horoscope Details', 'Contact Details'];
+    final stepTitles = [
+      'Basic Details',
+      'Family Details',
+      'Horoscope Details',
+      'Contact Details',
+    ];
 
     return Scaffold(
-
-      appBar: TAppBar(title: TTexts.register.tr),
+      appBar: TAppBar(
+        title: TTexts.register.tr,
+        actions: [
+          TextButton.icon(
+            onPressed: () => THelperFunctions.makePhoneCall("0452-4380101"),
+            icon: const Icon(Icons.phone),
+            label: Text(
+              "0452-4380101",
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [
             Obx(() {
               final idx = controller.currentStep.value;
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
                 child: Column(
                   children: [
                     Row(
@@ -41,11 +60,13 @@ class RegistrationPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 12),
                         // if(idx ==1)
-                        Text('Step ${idx + 1}/${controller.totalSteps}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                        Text(
+                          'Step ${idx + 1}/${controller.totalSteps}',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
-
 
                     // if(idx < controller.totalSteps - 1 )
                     Row(
@@ -53,15 +74,28 @@ class RegistrationPage extends StatelessWidget {
                       children: [
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text(stepTitles[idx], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          child: Text(
+                            stepTitles[idx],
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                        if(idx < controller.totalSteps - 1  )
+                        if (idx < controller.totalSteps - 1)
                           // if(idx==1)
-                        TextButton(onPressed: () {
-                          controller.currentStep.value++;
-                        },
-                        child: Text("Skip",style: Theme.of(context).textTheme.bodyMedium!.copyWith(decoration: TextDecoration.underline),))
-
+                          TextButton(
+                            onPressed: () {
+                              controller.currentStep.value++;
+                            },
+                            child: Text(
+                              "Skip",
+                              style: Theme.of(context).textTheme.bodyMedium!
+                                  .copyWith(
+                                    decoration: TextDecoration.underline,
+                                  ),
+                            ),
+                          ),
                       ],
                     ),
                   ],
@@ -79,7 +113,7 @@ class RegistrationPage extends StatelessWidget {
                   case 2:
                     return HoroscopeDetails();
                   case 3:
-                    return ContactDetails ();
+                    return ContactDetails();
                   default:
                     return StepBasicDetails();
                 }

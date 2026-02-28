@@ -1,6 +1,9 @@
 class TTexts {
   // -- Local Storage
   static const String userId = "USER_ID";
+  static const String fcmToken = "FCM_TOKEN";
+  static const String barerToken = "BARER_TOKEN";
+  static const String languageCode = "LANGUAGE_CODE";
   static const String appPages = "PAGE"; // - 0-  DASHBOARD, 1-> REGISTER
 
   // -- GLOBAL Keys
@@ -126,6 +129,7 @@ class TTexts {
   static const String state = "state";
   static const String country = "country";
   static const String pincode = "pincode";
+  static const String expectation = "expectation";
   static const String noCaste = "caste_no_bar";
 
   // Home Page
@@ -199,4 +203,29 @@ class TTexts {
   // Buttons
   static const horoscope = 'horoscope';
   static const sentInterest = 'sent_interest';
+  static const String matriId = "matri_id";
+  static const String postalCode = "postal_code";
+  static const String phone = "phone";
+  static const String thosamType = "thosam_type";
+  static const String horoscopeStatus = "horoscope_status";
+  static const String approved = "approved";
+  static const String pending = "pending";
+  static const String notVerified = "not_verified";
+  static const String photoApproved = "photo_approved";
+  static const String photoPending = "photo_pending";
+  static const String noProfileData = "no_profile_data";
+
+  // Help Dialog
+  static const String call = "call";
+  static const String mail = "mail";
+  static const String timing = "timing";
+  static const String callNow = "call_now";
+  static const String sendMail = "send_mail";
+  static const String close = "close";
+  static const String contactAddress = "contact_address";
+  static const String officeAddress = "office_address";
+
+  static const String workplace = "workplace";
+  static const String specialCases = "special_cases";
+  static const String horoscopeCheck = "horoscope_check";
 }

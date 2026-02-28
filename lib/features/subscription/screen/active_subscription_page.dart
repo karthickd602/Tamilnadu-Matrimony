@@ -6,10 +6,12 @@ import '../controller/subscription_controller.dart';
 class ActiveSubscriptionPage extends StatelessWidget {
   ActiveSubscriptionPage({super.key});
 
-  final controller = Get.put(SubscriptionController());
+  // final controller = SubscriptionController.instance;
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SubscriptionController());
+
     return Scaffold(
       appBar: TAppBar(title: "Subscription", isBackButtonNeed: true),
 

@@ -5,7 +5,6 @@ import 'package:tamilnadu_matrimony/features/alerts/screen/interest_send.dart';
 import '../../../common/widgets/tab/custom_tab_bar.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/text_strings.dart';
-import '../controller/alert_interest_send_controller.dart';
 import 'interest_received.dart';
 import 'notification_page.dart';
 
@@ -14,9 +13,7 @@ class AlertPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final controller = Get.put(AlertInterestSendController());
-
+    // final controller = Get.put(AlertInterestSendController());
 
     return KTabBarPage(
       title: TTexts.alerts.tr,
@@ -34,11 +31,7 @@ class AlertPage extends StatelessWidget {
           text: TTexts.interestReceived.tr,
         ),
       ],
-      tabViews: const [
-        NotificationPage(),
-        InterestSend(),
-        InterestReceived()
-      ],
+      tabViews: const [NotificationPage(), InterestSend(), InterestReceived()],
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:tamilnadu_matrimony/common/widgets/images/t_image_picker.dart';
@@ -14,11 +15,8 @@ class EditProfileController extends GetxController {
   static EditProfileController get instance => Get.find();
   final storage = GetStorage();
 
-  // String userId = "";
-
   final userProfile = Rxn<FetchUserProfileModel>();
 
-  // final repo = ProfileRepository.instance;
   final repo = Get.put(ProfileRepository());
   final profileController = ProfileController.instance;
 
@@ -48,7 +46,7 @@ class EditProfileController extends GetxController {
   final heightController = TextEditingController();
   final maritalStatus = ''.obs;
   final childLivingStatus = ''.obs;
-  final noOfChildren = ''.obs;
+  // final noOfChildren = ''.obs;
   final selectedNoOfChildren = Rxn<ChildCountModel>();
 
   // final eduction = ''.obs;
@@ -62,7 +60,7 @@ class EditProfileController extends GetxController {
   final occupationDetailsController = TextEditingController();
   final incomeController = TextEditingController();
 
-  final isDisablePerson = 'No'.obs;
+  final isDisablePerson = ''.obs;
   final subCasteController = TextEditingController();
 
   // Family Details fields
@@ -100,6 +98,7 @@ class EditProfileController extends GetxController {
   RxString districtController = "".obs;
   RxString stateController = "".obs;
   final pincodeController = TextEditingController();
+  final expectationsController = TextEditingController();
 
   final profileImageFile = File('').obs;
   RxString profileImagePath = ''.obs;
@@ -207,21 +206,44 @@ class EditProfileController extends GetxController {
     selectedDhosam.value = null;
   }
 
+  void onDoshamChanged(String? value) {
+    areYouHaveDhosam.value = value;
+    if (value == TTexts.yes.tr) {
+      isDoshamHave.value = "Yes";
+    } else {
+      isDoshamHave.value = "No";
+      selectedDhosam.value = null;
+    }
+  }
+
   @override
   void onInit() async {
     super.onInit();
-    await fetchOccupationDropdown();
-    await fetchEducationDropdown();
-    await fetchReligionDropdown();
-    await fetchCountryDropdown();
-    // await loadAllDropdown();
-    await fetchUserProfile();
+    await Future.delayed(const Duration(milliseconds: 100));
+    await loadAllDropdownAndProfile();
+  }
+
+  Future<void> loadAllDropdownAndProfile() async {
+    try {
+      TFullScreenLoader.popUpCircular();
+      await fetchOccupationDropdown();
+      await fetchEducationDropdown();
+      await fetchReligionDropdown();
+      await fetchCountryDropdown();
+      await fetchUserProfile();
+      TFullScreenLoader.stopLoading();
+    } catch (e) {
+      TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(
+        title: "Failed",
+        message: "Something went wrong, try again later",
+      );
+    }
   }
 
   Future<void> fetchUserProfile() async {
     try {
       isLoading.value = true;
-      TFullScreenLoader.popUpCircular();
 
       final userId = storage.read(TTexts.userId);
       // final userId = "96166";
@@ -229,39 +251,68 @@ class EditProfileController extends GetxController {
       debugPrint("Edit Profile Response : $response");
       userProfile.value = FetchUserProfileModel.fromJson(response["data"]);
 
+      if (isClosed) return;
       await _mapProfileToFields();
     } catch (e) {
       debugPrint("Profile Error : $e");
       TLoaders.errorSnackBar(title: "Profile Error", message: e.toString());
     } finally {
       isLoading.value = false;
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
     }
   }
 
   Future<void> _mapProfileToFields() async {
+    if (isClosed) return;
     final profile = userProfile.value;
     if (profile == null) return;
 
     /// ---------------- BASIC DETAILS ----------------
-    String children = profile.childrenLivingStatus.toString();
-    List<String> childrenList = children.split('-');
-    noOfChildren.value = childrenList[0].trim();
-    childLivingStatus.value = childrenList[1].trim();
+
+    /// split the child cound and living status
+    String children = profile.childrenLivingStatus?.toString() ?? '';
+
+    if (children.contains('-')) {
+      final childrenList = children.split('-');
+
+      if (childrenList.length > 1) {
+        childLivingStatus.value = childrenList[1].trim().toLowerCase() == 'yes'
+            ? 'Living with me'
+            : 'Not living';
+        selectedNoOfChildren.value = childCountList.firstWhereOrNull(
+          (e) => e.id.toString() == childrenList[0].trim(),
+        );
+      } else {
+        childLivingStatus.value = '';
+      }
+    } else {
+      childLivingStatus.value = '';
+    }
 
     nameController.text = profile.name ?? '';
     dobController.text = profile.dob ?? '';
-    // heightController.text = profile.height ?? '';
-    maritalStatus.value = profile.maritalStatus ?? '';
-    selectedComplexion.value = profile.complexion ?? '';
-    educationDetailsController.text = profile.educationDetails ?? '';
-    subCasteController.text = profile.subCaste ?? '';
-    incomeController.text = profile.annualIncome.toString();
+
     selectedGender.value = profile.gender == "1"
         ? TTexts.male.tr
         : TTexts.female.tr;
 
-    isDisablePerson.value = profile.speCases == "1" ? "Yes" : "No";
+    maritalStatus.value = profile.maritalStatus == "Unmarried"
+        ? TTexts.unMarried.tr
+        : profile.maritalStatus == 'Separated'
+        ? TTexts.separated.tr
+        : profile.maritalStatus == 'Divorced'
+        ? TTexts.divorced.tr
+        : profile.maritalStatus == 'widowed'
+        ? TTexts.widowed
+        : '';
+    selectedComplexion.value = profile.complexion ?? '';
+    educationDetailsController.text = profile.educationDetails ?? '';
+    subCasteController.text = profile.subCaste ?? '';
+    incomeController.text = profile.annualIncome.toString();
+
+    isDisablePerson.value = profile.speCases == "1"
+        ? TTexts.yes.tr
+        : TTexts.no.tr;
 
     /// ---------------- DROPDOWNS (MATCH BY ID) ----------------
     /// ---------------- DROPDOWNS ----------------
@@ -274,6 +325,7 @@ class EditProfileController extends GetxController {
     selectedEducation.value = educationDDList.firstWhereOrNull(
       (e) => e.id.toString() == profile.educationId,
     );
+
     selectedOccupation.value = occupationDDList.firstWhereOrNull(
       (e) => e.id.toString() == profile.occupationId,
     );
@@ -306,20 +358,12 @@ class EditProfileController extends GetxController {
     marriedSistersController.text = profile.nsm ?? '';
     nativePlaceController.text = profile.irupidam ?? '';
     selectedComplexion.value = profile.complexion ?? '';
-    noOfChildren.value = profile.childrenLivingStatus.toString()[0] ?? '';
 
     /// ---------------- LOCATION ----------------
 
     selectedCountry.value = countryList.firstWhereOrNull(
       (e) => e.id.toString() == profile.countryId,
     );
-
-    // selectedHeight.value = heightList.firstWhereOrNull(
-    //   (e) => e.id.toString() == profile.heightID.toString(),
-    // );
-
-    // debugPrint(" height id : ${profile.heightID}");
-    // debugPrint("selected height id : ${selectedHeight.value?.id}");
 
     if (selectedCountry.value != null) {
       await fetchStateDropdown();
@@ -339,14 +383,14 @@ class EditProfileController extends GetxController {
 
     /// ---------------- CONTACT ----------------
 
-    mobileController.text = profile.phone ?? profile.mobile ?? '';
+    alternateMobileController.text = profile.phone ?? '';
     emailController.text = profile.confirmEmail ?? '';
     cityController.text = profile.city ?? '';
     stateController.value = profile.state ?? '';
     districtController.value = profile.city ?? '';
     pincodeController.text = profile.postal ?? '';
     addressController.text = profile.address ?? '';
-    isDisablePerson.value = profile.speCases == "yes" ? "Yes" : "No";
+    expectationsController.text = profile.expections ?? '';
     noCasteChecked.value = profile.noCaste.toString().toLowerCase() == "yes"
         ? true
         : false;
@@ -383,7 +427,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-      TFullScreenLoader.popUpCircular();
+      // TFullScreenLoader.popUpCircular();
       final response = await THttpHelper.get(ApiConstant.getOccupationDD);
       //
       debugPrint("occupation Response:${response.toString()}");
@@ -427,7 +471,7 @@ class EditProfileController extends GetxController {
         message: e.toString(),
       );
     } finally {
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
     }
   }
 
@@ -441,7 +485,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-      TFullScreenLoader.popUpCircular();
+      // TFullScreenLoader.popUpCircular();
 
       final response = await THttpHelper.get(ApiConstant.getReligionDD);
       //
@@ -459,7 +503,7 @@ class EditProfileController extends GetxController {
         message: e.toString(),
       );
     } finally {
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
     }
   }
 
@@ -473,7 +517,7 @@ class EditProfileController extends GetxController {
         );
         return;
       }
-      TFullScreenLoader.popUpCircular();
+      // TFullScreenLoader.popUpCircular();
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
       //
@@ -491,7 +535,7 @@ class EditProfileController extends GetxController {
         message: e.toString(),
       );
     } finally {
-      TFullScreenLoader.stopLoading();
+      // TFullScreenLoader.stopLoading();
     }
   }
 
@@ -623,18 +667,20 @@ class EditProfileController extends GetxController {
         fromFormat: 'dd-MM-yyyy',
         toFormat: 'yyyy-MM-dd',
       );
-      final childrenCount = selectedNoOfChildren.value?.id == '0'
-          ? '0'
-          : selectedNoOfChildren.value?.id == '1'
-          ? 'One'
-          : selectedNoOfChildren.value?.id == '2'
-          ? 'Two'
-          : selectedNoOfChildren.value?.id == '3'
-          ? 'Three'
-          : selectedNoOfChildren.value?.id == '4 and above'
-          ? 'Four and above'
-          : '';
-
+      // final childrenCount = selectedNoOfChildren.value?.label == '0'
+      //     ? '0'
+      //     : selectedNoOfChildren.value?.label == '1'
+      //     ? 'One'
+      //     : selectedNoOfChildren.value?.id == '2'
+      //     ? 'Two'
+      //     : selectedNoOfChildren.value?.id == '3'
+      //     ? 'Three'
+      //     : selectedNoOfChildren.value?.id == '4 and above'
+      //     ? 'Four and above'
+      //     : '';
+      // debugPrint(
+      //   'childrenCountsssss: $childrenCount  -- ${selectedNoOfChildren.value!.id}',
+      // );
       final childLiving = childLivingStatus.value == "Living with me"
           ? "Yes"
           : "No";
@@ -652,9 +698,11 @@ class EditProfileController extends GetxController {
             ? "Separated"
             : maritalStatus.value == TTexts.divorced.tr
             ? "Divorced"
+            : maritalStatus.value == TTexts.widowed
+            ? "Widowed"
             : maritalStatus.value,
         "childrenlivingstatus":
-            "${childrenCount.toString()}-${childLiving.toString()}",
+            "${selectedNoOfChildren.value?.id ?? '0'.toString()}-${childLiving.toString()}",
         // "childrenlivingstatus":
         //     int.tryParse(childLivingStatus.value.toString()) ?? 0,
         "Religion": selectedReligion.value?.id ?? 0,
@@ -767,37 +815,42 @@ class EditProfileController extends GetxController {
         return;
       }
 
+      TFullScreenLoader.popUpCircular();
       if (!horoscopeFormKey.currentState!.validate()) {
         return;
       }
 
-      if (horoscopeImagePath.value.isEmpty) {
-        TLoaders.warningSnackBar(
-          title: "No Horoscope Image",
-          message: "Please select horoscope image",
-        );
-        return;
+      String? base64Image;
+      if (horoscopeImageFile.value.path.isNotEmpty) {
+        final file = File(horoscopeImageFile.value.path);
+        if (file.existsSync()) {
+          final bytes = await file.readAsBytes();
+          final base64String = base64Encode(bytes);
+          final extension = file.path.split('.').last.toLowerCase();
+          String mimeType = "image/jpeg";
+          if (extension == "png") mimeType = "image/png";
+          base64Image = "data:$mimeType;base64,$base64String";
+        }
       }
+
       final request = {
         "id": storage.read(TTexts.userId),
-        // "id": "96142",
+        "choice": 4,
         'Moonsign': selectedRaasi.value,
         "Star": selectedStar.value,
         "InLaknam": selectedLaknam.value,
         "dasatype": selectedDasa.value,
         "thoosamtype": isDoshamHave.value,
         "thosam": selectedDhosam.value,
+        if (base64Image != null) "file": base64Image,
       };
       debugPrint("Horoscope req : $request");
 
-      TFullScreenLoader.popUpCircular();
-
-      final res = await THttpHelper.multipartPost(
-        filePath: horoscopeImageFile.value.path,
-        ApiConstant.horoscopeRegisterEndpoint,
+      final res = await THttpHelper.post(
+        ApiConstant.horoscopeEditEndpoint,
         request,
       );
-      debugPrint("Horoscope res : $request");
+      debugPrint("Horoscope res : $res");
       await profileController.fetchUserProfile();
       TLoaders.successSnackBar(title: "Success", message: res['message']);
 
@@ -821,6 +874,8 @@ class EditProfileController extends GetxController {
       if (!isConnected) {
         return;
       }
+
+      TFullScreenLoader.popUpCircular();
       if (!contactFormKey.currentState!.validate()) {
         return;
       }
@@ -833,35 +888,32 @@ class EditProfileController extends GetxController {
         "State": selectedState.value?.id,
         "City": selectedDistrict.value?.id,
         "Postal": pincodeController.text,
+        "expections": expectationsController.text,
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
-      print("Contact : $request");
+      debugPrint("Contact req : $request");
 
       final response = await THttpHelper.post(
         ApiConstant.contactRegisterEndpoint,
         request,
       );
-      //
-      // final response = await THttpHelper.multipartPost(
-      //   filePath: profileImageFile.value.path,
-      //   ApiConstant.contactRegisterEndpoint,
-      //   request,
-      //   fileFieldName: "photo1",
-      // );
       debugPrint("Contact Register Response : $response");
       await profileController.fetchUserProfile();
-      TLoaders.successSnackBar(title: "Success", message: response['message']);
       Get.offNamed(TRoutes.viewProfile);
+      TLoaders.successSnackBar(title: "Success", message: response['message']);
+
       // storage.write(TTexts.appPages, 0);
       // Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
-      debugPrint("contactFormSubmit - ${e}");
+      debugPrint("contactFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
             "Something went wrong in Contact Details submit, try again later",
       );
+    } finally {
+      TFullScreenLoader.stopLoading();
     }
   }
 
@@ -878,6 +930,7 @@ class EditProfileController extends GetxController {
     occupationDetailsController.dispose();
     incomeController.dispose();
     subCasteController.dispose();
+    expectationsController.dispose();
     super.onClose();
   }
 }

@@ -1,10 +1,19 @@
 import 'dart:convert';
 import 'dart:ui';
-
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
+import '../../../../utils/constants/text_strings.dart';
 
 class TranslationService {
-  static Locale get locale => const Locale('en', 'US');
+  static Locale get locale {
+    final storage = GetStorage();
+    final code = storage.read(TTexts.languageCode);
+    if (code == 'ta') {
+      return const Locale('ta', 'IN');
+    }
+    return const Locale('en', 'US');
+  }
+
   static Locale get fallbackLocale => const Locale('en', 'US');
 
   static Future<Map<String, Map<String, String>>> loadTranslations() async {

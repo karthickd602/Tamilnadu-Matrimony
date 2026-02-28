@@ -6,7 +6,6 @@
   "app_name": "தமிழ்நாடு மேட்ரிமோனி",
   "continue": "தொடரவும்",
   "back": "பின்செல்",
-
   "login": "உள்நுழை",
   "first_name": "முதல் பெயர்",
   "last_name": "கடைசி பெயர்",
@@ -27,13 +26,10 @@
   "verification_code": "சரிபார்ப்பு குறியீடு",
   "resend_email": "மின்னஞ்சலை மீண்டும் அனுப்பு",
   "resend_email_in": "மின்னஞ்சல் மீண்டும் அனுப்பப்படும்",
-
   "select_language": "உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்",
   "continue_text": "தொடரவும்",
-
   "login_page_header": "தொடங்க உங்கள் தொலைபேசி  எண்ணை உள்ளிடவும்",
   "login_page_notifier": "இந்த எண்ணிற்கு OTP பெறுவீர்கள்",
-
   "enter_otp": "OTP உள்ளிடவும்",
   "auto_fetching": "தானாக OTP பெறப்படுகிறது",
   "did_not_receive": "OTP கிடைக்கவில்லையா?",
@@ -42,7 +38,6 @@
   "error_full_otp": "முழு OTP உள்ளிடவும்",
   "otp_entered": "OTP சேர்க்கப்பட்டது",
   "register": "பதிவு செய்யுங்கள்",
-
   "basic_details": "அடிப்படை விவரங்கள்",
   "family_details": "குடும்ப விவரங்கள்",
   "review_submit": "சரிபார்த்து சமர்ப்பிக்கவும்",
@@ -51,8 +46,6 @@
   "whatsapp_number": "வாட்ஸ்அப் எண்",
   "alternate_mobile": "மாற்று மொபைல்",
   "district": "மாவட்டம்",
-
-
   "name": "பெயர்",
   "gender": "பாலினம்",
   "male": "ஆண்",
@@ -75,25 +68,21 @@
   "caste": "ஜாதி",
   "sub_caste": "உப ஜாதி",
   "disablePerson": "மாற்றுத்திறனாளி",
-
   "father_name": "தந்தையின் பெயர்",
   "mother_name": "தாயின் பெயர்",
   "father_occupation": "தந்தையின் தொழில்",
   "mother_occupation": "தாயின் தொழில்",
   "brothers": "சகோதரர்கள்",
   "sisters": "சகோதரிகள்",
-
-  "married_brothers": "திருமணமான சகோதரிகள்",
+  "married_brothers": "திருமணமான சகோதரர்கள்",
   "married_sisters": "திருமணமான சகோதரிகள்",
   "family_type": "குடும்ப வகை",
   "family_status": "குடும்ப நிலை",
   "native_place": "பூர்வீக ஊர்",
-
   "star": "நட்சத்திரம்",
   "lagnam": "லக்னம்",
   "birth_time": "பிறந்த நேரம்",
   "birth_place": "பிறந்த இடம்",
-
   "horoscope_details_title": "ஜாதக விவரங்கள்",
   "horoscope_details": "ஜாதக விவரங்கள்",
   "rasi": "ராசி",
@@ -101,7 +90,6 @@
   "laknam": "லக்னம்",
   "dosham": "தோஷம்",
   "is_dosham_have": "தோஷம் உள்ளதா?",
-
   "dasa_type": "திசை இருப்பு",
   "dasa_balance_days": "திசை இருப்பு முடிவு தேதி",
   "yes": "ஆம்",
@@ -115,17 +103,15 @@
   "city": "நகரம்",
   "state": "மாநிலம்",
   "pincode": "அஞ்சல் குறியீடு",
+  "expectation": "எதிர்பார்ப்பு",
   "caste_no_bar": "சாதி தடை இல்லை",
   "country": "நாடு",
   "nationality": "தேசீயத்துவம்",
-
-
   "home_title": "தமிழ்நாடு திருமணம்",
   "filter": "வடிகட்டு",
   "verified": "சரிபார்க்கப்பட்டது",
   "unlock_number": "எண்ணை திறக்கவும்",
   "view_details": "விவரங்களைப் பார்க்கவும் ",
-
   "profile_details": "சுயவிவர விவரங்கள்",
   "personal_details": "தனிப்பட்ட விவரங்கள்",
   "occupation_details": "வேலை விவரங்கள்",
@@ -146,7 +132,6 @@
   "socio_religious": "மத மற்றும் சமூக பின்னணி",
   "physical_status": "உடல் நிலை",
   "partner_preference": "திருமண துணை விருப்பம்",
-
   "name_age": "பெயர் மற்றும் வயது",
   "degree": "பட்டம்",
   "complexion": "நிறம்",
@@ -154,11 +139,8 @@
   "mother": "தாய்",
   "siblings": "சகோதரர் / சகோதரி",
   "partner_caste": "ஜாதி",
-
   "horoscope": "ஜாதகம்",
   "sent_interest": "ஆர்வம் தெரிவி",
-
-
   "marriage_type": "திருமண வகை",
   "disability": "திறனிழப்பு",
   "no_caste_bar": "சாதி தடையின்றி",
@@ -167,13 +149,10 @@
   "favorite": "பிடித்தவை",
   "liked": "விரும்பியவை",
   "unlocked": "திறக்கப்பட்டது",
-
   "alerts": "எச்சரிக்கைகள்",
   "notification": "அறிவிப்புகள்",
   "interestSent": "அனுப்பிய விருப்பங்கள்",
   "interestReceived": "பெற்ற விருப்பங்கள்",
-
-
   "profile": "புரொபைல்",
   "edit_profile": "காண்க/சுயவிவரத்தை திருத்து",
   "update_photo": "போட்டோவை புதுப்பிக்கவும்",
@@ -183,5 +162,24 @@
   "membership_details": "மெம்பர்ஷிப் விவரங்கள்",
   "share_app": "பகிரவும்",
   "delete_profile": "புரொபைலை நீக்கு",
-  "Logout": "வெளியேறு"
+  "logout": "வெளியேறு",
+  "matri_id": "மேட்ரி ஐடி",
+  "postal_code": "அஞ்சல் குறியீடு",
+  "phone": "தொலைபேசி",
+  "thosam_type": "தோஷ வகை",
+  "horoscope_status": "ஜாதகம் நிலை",
+  "approved": "அங்கீகரிக்கப்பட்டது",
+  "pending": "நிலுவையில் உள்ளது",
+  "not_verified": "சரிபார்க்கப்படவில்லை",
+  "photo_approved": "புகைப்படம் அங்கீகரிக்கப்பட்டது",
+  "photo_pending": "புகைப்படம் நிலுவையில் உள்ளது",
+  "no_profile_data": "சுயவிவரத் தரவு இல்லை",
+  "call": "அழைப்பு",
+  "mail": "மின்னஞ்சல்",
+  "timing": "நேரம்",
+  "call_now": "இப்போது அழைக்கவும்",
+  "send_mail": "மின்னஞ்சல் அனுப்பவும்",
+  "close": "மூடு",
+  "contact_address": "தொடர்பு முகவரி",
+  "office_address": "தமிழ்நாடு மேட்ரிமோனி,\n95, வடக்குவெளி வீதி,\nசிம்மக்கல் பேருந்து நிறுத்தம்,\nமதுரை - 625001."
 }

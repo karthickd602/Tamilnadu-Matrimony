@@ -12,7 +12,9 @@ class SubscriptionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SubscriptionController());
-
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await controller.fetchSubscriptionPlans();
+    });
     return Scaffold(
       appBar: TAppBar(title: "Subscription", isBackButtonNeed: true),
       body: SafeArea(
@@ -26,7 +28,7 @@ class SubscriptionPage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               const SizedBox(height: 20),
-        
+
               // Features
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -45,9 +47,9 @@ class SubscriptionPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-        
+
               Obx(
-                ()=> GridView.builder(
+                () => GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     mainAxisSpacing: 12,
@@ -63,25 +65,22 @@ class SubscriptionPage extends StatelessWidget {
                   // ),
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-        
-                  itemBuilder: (context, index) {
 
-                    return Obx(
-                      () {
-                        final plan = controller.plans[index];
-                        final selected = controller.selectedIndex.value == index;
-                        return GestureDetector(
+                  itemBuilder: (context, index) {
+                    return Obx(() {
+                      final plan = controller.plans[index];
+                      final selected = controller.selectedIndex.value == index;
+                      return GestureDetector(
                         onTap: () => controller.selectPlan(index),
                         child: PlanCard(plan: plan, selected: selected),
                       );
-                      },
-                    );
+                    });
                   },
                   itemCount: controller.plans.length,
                 ),
               ),
               const SizedBox(height: 30),
-        
+
               // Buy Button (Dynamic)
               Obx(() {
                 final selected = controller.selectedPlan;
@@ -102,16 +101,11 @@ class SubscriptionPage extends StatelessWidget {
                         ),
                       ),
                       onPressed: enabled
-                          ? () {
-                              Get.snackbar(
-                                "Selected Plan",
-                                "${selected!.name} ₹${selected.price}",
-                              );
-                            }
+                          ? () => controller.buySubscription(selected)
                           : null,
                       child: Text(
                         enabled
-                            ? "Buy package for ₹ ${selected!.price}"
+                            ? "Buy package for ₹ ${selected.price}"
                             : "Loading plans...",
                         style: const TextStyle(
                           color: Colors.white,
@@ -123,7 +117,7 @@ class SubscriptionPage extends StatelessWidget {
                   ),
                 );
               }),
-        
+
               const SizedBox(height: 20),
             ],
           ),

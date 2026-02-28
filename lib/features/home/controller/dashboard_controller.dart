@@ -1,4 +1,6 @@
 import 'package:share_plus/share_plus.dart';
+import 'package:tamilnadu_matrimony/data/services/dynamic_link_service.dart';
+import 'package:tamilnadu_matrimony/features/alerts/controller/alert_interest_send_controller.dart';
 import 'package:tamilnadu_matrimony/features/favorites/controller/unlocked_controller.dart';
 import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart';
 import 'package:tamilnadu_matrimony/features/home/screen/customer_view_page.dart';
@@ -24,6 +26,10 @@ class DashboardController extends GetxController {
 
   // final int pageSize = 10; // If API supports
   final RxBool hasMore = true.obs;
+  final searchIdController = TextEditingController();
+
+  /// 🔥 Store applied filters to persist across pagination
+  Map<String, dynamic>? _appliedFilters;
 
   final scrollController = ScrollController();
 
@@ -54,12 +60,19 @@ class DashboardController extends GetxController {
         currentPage.value = 1;
         hasMore.value = true;
         dashboardCustomerList.clear();
+
+        /// 🔥 Update stored filters on initial load
+        if (filters != null) {
+          _appliedFilters = (filters.isEmpty) ? null : filters;
+        }
       } else {
         isMoreLoading.value = true;
       }
 
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
+        isFirstLoad.value = false;
+        isMoreLoading.value = false;
         TLoaders.errorSnackBar(
           title: "No Internet",
           message: "No Internet Connection",
@@ -73,9 +86,14 @@ class DashboardController extends GetxController {
         "page": currentPage.value,
       };
 
-      /// 🔥 MERGE FILTERS IF PROVIDED
-      if (filters != null && filters.isNotEmpty) {
-        req.addAll(filters);
+      if (searchIdController.text.isNotEmpty) {
+        req["search_id"] = searchIdController.text.trim();
+      }
+
+      /// 🔥 MERGE FILTERS IF PROVIDED OR STORED
+      final filtersToUse = filters ?? _appliedFilters;
+      if (filtersToUse != null && filtersToUse.isNotEmpty) {
+        req.addAll(filtersToUse);
       }
 
       debugPrint("Dashboard Request = $req");
@@ -84,6 +102,13 @@ class DashboardController extends GetxController {
         ApiConstant.dashboardListEndPoint,
         req,
       );
+
+      if (response["statusCode"] == 204) {
+        isFirstLoad.value = false;
+        isMoreLoading.value = false;
+        hasMore.value = false;
+        return;
+      }
 
       debugPrint("Dashboard Response = $response");
 
@@ -196,6 +221,7 @@ class DashboardController extends GetxController {
   Future<void> unlockProfile({
     required int profileId,
     required RxString unlockValue,
+    bool navigateToView = true,
   }) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -208,14 +234,8 @@ class DashboardController extends GetxController {
       }
 
       TFullScreenLoader.popUpCircular();
-      // final req = {
-      //   "current_user": storage.read(TTexts.userId),
-      //   "target_user": profileId,
-      // };
-
       final req = {
         "current_user": storage.read(TTexts.userId),
-        // "current_user": 11622,
         "target_user": profileId,
       };
       debugPrint("unlockProfile req: $req");
@@ -236,6 +256,16 @@ class DashboardController extends GetxController {
       }
 
       /// Toggle value for CURRENT MODEL
+
+      if (unlockValue.value.toLowerCase() == "true") {
+        TFullScreenLoader.stopLoading();
+
+        await fetchCustomerPage(profileId);
+        if (navigateToView) {
+          Get.to(() => CustomerDetailsView());
+        }
+        return;
+      }
       unlockValue.value = unlockValue.value.toLowerCase() == "true"
           ? "false"
           : "true";
@@ -249,18 +279,20 @@ class DashboardController extends GetxController {
       }
       TFullScreenLoader.stopLoading();
       await fetchCustomerPage(profileId);
-      Get.to(() => CustomerDetailsView());
-
-      await Get.put(UnlockedController()).fetchUnlockList();
+      if (navigateToView) {
+        Get.to(() => CustomerDetailsView());
+      }
+      final unlockedController = Get.put(UnlockedController());
+      await unlockedController.fetchUnlockList();
 
       TLoaders.successSnackBar(
-        title: "Send Interest",
+        title: "Unlock Success",
         message: response['message'],
       );
     } catch (e) {
       TFullScreenLoader.stopLoading();
       debugPrint("unlockProfile Error: $e");
-      TLoaders.errorSnackBar(title: "Send Interest", message: e.toString());
+      TLoaders.errorSnackBar(title: "Unlock Failed", message: e.toString());
     }
   }
 
@@ -290,7 +322,8 @@ class DashboardController extends GetxController {
         title: "Send Interest",
         message: response['message'],
       );
-
+      final controller = Get.put(AlertInterestSendController());
+      await controller.fetchAlertSendProfile();
       TFullScreenLoader.stopLoading();
     } catch (e) {
       TFullScreenLoader.stopLoading();
@@ -301,8 +334,9 @@ class DashboardController extends GetxController {
 
   Future<void> shareProfile(CustomerUserModel user) async {
     try {
-      final profileUrl =
-          "https://tamilnadu-matrimony.com/profile/${user.id}"; // change if needed
+      // Use DynamicLinkService to create a share link
+      final String shortLink = DynamicLinkService.instance
+          .createProfileShareLink(user.id.toString());
 
       final shareText =
           '''
@@ -315,11 +349,12 @@ class DashboardController extends GetxController {
 💼 Occupation: ${user.occupation ?? '-'}
 
 View full profile here 👇
-$profileUrl
+$shortLink
 ''';
 
       await Share.share(shareText, subject: "Matrimony Profile - ${user.name}");
     } catch (e) {
+      TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(title: "Share Failed", message: e.toString());
     }
   }

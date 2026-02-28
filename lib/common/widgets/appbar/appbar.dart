@@ -23,7 +23,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       elevation: 0,
-      centerTitle: true,
+      centerTitle: false,
       automaticallyImplyLeading: false,
       backgroundColor: backgroundColor ?? TColors.scaffoldColor,
       leading: isBackButtonNeed
@@ -39,9 +39,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
               tooltip: "Back",
             )
           : null,
-      title: Column(
-        children: [Text(title, style: textTheme.headlineMedium, maxLines: 2)],
-      ),
+      title: Text(" $title", style: textTheme.headlineMedium, maxLines: 2),
       actions: actions,
       bottom: bottom,
     );
