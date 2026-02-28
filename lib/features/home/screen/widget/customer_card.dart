@@ -155,24 +155,51 @@ class CustomerCard extends StatelessWidget {
                   spacing: 2,
                   runSpacing: 6,
                   children: [
-                    _buildChip(
-                      Icons.join_inner_rounded,
-                      customerProfile.maritalStatus ?? '',
-                    ),
-                    _buildChip(Icons.auto_awesome, customerProfile.caste ?? ''),
-                    _buildChip(Icons.location_on, customerProfile.city ?? ''),
+                    if (customerProfile.maritalStatus != null)
+                      _buildChip(
+                        Icons.join_inner_rounded,
+                        customerProfile.maritalStatus ?? '',
+                      ),
+                    if (customerProfile.caste != null)
+                      _buildChip(
+                        Icons.auto_awesome,
+                        customerProfile.caste ?? '',
+                      ),
+                    if (customerProfile.city != null)
+                      _buildChip(Icons.location_on, customerProfile.city ?? ''),
 
-                    _buildChip(
-                      Icons.stars,
-                      "Rasi: ${customerProfile.moonSign ?? ''}",
-                    ),
+                    if (customerProfile.moonSign != null)
+                      _buildChip(
+                        Icons.stars,
+                        "Rasi: ${customerProfile.moonSign ?? ''}",
+                      ),
 
-                    _buildChip(Icons.star, customerProfile.star ?? ''),
-                    _buildChip(Icons.work, customerProfile.occupation ?? ''),
-                    _buildChip(
-                      Icons.school,
-                      customerProfile.educationDetails ?? '',
-                    ),
+                    if (customerProfile.star != null)
+                      _buildChip(Icons.star, customerProfile.star ?? ''),
+                    if (customerProfile.occupation != null)
+                      _buildChip(Icons.work, customerProfile.occupation ?? ''),
+                    if (customerProfile.education != null &&
+                        customerProfile.education!.isNotEmpty)
+                      _buildChip(Icons.school, customerProfile.education ?? ''),
+                    // if (customerProfile.educationDetails != null &&
+                    //     customerProfile.educationDetails!.isNotEmpty)
+                    //   _buildChip(
+                    //     Icons.history_edu,
+                    //     customerProfile.educationDetails ?? '',
+                    //   ),
+                    if (customerProfile.annualIncome != null &&
+                        customerProfile.annualIncome!.isNotEmpty &&
+                        customerProfile.annualIncome != "இல்லை")
+                      _buildChip(
+                        Icons.currency_rupee,
+                        "Income: ${customerProfile.annualIncome}",
+                      ),
+                    if (customerProfile.doshamType != null &&
+                        customerProfile.doshamType!.isNotEmpty)
+                      _buildChip(
+                        Icons.error_outline,
+                        "Dosham: ${customerProfile.doshamType}",
+                      ),
                   ],
                 ),
                 const SizedBox(height: 16),

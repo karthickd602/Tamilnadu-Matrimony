@@ -91,7 +91,9 @@ class NetworkSpeedChecker {
   static Future<bool> isNetworkFast() async {
     try {
       final stopwatch = Stopwatch()..start();
-      final result = await InternetAddress.lookup('google.com');
+      final result = await InternetAddress.lookup(
+        'google.com',
+      ).timeout(const Duration(seconds: 3));
 
       stopwatch.stop();
       final ping = stopwatch.elapsedMilliseconds;

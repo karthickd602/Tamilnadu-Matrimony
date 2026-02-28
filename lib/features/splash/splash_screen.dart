@@ -1,4 +1,3 @@
-import 'package:lottie/lottie.dart';
 import '../../utils/constants/path_provider.dart';
 import 'splash_controller.dart';
 
@@ -10,92 +9,65 @@ class SplashPage extends StatelessWidget {
     // Initialize SplashController
     Get.put(SplashController());
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          // Background Gradient
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  TColors.green, // Primary brand color
-                  Color(0xFF1B5E20), // Darker shade for depth
-                ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Color(0xFFFFF254),
+        body: Stack(
+          children: [
+            // Full Screen Background Image
+            Center(
+              child: SizedBox(
+                width: Get.width / 1.2,
+                height: Get.height / 1.2,
+                child: Image.asset(TImages.splashScreen, fit: BoxFit.fill),
               ),
             ),
-          ),
 
-          // Central Content
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Animated Logo / Lottie
-                Lottie.asset(
-                  TImages.splashAppLogoAnimation,
-                  width: 250,
-                  height: 250,
-                  fit: BoxFit.contain,
-                ),
-
-                const SizedBox(height: 20),
-
-                // App Name with Premium Typography
-                Text(
-                  "Tamilnadu Matrimony",
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
-                    fontFamily: 'Urbanist',
+            // Optional: Subtle Gradient Overlay from Bottom to ensure visibility if text is added
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withValues(alpha: 0.1),
+                      Colors.black.withValues(alpha: 0.4),
+                    ],
                   ),
                 ),
-
-                const SizedBox(height: 8),
-
-                // Tagline
-                Text(
-                  "Trusted by Millions to Find Their Perfect Match",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    fontStyle: FontStyle.italic,
-                    fontFamily: 'Urbanist',
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
 
-          // Bottom Loading / Branding
-          Positioned(
-            bottom: 50,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                const SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 3,
-                  ),
+            // Bottom Loading Indicator
+            Positioned(
+              bottom: 60,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 3,
+                    ),
+                    const SizedBox(height: 20),
+                    // Text(
+                    //   "Tamilnadu Matrimony",
+                    //   style: Theme.of(context).textTheme.headlineSmall
+                    //       ?.copyWith(
+                    //         color: Colors.white,
+                    //         fontWeight: FontWeight.bold,
+                    //         letterSpacing: 2.0,
+                    //       ),
+                    // ),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                Text(
-                  "From the House of T-Matrimony",
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.6),
-                    letterSpacing: 1.5,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -63,7 +63,7 @@ class DashboardController extends GetxController {
 
         /// 🔥 Update stored filters on initial load
         if (filters != null) {
-          _appliedFilters = filters;
+          _appliedFilters = (filters.isEmpty) ? null : filters;
         }
       } else {
         isMoreLoading.value = true;
@@ -71,6 +71,8 @@ class DashboardController extends GetxController {
 
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
+        isFirstLoad.value = false;
+        isMoreLoading.value = false;
         TLoaders.errorSnackBar(
           title: "No Internet",
           message: "No Internet Connection",
@@ -102,6 +104,9 @@ class DashboardController extends GetxController {
       );
 
       if (response["statusCode"] == 204) {
+        isFirstLoad.value = false;
+        isMoreLoading.value = false;
+        hasMore.value = false;
         return;
       }
 

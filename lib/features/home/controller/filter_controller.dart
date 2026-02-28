@@ -291,7 +291,7 @@ class FilterController extends GetxController {
 
     return {
       "id": storage.read(TTexts.userId),
-      "Caste": (selectedOptions["Caste"] as List? ?? []) .join(","),
+      "Caste": (selectedOptions["Caste"] as List? ?? []).join(","),
       "Education": (selectedOptions["Education"] as List? ?? []).join(","),
       "City": (selectedOptions["Location"] as List? ?? []).join(","),
       "thosam": _getDoshamNames().join(","),
@@ -328,6 +328,10 @@ class FilterController extends GetxController {
     ageRange.value = const RangeValues(18, 50);
     selectedOptions.clear();
     selectedIndex.value = 0;
+
+    // 🔥 Also reset stored filters in DashboardController
+    final dashboard = DashboardController.instance;
+    dashboard.fetchDashboardCustomerProfile(isInitial: true, filters: {});
   }
 
   List<String> _getDoshamNames() {

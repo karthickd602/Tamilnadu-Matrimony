@@ -194,8 +194,7 @@ class _BottomButtons extends StatelessWidget {
           child: OutlinedButton(
             onPressed: () {
               controller.resetFilters();
-              controller.selectedIndex.value = 0; // Reset category view
-              controller.applyFilter();
+              Get.back();
             },
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: primaryColor),

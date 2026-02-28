@@ -15,7 +15,7 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    checkVersion();
+    // checkVersion();
   }
 
   Future<void> checkVersion() async {
