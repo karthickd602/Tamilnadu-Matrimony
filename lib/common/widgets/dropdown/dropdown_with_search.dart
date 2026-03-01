@@ -22,57 +22,59 @@ class TSearchDropdownField<T> extends StatelessWidget {
     this.compareFn,
     this.onChanged,
     this.validator,
-    this.prefixIcon, this.showSearchBox,
+    this.prefixIcon,
+    this.showSearchBox,
   });
 
   @override
   Widget build(BuildContext context) {
-    return DropdownSearch<T>(
-      items: (filter, props) => items,
-      selectedItem: selectedItem,
-      compareFn: compareFn,
-      itemAsString: itemAsString,
-      popupProps: PopupProps.menu(
-        showSearchBox: showSearchBox??true,
-
-        showSelectedItems: true,
-        searchFieldProps: TextFieldProps(
-          decoration: const InputDecoration(
-            hintText: "Search here",
-          ),
-        ),
-
-        menuProps: MenuProps(
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-          backgroundColor: THelperFunctions.isDarkMode(context)
-              ? TColors.black
-              : TColors.white,
-        ),
-      ),
-      dropdownBuilder: (context, item) {
-        final text = item != null
-            ? (itemAsString?.call(item) ?? item.toString())
-            : '';
-        return Text(
-          text,
-          style: Theme.of(context).textTheme.titleMedium,
-        );
+    return TapRegion(
+      onTapInside: (event) {
+        FocusScope.of(context).unfocus();
       },
-      decoratorProps: DropDownDecoratorProps(
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle:Theme.of(context).textTheme.bodyMedium,
-          prefixIcon: prefixIcon != null
-              ? Icon(prefixIcon, color:  TColors.primary)
-              : null, // ✅ Added support for prefix icon
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+      child: DropdownSearch<T>(
+        items: (filter, props) => items,
+        selectedItem: selectedItem,
+        compareFn: compareFn,
+        itemAsString: itemAsString,
+        onChanged: (value) {
+          FocusScope.of(context).unfocus();
+          onChanged?.call(value);
+        },
+        popupProps: PopupProps.menu(
+          showSearchBox: showSearchBox ?? true,
+
+          showSelectedItems: true,
+          searchFieldProps: TextFieldProps(
+            decoration: const InputDecoration(hintText: "Search here"),
+          ),
+
+          menuProps: MenuProps(
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+            backgroundColor: THelperFunctions.isDarkMode(context)
+                ? TColors.black
+                : TColors.white,
           ),
         ),
+        dropdownBuilder: (context, item) {
+          final text = item != null
+              ? (itemAsString?.call(item) ?? item.toString())
+              : '';
+          return Text(text, style: Theme.of(context).textTheme.titleMedium);
+        },
+        decoratorProps: DropDownDecoratorProps(
+          decoration: InputDecoration(
+            labelText: label,
+            labelStyle: Theme.of(context).textTheme.bodyMedium,
+            prefixIcon: prefixIcon != null
+                ? Icon(prefixIcon, color: TColors.primary)
+                : null, // ✅ Added support for prefix icon
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+        validator: validator,
       ),
-      onChanged: onChanged,
-      validator: validator,
     );
   }
 }

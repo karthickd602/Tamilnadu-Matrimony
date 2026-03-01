@@ -2,8 +2,10 @@ import 'package:tamilnadu_matrimony/features/profile/controller/profile_controll
 
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/popups/full_screen_loader.dart';
+import '../../authentication/dropdown_list.dart';
 import '../../authentication/model/dropdown_model.dart';
 import '../controller/dashboard_controller.dart';
+import '../model/dashboard_list_model.dart';
 
 class FilterController extends GetxController {
   final selectedIndex = 0.obs;
@@ -17,6 +19,7 @@ class FilterController extends GetxController {
     "Marriage Type",
     // "Nakshatram",
     "Location",
+    "Star",
     "Dosham",
     "No Caste Bar",
     "Disability",
@@ -33,18 +36,8 @@ class FilterController extends GetxController {
     {'id': 4, 'name': TTexts.separated.tr},
   ].obs;
 
-  // final martialStatus = [
-  //   // TTexts.unMarried.tr,
-  //   // TTexts.widowed.tr,
-  //   // TTexts.divorced.tr,
-  //   // TTexts.separated.tr,
-  // ].obs;
-  // final martialStatus = [
-  //   {"id": 1, "name": "First Marriage"},
-  //   {"id": 2, "name": "Second Marriage"},
-  // ].obs;
+  final starList = ProfileDropdowns.allStarsList;
 
-  /// DOSHAM STATIC
   final dhosamList = [
     {"id": 1, "name": "ராகு-கேது தோஷம்"},
     {"id": 2, "name": "செவ்வாய் தோஷம்"},
@@ -62,15 +55,15 @@ class FilterController extends GetxController {
 
   final profileController = Get.put(ProfileController());
 
-  // --------------------------------------------------------------
-  // INIT
-  // --------------------------------------------------------------
   @override
   void onInit() async {
     super.onInit();
-  }
+    await profileController.fetchUserProfile();
+    final profile = profileController.userProfile.value;
 
-  // --------------------------------------------------------------
+    await fetchCasteFilter(religionId: profile?.religionId ?? '0');
+    await fetchDistrictDropdown(stateId: profile?.stateId ?? "0");
+  } // --------------------------------------------------------------
   // API CALLS
   // --------------------------------------------------------------
 
@@ -179,16 +172,25 @@ class FilterController extends GetxController {
   // --------------------------------------------------------------
 
   /// MULTIPLE (CHECKBOX)
-  void toggleCheckbox(String category, int id) {
-    final List<int> list = List<int>.from(selectedOptions[category] ?? []);
+  void toggleCheckbox(String category, int id, {String? value}) {
+    List<dynamic> list = List<dynamic>.from(selectedOptions[category] ?? []);
 
-    if (list.contains(id)) {
-      list.remove(id);
+    if (category == "Star" && value != null) {
+      if (list.contains(value)) {
+        list.remove(value);
+      } else {
+        list.add(value);
+      }
     } else {
-      list.add(id);
+      if (list.contains(id)) {
+        list.remove(id);
+      } else {
+        list.add(id);
+      }
     }
 
     selectedOptions[category] = list;
+    debugPrint("✅ Selected $category: $list");
   }
 
   /// Return selected count or indicator for category
@@ -221,7 +223,12 @@ class FilterController extends GetxController {
     return "$start–$end";
   }
 
-  bool isCheckboxSelected(String category, int id) {
+  bool isCheckboxSelected(String category, int id, {String? value}) {
+    // For string-based lists like Star, we might need to check by value if ID isn't available/unique
+    if (category == "Star" && value != null) {
+      final list = selectedOptions[category] ?? [];
+      return list.contains(value);
+    }
     return (selectedOptions[category] ?? []).contains(id);
   }
 
@@ -240,7 +247,7 @@ class FilterController extends GetxController {
     update();
   }
 
-  final lockedCategories = ["Location"].obs;
+  final lockedCategories = [""].obs;
 
   /// 🔹 Check if category is locked
   bool isLocked(String category) {
@@ -249,11 +256,17 @@ class FilterController extends GetxController {
 
   int getOptionId(dynamic option) {
     if (option is Map) return option["id"];
+    if (option is String) {
+      return 0;
+    }
     return option.id; // model
   }
 
   String getOptionName(dynamic option) {
     if (option is Map) return option["name"];
+    if (option is String) {
+      return option;
+    }
     return option.name; // model
   }
 
@@ -262,26 +275,30 @@ class FilterController extends GetxController {
   // --------------------------------------------------------------
 
   Future<Map<String, dynamic>> fetchFilter() async {
-    final selectedMarriageId = selectedOptions["Marriage Type"];
-    final selectedMartial = selectedMarriageId == 1
-        ? "Unmarried"
-        : selectedMarriageId == 2
-        ? "Separated"
-        : selectedMarriageId == 3
-        ? "Divorced"
-        : selectedMarriageId == 4
-        ? "Widowed"
-        : "";
+    final selectedMarriageIds = selectedOptions["Marriage Type"];
+    String selectedMartial = "";
+
+    if (selectedMarriageIds != null && selectedMarriageIds is List) {
+      final List<String> statusList = [];
+      for (var id in selectedMarriageIds) {
+        if (id == 1) statusList.add("Unmarried");
+        if (id == 2) statusList.add("Widowed");
+        if (id == 3) statusList.add("Divorced");
+        if (id == 4) statusList.add("Separated");
+      }
+      selectedMartial = statusList.join(",");
+    }
 
     return {
       "id": storage.read(TTexts.userId),
-      "Caste": selectedOptions["Caste"] ?? [],
-      "EducationDetails": selectedOptions["Education"] ?? [],
-      "City": selectedOptions["Location"] ?? [],
-      "thosam": selectedOptions["Dosham"] ?? [],
+      "Caste": (selectedOptions["Caste"] as List? ?? []).join(","),
+      "Education": (selectedOptions["Education"] as List? ?? []).join(","),
+      "City": (selectedOptions["Location"] as List? ?? []).join(","),
+      "thosam": _getDoshamNames().join(","),
+      "Star": (selectedOptions["Star"] as List? ?? []).join(","),
       "Maritalstatus": selectedMartial,
-      "no_caste_bar": selectedOptions["No Caste Bar"] == 1 ? 'no_caste' : '',
-      "disability": selectedOptions["Disability"] ?? 0,
+      "nocaste": selectedOptions["No Caste Bar"] == 1 ? 'no_caste' : '',
+      "spe_cases": selectedOptions["Disability"] == 1 ? "ஆம்" : "",
       "from_age": ageRange.value.start.toInt(),
       "to_age": ageRange.value.end.toInt(),
     };
@@ -311,5 +328,99 @@ class FilterController extends GetxController {
     ageRange.value = const RangeValues(18, 50);
     selectedOptions.clear();
     selectedIndex.value = 0;
+
+    // 🔥 Also reset stored filters in DashboardController
+    final dashboard = DashboardController.instance;
+    dashboard.fetchDashboardCustomerProfile(isInitial: true, filters: {});
+  }
+
+  List<String> _getDoshamNames() {
+    final selectedIds = List<dynamic>.from(selectedOptions["Dosham"] ?? []);
+    if (selectedIds.isEmpty) return [];
+
+    return dhosamList
+        .where((e) => selectedIds.contains(e["id"]))
+        .map((e) => e["name"].toString())
+        .toList();
+  }
+
+  // --------------------------------------------------------------
+  // SPECIAL FILTER LOGIC
+  // --------------------------------------------------------------
+  final specialFilterProfiles = <CustomerProfileListModel>[].obs;
+  final isSpecialLoading = false.obs;
+  final RxString selectedSpecialCategory = "".obs;
+
+  void setSpecialFilter(String type) {
+    if (selectedSpecialCategory.value == type) {
+      selectedSpecialCategory.value = "";
+      specialFilterProfiles.clear();
+      return;
+    }
+
+    selectedSpecialCategory.value = type;
+    fetchSpecialFilterProfiles();
+  }
+
+  Future<void> fetchSpecialFilterProfiles() async {
+    try {
+      final connected = await NetworkManager.instance.isConnected();
+      if (!connected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Check connection",
+        );
+        return;
+      }
+
+      isSpecialLoading.value = true;
+      specialFilterProfiles.clear();
+
+      Map<String, dynamic> req = {"id": storage.read(TTexts.userId)};
+
+      switch (selectedSpecialCategory.value) {
+        case "unmarried":
+          req["Maritalstatus"] = "Unmarried";
+          break;
+        case "no_caste":
+          req["nocaste"] = "no_caste";
+          break;
+        case "disable_person":
+          req["spe_cases"] = "ஆம்";
+          break;
+        case "dhosam_having":
+          req["thoosamtype"] = "ஆம்";
+          break;
+        default:
+          isSpecialLoading.value = false;
+          return;
+      }
+
+      debugPrint("fetchSpecialFilterProfiles req: $req");
+      final response = await THttpHelper.post(
+        ApiConstant.specialFilterEndPoint,
+        req,
+      );
+      debugPrint("fetchSpecialFilterProfiles res: $response");
+
+      if (response['statusCode'] == 200) {
+        final List profiles = response['profiles'] ?? [];
+        specialFilterProfiles.value = profiles
+            .map((e) => CustomerProfileListModel.fromJson(e))
+            .toList();
+
+        if (specialFilterProfiles.isEmpty) {
+          // No profiles found
+        }
+      }
+
+      isSpecialLoading.value = false;
+    } catch (e) {
+      isSpecialLoading.value = false;
+      TLoaders.errorSnackBar(
+        title: "Special Filter Failed",
+        message: e.toString(),
+      );
+    }
   }
 }

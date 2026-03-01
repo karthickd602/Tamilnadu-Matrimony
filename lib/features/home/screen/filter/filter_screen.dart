@@ -11,17 +11,16 @@ class FilterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller =   Get.put( FilterController(), permanent: true);
+    final controller = Get.put(FilterController(), permanent: true);
     final primaryColor = TColors.primary;
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
-    await  controller.profileController.fetchUserProfile();
-    final profile = controller.profileController.userProfile.value;
-
-    await   controller.fetchCasteFilter(religionId:profile?.religionId??'0');
-    await controller.fetchDistrictDropdown(stateId: profile?.stateId??"0");
-
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // await  controller.profileController.fetchUserProfile();
+      // final profile = controller.profileController.userProfile.value;
+      //
+      // await   controller.fetchCasteFilter(religionId:profile?.religionId??'0');
+      // await controller.fetchDistrictDropdown(stateId: profile?.stateId??"0");
+      //
     });
-
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -31,9 +30,7 @@ class FilterPage extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
 
-      persistentFooterButtons: [
-        _BottomButtons(primaryColor: primaryColor),
-      ],
+      persistentFooterButtons: [_BottomButtons(primaryColor: primaryColor)],
 
       body: SafeArea(
         child: Row(
@@ -45,7 +42,7 @@ class FilterPage extends StatelessWidget {
             Expanded(
               child: Obx(() {
                 final category =
-                controller.filterCategories[controller.selectedIndex.value];
+                    controller.filterCategories[controller.selectedIndex.value];
 
                 return AnimatedSwitcher(
                   duration: const Duration(milliseconds: 250),
@@ -81,106 +78,97 @@ class _LeftCategoryMenu extends StatelessWidget {
       color: Colors.grey.shade100,
       child: Obx(() {
         return ListView.builder(
-        itemCount: controller.filterCategories.length,
-        itemBuilder: (context, index) {
-
-
-          return Obx(
-            () {
+          itemCount: controller.filterCategories.length,
+          itemBuilder: (context, index) {
+            return Obx(() {
               final category = controller.filterCategories[index];
               final isSelected = controller.selectedIndex.value == index;
               final isLocked = controller.isLocked(category);
               return AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              margin:
-              const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-              decoration: BoxDecoration(
-                color:  controller.selectedIndex.value == index? Colors.white : Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: isSelected
-                    ? [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-                    : [],
-              ),
-              child: ListTile(
-                onTap: isLocked ? null : () {
-                  controller.changeCategory(index);
-                },
-                // title: Text(
-                //   category,
-                //   style: TextStyle(
-                //     color: isLocked
-                //         ? Colors.grey
-                //         : isSelected
-                //         ? primaryColor
-                //         : Colors.black87,
-                //     fontWeight: isSelected
-                //         ? FontWeight.w600
-                //         : FontWeight.w400,
-                //   ),
-                // ),
-                title:  Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      category,
-                      style: TextStyle(
-                        color: isLocked
-                            ? Colors.grey
-                            : isSelected
-                            ? primaryColor
-                            : Colors.black87,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                      ),
-                    ),
-                  ),
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                decoration: BoxDecoration(
+                  color: controller.selectedIndex.value == index
+                      ? Colors.white
+                      : Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
+                      : [],
+                ),
+                child: ListTile(
+                  onTap: isLocked
+                      ? null
+                      : () {
+                          controller.changeCategory(index);
+                        },
 
-                  /// BADGE / COUNT / TICK
-                  Obx(() {
-                    String? badge;
-
-                    if (category == "Age") {
-                      badge = controller.getAgeBadge();
-                    } else {
-                      badge = controller.getCategoryBadge(category);
-                    }
-
-                    if (badge == null) return const SizedBox();
-
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        badge,
-                        style: TextStyle(
-                          color: primaryColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          category,
+                          style: TextStyle(
+                            color: isLocked
+                                ? Colors.grey
+                                : isSelected
+                                ? primaryColor
+                                : Colors.black87,
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.w400,
+                          ),
                         ),
                       ),
-                    );
-                  }),
-                ],
-              )
-                  ,
-                trailing: isLocked
-                    ? const Icon(Icons.lock, color: Colors.grey, size: 18)
-                    : null,
-              ),
-            );
-            },
-          );
-        },
-      );
+
+                      /// BADGE / COUNT / TICK
+                      Obx(() {
+                        String? badge;
+
+                        if (category == "Age") {
+                          badge = controller.getAgeBadge();
+                        } else {
+                          badge = controller.getCategoryBadge(category);
+                        }
+
+                        if (badge == null) return const SizedBox();
+
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: primaryColor.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            badge,
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                  trailing: isLocked
+                      ? const Icon(Icons.lock, color: Colors.grey, size: 18)
+                      : null,
+                ),
+              );
+            });
+          },
+        );
       }),
     );
   }
@@ -206,7 +194,7 @@ class _BottomButtons extends StatelessWidget {
           child: OutlinedButton(
             onPressed: () {
               controller.resetFilters();
-              controller.selectedIndex.value = 0; // Reset category view
+              Get.back();
             },
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: primaryColor),

@@ -9,19 +9,12 @@ class ProfileController extends GetxController {
   static ProfileController get instance => Get.find();
 
   final storage = GetStorage();
-final repo = Get.put(ProfileRepository());
+  final repo = Get.put(ProfileRepository());
   final isLoading = false.obs;
   final isUpdateProfileLoading = false.obs;
 
   final userProfile = Rxn<FetchUserProfileModel>();
   final pickedImage = Rxn<File>();
-
-  @override
-  void onReady() {
-    super.onReady();
-    // fetchUserProfile();
-  }
-
 
   /* ========================================================
    *  FETCH USER PROFILE
@@ -32,16 +25,12 @@ final repo = Get.put(ProfileRepository());
       debugPrint("-----------------${storage.read(TTexts.userId)}");
 
       final userId = storage.read(TTexts.userId);
-      final response = await repo.fetchUserProfile( userId: userId);
-debugPrint("Profile Response : $response");
-      userProfile.value =
-          FetchUserProfileModel.fromJson(response["data"]);
+      final response = await repo.fetchUserProfile(userId: userId);
+      debugPrint("Profile Response : $response");
+      userProfile.value = FetchUserProfileModel.fromJson(response["data"]);
     } catch (e) {
       debugPrint("Profile Error : $e");
-      TLoaders.errorSnackBar(
-        title: "Profile Error",
-        message: e.toString(),
-      );
+      TLoaders.errorSnackBar(title: "Profile Error", message: e.toString());
     } finally {
       isLoading.value = false;
       // TFullScreenLoader.stopLoading();
@@ -70,35 +59,35 @@ debugPrint("Profile Response : $response");
 
       await fetchUserProfile();
     } catch (e) {
-      TLoaders.errorSnackBar(
-        title: "Upload Failed",
-        message: e.toString(),
-      );
+      TLoaders.errorSnackBar(title: "Upload Failed", message: e.toString());
     } finally {
       isUpdateProfileLoading.value = false;
       TFullScreenLoader.stopLoading();
     }
   }
 
-
-Future<void> deleteProfile({required String reason})async{
-    try{
-      final isConnected =await NetworkManager.instance.isConnected();
-      if(!isConnected){
-        return ;
+  Future<void> deleteProfile({required String reason}) async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        return;
       }
+
+      TFullScreenLoader.popUpCircular();
 
       final response = await repo.deleteProfile(reason: reason);
       TLoaders.successSnackBar(
         title: "Profile Deleted",
         message: response['message'],
       );
+      await storage.remove(TTexts.userId);
+      await storage.erase();
+      TFullScreenLoader.stopLoading();
 
-    }catch(e){
-      TLoaders.errorSnackBar(
-        title: "Delete Failed",
-        message: e.toString(),
-      );
+      Get.offAllNamed(TRoutes.languageSelection);
+    } catch (e) {
+      TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(title: "Delete Failed", message: e.toString());
     }
-}
+  }
 }

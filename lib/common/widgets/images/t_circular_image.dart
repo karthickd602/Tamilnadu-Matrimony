@@ -37,7 +37,8 @@ class TCircularImage extends StatelessWidget {
       height: height,
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-        color: backgroundColor ??
+        color:
+            backgroundColor ??
             (Theme.of(context).brightness == Brightness.dark
                 ? Colors.black
                 : Colors.white),
@@ -80,7 +81,8 @@ class TCircularImage extends StatelessWidget {
         fit: fit,
         color: overlayColor,
         imageUrl: image!,
-        errorWidget: (context, url, error) => const Icon(Icons.error),
+        errorWidget: (context, url, error) =>
+            Image.asset(TImages.defaultProfilePic, fit: fit),
         progressIndicatorBuilder: (context, url, downloadProgress) =>
             const TShimmerEffect(width: 55, height: 55),
       );
@@ -95,7 +97,10 @@ class TCircularImage extends StatelessWidget {
     if (memoryImage != null) {
       // Display image from memory using Image widget
       return Image(
-          fit: fit, image: MemoryImage(memoryImage!), color: overlayColor);
+        fit: fit,
+        image: MemoryImage(memoryImage!),
+        color: overlayColor,
+      );
     } else {
       // Return an empty container if no image is provided
       return Container();

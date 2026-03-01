@@ -40,7 +40,7 @@ class FilterOptionsWidget extends StatelessWidget {
   }
 
   bool _isRadioCategory(String category) =>
-      ["Marriage Type", "No Caste Bar", "Disability"].contains(category);
+      ["No Caste Bar", "Disability"].contains(category);
 
   List<dynamic> _getOptions(String category, FilterController controller) {
     switch (category) {
@@ -55,6 +55,8 @@ class FilterOptionsWidget extends StatelessWidget {
         return controller.dhosamList;
       case "Marriage Type":
         return controller.martialStatusList;
+      case "Star":
+        return controller.starList;
       case "No Caste Bar":
         return [
           {"id": 1, "name": "Yes"},
@@ -81,22 +83,36 @@ class _CheckboxTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<FilterController>();
 
-    final int id = option is Map ? option["id"] : option.id;
-    final String name = option is Map ? option["name"] : option.name;
+    final int id = option is Map
+        ? option["id"]
+        : option is String
+        ? 0
+        : option.id;
+    final String name = option is Map
+        ? option["name"]
+        : option is String
+        ? option
+        : option.name;
 
     return Obx(() {
-      final isSelected = controller.isCheckboxSelected(category, id);
+      final isSelected = option is String
+          ? controller.isCheckboxSelected(category, 0, value: name)
+          : controller.isCheckboxSelected(category, id);
 
       return TRoundedContainer(
         margin: const EdgeInsets.symmetric(vertical: 4),
         padding: const EdgeInsets.all(4),
         showBorder: true,
         child: ListTile(
-          onTap: () => controller.toggleCheckbox(category, id),
+          onTap: () => option is String
+              ? controller.toggleCheckbox(category, 0, value: name)
+              : controller.toggleCheckbox(category, id),
           title: Text(name),
           trailing: Checkbox(
             value: isSelected,
-            onChanged: (_) => controller.toggleCheckbox(category, id),
+            onChanged: (_) => option is String
+                ? controller.toggleCheckbox(category, 0, value: name)
+                : controller.toggleCheckbox(category, id),
           ),
         ),
       );

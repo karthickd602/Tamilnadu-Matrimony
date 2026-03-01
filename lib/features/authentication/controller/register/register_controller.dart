@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:tamilnadu_matrimony/common/widgets/images/t_image_picker.dart';
@@ -59,7 +60,7 @@ class RegistrationController extends GetxController {
   final occupationDetailsController = TextEditingController();
   final incomeController = TextEditingController();
 
-  final isDisablePerson = 'No'.obs;
+  final isDisablePerson = TTexts.no.tr.obs;
   final subCasteController = TextEditingController();
 
   // Family Details fields
@@ -70,10 +71,10 @@ class RegistrationController extends GetxController {
   final familyStatusController = ''.obs;
 
   // final familyTypeController = TextEditingController();
-  final brothersController = TextEditingController();
-  final sistersController = TextEditingController();
-  final marriedBrothersController = TextEditingController();
-  final marriedSistersController = TextEditingController();
+  final brothersController = TextEditingController(text: "0");
+  final sistersController = TextEditingController(text: "0");
+  final marriedBrothersController = TextEditingController(text: "0");
+  final marriedSistersController = TextEditingController(text: "0");
   final nativePlaceController = TextEditingController();
 
   // Horoscope fields
@@ -88,8 +89,6 @@ class RegistrationController extends GetxController {
   final horoscopeImageFile = File('').obs;
   RxString horoscopeImagePath = ''.obs;
 
-  final mobileController = TextEditingController();
-  final whatsappController = TextEditingController();
   final alternateMobileController = TextEditingController();
   final emailController = TextEditingController();
   final addressController = TextEditingController();
@@ -97,6 +96,7 @@ class RegistrationController extends GetxController {
   RxString districtController = "".obs;
   RxString stateController = "".obs;
   final pincodeController = TextEditingController();
+  final expectationsController = TextEditingController();
 
   final profileImageFile = File('').obs;
   RxString profileImagePath = ''.obs;
@@ -177,94 +177,6 @@ class RegistrationController extends GetxController {
   final dasaList = ProfileDropdowns.dasaList;
   final dhosamList = ProfileDropdowns.dhosamList;
 
-  // final List<ChildCountModel> childCountList = [
-  //   ChildCountModel(id: '0', label: "0"),
-  //   ChildCountModel(id: "One", label: "1"),
-  //   ChildCountModel(id: "Two", label: "2"),
-  //   ChildCountModel(id: "Three", label: "3"),
-  //   ChildCountModel(id: 'Four and above', label: "4 and above"),
-  // ];
-  //
-  // final List<HeightOption> heightList = [
-  //   HeightOption(id: 0, label: "4ft (121 cm)"),
-  //   HeightOption(id: 1, label: "4ft 1in (124 cm)"),
-  //   HeightOption(id: 2, label: "4ft 2in (127 cm)"),
-  //   HeightOption(id: 3, label: "4ft 3in (129 cm)"),
-  //   HeightOption(id: 4, label: "4ft 4in (132 cm)"),
-  //   HeightOption(id: 5, label: "4ft 5in (134 cm)"),
-  //   HeightOption(id: 6, label: "4ft 6in (137 cm)"),
-  //   HeightOption(id: 7, label: "4ft 7in (139 cm)"),
-  //   HeightOption(id: 8, label: "4ft 8in (142 cm)"),
-  //   HeightOption(id: 9, label: "4ft 9in (144 cm)"),
-  //   HeightOption(id: 10, label: "4ft 10in (147 cm)"),
-  //   HeightOption(id: 11, label: "4ft 11in (149 cm)"),
-  //   HeightOption(id: 12, label: "5ft (152 cm)"),
-  //   HeightOption(id: 13, label: "5ft 1in (154 cm)"),
-  //   HeightOption(id: 14, label: "5ft 2in (157 cm)"),
-  //   HeightOption(id: 15, label: "5ft 3in (160 cm)"),
-  //   HeightOption(id: 16, label: "5ft 4in (162 cm)"),
-  //   HeightOption(id: 17, label: "5ft 5in (165 cm)"),
-  //   HeightOption(id: 18, label: "5ft 6in (167 cm)"),
-  //   HeightOption(id: 19, label: "5ft 7in (170 cm)"),
-  //   HeightOption(id: 20, label: "5ft 8in (172 cm)"),
-  //   HeightOption(id: 21, label: "5ft 9in (175 cm)"),
-  //   HeightOption(id: 22, label: "5ft 10in (177 cm)"),
-  //   HeightOption(id: 23, label: "5ft 11in (180 cm)"),
-  //   HeightOption(id: 24, label: "6ft (182 cm)"),
-  //   HeightOption(id: 25, label: "6ft 1in (185 cm)"),
-  //   HeightOption(id: 26, label: "6ft 2in (187 cm)"),
-  //   HeightOption(id: 27, label: "6ft 3in (190 cm)"),
-  //   HeightOption(id: 28, label: "6ft 4in (193 cm)"),
-  //   HeightOption(id: 29, label: "6ft 5in (195 cm)"),
-  //   HeightOption(id: 30, label: "6ft 6in (198 cm)"),
-  //   HeightOption(id: 31, label: "6ft 7in (200 cm)"),
-  //   HeightOption(id: 32, label: "6ft 8in (203 cm)"),
-  //   HeightOption(id: 33, label: "6ft 9in (205 cm)"),
-  //   HeightOption(id: 34, label: "6ft 10in (208 cm)"),
-  //   HeightOption(id: 35, label: "6ft 11in (210 cm)"),
-  //   HeightOption(id: 36, label: "7ft (213 cm)"),
-  // ];
-  //
-  // /// --- Base Lists ---
-  // final raasiList = [
-  //   "மேஷம்",
-  //   "ரிஷபம்",
-  //   "மிதுனம்",
-  //   "கடகம்",
-  //   "சிம்மம்",
-  //   "கன்னி",
-  //   "துலாம்",
-  //   "விருச்சிகம்",
-  //   "தனுசு",
-  //   "மகரம்",
-  //   "கும்பம்",
-  //   "மீனம்",
-  // ];
-  //
-  //
-  // final dasaList = [
-  //   "சூரிய மகா திசை",
-  //   "சந்திர மகா திசை",
-  //   "செவ்வாய் மகா திசை",
-  //   "புதன் மகா திசை",
-  //   "வியாழ மகா திசை",
-  //   "சுக்கிர மகா திசை",
-  //   "சனி மகா திசை",
-  //   "ராகு மகா திசை",
-  //   "கேது மகா திசை",
-  //   "குரு மகா திசை",
-  // ];
-  //
-  // final dhosamList = [
-  //   "ராகு-கேது தோஷம்",
-  //   "செவ்வாய் தோஷம்",
-  //   "நாக தோஷம்",
-  //   "கால சர்ப்ப தோஷம்",
-  //   "களத்திர தோஷம்",
-  //   "பித்ரு தோஷம்",
-  //   "இதர தோஷம்",
-  // ];
-
   /// --- Selected Values ---
   final selectedRaasi = RxnString();
   final selectedStar = RxnString();
@@ -312,6 +224,10 @@ class RegistrationController extends GetxController {
       // final userId = "96166";
       final response = await repo.fetchUserProfile(userId: userId);
       debugPrint("Edit Profile Response : $response");
+      if (response["data"]['Name'] == null || response["data"]['Name'] == '') {
+        return;
+      }
+
       userProfile.value = FetchUserProfileModel.fromJson(response["data"]);
 
       await _mapProfileToFields();
@@ -329,24 +245,42 @@ class RegistrationController extends GetxController {
     if (profile == null) return;
 
     /// ---------------- BASIC DETAILS ----------------
+
+    /// split the child cound and living status
     String children = profile.childrenLivingStatus.toString();
     List<String> childrenList = children.split('-');
-    noOfChildren.value = childrenList[0].trim();
-    childLivingStatus.value = childrenList[1].trim();
 
+    childLivingStatus.value = childrenList[1].trim() == 'Yes'
+        ? "Living with me"
+        : "Not living with me";
+
+    selectedNoOfChildren.value = childCountList.firstWhereOrNull(
+      (e) => e.id.toString() == childrenList[0].trim(),
+    );
     nameController.text = profile.name ?? '';
     dobController.text = profile.dob ?? '';
-    // heightController.text = profile.height ?? '';
-    maritalStatus.value = profile.maritalStatus ?? '';
-    selectedComplexion.value = profile.complexion ?? '';
-    educationDetailsController.text = profile.educationDetails ?? '';
-    subCasteController.text = profile.subCaste ?? '';
-    incomeController.text = profile.annualIncome.toString();
+
     selectedGender.value = profile.gender == "1"
         ? TTexts.male.tr
         : TTexts.female.tr;
 
-    isDisablePerson.value = profile.speCases == "1" ? "Yes" : "No";
+    maritalStatus.value = profile.maritalStatus == "Unmarried"
+        ? TTexts.unMarried.tr
+        : profile.maritalStatus == 'Separated'
+        ? TTexts.separated.tr
+        : profile.maritalStatus == 'Divorced'
+        ? TTexts.divorced.tr
+        : profile.maritalStatus == 'widowed'
+        ? TTexts.widowed
+        : '';
+    selectedComplexion.value = profile.complexion ?? '';
+    educationDetailsController.text = profile.educationDetails ?? '';
+    subCasteController.text = profile.subCaste ?? '';
+    incomeController.text = profile.annualIncome.toString();
+
+    isDisablePerson.value = profile.speCases == "1"
+        ? TTexts.yes.tr
+        : TTexts.no.tr;
 
     /// ---------------- DROPDOWNS (MATCH BY ID) ----------------
     /// ---------------- DROPDOWNS ----------------
@@ -359,6 +293,7 @@ class RegistrationController extends GetxController {
     selectedEducation.value = educationDDList.firstWhereOrNull(
       (e) => e.id.toString() == profile.educationId,
     );
+
     selectedOccupation.value = occupationDDList.firstWhereOrNull(
       (e) => e.id.toString() == profile.occupationId,
     );
@@ -391,20 +326,12 @@ class RegistrationController extends GetxController {
     marriedSistersController.text = profile.nsm ?? '';
     nativePlaceController.text = profile.irupidam ?? '';
     selectedComplexion.value = profile.complexion ?? '';
-    noOfChildren.value = profile.childrenLivingStatus.toString()[0] ?? '';
 
     /// ---------------- LOCATION ----------------
 
     selectedCountry.value = countryList.firstWhereOrNull(
       (e) => e.id.toString() == profile.countryId,
     );
-
-    // selectedHeight.value = heightList.firstWhereOrNull(
-    //   (e) => e.id.toString() == profile.heightID.toString(),
-    // );
-
-    // debugPrint(" height id : ${profile.heightID}");
-    // debugPrint("selected height id : ${selectedHeight.value?.id}");
 
     if (selectedCountry.value != null) {
       await fetchStateDropdown();
@@ -424,14 +351,13 @@ class RegistrationController extends GetxController {
 
     /// ---------------- CONTACT ----------------
 
-    mobileController.text = profile.phone ?? profile.mobile ?? '';
+    alternateMobileController.text = profile.phone ?? '';
     emailController.text = profile.confirmEmail ?? '';
     cityController.text = profile.city ?? '';
     stateController.value = profile.state ?? '';
     districtController.value = profile.city ?? '';
     pincodeController.text = profile.postal ?? '';
     addressController.text = profile.address ?? '';
-    isDisablePerson.value = profile.speCases == "yes" ? "Yes" : "No";
     noCasteChecked.value = profile.noCaste.toString().toLowerCase() == "yes"
         ? true
         : false;
@@ -446,7 +372,7 @@ class RegistrationController extends GetxController {
     areYouHaveDhosam.value = profile.thoosamType == 'Yes'
         ? TTexts.yes.tr
         : TTexts.no.tr;
-    isDoshamHave.value = profile.thoosamType ?? '';
+    isDoshamHave.value = profile.thoosamType ?? 'No';
     debugPrint(" dosham ${isDoshamHave.value}");
 
     /// ---------------- PROFILE IMAGE ----------------
@@ -599,7 +525,8 @@ class RegistrationController extends GetxController {
         countryList.value = (response['data'] as List)
             .map((e) => CountryModel.fromJson(e))
             .toList();
-        // selectedCountry.value = countryList.where((e)=>e.id==101,);
+        selectedCountry.value = countryList.firstWhere((e) => e.id == 101);
+        await fetchStateDropdown();
       } else {
         countryList.value = <CountryModel>[];
       }
@@ -710,13 +637,13 @@ class RegistrationController extends GetxController {
       );
       final childrenCount = selectedNoOfChildren.value?.id == '0'
           ? '0'
-          : selectedNoOfChildren.value?.id == '1'
+          : selectedNoOfChildren.value?.id == 'One'
           ? 'One'
-          : selectedNoOfChildren.value?.id == '2'
+          : selectedNoOfChildren.value?.id == 'Two'
           ? 'Two'
-          : selectedNoOfChildren.value?.id == '3'
+          : selectedNoOfChildren.value?.id == 'Three'
           ? 'Three'
-          : selectedNoOfChildren.value?.id == '4 and above'
+          : selectedNoOfChildren.value?.id == 'Four and above'
           ? 'Four and above'
           : '';
 
@@ -734,12 +661,12 @@ class RegistrationController extends GetxController {
         "Maritalstatus": maritalStatus.value == TTexts.unMarried.tr
             ? "Unmarried"
             : maritalStatus.value == TTexts.separated.tr
-            ? "Seperated"
+            ? "Separated"
             : maritalStatus.value == TTexts.divorced.tr
             ? "Divorced"
-            : maritalStatus.value == TTexts.widowed.tr
+            : maritalStatus.value == TTexts.widowed
             ? "Widowed"
-            : '',
+            : maritalStatus.value,
         "childrenlivingstatus":
             "${childrenCount.toString()}-${childLiving.toString()}",
         // "childrenlivingstatus":
@@ -752,7 +679,7 @@ class RegistrationController extends GetxController {
         "workplace": occupationDetailsController.text,
         "Annualincome": int.tryParse(incomeController.text) ?? 0,
         "Subcaste": subCasteController.text,
-        "spe_cases": isDisablePerson.value.toString() == "Yes" ? 1 : 0,
+        "spe_cases": isDisablePerson.value.toString() == TTexts.yes.tr ? 1 : 0,
       };
 
       debugPrint(
@@ -862,37 +789,42 @@ class RegistrationController extends GetxController {
         return;
       }
 
-      if (horoscopeImagePath.value.isEmpty) {
-        TLoaders.warningSnackBar(
-          title: "No Horoscope Image",
-          message: "Please select horoscope image",
-        );
-        return;
+      TFullScreenLoader.popUpCircular();
+
+      String? base64Image;
+      if (horoscopeImageFile.value.path.isNotEmpty) {
+        final bytes = await horoscopeImageFile.value.readAsBytes();
+        final extension = horoscopeImageFile.value.path.split('.').last;
+        final base64String = base64Encode(bytes);
+        base64Image = "data:image/$extension;base64,$base64String";
       }
+
       final request = {
         "id": storage.read(TTexts.userId),
-        // "id": "96142",
+        "choice": 4,
         'Moonsign': selectedRaasi.value,
         "Star": selectedStar.value,
         "InLaknam": selectedLaknam.value,
         "dasatype": selectedDasa.value,
         "thoosamtype": isDoshamHave.value,
         "thosam": selectedDhosam.value,
+        if (base64Image != null) "file": base64Image,
       };
       debugPrint("Horoscope req : $request");
 
-      final res = await THttpHelper.multipartPost(
-        filePath: horoscopeImageFile.value.path,
+      final res = await THttpHelper.post(
         ApiConstant.horoscopeRegisterEndpoint,
         request,
       );
-      debugPrint("Horoscope res : $request");
 
+      debugPrint("Horoscope res : $res");
+      TFullScreenLoader.stopLoading();
       TLoaders.successSnackBar(title: "Success", message: res['message']);
 
       currentStep.value++;
     } catch (e) {
-      debugPrint("horoscopeFormSubmit - ${e}");
+      TFullScreenLoader.stopLoading();
+      debugPrint("horoscopeFormSubmit - $e");
 
       TLoaders.errorSnackBar(
         title: "Failed",
@@ -911,7 +843,7 @@ class RegistrationController extends GetxController {
       if (!contactFormKey.currentState!.validate()) {
         return;
       }
-
+      TFullScreenLoader.popUpCircular();
       final request = {
         "id": storage.read(TTexts.userId),
         "Phone": alternateMobileController.text,
@@ -921,29 +853,36 @@ class RegistrationController extends GetxController {
         "State": selectedState.value?.id,
         "City": selectedDistrict.value?.id,
         "Postal": pincodeController.text,
+        "expections": expectationsController.text,
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
-      print("Contact : $request");
+      debugPrint("Contact : $request");
 
-      // final response = await THttpHelper.post(
-      //   ApiConstant.contactRegisterEndpoint,
-      //   request,
-      // );
+      final response;
 
-      final response = await THttpHelper.multipartPost(
-        filePath: profileImageFile.value.path,
-        ApiConstant.contactRegisterEndpoint,
-        request,
-        fileFieldName: "photo1",
-      );
+      if (profileImageFile.value.path.isNotEmpty) {
+        response = await THttpHelper.multipartPost(
+          filePath: profileImageFile.value.path,
+          ApiConstant.contactRegisterEndpoint,
+          request,
+          fileFieldName: "photo1",
+        );
+      } else {
+        response = await THttpHelper.post(
+          ApiConstant.contactRegisterEndpoint,
+          request,
+        );
+      }
+      TFullScreenLoader.stopLoading();
       debugPrint("Contact Register Response : $response");
 
       TLoaders.successSnackBar(title: "Success", message: response['message']);
       storage.write(TTexts.appPages, 0);
       Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
-      debugPrint("contactFormSubmit - ${e}");
+      TFullScreenLoader.stopLoading();
+      debugPrint("contactFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
@@ -965,14 +904,7 @@ class RegistrationController extends GetxController {
     occupationDetailsController.dispose();
     incomeController.dispose();
     subCasteController.dispose();
+    expectationsController.dispose();
     super.onClose();
   }
 }
-
-//
-// class HeightOption {
-//   final int id;
-//   final String label;
-//
-//   HeightOption({required this.id, required this.label});
-// }

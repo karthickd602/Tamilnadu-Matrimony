@@ -7,6 +7,7 @@ import '../constants/path_provider.dart';
 
 class THttpHelper {
   static const String _baseUrl = 'https://www.jobsintimate.com/api';
+  static final storage = GetStorage();
 
   // Helper method to make a GET request
   static Future<Map<String, dynamic>> get(String endpoint) async {
@@ -23,6 +24,11 @@ class THttpHelper {
     final url = Uri.parse("$_baseUrl/$endpoint");
     final request = http.MultipartRequest("POST", url);
 
+    request.headers.addAll({
+      'Accept-Language': storage.read(TTexts.languageCode) ?? "en",
+      'x-authorization': 'Bearer ${storage.read(TTexts.barerToken)}',
+    });
+    debugPrint('Bearer token:Bearer ${storage.read(TTexts.barerToken)}');
     // Convert dynamic body → String fields safely
     body.forEach((key, value) {
       if (value != null) {
@@ -31,18 +37,17 @@ class THttpHelper {
     });
 
     // Add file
-    final file = File(filePath);
-    final fileStream = http.ByteStream(file.openRead());
-    final fileLength = await file.length();
-
-    final multipartFile = http.MultipartFile(
+    final multipartFile = await http.MultipartFile.fromPath(
       fileFieldName,
-      fileStream,
-      fileLength,
-      filename: file.path.split("/").last,
+      filePath,
     );
 
     request.files.add(multipartFile);
+
+    debugPrint('Multipart Body Fields: ${request.fields}');
+    debugPrint(
+      'Multipart Files: ${request.files.map((f) => 'Field: ${f.field}, File: ${f.filename}').toList()}',
+    );
 
     // Send request
     final response = await request.send();
@@ -50,6 +55,14 @@ class THttpHelper {
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return json.decode(responseData);
+    }
+
+    if (response.statusCode == 401) {
+      debugPrint("multipartPost StatusCode: ${response.statusCode}");
+      storage.remove(TTexts.barerToken);
+      storage.remove(TTexts.userId);
+      Get.offAllNamed(TRoutes.loginPage);
+      throw "Unauthorized";
     }
 
     // If error contains message
@@ -68,9 +81,16 @@ class THttpHelper {
   ) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/$endpoint'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Accept-Language': storage.read(TTexts.languageCode) ?? "en",
+        'x-authorization': 'Bearer ${storage.read(TTexts.barerToken)}',
+      },
       body: json.encode(data),
     );
+    debugPrint('Headers: ${response.request?.headers}');
+    debugPrint('Bearer ${storage.read(TTexts.barerToken)}');
     return _handleResponse(response);
   }
 
@@ -83,6 +103,10 @@ class THttpHelper {
       'POST',
       Uri.parse('$_baseUrl/$endpoint'),
     );
+    request.headers.addAll({
+      'Accept-Language': storage.read(TTexts.languageCode) ?? "en",
+      'x-authorization': 'Bearer ${storage.read(TTexts.barerToken)}',
+    });
     request.fields.addAll(data);
     files.forEach((key, value) async {
       request.files.add(await http.MultipartFile.fromPath(key, value.path));
@@ -93,6 +117,12 @@ class THttpHelper {
 
     if (response.statusCode == 200) {
       return json.decode(responseBody);
+    } else if (response.statusCode == 401) {
+      debugPrint("postWithFiles StatusCode: ${response.statusCode}");
+      storage.remove(TTexts.barerToken);
+      storage.remove(TTexts.userId);
+      Get.offAllNamed(TRoutes.languageSelection);
+      throw "Unauthorized";
     } else {
       throw Exception('Failed to load data: ${response.statusCode}');
     }
@@ -116,13 +146,14 @@ class THttpHelper {
 
   // Handle the HTTP response
   static Map<String, dynamic> _handleResponse(http.Response response) {
-    if (response.statusCode >= 200) {
+    if (response.statusCode == 200 ||
+        response.statusCode == 201 ||
+        response.statusCode == 204) {
       debugPrint("StatusCode: ${response.statusCode}");
       // debugPrint("StatusCode: ${response.body}");
 
       return json.decode(response.body);
-    }
-    if (response.statusCode == 404 ||
+    } else if (response.statusCode == 404 ||
         response.statusCode == 400 ||
         response.statusCode == 409 ||
         response.statusCode == 302) {
@@ -131,6 +162,17 @@ class THttpHelper {
       // debugPrint("StatusCode: ${response.body}");
 
       throw message;
+    } else if (response.statusCode == 500) {
+      debugPrint("StatusCode 500: ${response.statusCode}");
+
+      // final message = json.decode(response.body)['message'];
+      throw "Something went wrong";
+    } else if (response.statusCode == 401) {
+      debugPrint("StatusCode: ${response.statusCode}");
+      storage.remove(TTexts.barerToken);
+      storage.remove(TTexts.userId);
+      Get.offAllNamed(TRoutes.loginPage);
+      throw "Unauthorized";
     } else {
       throw Exception('Failed to load data: ${response.statusCode}');
     }

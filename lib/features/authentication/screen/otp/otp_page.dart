@@ -41,9 +41,11 @@ class OtpPage extends StatelessWidget {
               const SizedBox(height: TSizes.sm),
               Text(TTexts.autoFetching.tr),
 
-              Obx(() => controller.secondsRemaining.value > 0
-                  ? SizedBox(height: TSizes.spaceBtwSections)
-                  : const SizedBox()),
+              Obx(
+                () => controller.secondsRemaining.value > 0
+                    ? SizedBox(height: TSizes.spaceBtwSections)
+                    : const SizedBox(),
+              ),
 
               /// Retry Section
               Center(child: _buildRetrySection()),
@@ -87,11 +89,9 @@ class OtpPage extends StatelessWidget {
             border: Border.all(color: Theme.of(context).primaryColor, width: 2),
           ),
         ),
+        smsRetriever: controller.smsRetriever,
         onCompleted: (pin) {
-          // Automatically submit or save entered OTP
-          // for (int i = 0; i < 6; i++) {
-          //   controller.otpControllers[i].text = pin[i];
-          // }
+          controller.verifyOtpApi();
         },
       ),
     );
@@ -106,7 +106,7 @@ class OtpPage extends StatelessWidget {
         );
       } else {
         return TextButton(
-          onPressed: controller.retryOtp,
+          onPressed: controller.resendOtp,
           child: Text(TTexts.resend.tr),
         );
       }

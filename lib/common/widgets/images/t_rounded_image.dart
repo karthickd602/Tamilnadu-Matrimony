@@ -56,8 +56,9 @@ class TRoundedImage extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: ClipRRect(
-        borderRadius:
-        applyRadius ? BorderRadius.circular(borderRadius) : BorderRadius.zero,
+        borderRadius: applyRadius
+            ? BorderRadius.circular(borderRadius)
+            : BorderRadius.zero,
         child: _buildImage(),
       ),
     );
@@ -81,16 +82,17 @@ class TRoundedImage extends StatelessWidget {
   // NETWORK IMAGE (Shimmer + Fade)
   // -----------------------------
   Widget _networkImage() {
-    if (image == null || image!.isEmpty) {
+    if (image.isEmpty) {
       return _fallbackImage();
     }
 
     return CachedNetworkImage(
       fit: fit,
-      imageUrl: image!,
+      imageUrl: image,
       progressIndicatorBuilder: (_, __, downloadProgress) =>
           TShimmerEffect(width: width, height: height),
-      errorWidget: (context,url,error)=>Icon(Icons.error),
+      errorWidget: (context, url, error) =>
+          Image.asset(TImages.defaultProfilePic, fit: fit),
     );
 
     // return Image.network(
@@ -124,8 +126,7 @@ class TRoundedImage extends StatelessWidget {
   // ASSET IMAGE
   // -----------------------------
   Widget _assetImage() {
-    if (image == null) return _fallbackImage();
-    return _fadeIn(Image.asset(image!, fit: fit));
+    return _fadeIn(Image.asset(image, fit: fit));
   }
 
   // -----------------------------
@@ -144,9 +145,6 @@ class TRoundedImage extends StatelessWidget {
   // FALLBACK DEFAULT IMAGE
   // -----------------------------
   Widget _fallbackImage() {
-    return Image.asset(
-      TImages.defaultProfilePic,
-      fit: BoxFit.cover,
-    );
+    return Image.asset(TImages.defaultProfilePic, fit: BoxFit.cover);
   }
 }

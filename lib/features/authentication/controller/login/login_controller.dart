@@ -45,7 +45,7 @@ class LoginController extends GetxController {
 
       Get.toNamed(TRoutes.otp);
     } catch (e) {
-      TFullScreenLoader.popUpCircular();
+      TFullScreenLoader.stopLoading();
 
       TLoaders.errorSnackBar(
         title: "Authentication Failed",

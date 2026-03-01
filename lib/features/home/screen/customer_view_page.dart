@@ -3,6 +3,7 @@ import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 
 import '../../../common/widgets/appbar/appbar.dart';
+import '../../../common/widgets/horoscope/horoscope_chart.dart';
 import '../controller/dashboard_controller.dart';
 
 class CustomerDetailsView extends StatelessWidget {
@@ -13,272 +14,340 @@ class CustomerDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = DashboardController.instance;
 
-    final userModel = controller.userModel.value;
+    return Obx(() {
+      final userModel = controller.userModel.value;
+      final primaryColor = TColors.primary;
+      final secondaryColor = Colors.grey[100]!;
 
-    final primaryColor = TColors.primary;
-    final secondaryColor = Colors.grey[100]!;
+      return Scaffold(
+        backgroundColor: secondaryColor,
+        appBar: TAppBar(
+          title: TTexts.appName.tr,
+          isBackButtonNeed: true,
+          actions: [
+            IconButton(
+              tooltip: "Share Profile",
+              onPressed: () {
+                controller.shareProfile(userModel);
+              },
+              icon: const Icon(Icons.share_outlined),
+              color: TColors.primary,
+              iconSize: 26,
+            ),
+          ],
+        ),
 
-    return Scaffold(
-      backgroundColor: secondaryColor,
-      appBar: TAppBar(
-        title: TTexts.appName.tr,
-        isBackButtonNeed: true,
-        actions: [
-          IconButton(
-            tooltip: "Share Profile",
-            onPressed: () {
-              controller.shareProfile(userModel);
-            },
-            icon: const Icon(Icons.share_outlined),
-            color: TColors.primary,
-            iconSize: 26,
-          ),
-        ],
-      ),
-
-      /// Body
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              /// Profile Image
-              GestureDetector(
-                onTap: () => Get.to(
-                  () => ImagePreviewPage(
-                    imageUrl: userModel.photo1 ?? TImages.sampleUser,
+        /// Body
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                /// Profile Image
+                GestureDetector(
+                  onTap: () => Get.to(
+                    () => ImagePreviewPage(
+                      imageUrl: userModel.photo1,
+                      imageType: userModel.photo1 == ""
+                          ? ImageType.asset
+                          : ImageType.network,
+                    ),
+                  ),
+                  child: TRoundedImage(
+                    width: double.infinity,
+                    height: 400,
+                    margin: 0,
+                    padding: 0,
+                    borderRadius: 0,
                     imageType: userModel.photo1 == ""
                         ? ImageType.asset
                         : ImageType.network,
+                    image: userModel.photo1,
+                    backgroundColor: TColors.white,
+                    fit: BoxFit.fill,
                   ),
                 ),
-                child: TRoundedImage(
-                  width: double.infinity,
-                  height: 400,
-                  margin: 0,
-                  padding: 0,
-                  borderRadius: 0,
-                  imageType: userModel.photo1 == ""
-                      ? ImageType.asset
-                      : ImageType.network,
-                  image: userModel.photo1 ?? TImages.sampleUser,
-                  backgroundColor: TColors.white,
-                  fit: BoxFit.cover,
-                ),
-              ),
 
-              const SizedBox(height: TSizes.spaceBtwSections),
+                const SizedBox(height: TSizes.spaceBtwSections),
 
-              /// All Info Sections
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  children: [
-                    /// BASIC INFO
-                    _infoCard(
-                      userModel: userModel,
-                      TTexts.basicInfo.tr,
-                      Icons.person_outline,
-                      [
-                        {
-                          "icon": Icons.badge,
-                          "label": TTexts.nameAge.tr,
-                          "value":
-                              "${userModel.name ?? ''}, ${userModel.age ?? ''} yrs",
-                        },
-                        {
-                          "icon": Icons.location_on,
-                          "label": TTexts.location.tr,
-                          "value":
-                              "${userModel.city ?? ''}, ${userModel.state ?? ''}",
-                        },
-                        {
-                          "icon": Icons.favorite,
-                          "label": TTexts.maritalStatus.tr,
-                          "value": userModel.maritalStatus ?? "-",
-                        },
-                        {
-                          "icon": Icons.cake,
-                          "label": TTexts.dob.tr,
-                          "value": THelperFunctions.formatDateString(
-                            userModel.dob,
-                          ),
-                        },
-                      ],
-                      primaryColor,
-                      showLikeAndShare: true,
-                    ),
-
-                    /// EDUCATION & OCCUPATION
-                    _infoCard(
-                      userModel: userModel,
-                      TTexts.educationOccupation.tr,
-                      Icons.school_outlined,
-                      [
-                        {
-                          "icon": Icons.menu_book,
-                          "label": TTexts.degree.tr,
-                          "value": userModel.educationDetails ?? "-",
-                        },
-                        {
-                          "icon": Icons.work_outline,
-                          "label": TTexts.occupation.tr,
-                          "value": userModel.occupation ?? "-",
-                        },
-                      ],
-                      primaryColor,
-                    ),
-
-                    /// SOCIO RELIGIOUS
-                    _infoCard(
-                      userModel: userModel,
-                      TTexts.socioReligious.tr,
-                      Icons.account_balance,
-                      [
-                        {
-                          "icon": Icons.self_improvement,
-                          "label": TTexts.religion.tr,
-                          "value": userModel.religion ?? "-",
-                        },
-                        {
-                          "icon": Icons.groups,
-                          "label": TTexts.caste.tr,
-                          "value": userModel.caste ?? "-",
-                        },
-                        {
-                          "icon": Icons.star_rate,
-                          "label": TTexts.star.tr,
-                          "value": userModel.star ?? "-",
-                        },
-                        {
-                          "icon": Icons.wb_sunny,
-                          "label": TTexts.lagnam.tr,
-                          "value": userModel.inLaknam ?? "-",
-                        },
-                      ],
-                      primaryColor,
-                    ),
-
-                    /// PHYSICAL DETAILS
-                    _infoCard(
-                      userModel: userModel,
-                      TTexts.physicalStatus.tr,
-                      Icons.accessibility_new,
-                      [
-                        {
-                          "icon": Icons.height,
-                          "label": TTexts.height.tr,
-                          "value": userModel.height ?? "-",
-                        },
-                        {
-                          "icon": Icons.face_retouching_natural,
-                          "label": TTexts.complexion.tr,
-                          "value": userModel.complexion ?? "-",
-                        },
-                      ],
-                      primaryColor,
-                    ),
-
-                    /// FAMILY DETAILS
-                    _infoCard(
-                      userModel: userModel,
-                      TTexts.familyDetails.tr,
-                      Icons.family_restroom,
-                      [
-                        {
-                          "icon": Icons.man,
-                          "label": TTexts.father.tr,
-                          "value":
-                              "${userModel.fatherName ?? ''} (${userModel.fathersOccupation ?? ''})",
-                        },
-                        {
-                          "icon": Icons.woman,
-                          "label": TTexts.mother.tr,
-                          "value":
-                              "${userModel.motherName ?? ''} (${userModel.mothersOccupation ?? ''})",
-                        },
-                        {
-                          "icon": Icons.people,
-                          "label": TTexts.siblings.tr,
-                          "value":
-                              "${userModel.noOfBrothers ?? '0'} Brothers | ${userModel.noOfSisters ?? '0'} Sisters",
-                        },
-                      ],
-                      primaryColor,
-                    ),
-
-                    /// CONTACT DETAILS (ONLY IF UNLOCKED)
-                    if (userModel.isUnlocked)
+                /// All Info Sections
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      /// BASIC INFO
                       _infoCard(
                         userModel: userModel,
-                        TTexts.contactDetails.tr,
-                        Icons.contact_phone,
+                        TTexts.basicInfo.tr,
+                        Icons.person_outline,
                         [
                           {
-                            "icon": Icons.call,
-                            "label": TTexts.mobileNo.tr,
-                            "value": userModel.mobile.isEmpty
-                                ? "-"
-                                : userModel.mobile,
+                            "icon": Icons.badge,
+                            "label": TTexts.nameAge.tr,
+                            "value": "${userModel.name}, ${userModel.age} yrs",
                           },
                           {
-                            "icon": Icons.phone,
-                            "label": TTexts.mobileNo.tr,
-                            "value": userModel.phone.isEmpty
-                                ? "-"
-                                : userModel.phone,
+                            "icon": Icons.location_on,
+                            "label": TTexts.location.tr,
+                            "value": "${userModel.city}, ${userModel.state}",
                           },
                           {
-                            "icon": Icons.home,
-                            "label": TTexts.address.tr,
-                            "value": userModel.address.isEmpty
-                                ? "-"
-                                : userModel.address,
+                            "icon": Icons.favorite,
+                            "label": TTexts.maritalStatus.tr,
+                            "value": userModel.maritalStatus,
+                          },
+                          {
+                            "icon": Icons.cake,
+                            "label": TTexts.dob.tr,
+                            "value": THelperFunctions.formatDateString(
+                              userModel.dob,
+                            ),
+                          },
+                        ],
+                        primaryColor,
+                        showLikeAndShare: true,
+                      ),
+
+                      /// EDUCATION & OCCUPATION
+                      _infoCard(
+                        userModel: userModel,
+                        TTexts.educationOccupation.tr,
+                        Icons.school_outlined,
+                        [
+                          {
+                            "icon": Icons.menu_book,
+                            "label": TTexts.degree.tr,
+                            "value": userModel.educationDetails,
+                          },
+                          {
+                            "icon": Icons.work_outline,
+                            "label": TTexts.occupation.tr,
+                            "value": userModel.occupation,
                           },
                         ],
                         primaryColor,
                       ),
 
-                    /// PARTNER PREFERENCE PLACEHOLDER
-                    _infoCard(
-                      userModel: userModel,
-                      TTexts.partnerPreference.tr,
-                      Icons.favorite_border,
-                      [
-                        {
-                          "icon": Icons.groups_2,
-                          "label": TTexts.caste.tr,
-                          "value": userModel.caste ?? "-",
-                        },
-                      ],
-                      primaryColor,
-                    ),
-
-                    /// Horoscope Button
-                    if (userModel.horosApprove.toLowerCase() == "yes")
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            Get.to(
-                              () => ImagePreviewPage(
-                                imageUrl: userModel.horosCheck,
-                                imageType: ImageType.network,
-                              ),
-                            );
+                      /// SOCIO RELIGIOUS
+                      _infoCard(
+                        userModel: userModel,
+                        TTexts.socioReligious.tr,
+                        Icons.account_balance,
+                        [
+                          {
+                            "icon": Icons.self_improvement,
+                            "label": TTexts.religion.tr,
+                            "value": userModel.religion,
                           },
-                          icon: const Icon(Icons.remove_red_eye),
-                          label: Text(TTexts.horoscope.tr),
-                        ),
+                          {
+                            "icon": Icons.groups,
+                            "label": TTexts.caste.tr,
+                            "value": userModel.caste,
+                          },
+                          {
+                            "icon": Icons.star_rate,
+                            "label": TTexts.star.tr,
+                            "value": userModel.star,
+                          },
+                          {
+                            "icon": Icons.wb_sunny,
+                            "label": TTexts.lagnam.tr,
+                            "value": userModel.inLaknam,
+                          },
+                          // if (userModel.doshamType != "")
+                          {
+                            "icon": Icons.warning_amber_rounded,
+                            "label": "Dosham",
+                            "value": userModel.doshamType,
+                          },
+                        ],
+                        primaryColor,
                       ),
-                    SizedBox(height: TSizes.spaceBtwSections),
-                  ],
+
+                      /// PHYSICAL DETAILS
+                      _infoCard(
+                        userModel: userModel,
+                        TTexts.physicalStatus.tr,
+                        Icons.accessibility_new,
+                        [
+                          {
+                            "icon": Icons.height,
+                            "label": TTexts.height.tr,
+                            "value": userModel.height,
+                          },
+                          {
+                            "icon": Icons.face_retouching_natural,
+                            "label": TTexts.complexion.tr,
+                            "value": userModel.complexion,
+                          },
+                          {
+                            "icon": Icons.accessible,
+                            "label": "Special Cases",
+                            "value": userModel.speCases,
+                          },
+                        ],
+                        primaryColor,
+                      ),
+
+                      /// FAMILY DETAILS
+                      _infoCard(
+                        userModel: userModel,
+                        TTexts.familyDetails.tr,
+                        Icons.family_restroom,
+                        [
+                          if (userModel.fatherName != "")
+                            {
+                              "icon": Icons.man,
+                              "label": TTexts.father.tr,
+                              "value":
+                                  "${userModel.fatherName} - ${userModel.fathersOccupation}",
+                            },
+                          if (userModel.motherName != "")
+                            {
+                              "icon": Icons.woman,
+                              "label": TTexts.mother.tr,
+                              "value":
+                                  "${userModel.motherName} - ${userModel.mothersOccupation}",
+                            },
+                          {
+                            "icon": Icons.people,
+                            "label": TTexts.siblings.tr,
+                            "value":
+                                "${userModel.noOfBrothers} Brothers | ${userModel.noOfSisters} Sisters",
+                          },
+                        ],
+                        primaryColor,
+                      ),
+
+                      /// CONTACT DETAILS (ONLY IF UNLOCKED)
+                      if (userModel.isUnlocked)
+                        _infoCard(
+                          userModel: userModel,
+                          TTexts.contactDetails.tr,
+                          Icons.contact_phone,
+                          [
+                            {
+                              "icon": Icons.call,
+                              "label": TTexts.mobileNo.tr,
+                              "value": userModel.mobile.isEmpty
+                                  ? "-"
+                                  : userModel.mobile,
+                            },
+                            {
+                              "icon": Icons.phone,
+                              "label": TTexts.mobileNo.tr,
+                              "value": userModel.phone.isEmpty
+                                  ? "-"
+                                  : userModel.phone,
+                            },
+                            {
+                              "icon": Icons.home,
+                              "label": TTexts.address.tr,
+                              "value": userModel.address.isEmpty
+                                  ? "-"
+                                  : userModel.address,
+                            },
+                          ],
+                          primaryColor,
+                        ),
+
+                      /// PARTNER PREFERENCE PLACEHOLDER
+                      _infoCard(
+                        userModel: userModel,
+                        TTexts.partnerPreference.tr,
+                        Icons.favorite_border,
+                        [
+                          {
+                            "icon": Icons.groups_2,
+                            "label": TTexts.caste.tr,
+                            "value": userModel.caste,
+                          },
+                          if (userModel.expectations != "")
+                            {
+                              "icon": Icons.comment_outlined,
+                              "label": "Expectations",
+                              "value": userModel.expectations,
+                            },
+                        ],
+                        primaryColor,
+                      ),
+
+                      /// Horoscope Section
+                      if (userModel.horosCheck.isNotEmpty &&
+                          userModel.horosApprove.toLowerCase() == "yes")
+                        //   SizedBox(
+                        //     width: double.infinity,
+                        //     child: ElevatedButton.icon(
+                        //       onPressed: () {
+                        //         Get.to(
+                        //           () => ImagePreviewPage(
+                        //             imageUrl: userModel.horosCheck,
+                        //             imageType: ImageType.network,
+                        //           ),
+                        //         );
+                        //       },
+                        //       icon: const Icon(Icons.remove_red_eye),
+                        //       label: Text(TTexts.horoscope.tr),
+                        //     ),
+                        //   )
+                        SizedBox()
+                      else
+                        HoroscopeChart(
+                          rasiData: userModel.rasi,
+                          amsamData: userModel.amsam,
+                        ),
+                      SizedBox(height: TSizes.spaceBtwSections),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+        bottomNavigationBar: userModel.isUnlocked
+            ? null
+            : Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, -5),
+                    ),
+                  ],
+                ),
+                child: SafeArea(
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      controller.unlockProfile(
+                        profileId: userModel.id,
+                        unlockValue: userModel.isUnlocked.toString().obs,
+                        navigateToView: false,
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: TColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 2,
+                    ),
+                    icon: const Icon(Icons.lock_open_rounded),
+                    label: Text(
+                      TTexts.unlockNumber.tr,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+      );
+    });
   }
 
   /// ---------------------- Info Card Widget ------------------------
@@ -302,7 +371,7 @@ class CustomerDetailsView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.15),
+                  color: primaryColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(icon, color: primaryColor, size: 26),

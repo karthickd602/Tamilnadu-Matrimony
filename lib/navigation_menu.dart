@@ -7,6 +7,7 @@ import 'package:tamilnadu_matrimony/features/profile/screen/profile_page.dart';
 
 import '../../../utils/constants/path_provider.dart';
 import 'features/favorites/favorites_page.dart';
+import 'features/home/screen/filter/special_filter_page.dart';
 
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});
@@ -32,30 +33,37 @@ class NavigationMenu extends StatelessWidget {
         extendBody: true,
         bottomNavigationBar: SafeArea(
           child: Obx(
-                () => CurvedNavigationBar(
+            () => CurvedNavigationBar(
               index: controller.selectedIndex.value,
               backgroundColor: TColors.scaffoldColor,
               buttonBackgroundColor: TColors.bottomNavColor,
               animationCurve: Curves.easeInOut,
               animationDuration: const Duration(milliseconds: 600),
-              color: darkMode
-                  ? TColors.yellow
-                  : TColors.bottomNavColor,
+              color: darkMode ? TColors.yellow : TColors.bottomNavColor,
               onTap: (index) {
                 controller.selectedIndex.value = index;
               },
-              items:  [
+              items: [
                 CurvedNavigationBarItem(
                   child: Icon(Iconsax.home, color: iconAndLabelColor),
                   label: 'Home',
-                  labelStyle: TextStyle(color:iconAndLabelColor),
+                  labelStyle: TextStyle(color: iconAndLabelColor),
+                ),
+                CurvedNavigationBarItem(
+                  child: Icon(Iconsax.star, color: iconAndLabelColor),
+                  label: 'Special',
+                  labelStyle: TextStyle(color: iconAndLabelColor),
                 ),
                 CurvedNavigationBarItem(
                   child: Icon(Iconsax.heart, color: iconAndLabelColor),
                   label: 'Favorites',
                   labelStyle: TextStyle(color: iconAndLabelColor),
-                ),CurvedNavigationBarItem(
-                  child: Icon(Icons.notifications_active_outlined, color: iconAndLabelColor),
+                ),
+                CurvedNavigationBarItem(
+                  child: Icon(
+                    Icons.notifications_active_outlined,
+                    color: iconAndLabelColor,
+                  ),
                   label: 'Alerts',
                   labelStyle: TextStyle(color: iconAndLabelColor),
                 ),
@@ -100,6 +108,7 @@ class NavigationController extends GetxController {
   RxInt back = 0.obs;
   final screens = [
     HomePage(),
+    SpecialFilterPage(),
     FavoritesPage(),
     AlertPage(),
     ProfilePage(),

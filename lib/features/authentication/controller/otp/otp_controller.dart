@@ -1,16 +1,25 @@
 import 'dart:async';
 
+import 'package:pinput/pinput.dart';
+import 'package:smart_auth/smart_auth.dart';
 import 'package:tamilnadu_matrimony/features/authentication/controller/login/login_controller.dart';
 import 'package:tamilnadu_matrimony/utils/popups/full_screen_loader.dart';
 
+import '../../../../data/services/notification_service.dart';
 import '../../../../utils/constants/path_provider.dart';
+import '../../model/login_otp_model.dart';
+import '../../screen/otp/sms_retriever_impl.dart';
 
 class OtpController extends GetxController {
   var secondsRemaining = 300.obs;
   late Timer _timer;
   final otpTextController = TextEditingController();
+  late final SmsRetriever smsRetriever;
+  late final SmartAuth smartAuth;
 
   final storage = GetStorage();
+
+  final loginController = LoginController.instance;
 
   // final List<TextEditingController> otpControllers = List.generate(
   //   6,
@@ -21,6 +30,8 @@ class OtpController extends GetxController {
   void onInit() {
     super.onInit();
     startTimer();
+    smartAuth = SmartAuth.instance;
+    smsRetriever = SmsRetrieverImpl(smartAuth);
   }
 
   Future<void> verifyOtpApi() async {
@@ -34,18 +45,29 @@ class OtpController extends GetxController {
         return;
       }
 
+      if (otpTextController.text.length < 6) {
+        TLoaders.warningSnackBar(
+          title: "Empty OTP",
+          message: "Please enter the OTP.",
+        );
+        return;
+      }
       TFullScreenLoader.popUpCircular();
 
-      final loginController = LoginController.instance;
+      await NotificationService().init();
+
+      debugPrint("Fcm 1:${storage.read(TTexts.fcmToken)}");
       final request = {
         "mobile_no": loginController.mobileNoT.text,
         "otp": otpTextController.text,
+        "fcm_token": await storage.read(TTexts.fcmToken),
       };
-      debugPrint("OTP Verify1 : $request");
+      debugPrint("OTP Verify1 request: $request");
       final response = await THttpHelper.post(ApiConstant.verifyOtp, request);
-      debugPrint("OTP Verify : $response");
+      debugPrint("OTP Verify response : $response");
       if (response['statusCode'] == 200) {
         storage.write(TTexts.userId, response['user_id'].toString());
+        storage.write(TTexts.barerToken, response['token'].toString());
         storage.write(TTexts.appPages, response['app_page']);
         TFullScreenLoader.stopLoading();
 
@@ -54,6 +76,9 @@ class OtpController extends GetxController {
         } else {
           Get.offAllNamed(TRoutes.register);
         }
+      } else {
+        TFullScreenLoader.stopLoading();
+        TLoaders.errorSnackBar(title: "Failed", message: response['message']);
       }
       // TFullScreenLoader.stopLoading();
 
@@ -81,9 +106,42 @@ class OtpController extends GetxController {
     return "$minutes:$seconds";
   }
 
-  void retryOtp() {
-    secondsRemaining.value = 300;
-    startTimer();
+  // void retryOtp() {}
+
+  Future<void> resendOtp() async {
+    try {
+      final isConnected = await NetworkManager.instance.isConnected();
+
+      if (!isConnected) {
+        TLoaders.warningSnackBar(
+          title: "No Internet",
+          message: "Please check your Internet Connection",
+        );
+        return;
+      }
+
+      TFullScreenLoader.popUpCircular();
+
+      final request = {"mobile_no": loginController.mobileNoT.text};
+      //
+      final response = await THttpHelper.post(ApiConstant.sendOtp, request);
+      loginController.loginOtpModel.value = (response['data'] as List)
+          .map((e) => LoginOtpModel.fromJson(e))
+          .toList();
+      debugPrint(
+        "loginApi Response:${loginController.mobileNoT.text} ${response.toString()}",
+      );
+
+      secondsRemaining.value = 300;
+      startTimer();
+    } catch (e) {
+      TLoaders.errorSnackBar(
+        title: "Authentication Failed",
+        message: e.toString(),
+      );
+    } finally {
+      TFullScreenLoader.stopLoading();
+    }
   }
 
   @override
