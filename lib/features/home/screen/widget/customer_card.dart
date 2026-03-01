@@ -160,7 +160,8 @@ class CustomerCard extends StatelessWidget {
                         Icons.join_inner_rounded,
                         customerProfile.maritalStatus ?? '',
                       ),
-                    if (customerProfile.caste != null)
+                    if (customerProfile.caste != null &&
+                        customerProfile.caste!.isNotEmpty)
                       _buildChip(
                         Icons.auto_awesome,
                         customerProfile.caste ?? '',
@@ -168,13 +169,15 @@ class CustomerCard extends StatelessWidget {
                     if (customerProfile.city != null)
                       _buildChip(Icons.location_on, customerProfile.city ?? ''),
 
-                    if (customerProfile.moonSign != null)
+                    if (customerProfile.moonSign != null &&
+                        customerProfile.moonSign!.isNotEmpty)
                       _buildChip(
                         Icons.stars,
                         "Rasi: ${customerProfile.moonSign ?? ''}",
                       ),
 
-                    if (customerProfile.star != null)
+                    if (customerProfile.star != null &&
+                        customerProfile.star!.isNotEmpty)
                       _buildChip(Icons.star, customerProfile.star ?? ''),
                     if (customerProfile.occupation != null)
                       _buildChip(Icons.work, customerProfile.occupation ?? ''),
