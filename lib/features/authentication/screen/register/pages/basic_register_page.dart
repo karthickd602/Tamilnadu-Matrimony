@@ -283,37 +283,39 @@ class StepBasicDetails extends StatelessWidget {
                 ),
                 Obx(
                   () =>
-                      (controller.selectedReligion.value == null ||
-                          controller.selectedReligion.value?.id != 1)
-                      ? SizedBox()
-                      : TSearchDropdownField<CasteDDModel>(
-                          prefixIcon: IconlyLight.user,
-                          label: TTexts.caste.tr,
-                          items: controller.casteDDList,
-                          selectedItem: controller.selectedCaste.value,
-                          itemAsString: (item) => item.name.toString(),
-                          compareFn: (a, b) => a.name == b.name,
-                          onChanged: (value) {
-                            if (value == null) return;
-                            controller.selectedCaste.value = value;
-                            controller.subCasteController.text = '';
-                          },
-                          validator: (value) => TValidator.validateEmptyText(
-                            TTexts.caste.tr,
-                            value?.name,
-                          ),
+                      // (controller.selectedReligion.value == null ||
+                      //     controller.selectedReligion.value?.id != 1)
+                      // ? SizedBox()
+                      // :
+                      TSearchDropdownField<CasteDDModel>(
+                        prefixIcon: IconlyLight.user,
+                        label: TTexts.caste.tr,
+                        items: controller.casteDDList,
+                        selectedItem: controller.selectedCaste.value,
+                        itemAsString: (item) => item.name.toString(),
+                        compareFn: (a, b) => a.name == b.name,
+                        onChanged: (value) {
+                          if (value == null) return;
+                          controller.selectedCaste.value = value;
+                          controller.subCasteController.text = '';
+                        },
+                        validator: (value) => TValidator.validateEmptyText(
+                          TTexts.caste.tr,
+                          value?.name,
                         ),
+                      ),
                 ),
                 Obx(
                   () =>
-                      (controller.selectedReligion.value == null ||
-                          controller.selectedReligion.value?.id != 1)
-                      ? SizedBox()
-                      : TFormField(
-                          labelText: TTexts.subCaste.tr,
-                          controller: controller.subCasteController,
-                          icon: IconlyLight.user,
-                        ),
+                      // (controller.selectedReligion.value == null ||
+                      //     controller.selectedReligion.value?.id != 1)
+                      // ? SizedBox()
+                      // :
+                      TFormField(
+                        labelText: TTexts.subCaste.tr,
+                        controller: controller.subCasteController,
+                        icon: IconlyLight.user,
+                      ),
                 ),
                 SizedBox(height: TSizes.sm),
                 TSearchDropdownField<String>(

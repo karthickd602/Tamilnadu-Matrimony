@@ -6,7 +6,9 @@ import 'package:http/http.dart' as http;
 import '../constants/path_provider.dart';
 
 class THttpHelper {
-  static const String _baseUrl = 'https://www.jobsintimate.com/api';
+  // static const String _baseUrl = 'https://www.jobsintimate.com/api';
+  static const String _baseUrl =
+      'https://api.tamilnadumatrimony.net/public/api';
   static final storage = GetStorage();
 
   // Helper method to make a GET request

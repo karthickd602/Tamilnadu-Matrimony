@@ -116,6 +116,22 @@ class CustomerCard extends StatelessWidget {
                   ),
                 ),
 
+                // Floating Share Button
+                Positioned(
+                  bottom: 100,
+                  right: 20,
+                  child: FloatingActionButton(
+                    heroTag: null,
+                    tooltip: 'Share',
+                    onPressed: () {
+                      controller.shareProfileFromList(customerProfile);
+                    },
+                    mini: true,
+                    backgroundColor: Colors.white,
+                    child: const Icon(Icons.share, color: TColors.primary),
+                  ),
+                ),
+
                 // Floating Like Button
                 Positioned(
                   bottom: 50,
@@ -133,10 +149,10 @@ class CustomerCard extends StatelessWidget {
                       mini: true,
                       backgroundColor: Colors.white,
                       child: controller.isLikeLoading.value
-                          ? CircularProgressIndicator(color: Colors.red)
+                          ? const CircularProgressIndicator(color: Colors.red)
                           : customerProfile.liked.value == "yes"
-                          ? Icon(Icons.favorite, color: TColors.error)
-                          : Icon(Icons.favorite_border, color: TColors.error),
+                          ? const Icon(Icons.favorite, color: TColors.error)
+                          : const Icon(Icons.favorite_border, color: TColors.error),
                     ),
                   ),
                 ),

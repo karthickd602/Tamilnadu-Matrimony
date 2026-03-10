@@ -41,7 +41,6 @@ class NotificationService {
     }
 
     // Get Token
-    // Get Token
     try {
       String? token = await _firebaseMessaging.getToken();
       if (token != null) {

@@ -5,7 +5,7 @@ class NotificationController extends GetxController {
   static NotificationController get instance => Get.find();
 
   final notificationList = <NotificationModel>[].obs;
-final isLoading = false.obs;
+  final isLoading = false.obs;
 
   @override
   void onInit() {
@@ -19,21 +19,24 @@ final isLoading = false.obs;
       if (!isConnected) {
         return;
       }
-isLoading.value = true;
+      isLoading.value = true;
       final res = await THttpHelper.get(ApiConstant.notificationListEndPoint);
       debugPrint("Notification List : $res");
+
+      if (res['statusCode'] == 204) {
+        return;
+      }
 
       notificationList.value = (res['data'] as List<dynamic>)
           .map((e) => NotificationModel.fromJson(e))
           .toList();
-
     } catch (e) {
       debugPrint("Notification Error - $e");
       TLoaders.errorSnackBar(
         title: "Notification Error",
         message: e.toString(),
       );
-    }finally{
+    } finally {
       isLoading.value = false;
     }
   }

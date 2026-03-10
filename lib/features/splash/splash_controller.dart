@@ -35,7 +35,10 @@ class SplashController extends GetxController {
         "current_version": currentVersion,
       };
       debugPrint("Version check body: $body");
-      final response = await THttpHelper.post("check_version", body);
+      final response = await THttpHelper.post(
+        ApiConstant.appVersionCheckEndPoint,
+        body,
+      );
       debugPrint("Version check response: $response");
       if (response['statusCode'] == 200) {
         final bool forceUpdate = response['force_update'] ?? false;

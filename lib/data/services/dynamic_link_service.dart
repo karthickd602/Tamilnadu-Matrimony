@@ -89,8 +89,8 @@ class DynamicLinkService extends GetxService {
 
   // Generates a standard web URL that will be intercepted by the app
   String createProfileShareLink(String userId) {
-    // Using custom scheme because there is no website/server to verify https links.
-    // Note: This link might not be clickable in some apps (like WhatsApp) but is the only offline way to open the app.
-    return 'tamilnadumatrimony://profile?id=$userId';
+    // Standard HTTPS link for best compatibility (clickable in WhatsApp/SMS)
+    // Domain matches the one configured in AndroidManifest.xml
+    return 'https://tamilnadumatrimony.net/profile?id=$userId';
   }
 }

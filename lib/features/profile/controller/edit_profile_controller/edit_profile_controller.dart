@@ -717,13 +717,15 @@ class EditProfileController extends GetxController {
       };
 
       debugPrint(
-        "Basic Edit Form Req ${ApiConstant.basicRegisterEndpoint}: $request",
+        "Basic Edit Form Req ${ApiConstant.basicEditEndpoint}: $request",
       );
 
       final response = await THttpHelper.post(
-        ApiConstant.basicRegisterEndpoint,
+        ApiConstant.basicEditEndpoint,
         request,
       );
+
+      ///-210 -- 3400 - 80-->
       profileController.fetchUserProfile();
 
       TLoaders.successSnackBar(title: "Success", message: response['message']);

@@ -251,25 +251,21 @@ class CustomerDetailsView extends StatelessWidget {
                         ),
 
                       /// PARTNER PREFERENCE PLACEHOLDER
-                      _infoCard(
-                        userModel: userModel,
-                        TTexts.partnerPreference.tr,
-                        Icons.favorite_border,
-                        [
-                          {
-                            "icon": Icons.groups_2,
-                            "label": TTexts.caste.tr,
-                            "value": userModel.caste,
-                          },
-                          if (userModel.expectations != "")
-                            {
-                              "icon": Icons.comment_outlined,
-                              "label": "Expectations",
-                              "value": userModel.expectations,
-                            },
-                        ],
-                        primaryColor,
-                      ),
+                      if (userModel.expectations != "")
+                        _infoCard(
+                          userModel: userModel,
+                          TTexts.partnerPreference.tr,
+                          Icons.favorite_border,
+                          [
+                            if (userModel.expectations != "")
+                              {
+                                "icon": Icons.comment_outlined,
+                                "label": "Expectations",
+                                "value": userModel.expectations,
+                              },
+                          ],
+                          primaryColor,
+                        ),
 
                       /// Horoscope Section
                       if (userModel.horosCheck.isNotEmpty &&

@@ -13,6 +13,8 @@ class TSearchDropdownField<T> extends StatelessWidget {
   final bool? showSearchBox;
   final IconData? prefixIcon; // ✅ Added prefix icon
 
+  final bool enabled;
+
   const TSearchDropdownField({
     super.key,
     required this.label,
@@ -24,6 +26,7 @@ class TSearchDropdownField<T> extends StatelessWidget {
     this.validator,
     this.prefixIcon,
     this.showSearchBox,
+    this.enabled = true,
   });
 
   @override
@@ -33,6 +36,7 @@ class TSearchDropdownField<T> extends StatelessWidget {
         FocusScope.of(context).unfocus();
       },
       child: DropdownSearch<T>(
+        enabled: enabled,
         items: (filter, props) => items,
         selectedItem: selectedItem,
         compareFn: compareFn,

@@ -2,6 +2,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
 import 'package:tamilnadu_matrimony/features/profile/screen/verified_profile/verify_profile.dart';
+import 'package:tamilnadu_matrimony/data/services/dynamic_link_service.dart';
 
 import '../../../common/widgets/dialog/logout_dialog.dart';
 import '../../../common/widgets/images/t_circular_image.dart';
@@ -196,9 +197,8 @@ class ProfilePage extends StatelessWidget {
                       const appLink =
                           "https://play.google.com/store/apps/details?id=com.maac.tamilnadumatrimony";
 
-                      // Use https scheme which is configured in AndroidManifest
-                      final deepLink =
-                          "https://tamilnadu-matrimony.com/profile?id=$profileId";
+                      // Use DynamicLinkService to generate consistent, clickable HTTPS links
+                      final deepLink = DynamicLinkService.instance.createProfileShareLink(profileId.toString());
 
                       final shareText =
                           "Check out my profile on Tamilnadu Matrimony!\n\nName: $name ($matriId)\n\nTap to view profile: $deepLink\n\nDownload App: $appLink";

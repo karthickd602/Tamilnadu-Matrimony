@@ -334,8 +334,8 @@ class DashboardController extends GetxController {
 
   Future<void> shareProfile(CustomerUserModel user) async {
     try {
-      // Use DynamicLinkService to create a share link
-      final String shortLink = DynamicLinkService.instance
+      // Use DynamicLinkService to create a consistent share link
+      final String shareLink = DynamicLinkService.instance
           .createProfileShareLink(user.id.toString());
 
       final shareText =
@@ -349,12 +349,38 @@ class DashboardController extends GetxController {
 💼 Occupation: ${user.occupation ?? '-'}
 
 View full profile here 👇
-$shortLink
+$shareLink
 ''';
 
       await Share.share(shareText, subject: "Matrimony Profile - ${user.name}");
     } catch (e) {
       TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(title: "Share Failed", message: e.toString());
+    }
+  }
+
+  Future<void> shareProfileFromList(CustomerProfileListModel user) async {
+    try {
+      // Use DynamicLinkService to create a consistent share link
+      final String shareLink = DynamicLinkService.instance
+          .createProfileShareLink(user.id.toString());
+
+      final shareText =
+          '''
+🌸 ${TTexts.appName.tr} 🌸
+
+👤 Name: ${user.name ?? '-'}
+🎂 Age: ${user.age ?? '-'}
+📍 Location: ${user.city ?? '-'}, ${user.state ?? '-'}
+🎓 Education: ${user.educationDetails ?? '-'}
+💼 Occupation: ${user.occupation ?? '-'}
+
+View full profile here 👇
+$shareLink
+''';
+
+      await Share.share(shareText, subject: "Matrimony Profile - ${user.name}");
+    } catch (e) {
       TLoaders.errorSnackBar(title: "Share Failed", message: e.toString());
     }
   }

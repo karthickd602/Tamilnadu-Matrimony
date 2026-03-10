@@ -181,7 +181,7 @@ class TTexts {
   // Customer Details
   static const basicInfo = 'basic_info';
   static const educationOccupation = 'education_occupation';
-  static const socioReligious = 'socio_religious';
+  static const socioReligious = 'social_religious';
   static const physicalStatus = 'physical_status';
   static const partnerPreference = 'partner_preference';
 

@@ -175,7 +175,9 @@ class SubscriptionController extends GetxController
         return;
       }
 
-      final url = "https://www.jobsintimate.com/payment/${plan.planId}/$userId";
+      final url =
+          "https://api.tamilnadumatrimony.net/public/payment/${plan.planId}/$userId";
+      // final url = "https://www.jobsintimate.com/payment/${plan.planId}/$userId";
       if (!await launchUrl(Uri.parse(url), mode: LaunchMode.inAppBrowserView)) {
         throw Exception('Could not launch $url');
       }
