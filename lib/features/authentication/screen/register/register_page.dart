@@ -82,7 +82,7 @@ class RegistrationPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (idx < controller.totalSteps - 1)
+                        if (idx < controller.totalSteps - 1 && idx == 1)
                           // if(idx==1)
                           TextButton(
                             onPressed: () {

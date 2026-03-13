@@ -22,9 +22,14 @@ class ImagePreviewPage extends StatelessWidget {
       ),
       body: Center(
         child: PhotoView(
-          imageProvider: imageType == ImageType.network
+          imageProvider: (imageType == ImageType.network &&
+                  imageUrl.isNotEmpty &&
+                  imageUrl != "null" &&
+                  imageUrl.startsWith('http'))
               ? CachedNetworkImageProvider(imageUrl)
-              : AssetImage(imageUrl) as ImageProvider,
+              : AssetImage(imageUrl.isEmpty || imageUrl == "null"
+                      ? TImages.defaultProfilePic
+                      : imageUrl) as ImageProvider,
           minScale: PhotoViewComputedScale.contained,
           maxScale: PhotoViewComputedScale.covered * 3,
           backgroundDecoration: const BoxDecoration(color: Colors.black),
@@ -40,6 +45,17 @@ class ImagePreviewPage extends StatelessWidget {
                     context,
                   ).textTheme.titleMedium?.copyWith(color: Colors.white),
                 ),
+                if (imageUrl.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      imageUrl,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

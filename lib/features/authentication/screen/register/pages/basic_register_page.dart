@@ -281,8 +281,8 @@ class StepBasicDetails extends StatelessWidget {
                       ? SizedBox()
                       : SizedBox(height: TSizes.sm),
                 ),
-                Obx(
-                  () =>
+                // Obx(
+                //   () =>
                       // (controller.selectedReligion.value == null ||
                       //     controller.selectedReligion.value?.id != 1)
                       // ? SizedBox()
@@ -304,9 +304,9 @@ class StepBasicDetails extends StatelessWidget {
                           value?.name,
                         ),
                       ),
-                ),
-                Obx(
-                  () =>
+                // ),
+                // Obx(
+                //   () =>
                       // (controller.selectedReligion.value == null ||
                       //     controller.selectedReligion.value?.id != 1)
                       // ? SizedBox()
@@ -316,7 +316,7 @@ class StepBasicDetails extends StatelessWidget {
                         controller: controller.subCasteController,
                         icon: IconlyLight.user,
                       ),
-                ),
+                // ),
                 SizedBox(height: TSizes.sm),
                 TSearchDropdownField<String>(
                   label: TTexts.disablePerson.tr,

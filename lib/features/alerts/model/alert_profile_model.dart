@@ -9,6 +9,7 @@ class AlertProfileModel {
   final String city;
   final String caste;
   final String photo1;
+  final String maritalStatus;
   final String photo1Approve;
   final String eisentdt;
 
@@ -23,6 +24,7 @@ class AlertProfileModel {
     required this.city,
     required this.caste,
     required this.photo1,
+    required this.maritalStatus,
     required this.photo1Approve,
     required this.eisentdt,
   });
@@ -39,6 +41,7 @@ class AlertProfileModel {
       city: json['City'] ?? '',
       caste: json['Caste'] ?? '',
       photo1: json['photo1'] ?? '',
+      maritalStatus: json['MaritalStatus'] ?? '',
       photo1Approve: json['Photo1Approve'] ?? '',
       eisentdt: json['eisentdt'] ?? '',
     );
@@ -55,6 +58,7 @@ class AlertProfileModel {
     'City': city,
     'Caste': caste,
     'photo1': photo1,
+    'MaritalStatus': maritalStatus,
     'Photo1Approve': photo1Approve,
     'eisentdt': eisentdt,
   };

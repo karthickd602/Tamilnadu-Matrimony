@@ -5,6 +5,8 @@ import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../controller/filter_controller.dart';
 import '../widget/filter_options.dart';
+import '../../../subscription/controller/subscription_controller.dart';
+import '../../../../utils/popups/loaders.dart';
 
 class FilterPage extends StatelessWidget {
   const FilterPage({super.key});
@@ -13,14 +15,6 @@ class FilterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(FilterController(), permanent: true);
     final primaryColor = TColors.primary;
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // await  controller.profileController.fetchUserProfile();
-      // final profile = controller.profileController.userProfile.value;
-      //
-      // await   controller.fetchCasteFilter(religionId:profile?.religionId??'0');
-      // await controller.fetchDistrictDropdown(stateId: profile?.stateId??"0");
-      //
-    });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -103,11 +97,18 @@ class _LeftCategoryMenu extends StatelessWidget {
                       : [],
                 ),
                 child: ListTile(
-                  onTap: isLocked
-                      ? null
-                      : () {
-                          controller.changeCategory(index);
-                        },
+                  onTap: () {
+                    if (isLocked) {
+                      TLoaders.warningSnackBar(
+                        title: "Subscription Required",
+                        message: "Please subscribe to use the $category filter.",
+                      );
+                      SubscriptionController.instance
+                          .fetchUserSubscriptionPlan(navigate: true);
+                    } else {
+                      controller.changeCategory(index);
+                    }
+                  },
 
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

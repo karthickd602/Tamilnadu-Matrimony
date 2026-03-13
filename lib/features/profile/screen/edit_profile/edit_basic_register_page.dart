@@ -302,18 +302,12 @@ class EditBasicDetails extends StatelessWidget {
                       ),
                 ),
 
-                Obx(
-                  () =>
-                      // (controller.selectedReligion.value == null ||
-                      //     controller.selectedReligion.value?.id != 1)
-                      // ? SizedBox()
-                      // :
-                      TFormField(
-                        labelText: TTexts.subCaste.tr,
-                        controller: controller.subCasteController,
-                        icon: IconlyLight.user,
-                      ),
+                TFormField(
+                  labelText: TTexts.subCaste.tr,
+                  controller: controller.subCasteController,
+                  icon: IconlyLight.user,
                 ),
+
                 SizedBox(height: TSizes.sm),
 
                 TSearchDropdownField<String>(

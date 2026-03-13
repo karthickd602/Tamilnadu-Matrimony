@@ -8,9 +8,11 @@ import '../model/subscription_model.dart';
 class SubscriptionController extends GetxController
     with WidgetsBindingObserver {
   static SubscriptionController get instance => Get.find();
+  static bool shouldNavigate = true;
 
   final RxList<SubscriptionPlan> plans = <SubscriptionPlan>[].obs;
   final RxInt selectedIndex = 0.obs;
+  final RxString bannerImage = "".obs;
 
   // Return nullable to avoid RangeError when plans is empty
   SubscriptionPlan? get selectedPlan =>
@@ -25,12 +27,13 @@ class SubscriptionController extends GetxController
   var daysLeft = "".obs;
 
   final storage = GetStorage();
+  final RxBool isSubscribed = false.obs;
 
   @override
   void onInit() async {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
-    await fetchUserSubscriptionPlan();
+    await fetchUserSubscriptionPlan(navigate: shouldNavigate);
     _initDeepLinkListener();
   }
 
@@ -65,7 +68,47 @@ class SubscriptionController extends GetxController
     }
   }
 
-  Future<void> fetchUserSubscriptionPlan() async {
+  /// Silent check to update state without navigation
+  Future<void> checkSubscriptionStatusSilent() async {
+    try {
+      final connected = await NetworkManager.instance.isConnected();
+      if (!connected) return;
+
+      final req = {"user_id": storage.read(TTexts.userId)};
+      final response = await THttpHelper.post(
+        ApiConstant.getSubscriptionUserPlan,
+        req,
+      );
+
+      if (response['statusCode'] == 200) {
+        final data = response['data'];
+        if (data is Map && data["plan"] != null) {
+          isSubscribed.value = true;
+          packageName.value = data["plan"]['plandisplayname'] ?? "";
+          buyDate.value = THelperFunctions.formatDateString(
+            data["order"]?['orderdate'] ?? "",
+          );
+          creditLeft.value = (data["Noofcontacts"] ?? 0).toString();
+          expiryDate.value = THelperFunctions.formatDateString(
+            data["expiry_date"] ?? "",
+          );
+
+          if (data["expiry_date"] != null) {
+            daysLeft.value =
+                "${calculateBalanceDays(DateTime.parse(data["expiry_date"]))} Days Left";
+          }
+        } else {
+          isSubscribed.value = false;
+        }
+      } else {
+        isSubscribed.value = false;
+      }
+    } catch (e) {
+      debugPrint("Silent check error: $e");
+    }
+  }
+
+  Future<void> fetchUserSubscriptionPlan({bool navigate = true}) async {
     try {
       final connected = await NetworkManager.instance.isConnected();
       if (!connected) {
@@ -105,19 +148,22 @@ class SubscriptionController extends GetxController
                 "${calculateBalanceDays(DateTime.parse(data["expiry_date"]))} Days Left";
           }
           debugPrint("Response structure is Active");
+          isSubscribed.value = true;
 
           TFullScreenLoader.stopLoading();
-          Get.offNamed(TRoutes.userSubscriptionPlan);
+          if (navigate) Get.offNamed(TRoutes.userSubscriptionPlan);
         } else {
           debugPrint("Response structure is not Active");
-          await fetchSubscriptionPlans();
+          isSubscribed.value = false;
+          // await fetchSubscriptionPlans();
           TFullScreenLoader.stopLoading();
 
-          Get.offNamed(TRoutes.buySubscription);
+          if (navigate) Get.toNamed(TRoutes.buySubscription);
         }
       } else {
+        isSubscribed.value = false;
         TFullScreenLoader.stopLoading();
-        Get.offNamed(TRoutes.buySubscription);
+        if (navigate) Get.toNamed(TRoutes.buySubscription);
       }
     } catch (e) {
       TFullScreenLoader.stopLoading();
@@ -147,6 +193,7 @@ class SubscriptionController extends GetxController
 
       final data = SubscriptionResponse.fromJson(response);
       plans.assignAll(data.data ?? []);
+      bannerImage.value = data.offerImg ?? "";
 
       if (plans.isEmpty) {
         selectedIndex.value = 0;

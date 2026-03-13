@@ -132,7 +132,7 @@ class DashboardController extends GetxController {
     }
   }
 
-  Future<void> fetchCustomerPage(int profileId) async {
+  Future<void> fetchCustomerPage(int profileId, {bool showLoader = true}) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
@@ -143,7 +143,7 @@ class DashboardController extends GetxController {
         return;
       }
 
-      TFullScreenLoader.popUpCircular();
+      if (showLoader) TFullScreenLoader.popUpCircular();
       final req = {
         "user_id": storage.read(TTexts.userId),
         "view_user_id": profileId,
@@ -159,9 +159,9 @@ class DashboardController extends GetxController {
       debugPrint("fetchCustomerPage response: $response");
       userModel.value = CustomerUserModel.fromJson(response["data"]);
 
-      TFullScreenLoader.stopLoading();
+      if (showLoader) TFullScreenLoader.stopLoading();
     } catch (e) {
-      TFullScreenLoader.stopLoading();
+      if (showLoader) TFullScreenLoader.stopLoading();
       debugPrint("fetchDashboardCustomerProfile Error: $e");
       TLoaders.errorSnackBar(title: "Error", message: e.toString());
     }

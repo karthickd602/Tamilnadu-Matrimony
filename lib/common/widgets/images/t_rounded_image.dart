@@ -82,7 +82,10 @@ class TRoundedImage extends StatelessWidget {
   // NETWORK IMAGE (Shimmer + Fade)
   // -----------------------------
   Widget _networkImage() {
-    if (image.isEmpty) {
+    if (image.isEmpty ||
+        image == "null" ||
+        image == "default" ||
+        !image.startsWith('http')) {
       return _fallbackImage();
     }
 
@@ -91,19 +94,15 @@ class TRoundedImage extends StatelessWidget {
       imageUrl: image,
       progressIndicatorBuilder: (_, __, downloadProgress) =>
           TShimmerEffect(width: width, height: height),
-      errorWidget: (context, url, error) =>
-          Image.asset(TImages.defaultProfilePic, fit: fit),
+      errorWidget: (context, url, error) {
+        debugPrint("Image Load Error: $url - $error");
+        return _fallbackImage();
+      },
+      memCacheHeight:
+          (height > 0 && height.isFinite) ? (height * 3).toInt() : null,
+      memCacheWidth:
+          (width > 0 && width.isFinite) ? (width * 3).toInt() : null,
     );
-
-    // return Image.network(
-    //   image!,
-    //   fit: fit,
-    //   loadingBuilder: (context, child, loading) {
-    //     if (loading == null) return _fadeIn(child);
-    //     return TShimmerEffect(width: width, height: height);
-    //   },
-    //   errorBuilder: (context, error, stackTrace) => _fallbackImage(),
-    // );
   }
 
   // -----------------------------

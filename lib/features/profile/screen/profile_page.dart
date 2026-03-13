@@ -11,6 +11,7 @@ import '../../../utils/constants/path_provider.dart';
 import '../../../utils/helpers/url_launcher.dart';
 import '../../authentication/controller/language/language_selection_controller.dart';
 import '../controller/profile_controller.dart';
+import '../../subscription/controller/subscription_controller.dart';
 import 'delete_profile/delete_profile_dialog.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -183,7 +184,11 @@ class ProfilePage extends StatelessWidget {
                     Icons.card_membership_outlined,
                     TTexts.membershipDetails.tr,
                     () async {
-                      Get.toNamed(TRoutes.userSubscriptionPlan);
+                      final subController = Get.put(SubscriptionController());
+                      await subController.fetchUserSubscriptionPlan(
+                        navigate: true,
+                      );
+                      // Get.toNamed(TRoutes.userSubscriptionPlan);
                     },
                   ),
                   _buildMenuItem(

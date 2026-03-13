@@ -7,6 +7,7 @@ import 'package:tamilnadu_matrimony/features/profile/screen/edit_profile/edit_pr
 import 'package:tamilnadu_matrimony/features/subscription/screen/subscription_page.dart';
 
 import '../features/authentication/screen/login/login_page.dart';
+import '../features/home/screen/customer_view_page.dart';
 import '../features/profile/screen/view_profile/view_profile_page.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/subscription/screen/active_subscription_page.dart';
@@ -36,5 +37,6 @@ class TAppRoutes {
     ),
     GetPage(name: TRoutes.editProfile, page: () => EditProfilePage()),
     GetPage(name: TRoutes.viewProfile, page: () => ViewProfilePage()),
+    GetPage(name: TRoutes.customerDetails, page: () => const CustomerDetailsView()),
   ];
 }

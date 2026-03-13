@@ -11,4 +11,5 @@ class TRoutes {
   static const home = '/home';
   static const viewProfile = '/viewProfile';
   static const editProfile = '/editProfile';
+  static const customerDetails = '/customerDetails';
 }

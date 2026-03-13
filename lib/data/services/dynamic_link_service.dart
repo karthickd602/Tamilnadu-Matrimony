@@ -1,96 +1,138 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../features/home/controller/dashboard_controller.dart';
-import '../../features/home/screen/customer_view_page.dart';
+import '../../routes/routes.dart';
+import '../../utils/constants/text_strings.dart';
 
 class DynamicLinkService extends GetxService {
   static DynamicLinkService get instance => Get.find();
 
   final _appLinks = AppLinks();
+  final _storage = GetStorage();
+
+  bool isHandled = false;
+  bool _lock = false;
 
   @override
-  void onReady() {
-    super.onReady();
-    // Add start-up delay to ensure navigation stack is ready (fixes GlobalKey error on cold start)
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      initDynamicLinks();
+  void onInit() {
+    super.onInit();
+    _init();
+  }
+
+  Future<void> _init() async {
+    debugPrint("DynamicLinkService: Initializing AppLinks Engine...");
+    
+    // Optimistically set to true to stall Splash until we check for initial link
+    isHandled = true; 
+
+    // 1. Cold Start Check
+    try {
+      final Uri? initialLink = await _appLinks.getInitialLink();
+      if (initialLink != null) {
+        debugPrint("DynamicLinkService: !!! Cold Start Link detected: $initialLink");
+        // isHandled remains true to keep Splash waiting
+        _processSafe(initialLink, delay: 1500); 
+      } else {
+        // No cold start link, tellSplash it's safe to proceed
+        isHandled = false;
+      }
+    } catch (e) {
+      debugPrint("DynamicLinkService: Cold start error: $e");
+      isHandled = false;
+    }
+
+    // 2. Stream Check (Warm Start)
+    _appLinks.uriLinkStream.listen((uri) {
+      debugPrint("DynamicLinkService: Link received via stream: $uri");
+      
+      // If we are currently handling a handoff, don't trigger twice
+      if (isHandled && !_lock) {
+         debugPrint("DynamicLinkService: Ignoring stream link during cold-start handoff.");
+         return;
+      }
+      
+      _processSafe(uri, delay: 500);
     });
   }
 
-  Future<void> initDynamicLinks() async {
-    debugPrint("DynamicLinkService: Initializing...");
+  Future<void> _processSafe(Uri uri, {required int delay}) async {
+    if (_lock) return;
+    _lock = true;
 
-    // 1. Handle the initial link (if the app was opened via a link)
-    final Uri? initialLink = await _appLinks.getInitialLink();
-    if (initialLink != null) {
-      debugPrint("DynamicLinkService: Found initial link: $initialLink");
-      _handleDeepLink(initialLink);
-    }
-
-    // 2. Listen for new links while the app is running
-    _appLinks.uriLinkStream.listen(
-      (uri) {
-        debugPrint("DynamicLinkService: Stream received link: $uri");
-        _handleDeepLink(uri);
-      },
-      onError: (err) {
-        debugPrint('DynamicLinkService Error: $err');
-      },
-    );
-  }
-
-  DateTime? _lastLinkTime;
-
-  void _handleDeepLink(Uri deepLink) {
-    debugPrint('DynamicLinkService: Handling Link: $deepLink');
-
-    // STRICT Debounce: Ignore ANY second link within 1.5 seconds.
-    // This prevents the "GlobalKey" collision if the OS sends the link twice (Intent vs Stream)
-    // or if the user double-clicks.
-    final now = DateTime.now();
-    if (_lastLinkTime != null &&
-        now.difference(_lastLinkTime!).inMilliseconds < 1500) {
-      debugPrint('DynamicLinkService: Ignoring duplicate/rapid link event.');
-      return;
-    }
-
-    _lastLinkTime = now;
-
-    _lastLinkTime = now;
-
-    // Expected format: https://tamilnadu-matrimony.com/profile?id=123
-    // or custom scheme: tamilnadumatrimony://profile?id=123
-
-    // Check for "id" parameter
-    if (deepLink.queryParameters.containsKey('id')) {
-      final String? profileId = deepLink.queryParameters['id'];
-      if (profileId != null) {
-        _navigateToProfile(int.tryParse(profileId));
+    try {
+      final profileId = _parseId(uri);
+      if (profileId == null) {
+        isHandled = false;
+        return;
       }
+
+      // Ensure user is logged in
+      final userId = _storage.read(TTexts.userId);
+      if (userId == null || userId.isEmpty) {
+        debugPrint("DynamicLinkService: No user logged in. Aborting.");
+        isHandled = false;
+        return;
+      }
+
+      // 1. Wait for stability
+      await Future.delayed(Duration(milliseconds: delay));
+      while (Get.context == null) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+
+      debugPrint("DynamicLinkService: Processing Profile $profileId (Atomic Flow)");
+      
+      // 2. Prepare data silently
+      final dashboardController = Get.isRegistered<DashboardController>()
+          ? Get.find<DashboardController>()
+          : Get.put(DashboardController());
+      await dashboardController.fetchCustomerPage(profileId, showLoader: false);
+
+      // 3. STABLE NAVIGATION SEQUENCE
+      // A. If we are not on BottomNav, reset to it first.
+      if (Get.currentRoute != TRoutes.bottomNav) {
+        debugPrint("DynamicLinkService: Resetting route stack...");
+        Get.offAllNamed(TRoutes.bottomNav);
+        
+        // CRITICAL: Wait for Navigator to fully transition and update GetX route state
+        // This prevents the GlobalKey collision by ensuring we don't 'push' during 'reset'.
+        int settleTimeout = 0;
+        while (Get.currentRoute != TRoutes.bottomNav && settleTimeout < 30) {
+          await Future.delayed(const Duration(milliseconds: 100));
+          settleTimeout++;
+        }
+      }
+
+      // B. Extra cushion for animations to settle
+      await Future.delayed(const Duration(milliseconds: 200));
+
+      // C. Final push
+      if (Get.currentRoute != TRoutes.customerDetails) {
+        debugPrint("DynamicLinkService: Navigating to Profile Page.");
+        Get.toNamed(TRoutes.customerDetails);
+      }
+
+    } catch (e) {
+      debugPrint("DynamicLinkService Navigation Error: $e");
+    } finally {
+      isHandled = false; // Always release Splash
+      // Debounce lock for spam prevention
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        _lock = false;
+      });
     }
   }
 
-  Future<void> _navigateToProfile(int? profileId) async {
-    if (profileId == null) return;
-
-    // Ensure DashboardController is available
-    final dashboardController = Get.isRegistered<DashboardController>()
-        ? Get.find<DashboardController>()
-        : Get.put(DashboardController());
-
-    // Show loading or navigate
-    // Since we need to fetch data, let's call the controller method
-    await dashboardController.fetchCustomerPage(profileId);
-
-    // Navigate
-    Get.to(() => const CustomerDetailsView());
+  int? _parseId(Uri uri) {
+    if (uri.queryParameters.containsKey('id')) {
+      return int.tryParse(uri.queryParameters['id'] ?? '');
+    }
+    return null;
   }
 
-  // Generates a standard web URL that will be intercepted by the app
   String createProfileShareLink(String userId) {
-    // Standard HTTPS link for best compatibility (clickable in WhatsApp/SMS)
-    // Domain matches the one configured in AndroidManifest.xml
     return 'https://tamilnadumatrimony.net/profile?id=$userId';
   }
 }

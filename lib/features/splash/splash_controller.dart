@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:tamilnadu_matrimony/data/services/dynamic_link_service.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../profile/controller/profile_controller.dart';
 
 class SplashController extends GetxController {
@@ -86,22 +86,34 @@ class SplashController extends GetxController {
   }
 
   void validate() async {
-    if (storage.read(TTexts.userId) != null) {
+    final String? userId = storage.read(TTexts.userId);
+
+    if (userId != null) {
+      // 1. Check if DynamicLinkService is handling a cold start link
+      if (DynamicLinkService.instance.isHandled) {
+        debugPrint("SplashController: Deep link handoff detected. Waiting...");
+        
+        // Safety Timeout: If for some reason the link never completes, don't get stuck.
+        Future.delayed(const Duration(seconds: 5), () {
+          if (Get.currentRoute == TRoutes.splash) {
+            debugPrint("SplashController: Handoff timeout, following normal flow.");
+            DynamicLinkService.instance.isHandled = false;
+            validate();
+          }
+        });
+        return;
+      }
+
+      // 2. Normal flow if no deep link
       if (storage.read(TTexts.appPages) == 0) {
         Get.offAllNamed(TRoutes.bottomNav);
       } else {
         Get.offAllNamed(TRoutes.register);
-        // await profileController.fetchUserProfile();
       }
     } else {
       Get.offAllNamed(TRoutes.languageSelection);
     }
-    // await storage.write(TTexts.userId, "11623");
 
-    debugPrint("userId: ${storage.read(TTexts.userId)}");
-    // Get.offAllNamed(TRoutes.loginPage);
-
-    // Get.offAllNamed(TRoutes.languageSelection);
-    // Get.offAllNamed(TRoutes.bottomNav);
+    debugPrint("userId: $userId");
   }
 }

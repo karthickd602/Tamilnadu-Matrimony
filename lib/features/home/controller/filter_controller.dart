@@ -1,4 +1,5 @@
 import 'package:tamilnadu_matrimony/features/profile/controller/profile_controller.dart';
+import 'package:tamilnadu_matrimony/features/subscription/controller/subscription_controller.dart';
 
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/popups/full_screen_loader.dart';
@@ -58,29 +59,37 @@ class FilterController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    // Silent check for subscription status
+    SubscriptionController.shouldNavigate = false;
+    final subController = Get.put(SubscriptionController());
+    SubscriptionController.shouldNavigate = true;
+    await subController.checkSubscriptionStatusSilent();
+
     await profileController.fetchUserProfile();
     final profile = profileController.userProfile.value;
 
-    await fetchCasteFilter(religionId: profile?.religionId ?? '0');
-    await fetchDistrictDropdown(stateId: profile?.stateId ?? "0");
+    await fetchCasteFilter(religionId: profile?.religionId ?? '0', showLoader: false);
+    await fetchDistrictDropdown(stateId: profile?.stateId ?? "0", showLoader: false);
   } // --------------------------------------------------------------
   // API CALLS
   // --------------------------------------------------------------
 
   /// 🔹 Caste Fetch
-  Future<void> fetchCasteFilter({required String religionId}) async {
+  Future<void> fetchCasteFilter({required String religionId, bool showLoader = true}) async {
     try {
       if (casteList.isNotEmpty) return;
       final connected = await NetworkManager.instance.isConnected();
       if (!connected) {
-        TLoaders.warningSnackBar(
-          title: "No Internet",
-          message: "Check connection",
-        );
+        if (showLoader) {
+          TLoaders.warningSnackBar(
+            title: "No Internet",
+            message: "Check connection",
+          );
+        }
         return;
       }
 
-      TFullScreenLoader.popUpCircular();
+      if (showLoader) TFullScreenLoader.popUpCircular();
 
       final req = {"religion_id": religionId};
 
@@ -93,31 +102,30 @@ class FilterController extends GetxController {
             .toList();
       }
 
-      TFullScreenLoader.stopLoading();
+      if (showLoader) TFullScreenLoader.stopLoading();
     } catch (e) {
-      TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(
-        title: "Caste Fetch Failed",
-        message: e.toString(),
-      );
+      if (showLoader) TFullScreenLoader.stopLoading();
+      debugPrint("fetchCasteFilter Error: $e");
     }
   }
 
   /// 🔹 Education Fetch
-  Future<void> fetchEducationFilter() async {
+  Future<void> fetchEducationFilter({bool showLoader = true}) async {
     try {
       if (educationList.isNotEmpty) return;
 
       final connected = await NetworkManager.instance.isConnected();
       if (!connected) {
-        TLoaders.warningSnackBar(
-          title: "No Internet",
-          message: "Check connection",
-        );
+        if (showLoader) {
+          TLoaders.warningSnackBar(
+            title: "No Internet",
+            message: "Check connection",
+          );
+        }
         return;
       }
 
-      TFullScreenLoader.popUpCircular();
+      if (showLoader) TFullScreenLoader.popUpCircular();
 
       final response = await THttpHelper.get(ApiConstant.getEducationDD);
 
@@ -127,28 +135,19 @@ class FilterController extends GetxController {
             .toList();
       }
 
-      TFullScreenLoader.stopLoading();
+      if (showLoader) TFullScreenLoader.stopLoading();
     } catch (e) {
-      TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(
-        title: "Education Fetch Failed",
-        message: e.toString(),
-      );
+      if (showLoader) TFullScreenLoader.stopLoading();
+      debugPrint("fetchEducationFilter Error: $e");
     }
   }
 
   /// 🔹 District Fetch
-  Future<void> fetchDistrictDropdown({required String stateId}) async {
+  Future<void> fetchDistrictDropdown({required String stateId, bool showLoader = true}) async {
     try {
       if (districtList.isNotEmpty) return;
       final connected = await NetworkManager.instance.isConnected();
-      if (!connected) {
-        TLoaders.warningSnackBar(
-          title: "No Internet",
-          message: "Check connection",
-        );
-        return;
-      }
+      if (!connected) return;
 
       final req = {"state_id": stateId};
       debugPrint("fetchDistrictDropdown req :$req");
@@ -160,10 +159,7 @@ class FilterController extends GetxController {
             .toList();
       }
     } catch (e) {
-      TLoaders.errorSnackBar(
-        title: "District Fetch Failed",
-        message: e.toString(),
-      );
+      debugPrint("fetchDistrictDropdown Error: $e");
     }
   }
 
@@ -251,7 +247,16 @@ class FilterController extends GetxController {
 
   /// 🔹 Check if category is locked
   bool isLocked(String category) {
-    return lockedCategories.contains(category);
+    if (lockedCategories.contains(category)) return true;
+
+    // These categories are locked for unsubscribed users
+    final lockedForUnsubscribed = ["Age", "Location", "Disability", "Star"];
+    if (lockedForUnsubscribed.contains(category)) {
+      final subController = Get.find<SubscriptionController>();
+      return !subController.isSubscribed.value;
+    }
+
+    return false;
   }
 
   int getOptionId(dynamic option) {

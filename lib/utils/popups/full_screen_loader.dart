@@ -40,18 +40,22 @@ class TFullScreenLoader {
   }
 
   static void popUpCircular() {
+    if (Get.context == null) return;
     Get.defaultDialog(
       title: '',
       onWillPop: () async => false,
       content: const TCircularLoader(),
       backgroundColor: Colors.transparent,
+      barrierDismissible: false,
     );
   }
 
   /// Stop the currently open loading dialog.
-  /// This method doesn't return anything.
   static void stopLoading() {
-    Navigator.of(Get.overlayContext!)
-        .pop(); // Close the dialog using the Navigator
+    if (Get.overlayContext != null) {
+      Navigator.of(Get.overlayContext!).pop();
+    } else if (Get.isDialogOpen == true) {
+      Get.back();
+    }
   }
 }

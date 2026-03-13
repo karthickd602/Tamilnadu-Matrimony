@@ -75,20 +75,30 @@ class TCircularImage extends StatelessWidget {
 
   // Function to build the network image widget
   Widget _buildNetworkImage() {
-    if (image != null) {
-      // Use CachedNetworkImage for efficient loading and caching of network images // Not working in Web but just for loading
+    if (image != null &&
+        image!.isNotEmpty &&
+        image != "null" &&
+        image != "default" &&
+        image!.startsWith('http')) {
+      // Use CachedNetworkImage for efficient loading and caching of network images
       return CachedNetworkImage(
         fit: fit,
         color: overlayColor,
         imageUrl: image!,
-        errorWidget: (context, url, error) =>
-            Image.asset(TImages.defaultProfilePic, fit: fit),
+        errorWidget: (context, url, error) {
+          debugPrint("Image Load Error: $url - $error");
+          return Image.asset(TImages.defaultProfilePic, fit: fit);
+        },
         progressIndicatorBuilder: (context, url, downloadProgress) =>
             const TShimmerEffect(width: 55, height: 55),
+        memCacheHeight:
+            (height > 0 && height.isFinite) ? (height * 3).toInt() : null,
+        memCacheWidth:
+            (width > 0 && width.isFinite) ? (width * 3).toInt() : null,
       );
     } else {
-      // Return an empty container if no image is provided
-      return Container();
+      // Return fallback image if no valid image URL is provided
+      return Image.asset(TImages.defaultProfilePic, fit: fit);
     }
   }
 

@@ -254,8 +254,11 @@ class EditProfileController extends GetxController {
       if (isClosed) return;
       await _mapProfileToFields();
     } catch (e) {
-      debugPrint("Profile Error : $e");
-      TLoaders.errorSnackBar(title: "Profile Error", message: e.toString());
+      debugPrint("Edit fetch Profile Error : $e");
+      TLoaders.errorSnackBar(
+        title: "Edit fetch Profile Error",
+        message: e.toString(),
+      );
     } finally {
       isLoading.value = false;
       // TFullScreenLoader.stopLoading();

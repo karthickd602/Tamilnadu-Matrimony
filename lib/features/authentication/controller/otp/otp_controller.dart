@@ -11,7 +11,7 @@ import '../../model/login_otp_model.dart';
 import '../../screen/otp/sms_retriever_impl.dart';
 
 class OtpController extends GetxController {
-  var secondsRemaining = 300.obs;
+  var secondsRemaining = 120.obs;
   late Timer _timer;
   final otpTextController = TextEditingController();
   late final SmsRetriever smsRetriever;
@@ -20,11 +20,6 @@ class OtpController extends GetxController {
   final storage = GetStorage();
 
   final loginController = LoginController.instance;
-
-  // final List<TextEditingController> otpControllers = List.generate(
-  //   6,
-  //   (_) => TextEditingController(),
-  // );
 
   @override
   void onInit() {

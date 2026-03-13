@@ -35,6 +35,7 @@ class CustomerProfileListModel {
   final String? annualIncome;
   final String? education;
   final String? doshamType;
+  final String? viewedDate;
 
   CustomerProfileListModel({
     this.id,
@@ -71,6 +72,7 @@ class CustomerProfileListModel {
     this.annualIncome,
     this.education,
     this.doshamType,
+    this.viewedDate,
   }) {
     this.liked.value = liked ?? "no";
     this.isUnlocked.value = isUnlocked ?? "false";
@@ -113,6 +115,7 @@ class CustomerProfileListModel {
       annualIncome: "",
       education: "",
       doshamType: "",
+      viewedDate: "",
     );
   }
 
@@ -153,6 +156,7 @@ class CustomerProfileListModel {
       verified: (json['verified'] ?? "no").toString(),
       annualIncome: json['Annualincome']?.toString(),
       doshamType: json['thoosamtype']?.toString(),
+      viewedDate: json['viewed_date']?.toString(),
     );
   }
 

@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       getPages: TAppRoutes.pages,
       initialRoute: TRoutes.splash,
-
     );
   }
 }

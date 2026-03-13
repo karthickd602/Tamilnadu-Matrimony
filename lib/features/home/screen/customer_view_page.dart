@@ -81,6 +81,11 @@ class CustomerDetailsView extends StatelessWidget {
                         Icons.person_outline,
                         [
                           {
+                            'icon': Icons.numbers,
+                            'label': TTexts.matriId.tr,
+                            'value': userModel.matriId,
+                          },
+                          {
                             "icon": Icons.badge,
                             "label": TTexts.nameAge.tr,
                             "value": "${userModel.name}, ${userModel.age} yrs",

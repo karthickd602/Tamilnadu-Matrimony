@@ -17,7 +17,7 @@ class FetchUserProfileModel {
   final String? occupationId;
   final String? occupation;
   final String? occupationDetails;
-  final int? annualIncome;
+  final String? annualIncome;
   final String? workplace;
 
   /// RELIGION
@@ -201,7 +201,6 @@ class FetchUserProfileModel {
       horosCheck: json['Horoscheck'],
       expections: json['expections'],
 
-
       photo1: json['photo1'],
       photo1Approve: json['Photo1Approve'],
 
@@ -209,5 +208,4 @@ class FetchUserProfileModel {
       speCases: json['spe_cases'],
     );
   }
-
 }

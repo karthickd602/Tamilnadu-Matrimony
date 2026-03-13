@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
@@ -21,11 +22,34 @@ class SubscriptionPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Image.asset(
-                TImages.banner1,
-                height: 220,
-                width: double.infinity,
-                fit: BoxFit.cover,
+              Obx(
+                () => controller.bannerImage.value.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: controller.bannerImage.value,
+                        height: 220,
+                        width: double.infinity,
+                        fit: BoxFit.fill,
+                        placeholder: (context, url) => Container(
+                          height: 220,
+                          width: double.infinity,
+                          color: Colors.grey[200],
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Image.asset(
+                          TImages.banner1,
+                          height: 220,
+                          width: double.infinity,
+                          fit: BoxFit.fill,
+                        ),
+                      )
+                    : Image.asset(
+                        TImages.banner1,
+                        height: 220,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
               ),
               const SizedBox(height: 20),
 
@@ -42,7 +66,12 @@ class SubscriptionPage extends StatelessWidget {
                       Icons.filter_alt_outlined,
                       "Get access to premium filters",
                     ),
-                    _buildFeature(Icons.timer, "Package validity for 90 days"),
+                    Obx(
+                      () => _buildFeature(
+                        Icons.timer,
+                        "Package validity for ${controller.selectedPlan?.duration} days",
+                      ),
+                    ),
                   ],
                 ),
               ),

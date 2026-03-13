@@ -152,7 +152,10 @@ class CustomerCard extends StatelessWidget {
                           ? const CircularProgressIndicator(color: Colors.red)
                           : customerProfile.liked.value == "yes"
                           ? const Icon(Icons.favorite, color: TColors.error)
-                          : const Icon(Icons.favorite_border, color: TColors.error),
+                          : const Icon(
+                              Icons.favorite_border,
+                              color: TColors.error,
+                            ),
                     ),
                   ),
                 ),
@@ -212,6 +215,12 @@ class CustomerCard extends StatelessWidget {
                       _buildChip(
                         Icons.currency_rupee,
                         "Income: ${customerProfile.annualIncome}",
+                      ),
+                    if (customerProfile.viewedDate != null &&
+                        customerProfile.viewedDate!.isNotEmpty)
+                      _buildChip(
+                        Icons.date_range,
+                        "Unlocked Date: ${customerProfile.viewedDate}",
                       ),
                     if (customerProfile.doshamType != null &&
                         customerProfile.doshamType!.isNotEmpty)

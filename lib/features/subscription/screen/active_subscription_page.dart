@@ -33,7 +33,7 @@ class ActiveSubscriptionPage extends StatelessWidget {
 
               _buildRow("Status", controller.status),
               _buildRow("Package", controller.packageName),
-              _buildRow("Issue Date", controller.buyDate),
+              _buildRow("Subscription Date", controller.buyDate),
               _buildRow("Credit's Left", controller.creditLeft),
               _buildRow(
                 "Expiry Date",

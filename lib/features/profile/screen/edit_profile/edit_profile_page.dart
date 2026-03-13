@@ -56,20 +56,21 @@ class EditProfilePage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    if (idx < controller.totalSteps - 1)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              stepTitles[idx],
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            stepTitles[idx],
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
+                        ),
+                        if (idx < controller.totalSteps - 1 && idx == 1)
                           TextButton(
                             onPressed: () {
                               controller.currentStep.value++;
@@ -82,8 +83,8 @@ class EditProfilePage extends StatelessWidget {
                                   ),
                             ),
                           ),
-                        ],
-                      ),
+                      ],
+                    ),
                   ],
                 ),
               );
