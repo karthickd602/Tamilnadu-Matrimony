@@ -25,8 +25,8 @@ android {
         applicationId = "com.maac.tamilnadumatrimony"
         minSdk = flutter.minSdkVersion
         targetSdk = 36
-        versionCode = 7
-        versionName = "2.3"
+        versionCode = 9
+        versionName = "2.3.3"
         multiDexEnabled = true
     }
 

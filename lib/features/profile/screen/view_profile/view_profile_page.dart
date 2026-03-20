@@ -88,8 +88,16 @@ class ViewProfilePage extends StatelessWidget {
                       _info(TTexts.religion.tr, profile.religion),
                       _info(TTexts.partnerCaste.tr, profile.caste),
                       _info(TTexts.subCaste.tr, profile.subCaste),
-                      _info(TTexts.noCaste.tr, profile.noCaste),
-                      _info(TTexts.specialCases.tr, profile.speCases),
+                      _info(
+                        TTexts.noCaste.tr,
+                        profile.noCaste == "no_caste"
+                            ? TTexts.yes.tr
+                            : TTexts.no.tr,
+                      ),
+                      _info(
+                        TTexts.disablePerson.tr,
+                        profile.speCases == "1" ? TTexts.yes.tr : TTexts.no.tr,
+                      ),
                       _info(TTexts.expectation.tr, profile.expections),
                     ],
                   ),
@@ -181,7 +189,6 @@ class ViewProfilePage extends StatelessWidget {
                             ? TTexts.approved.tr
                             : TTexts.pending.tr,
                       ),
-                      _info(TTexts.horoscopeCheck.tr, profile.horosCheck),
                     ],
                   ),
                 ],

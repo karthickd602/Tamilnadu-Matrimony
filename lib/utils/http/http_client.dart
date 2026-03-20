@@ -31,6 +31,8 @@ class THttpHelper {
       'x-authorization': 'Bearer ${storage.read(TTexts.barerToken)}',
     });
     debugPrint('Bearer token:Bearer ${storage.read(TTexts.barerToken)}');
+
+    debugPrint("Endpoint : $endpoint  --  Body : $body --- $request");
     // Convert dynamic body → String fields safely
     body.forEach((key, value) {
       if (value != null) {

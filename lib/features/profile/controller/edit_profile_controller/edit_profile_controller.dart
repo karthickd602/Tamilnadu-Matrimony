@@ -281,7 +281,7 @@ class EditProfileController extends GetxController {
       if (childrenList.length > 1) {
         childLivingStatus.value = childrenList[1].trim().toLowerCase() == 'yes'
             ? 'Living with me'
-            : 'Not living';
+            : 'Not living with me';
         selectedNoOfChildren.value = childCountList.firstWhereOrNull(
           (e) => e.id.toString() == childrenList[0].trim(),
         );
@@ -305,14 +305,14 @@ class EditProfileController extends GetxController {
         ? TTexts.separated.tr
         : profile.maritalStatus == 'Divorced'
         ? TTexts.divorced.tr
-        : profile.maritalStatus == 'widowed'
-        ? TTexts.widowed
+        : profile.maritalStatus == 'Widowed'
+        ? TTexts.widowed.tr
         : '';
     selectedComplexion.value = profile.complexion ?? '';
     educationDetailsController.text = profile.educationDetails ?? '';
     subCasteController.text = profile.subCaste ?? '';
     incomeController.text = profile.annualIncome.toString();
-
+    debugPrint("✅isDisablePerson ${isDisablePerson.value}");
     isDisablePerson.value = profile.speCases == "1"
         ? TTexts.yes.tr
         : TTexts.no.tr;
@@ -394,9 +394,8 @@ class EditProfileController extends GetxController {
     pincodeController.text = profile.postal ?? '';
     addressController.text = profile.address ?? '';
     expectationsController.text = profile.expections ?? '';
-    noCasteChecked.value = profile.noCaste.toString().toLowerCase() == "yes"
-        ? true
-        : false;
+    noCasteChecked.value =
+        profile.noCaste.toString().toLowerCase() == "no_caste" ? true : false;
 
     /// ---------------- HOROSCOPE ----------------
 
@@ -670,26 +669,12 @@ class EditProfileController extends GetxController {
         fromFormat: 'dd-MM-yyyy',
         toFormat: 'yyyy-MM-dd',
       );
-      // final childrenCount = selectedNoOfChildren.value?.label == '0'
-      //     ? '0'
-      //     : selectedNoOfChildren.value?.label == '1'
-      //     ? 'One'
-      //     : selectedNoOfChildren.value?.id == '2'
-      //     ? 'Two'
-      //     : selectedNoOfChildren.value?.id == '3'
-      //     ? 'Three'
-      //     : selectedNoOfChildren.value?.id == '4 and above'
-      //     ? 'Four and above'
-      //     : '';
-      // debugPrint(
-      //   'childrenCountsssss: $childrenCount  -- ${selectedNoOfChildren.value!.id}',
-      // );
       final childLiving = childLivingStatus.value == "Living with me"
           ? "Yes"
           : "No";
 
       final request = {
-        "ID": storage.read(TTexts.userId),
+        "id": storage.read(TTexts.userId),
         "Name": nameController.text,
         "Gender": selectedGender.value == "Male" ? 1 : 2,
         "DOB": dob,
@@ -701,7 +686,7 @@ class EditProfileController extends GetxController {
             ? "Separated"
             : maritalStatus.value == TTexts.divorced.tr
             ? "Divorced"
-            : maritalStatus.value == TTexts.widowed
+            : maritalStatus.value == TTexts.widowed.tr
             ? "Widowed"
             : maritalStatus.value,
         "childrenlivingstatus":
@@ -716,7 +701,7 @@ class EditProfileController extends GetxController {
         "workplace": occupationDetailsController.text,
         "Annualincome": int.tryParse(incomeController.text) ?? 0,
         "Subcaste": subCasteController.text,
-        "spe_cases": isDisablePerson.value.toString() == "Yes" ? 1 : 0,
+        "spe_cases": isDisablePerson.value.toString() == TTexts.yes.tr ? 1 : 0,
       };
 
       debugPrint(
@@ -800,7 +785,12 @@ class EditProfileController extends GetxController {
       await profileController.fetchUserProfile();
       debugPrint("Family Register Response : $response");
       TLoaders.successSnackBar(title: "Success", message: response['message']);
-      currentStep.value++;
+      if (selectedReligion.value?.id == 1) {
+        currentStep.value++;
+      } else {
+        currentStep.value++;
+        currentStep.value++;
+      }
     } catch (e) {
       debugPrint("familyFormSubmit - $e");
       TLoaders.errorSnackBar(
@@ -880,10 +870,11 @@ class EditProfileController extends GetxController {
         return;
       }
 
-      TFullScreenLoader.popUpCircular();
       if (!contactFormKey.currentState!.validate()) {
         return;
       }
+      TFullScreenLoader.popUpCircular();
+
       final request = {
         "id": storage.read(TTexts.userId),
         "Phone": alternateMobileController.text,
@@ -904,22 +895,20 @@ class EditProfileController extends GetxController {
         request,
       );
       debugPrint("Contact Register Response : $response");
-      await profileController.fetchUserProfile();
+      // await profileController.fetchUserProfile();
+
+      TFullScreenLoader.stopLoading();
       Get.offNamed(TRoutes.viewProfile);
       TLoaders.successSnackBar(title: "Success", message: response['message']);
-
-      // storage.write(TTexts.appPages, 0);
-      // Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
+      TFullScreenLoader.stopLoading();
       debugPrint("contactFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
             "Something went wrong in Contact Details submit, try again later",
       );
-    } finally {
-      TFullScreenLoader.stopLoading();
-    }
+    } finally {}
   }
 
   // Go back

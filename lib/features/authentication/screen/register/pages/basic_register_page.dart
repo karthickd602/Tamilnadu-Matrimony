@@ -121,7 +121,7 @@ class StepBasicDetails extends StatelessWidget {
                   onChanged: (value) {
                     if (value == null) return;
                     controller.maritalStatus.value = value ?? '';
-                    controller.noOfChildren.value = '';
+                    controller.selectedNoOfChildren.value = null;
                     controller.childLivingStatus.value = '';
                   },
                   validator: (value) => TValidator.validateEmptyText(
@@ -230,7 +230,10 @@ class StepBasicDetails extends StatelessWidget {
                   compareFn: (a, b) => a.name == b.name,
                   onChanged: (value) {
                     if (value == null) return;
+
                     controller.selectedOccupation.value = value;
+                    controller.occupationDetailsController.text = '';
+                    controller.incomeController.text = '';
                   },
                   validator: (value) => TValidator.validateEmptyText(
                     TTexts.occupation.tr,
@@ -238,26 +241,30 @@ class StepBasicDetails extends StatelessWidget {
                   ),
                 ),
 
-                TFormField(
-                  labelText: TTexts.occupationDetails.tr,
-                  controller: controller.occupationDetailsController,
-                  icon: IconlyLight.bag_2,
-                  validator: (value) => TValidator.validateEmptyText(
-                    TTexts.occupationDetails.tr,
-                    value.toString(),
+                if (controller.selectedOccupation.value?.name
+                        .toString()
+                        .toLowerCase() !=
+                    'others')
+                  TFormField(
+                    labelText: TTexts.occupationDetails.tr,
+                    controller: controller.occupationDetailsController,
+                    icon: IconlyLight.bag_2,
                   ),
-                ),
-                TFormField(
-                  labelText: TTexts.income.tr,
-                  keyboardType: TextInputType.number,
-                  controller: controller.incomeController,
-                  icon: IconlyLight.wallet,
-                  validator: (value) => TValidator.validateEmptyText(
-                    TTexts.income.tr,
-                    value.toString(),
+                if (controller.selectedOccupation.value?.name
+                        .toString()
+                        .toLowerCase() !=
+                    'others')
+                  TFormField(
+                    labelText: TTexts.income.tr,
+                    keyboardType: TextInputType.number,
+                    controller: controller.incomeController,
+                    icon: IconlyLight.wallet,
                   ),
-                ),
-
+                if (controller.selectedOccupation.value?.name
+                        .toString()
+                        .toLowerCase() ==
+                    'others')
+                  SizedBox(height: TSizes.sm),
                 TSearchDropdownField<ReligionDDModel>(
                   prefixIcon: Icons.temple_hindu_outlined,
                   label: TTexts.religion.tr,
@@ -283,39 +290,39 @@ class StepBasicDetails extends StatelessWidget {
                 ),
                 // Obx(
                 //   () =>
-                      // (controller.selectedReligion.value == null ||
-                      //     controller.selectedReligion.value?.id != 1)
-                      // ? SizedBox()
-                      // :
-                      TSearchDropdownField<CasteDDModel>(
-                        prefixIcon: IconlyLight.user,
-                        label: TTexts.caste.tr,
-                        items: controller.casteDDList,
-                        selectedItem: controller.selectedCaste.value,
-                        itemAsString: (item) => item.name.toString(),
-                        compareFn: (a, b) => a.name == b.name,
-                        onChanged: (value) {
-                          if (value == null) return;
-                          controller.selectedCaste.value = value;
-                          controller.subCasteController.text = '';
-                        },
-                        validator: (value) => TValidator.validateEmptyText(
-                          TTexts.caste.tr,
-                          value?.name,
-                        ),
-                      ),
+                // (controller.selectedReligion.value == null ||
+                //     controller.selectedReligion.value?.id != 1)
+                // ? SizedBox()
+                // :
+                TSearchDropdownField<CasteDDModel>(
+                  prefixIcon: IconlyLight.user,
+                  label: TTexts.caste.tr,
+                  items: controller.casteDDList,
+                  selectedItem: controller.selectedCaste.value,
+                  itemAsString: (item) => item.name.toString(),
+                  compareFn: (a, b) => a.name == b.name,
+                  onChanged: (value) {
+                    if (value == null) return;
+                    controller.selectedCaste.value = value;
+                    controller.subCasteController.text = '';
+                  },
+                  validator: (value) => TValidator.validateEmptyText(
+                    TTexts.caste.tr,
+                    value?.name,
+                  ),
+                ),
                 // ),
                 // Obx(
                 //   () =>
-                      // (controller.selectedReligion.value == null ||
-                      //     controller.selectedReligion.value?.id != 1)
-                      // ? SizedBox()
-                      // :
-                      TFormField(
-                        labelText: TTexts.subCaste.tr,
-                        controller: controller.subCasteController,
-                        icon: IconlyLight.user,
-                      ),
+                // (controller.selectedReligion.value == null ||
+                //     controller.selectedReligion.value?.id != 1)
+                // ? SizedBox()
+                // :
+                TFormField(
+                  labelText: TTexts.subCaste.tr,
+                  controller: controller.subCasteController,
+                  icon: IconlyLight.user,
+                ),
                 // ),
                 SizedBox(height: TSizes.sm),
                 TSearchDropdownField<String>(

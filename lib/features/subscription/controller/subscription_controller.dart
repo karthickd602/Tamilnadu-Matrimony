@@ -33,7 +33,7 @@ class SubscriptionController extends GetxController
   void onInit() async {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
-    await fetchUserSubscriptionPlan(navigate: shouldNavigate);
+    // await fetchUserSubscriptionPlan(navigate: shouldNavigate);
     _initDeepLinkListener();
   }
 
@@ -48,7 +48,7 @@ class SubscriptionController extends GetxController
     if (state == AppLifecycleState.resumed) {
       // User returning from background (or in-app browser close)
       debugPrint("App Resumed: Refreshing Subscription Status...");
-      fetchUserSubscriptionPlan();
+      fetchUserSubscriptionPlan(navigate: false);
     }
   }
 
@@ -115,12 +115,7 @@ class SubscriptionController extends GetxController
         return;
       }
 
-      // If we are resumed, we might not want to show full screen loader if already on the page,
-      // but let's stick to standard behavior for now or verify context.
-      // Use checks if Get.isDialogOpen ?? false
-
       TFullScreenLoader.popUpCircular();
-      // Use silent load or handle loader carefully so we don't stack them if resumed rapidly
 
       final req = {"user_id": storage.read(TTexts.userId)};
       final response = await THttpHelper.post(
@@ -151,7 +146,7 @@ class SubscriptionController extends GetxController
           isSubscribed.value = true;
 
           TFullScreenLoader.stopLoading();
-          if (navigate) Get.offNamed(TRoutes.userSubscriptionPlan);
+          if (navigate) Get.toNamed(TRoutes.userSubscriptionPlan);
         } else {
           debugPrint("Response structure is not Active");
           isSubscribed.value = false;

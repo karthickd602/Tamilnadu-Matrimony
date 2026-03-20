@@ -47,7 +47,6 @@ class RegistrationController extends GetxController {
   final heightController = TextEditingController();
   final maritalStatus = ''.obs;
   final childLivingStatus = ''.obs;
-  final noOfChildren = ''.obs;
 
   // final eduction = ''.obs;
   // final occupation  = ''.obs;
@@ -516,6 +515,7 @@ class RegistrationController extends GetxController {
         );
         return;
       }
+      debugPrint("country Dropdown1111111111111111");
 
       // final req = {"religion_id": religionId};
       final response = await THttpHelper.get(ApiConstant.getCountryDD);
@@ -532,7 +532,7 @@ class RegistrationController extends GetxController {
       }
     } catch (e) {
       TLoaders.errorSnackBar(
-        title: "Caste Dropdown Issue",
+        title: "country Dropdown Issue",
         message: e.toString(),
       );
     }
@@ -560,8 +560,8 @@ class RegistrationController extends GetxController {
       stateList.value = (response['data'] as List)
           .map((e) => CountryModel.fromJson(e))
           .toList();
-      // } else {
-      //
+      selectedState.value = stateList.firstWhere((e) => e.id == 35);
+      await fetchDistrictDropdown();
       // }
     } catch (e) {
       TLoaders.errorSnackBar(
@@ -664,7 +664,7 @@ class RegistrationController extends GetxController {
             ? "Separated"
             : maritalStatus.value == TTexts.divorced.tr
             ? "Divorced"
-            : maritalStatus.value == TTexts.widowed
+            : maritalStatus.value == TTexts.widowed.tr
             ? "Widowed"
             : maritalStatus.value,
         "childrenlivingstatus":
@@ -765,7 +765,13 @@ class RegistrationController extends GetxController {
 
       debugPrint("Family Register Response : $response");
       TLoaders.successSnackBar(title: "Success", message: response['message']);
-      currentStep.value++;
+
+      if (selectedReligion.value?.id == 1) {
+        currentStep.value++;
+      } else {
+        currentStep.value++;
+        currentStep.value++;
+      }
     } catch (e) {
       debugPrint("familyFormSubmit - $e");
       TLoaders.errorSnackBar(
@@ -821,6 +827,7 @@ class RegistrationController extends GetxController {
       TFullScreenLoader.stopLoading();
       TLoaders.successSnackBar(title: "Success", message: res['message']);
 
+      await fetchCountryDropdown();
       currentStep.value++;
     } catch (e) {
       TFullScreenLoader.stopLoading();
@@ -857,16 +864,31 @@ class RegistrationController extends GetxController {
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
-      debugPrint("Contact : $request");
+      debugPrint(
+        "============= CONTACT DETAILS API REQUEST BODY =============",
+      );
+      request.forEach((key, value) {
+        debugPrint("$key : $value");
+      });
+      if (profileImageFile.value.path.isNotEmpty &&
+          profileImagePath.value.isNotEmpty) {
+        debugPrint("photo1 : ${profileImageFile.value.path}");
+      } else {
+        debugPrint("photo1 : <No Image Selected>");
+      }
+      debugPrint(
+        "============================================================",
+      );
 
       final response;
 
-      if (profileImageFile.value.path.isNotEmpty) {
+      if (profileImageFile.value.path.isNotEmpty &&
+          profileImagePath.value.isNotEmpty) {
         response = await THttpHelper.multipartPost(
-          filePath: profileImageFile.value.path,
           ApiConstant.contactRegisterEndpoint,
           request,
-          fileFieldName: "photo1",
+          filePath: profileImageFile.value.path,
+          fileFieldName: "Photo1",
         );
       } else {
         response = await THttpHelper.post(

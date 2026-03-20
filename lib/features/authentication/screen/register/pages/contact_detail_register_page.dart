@@ -111,8 +111,6 @@ class ContactDetails extends StatelessWidget {
               labelText: TTexts.pincode.tr,
               icon: Icons.local_post_office_outlined,
               maxLength: 6,
-              validator: (value) =>
-                  TValidator.validateEmptyText(TTexts.pincode.tr, value),
               keyboardType: TextInputType.number,
             ),
 

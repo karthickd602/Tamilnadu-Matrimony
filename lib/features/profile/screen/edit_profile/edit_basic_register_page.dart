@@ -225,7 +225,10 @@ class EditBasicDetails extends StatelessWidget {
                   compareFn: (a, b) => a.name == b.name,
                   onChanged: (value) {
                     if (value == null) return;
+
                     controller.selectedOccupation.value = value;
+                    controller.occupationDetailsController.text = '';
+                    controller.incomeController.text = '';
                   },
                   validator: (value) => TValidator.validateEmptyText(
                     TTexts.occupation.tr,
@@ -233,25 +236,30 @@ class EditBasicDetails extends StatelessWidget {
                   ),
                 ),
 
-                TFormField(
-                  labelText: TTexts.occupationDetails.tr,
-                  controller: controller.occupationDetailsController,
-                  icon: IconlyLight.bag_2,
-                  validator: (value) => TValidator.validateEmptyText(
-                    TTexts.occupationDetails.tr,
-                    value.toString(),
+                if (controller.selectedOccupation.value?.name
+                        .toString()
+                        .toLowerCase() !=
+                    'others')
+                  TFormField(
+                    labelText: TTexts.occupationDetails.tr,
+                    controller: controller.occupationDetailsController,
+                    icon: IconlyLight.bag_2,
                   ),
-                ),
-                TFormField(
-                  labelText: TTexts.income.tr,
-                  keyboardType: TextInputType.number,
-                  controller: controller.incomeController,
-                  icon: IconlyLight.wallet,
-                  validator: (value) => TValidator.validateEmptyText(
-                    TTexts.income.tr,
-                    value.toString(),
+                if (controller.selectedOccupation.value?.name
+                        .toString()
+                        .toLowerCase() !=
+                    'others')
+                  TFormField(
+                    labelText: TTexts.income.tr,
+                    keyboardType: TextInputType.number,
+                    controller: controller.incomeController,
+                    icon: IconlyLight.wallet,
                   ),
-                ),
+                if (controller.selectedOccupation.value?.name
+                        .toString()
+                        .toLowerCase() ==
+                    'others')
+                  SizedBox(height: TSizes.sm),
                 TSearchDropdownField<ReligionDDModel>(
                   enabled: false,
                   prefixIcon: Icons.temple_hindu_outlined,

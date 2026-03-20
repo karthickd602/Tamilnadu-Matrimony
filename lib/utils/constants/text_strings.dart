@@ -70,7 +70,7 @@ class TTexts {
   static const String unMarried = "unMarried";
   static const String divorced = "divorced";
   static const String widowed = "widowed";
-  static const String separated = "Separated";
+  static const String separated = "separated";
   static const String time = "time";
   static const String age = "age";
   static const String height = "height";
@@ -226,6 +226,5 @@ class TTexts {
   static const String officeAddress = "office_address";
 
   static const String workplace = "workplace";
-  static const String specialCases = "special_cases";
   static const String horoscopeCheck = "horoscope_check";
 }

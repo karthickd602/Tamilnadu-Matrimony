@@ -1,8 +1,8 @@
 import 'package:share_plus/share_plus.dart';
 import 'package:tamilnadu_matrimony/common/widgets/appbar/appbar.dart';
 import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
-import 'package:tamilnadu_matrimony/features/profile/screen/verified_profile/verify_profile.dart';
 import 'package:tamilnadu_matrimony/data/services/dynamic_link_service.dart';
+import 'package:tamilnadu_matrimony/features/profile/screen/verified_profile/verify_profile.dart';
 
 import '../../../common/widgets/dialog/logout_dialog.dart';
 import '../../../common/widgets/images/t_circular_image.dart';
@@ -10,8 +10,8 @@ import '../../../common/widgets/images/t_image_picker.dart';
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/helpers/url_launcher.dart';
 import '../../authentication/controller/language/language_selection_controller.dart';
-import '../controller/profile_controller.dart';
 import '../../subscription/controller/subscription_controller.dart';
+import '../controller/profile_controller.dart';
 import 'delete_profile/delete_profile_dialog.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -203,7 +203,8 @@ class ProfilePage extends StatelessWidget {
                           "https://play.google.com/store/apps/details?id=com.maac.tamilnadumatrimony";
 
                       // Use DynamicLinkService to generate consistent, clickable HTTPS links
-                      final deepLink = DynamicLinkService.instance.createProfileShareLink(profileId.toString());
+                      final deepLink = DynamicLinkService.instance
+                          .createProfileShareLink(profileId.toString());
 
                       final shareText =
                           "Check out my profile on Tamilnadu Matrimony!\n\nName: $name ($matriId)\n\nTap to view profile: $deepLink\n\nDownload App: $appLink";
@@ -216,7 +217,6 @@ class ProfilePage extends StatelessWidget {
                     TTexts.selectLanguage.tr,
                     () => _showLanguageBottomSheet(context),
                   ),
-                  const Divider(height: 30),
 
                   /// Danger Section
                   _buildMenuItem(
@@ -226,7 +226,12 @@ class ProfilePage extends StatelessWidget {
                     () => showLogoutDialog(context),
                     isDanger: true,
                   ),
+                  const Divider(height: 30),
+
                   _buildMenuItem(
+                    textTheme: Theme.of(
+                      context,
+                    ).textTheme.bodySmall!.apply(color: TColors.red),
                     context,
                     Icons.delete_forever_outlined,
                     TTexts.deleteProfile.tr,
@@ -550,6 +555,7 @@ class ProfilePage extends StatelessWidget {
     IconData icon,
     String title,
     VoidCallback onTap, {
+    TextStyle? textTheme,
     bool isDanger = false,
   }) {
     final isDark = THelperFunctions.isDarkMode(context);
@@ -569,12 +575,14 @@ class ProfilePage extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-          color: isDanger
-              ? Colors.red
-              : (isDark ? TColors.white : Colors.black87),
-          fontWeight: isDanger ? FontWeight.w600 : FontWeight.normal,
-        ),
+        style:
+            textTheme ??
+            Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: isDanger
+                  ? Colors.red
+                  : (isDark ? TColors.white : Colors.black87),
+              fontWeight: isDanger ? FontWeight.w600 : FontWeight.normal,
+            ),
       ),
       trailing: const Icon(
         Icons.arrow_forward_ios,

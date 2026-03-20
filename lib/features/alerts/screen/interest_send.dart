@@ -23,7 +23,7 @@ class InterestSend extends StatelessWidget {
         if (controller.sendAlertProfileModel.isEmpty) {
           return TAnimationLoaderWidget(
             animation: TImages.noDataFoundAnimation,
-            text: 'No send Interest send Found',
+            text: 'No send Interest  Found',
           );
         }
 

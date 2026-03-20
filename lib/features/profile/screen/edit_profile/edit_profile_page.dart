@@ -70,19 +70,17 @@ class EditProfilePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (idx < controller.totalSteps - 1 && idx == 1)
-                          TextButton(
-                            onPressed: () {
-                              controller.currentStep.value++;
-                            },
-                            child: Text(
-                              "Skip",
-                              style: Theme.of(context).textTheme.bodyMedium!
-                                  .copyWith(
-                                    decoration: TextDecoration.underline,
-                                  ),
-                            ),
+                        // if (idx < controller.totalSteps - 1 && idx == 1)
+                        TextButton(
+                          onPressed: () {
+                            controller.currentStep.value++;
+                          },
+                          child: Text(
+                            "Skip",
+                            style: Theme.of(context).textTheme.bodyMedium!
+                                .copyWith(decoration: TextDecoration.underline),
                           ),
+                        ),
                       ],
                     ),
                   ],

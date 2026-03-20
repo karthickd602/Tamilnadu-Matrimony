@@ -175,7 +175,6 @@ class EditContactDetails extends StatelessWidget {
                     onPressed: () => controller.contactFormSubmit(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
-                      // padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

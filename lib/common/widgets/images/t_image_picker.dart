@@ -64,7 +64,7 @@ class TImagePickerHelper {
     if (!_isValidImage(file)) {
       TLoaders.errorSnackBar(
         title: "Invalid File",
-        message: "Only JPG / JPEG images are allowed",
+        message: "Only JPG / JPEG / PNG images are allowed",
       );
       return null;
     }
@@ -203,7 +203,7 @@ class TImagePickerHelper {
 
   static bool _isValidImage(File file) {
     final ext = file.path.split('.').last.toLowerCase();
-    return ext == 'jpg' || ext == 'jpeg';
+    return ext == 'jpg' || ext == 'jpeg' || ext == 'png';
   }
 
   /* ================================================================
@@ -215,10 +215,14 @@ class TImagePickerHelper {
     double size = await _getFileSizeMB(file);
     int quality = 90;
 
+    final ext = file.path.split('.').last.toLowerCase();
+    final isPng = ext == 'png';
+    final targetExt = isPng ? 'png' : 'jpg';
+
     while (size > maxSizeMB && quality > 20) {
       final compressed = await FlutterImageCompress.compressAndGetFile(
         file.path,
-        "${file.path}_compressed.jpg",
+        "${file.path}_compressed.$targetExt",
         quality: quality,
       );
 

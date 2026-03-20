@@ -24,7 +24,7 @@ class InterestReceived extends StatelessWidget {
         if (controller.receiveAlertProfileModel.isEmpty) {
           return TAnimationLoaderWidget(
             animation: TImages.noDataFoundAnimation,
-            text: 'No receive Interest send Found',
+            text: 'No receive Interest Found',
           );
         }
         return ListView.separated(
