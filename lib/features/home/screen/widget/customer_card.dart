@@ -33,6 +33,8 @@ class CustomerCard extends StatelessWidget {
                 // Background Image
                 Positioned.fill(
                   child: TRoundedImage(
+                    width: double.infinity,
+                    height: double.infinity,
                     margin: 0,
                     padding: 0,
                     borderRadius: 0,

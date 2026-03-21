@@ -74,7 +74,7 @@ class ViewProfilePage extends StatelessWidget {
                     children: [
                       _info(TTexts.name.tr, profile.name),
                       _info(TTexts.matriId.tr, profile.matriId),
-                      _info(TTexts.age.tr, profile.age),
+                      _info(TTexts.age.tr, profile.age.toString()),
                       _info(
                         TTexts.gender.tr,
                         profile.gender == '1'

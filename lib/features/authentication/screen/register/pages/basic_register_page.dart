@@ -335,7 +335,7 @@ class StepBasicDetails extends StatelessWidget {
                   compareFn: (a, b) => a == b,
                   onChanged: (value) {
                     if (value == null) return;
-                    controller.isDisablePerson.value;
+                    controller.isDisablePerson.value=value;
                   },
                   validator: (value) => TValidator.validateEmptyText(
                     TTexts.disablePerson.tr,

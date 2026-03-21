@@ -701,7 +701,9 @@ class EditProfileController extends GetxController {
         "workplace": occupationDetailsController.text,
         "Annualincome": int.tryParse(incomeController.text) ?? 0,
         "Subcaste": subCasteController.text,
-        "spe_cases": isDisablePerson.value.toString() == TTexts.yes.tr ? 1 : 0,
+        "spe_cases": isDisablePerson.value.toString() == TTexts.yes.tr
+            ? "1"
+            : "0",
       };
 
       debugPrint(
@@ -779,7 +781,7 @@ class EditProfileController extends GetxController {
       debugPrint('Family Register reqq $request');
 
       final response = await THttpHelper.post(
-        ApiConstant.familyRegisterEndpoint,
+        ApiConstant.familyEditEndpoint,
         request,
       );
       await profileController.fetchUserProfile();
@@ -891,7 +893,7 @@ class EditProfileController extends GetxController {
       debugPrint("Contact req : $request");
 
       final response = await THttpHelper.post(
-        ApiConstant.contactRegisterEndpoint,
+        ApiConstant.contactEditEndpoint,
         request,
       );
       debugPrint("Contact Register Response : $response");

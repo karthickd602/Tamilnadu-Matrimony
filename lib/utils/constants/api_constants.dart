@@ -11,6 +11,7 @@ class ApiConstant {
   static const String getCountryDD = "get_country_data";
   static const String getStateDD = "get_state_data";
   static const String getCityDD = "get_city_data";
+
   static const String basicRegisterEndpoint = "basic_details";
   static const String familyRegisterEndpoint = "family_details";
   static const String horoscopeRegisterEndpoint = "horoscope_details";
