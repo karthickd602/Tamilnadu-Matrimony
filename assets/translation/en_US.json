@@ -37,6 +37,7 @@
   "resend": "Resend OTP",
   "error_full_otp": "Please enter full OTP",
   "otp_entered": "OTP Entered",
+  "change_number": "Change",
   "contact_details": "Contact Details",
   "review_submit": "Review & Submit",
   "name": "Name",

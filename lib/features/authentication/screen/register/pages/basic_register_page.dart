@@ -244,7 +244,7 @@ class StepBasicDetails extends StatelessWidget {
                 if (controller.selectedOccupation.value?.name
                         .toString()
                         .toLowerCase() !=
-                    'others')
+                    'not working')
                   TFormField(
                     labelText: TTexts.occupationDetails.tr,
                     controller: controller.occupationDetailsController,
@@ -253,7 +253,7 @@ class StepBasicDetails extends StatelessWidget {
                 if (controller.selectedOccupation.value?.name
                         .toString()
                         .toLowerCase() !=
-                    'others')
+                    'not working')
                   TFormField(
                     labelText: TTexts.income.tr,
                     keyboardType: TextInputType.number,
@@ -263,7 +263,7 @@ class StepBasicDetails extends StatelessWidget {
                 if (controller.selectedOccupation.value?.name
                         .toString()
                         .toLowerCase() ==
-                    'others')
+                    'not working')
                   SizedBox(height: TSizes.sm),
                 TSearchDropdownField<ReligionDDModel>(
                   prefixIcon: Icons.temple_hindu_outlined,
@@ -335,7 +335,7 @@ class StepBasicDetails extends StatelessWidget {
                   compareFn: (a, b) => a == b,
                   onChanged: (value) {
                     if (value == null) return;
-                    controller.isDisablePerson.value=value;
+                    controller.isDisablePerson.value = value;
                   },
                   validator: (value) => TValidator.validateEmptyText(
                     TTexts.disablePerson.tr,

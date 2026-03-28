@@ -239,7 +239,7 @@ class EditBasicDetails extends StatelessWidget {
                 if (controller.selectedOccupation.value?.name
                         .toString()
                         .toLowerCase() !=
-                    'others')
+                    'not working')
                   TFormField(
                     labelText: TTexts.occupationDetails.tr,
                     controller: controller.occupationDetailsController,
@@ -248,7 +248,7 @@ class EditBasicDetails extends StatelessWidget {
                 if (controller.selectedOccupation.value?.name
                         .toString()
                         .toLowerCase() !=
-                    'others')
+                    'not working')
                   TFormField(
                     labelText: TTexts.income.tr,
                     keyboardType: TextInputType.number,
@@ -258,7 +258,7 @@ class EditBasicDetails extends StatelessWidget {
                 if (controller.selectedOccupation.value?.name
                         .toString()
                         .toLowerCase() ==
-                    'others')
+                    'not working')
                   SizedBox(height: TSizes.sm),
                 TSearchDropdownField<ReligionDDModel>(
                   enabled: false,

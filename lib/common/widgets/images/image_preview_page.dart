@@ -34,30 +34,7 @@ class ImagePreviewPage extends StatelessWidget {
           maxScale: PhotoViewComputedScale.covered * 3,
           backgroundDecoration: const BoxDecoration(color: Colors.black),
           errorBuilder: (context, error, stackTrace) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.broken_image, color: Colors.white, size: 80),
-                const SizedBox(height: 16),
-                Text(
-                  "Image not found",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.white),
-                ),
-                if (imageUrl.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      imageUrl,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.grey, fontSize: 12),
-                    ),
-                  ),
-                ],
-              ],
-            ),
+            child: Image.asset(TImages.defaultProfilePic),
           ),
         ),
       ),

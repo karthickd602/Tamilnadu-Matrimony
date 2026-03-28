@@ -654,7 +654,7 @@ class RegistrationController extends GetxController {
       final request = {
         "ID": storage.read(TTexts.userId),
         "Name": nameController.text,
-        "Gender": selectedGender.value == "Male" ? 1 : 2,
+        "Gender": selectedGender.value == TTexts.male.tr ? 1 : 2,
         "DOB": dob,
         "Height": selectedHeight.value?.id,
         "Complexion": selectedComplexion.value,

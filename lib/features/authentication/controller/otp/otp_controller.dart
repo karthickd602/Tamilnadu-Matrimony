@@ -11,7 +11,7 @@ import '../../model/login_otp_model.dart';
 import '../../screen/otp/sms_retriever_impl.dart';
 
 class OtpController extends GetxController {
-  var secondsRemaining = 120.obs;
+  var secondsRemaining = 60.obs;
   late Timer _timer;
   final otpTextController = TextEditingController();
   late final SmsRetriever smsRetriever;
@@ -127,7 +127,7 @@ class OtpController extends GetxController {
         "loginApi Response:${loginController.mobileNoT.text} ${response.toString()}",
       );
 
-      secondsRemaining.value = 300;
+      secondsRemaining.value = 60;
       startTimer();
     } catch (e) {
       TLoaders.errorSnackBar(
