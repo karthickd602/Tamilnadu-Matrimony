@@ -265,12 +265,14 @@ class RegistrationController extends GetxController {
 
     maritalStatus.value = profile.maritalStatus == "Unmarried"
         ? TTexts.unMarried.tr
-        : profile.maritalStatus == 'Separated'
+        : profile.maritalStatus == 'Seperated'
         ? TTexts.separated.tr
         : profile.maritalStatus == 'Divorced'
         ? TTexts.divorced.tr
         : profile.maritalStatus == 'widowed'
-        ? TTexts.widowed
+        ? TTexts.widowed.tr
+        : profile.maritalStatus == "Separated"
+        ? TTexts.separated.tr
         : '';
     selectedComplexion.value = profile.complexion ?? '';
     educationDetailsController.text = profile.educationDetails ?? '';
@@ -661,11 +663,13 @@ class RegistrationController extends GetxController {
         "Maritalstatus": maritalStatus.value == TTexts.unMarried.tr
             ? "Unmarried"
             : maritalStatus.value == TTexts.separated.tr
-            ? "Separated"
+            ? "Seperated"
             : maritalStatus.value == TTexts.divorced.tr
             ? "Divorced"
             : maritalStatus.value == TTexts.widowed.tr
             ? "Widowed"
+            : maritalStatus.value == "Seperated"
+            ? "Seperated"
             : maritalStatus.value,
         "childrenlivingstatus":
             "${childrenCount.toString()}-${childLiving.toString()}",

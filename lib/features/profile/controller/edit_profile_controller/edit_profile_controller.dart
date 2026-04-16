@@ -307,6 +307,8 @@ class EditProfileController extends GetxController {
         ? TTexts.divorced.tr
         : profile.maritalStatus == 'Widowed'
         ? TTexts.widowed.tr
+        : profile.maritalStatus == 'Seperated'
+        ? TTexts.separated.tr
         : '';
     selectedComplexion.value = profile.complexion ?? '';
     educationDetailsController.text = profile.educationDetails ?? '';
@@ -680,14 +682,26 @@ class EditProfileController extends GetxController {
         "DOB": dob,
         "Height": selectedHeight.value?.id,
         "Complexion": selectedComplexion.value,
+
+        // "Maritalstatus": maritalStatus.value == TTexts.unMarried.tr
+        //     ? "Unmarried"
+        //     : maritalStatus.value == TTexts.separated.tr
+        //     ? "Separated"
+        //     : maritalStatus.value == TTexts.divorced.tr
+        //     ? "Divorced"
+        //     : maritalStatus.value == TTexts.widowed.tr
+        //     ? "Widowed"
+        //     : maritalStatus.value,
         "Maritalstatus": maritalStatus.value == TTexts.unMarried.tr
             ? "Unmarried"
             : maritalStatus.value == TTexts.separated.tr
-            ? "Separated"
+            ? "Seperated"
             : maritalStatus.value == TTexts.divorced.tr
             ? "Divorced"
             : maritalStatus.value == TTexts.widowed.tr
             ? "Widowed"
+            : maritalStatus.value == "Seperated"
+            ? "Seperated"
             : maritalStatus.value,
         "childrenlivingstatus":
             "${selectedNoOfChildren.value?.id ?? '0'.toString()}-${childLiving.toString()}",

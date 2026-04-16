@@ -97,9 +97,7 @@ class ContactDetails extends StatelessWidget {
               compareFn: (a, b) => a.name == b.name,
               onChanged: (value) {
                 if (value == null) return;
-
                 controller.selectedDistrict.value = value;
-                // controller.fetchDistrictDropdown();
               },
               validator: (value) =>
                   TValidator.validateEmptyText(TTexts.district.tr, value?.name),
