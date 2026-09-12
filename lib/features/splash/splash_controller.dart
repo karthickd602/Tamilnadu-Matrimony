@@ -4,6 +4,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tamilnadu_matrimony/data/services/dynamic_link_service.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../profile/controller/profile_controller.dart';
 
 class SplashController extends GetxController {
@@ -34,12 +35,12 @@ class SplashController extends GetxController {
         "platform": Platform.isAndroid ? "android" : "ios",
         "current_version": currentVersion,
       };
-      debugPrint("Version check body: $body");
+      appDebugPrint("Version check body: $body");
       final response = await THttpHelper.post(
         ApiConstant.appVersionCheckEndPoint,
         body,
       );
-      debugPrint("Version check response: $response");
+      appDebugPrint("Version check response: $response");
       if (response['statusCode'] == 200) {
         final bool forceUpdate = response['force_update'] ?? false;
         if (forceUpdate) {
@@ -54,7 +55,7 @@ class SplashController extends GetxController {
         validate();
       }
     } catch (e) {
-      debugPrint("Version check failed: $e");
+      appDebugPrint("Version check failed: $e");
       validate();
     }
   }
@@ -91,12 +92,16 @@ class SplashController extends GetxController {
     if (userId != null) {
       // 1. Check if DynamicLinkService is handling a cold start link
       if (DynamicLinkService.instance.isHandled) {
-        debugPrint("SplashController: Deep link handoff detected. Waiting...");
-        
+        appDebugPrint(
+          "SplashController: Deep link handoff detected. Waiting...",
+        );
+
         // Safety Timeout: If for some reason the link never completes, don't get stuck.
         Future.delayed(const Duration(seconds: 5), () {
           if (Get.currentRoute == TRoutes.splash) {
-            debugPrint("SplashController: Handoff timeout, following normal flow.");
+            appDebugPrint(
+              "SplashController: Handoff timeout, following normal flow.",
+            );
             DynamicLinkService.instance.isHandled = false;
             validate();
           }
@@ -114,6 +119,6 @@ class SplashController extends GetxController {
       Get.offAllNamed(TRoutes.languageSelection);
     }
 
-    debugPrint("userId: $userId");
+    appDebugPrint("userId: $userId");
   }
 }

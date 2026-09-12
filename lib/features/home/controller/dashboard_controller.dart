@@ -96,7 +96,7 @@ class DashboardController extends GetxController {
         req.addAll(filtersToUse);
       }
 
-      debugPrint("Dashboard Request = $req");
+      appDebugPrint("Dashboard Request = $req");
 
       final response = await THttpHelper.post(
         ApiConstant.dashboardListEndPoint,
@@ -110,7 +110,7 @@ class DashboardController extends GetxController {
         return;
       }
 
-      debugPrint("Dashboard Response = $response");
+      appDebugPrint("Dashboard Response = $response");
 
       List newData = response["profiles"] ?? [];
 
@@ -132,7 +132,10 @@ class DashboardController extends GetxController {
     }
   }
 
-  Future<void> fetchCustomerPage(int profileId, {bool showLoader = true}) async {
+  Future<void> fetchCustomerPage(
+    int profileId, {
+    bool showLoader = true,
+  }) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
@@ -150,19 +153,19 @@ class DashboardController extends GetxController {
       };
       // final req = {"view_user_id": 11623, "user_id": 11622};
 
-      debugPrint("fetchCustomerPage req: $req");
+      appDebugPrint("fetchCustomerPage req: $req");
       final response = await THttpHelper.post(
         ApiConstant.customerProfilePage,
         req,
       );
 
-      debugPrint("fetchCustomerPage response: $response");
+      appDebugPrint("fetchCustomerPage response: $response");
       userModel.value = CustomerUserModel.fromJson(response["data"]);
 
       if (showLoader) TFullScreenLoader.stopLoading();
     } catch (e) {
       if (showLoader) TFullScreenLoader.stopLoading();
-      debugPrint("fetchDashboardCustomerProfile Error: $e");
+      appDebugPrint("fetchDashboardCustomerProfile Error: $e");
       TLoaders.errorSnackBar(title: "Error", message: e.toString());
     }
   }
@@ -187,13 +190,13 @@ class DashboardController extends GetxController {
         "user_id": storage.read(TTexts.userId),
         "liked_user_id": profileId,
       };
-      debugPrint("likeProfile req: $req");
+      appDebugPrint("likeProfile req: $req");
       final response = await THttpHelper.post(
         ApiConstant.likeProfileEndPoint,
         req,
       );
 
-      debugPrint('likeProfile res $response');
+      appDebugPrint('likeProfile res $response');
 
       /// Toggle value for CURRENT MODEL
       likedValue.value = likedValue.value.toLowerCase() == "yes" ? "no" : "yes";
@@ -207,7 +210,7 @@ class DashboardController extends GetxController {
       }
       await Get.put(LikeController()).fetchLikeList();
 
-      debugPrint("likeProfile response: $response");
+      appDebugPrint("likeProfile response: $response");
     } catch (e) {
       TLoaders.errorSnackBar(
         title: "Error in Like Profile",
@@ -238,12 +241,12 @@ class DashboardController extends GetxController {
         "current_user": storage.read(TTexts.userId),
         "target_user": profileId,
       };
-      debugPrint("unlockProfile req: $req");
+      appDebugPrint("unlockProfile req: $req");
       final response = await THttpHelper.post(
         ApiConstant.userUnlockProfileEndPoint,
         req,
       );
-      debugPrint("unlockProfile response: $response");
+      appDebugPrint("unlockProfile response: $response");
       if (response['statusCode'] == 204 || response['statusCode'] == 403) {
         TFullScreenLoader.stopLoading();
         TLoaders.warningSnackBar(
@@ -291,7 +294,7 @@ class DashboardController extends GetxController {
       );
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      debugPrint("unlockProfile Error: $e");
+      appDebugPrint("unlockProfile Error: $e");
       TLoaders.errorSnackBar(title: "Unlock Failed", message: e.toString());
     }
   }
@@ -317,7 +320,7 @@ class DashboardController extends GetxController {
         req,
       );
 
-      debugPrint("sendRequestAPI response: $response");
+      appDebugPrint("sendRequestAPI response: $response");
       TLoaders.successSnackBar(
         title: "Send Interest",
         message: response['message'],

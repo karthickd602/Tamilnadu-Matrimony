@@ -68,14 +68,23 @@ class FilterController extends GetxController {
     await profileController.fetchUserProfile();
     final profile = profileController.userProfile.value;
 
-    await fetchCasteFilter(religionId: profile?.religionId ?? '0', showLoader: false);
-    await fetchDistrictDropdown(stateId: profile?.stateId ?? "0", showLoader: false);
+    await fetchCasteFilter(
+      religionId: profile?.religionId ?? '0',
+      showLoader: false,
+    );
+    await fetchDistrictDropdown(
+      stateId: profile?.stateId ?? "0",
+      showLoader: false,
+    );
   } // --------------------------------------------------------------
   // API CALLS
   // --------------------------------------------------------------
 
   /// 🔹 Caste Fetch
-  Future<void> fetchCasteFilter({required String religionId, bool showLoader = true}) async {
+  Future<void> fetchCasteFilter({
+    required String religionId,
+    bool showLoader = true,
+  }) async {
     try {
       if (casteList.isNotEmpty) return;
       final connected = await NetworkManager.instance.isConnected();
@@ -93,9 +102,9 @@ class FilterController extends GetxController {
 
       final req = {"religion_id": religionId};
 
-      debugPrint("fetchCasteFilter req :$req");
+      appDebugPrint("fetchCasteFilter req :$req");
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
-      debugPrint("fetchCasteFilter res $response");
+      appDebugPrint("fetchCasteFilter res $response");
       if (response['statusCode'] == 200) {
         casteList.value = (response['data'] as List)
             .map((e) => CasteDDModel.fromJson(e))
@@ -105,7 +114,7 @@ class FilterController extends GetxController {
       if (showLoader) TFullScreenLoader.stopLoading();
     } catch (e) {
       if (showLoader) TFullScreenLoader.stopLoading();
-      debugPrint("fetchCasteFilter Error: $e");
+      appDebugPrint("fetchCasteFilter Error: $e");
     }
   }
 
@@ -138,19 +147,22 @@ class FilterController extends GetxController {
       if (showLoader) TFullScreenLoader.stopLoading();
     } catch (e) {
       if (showLoader) TFullScreenLoader.stopLoading();
-      debugPrint("fetchEducationFilter Error: $e");
+      appDebugPrint("fetchEducationFilter Error: $e");
     }
   }
 
   /// 🔹 District Fetch
-  Future<void> fetchDistrictDropdown({required String stateId, bool showLoader = true}) async {
+  Future<void> fetchDistrictDropdown({
+    required String stateId,
+    bool showLoader = true,
+  }) async {
     try {
       if (districtList.isNotEmpty) return;
       final connected = await NetworkManager.instance.isConnected();
       if (!connected) return;
 
       final req = {"state_id": stateId};
-      debugPrint("fetchDistrictDropdown req :$req");
+      appDebugPrint("fetchDistrictDropdown req :$req");
       final response = await THttpHelper.post(ApiConstant.getCityDD, req);
 
       if (response['statusCode'] == 200) {
@@ -159,7 +171,7 @@ class FilterController extends GetxController {
             .toList();
       }
     } catch (e) {
-      debugPrint("fetchDistrictDropdown Error: $e");
+      appDebugPrint("fetchDistrictDropdown Error: $e");
     }
   }
 
@@ -186,7 +198,7 @@ class FilterController extends GetxController {
     }
 
     selectedOptions[category] = list;
-    debugPrint("✅ Selected $category: $list");
+    appDebugPrint("✅ Selected $category: $list");
   }
 
   /// Return selected count or indicator for category
@@ -317,7 +329,7 @@ class FilterController extends GetxController {
     final dashboard = DashboardController.instance;
 
     final filterReq = await fetchFilter();
-    debugPrint("filterReq: $filterReq");
+    appDebugPrint("filterReq: $filterReq");
     dashboard.fetchDashboardCustomerProfile(
       isInitial: true,
       filters: filterReq,
@@ -401,12 +413,12 @@ class FilterController extends GetxController {
           return;
       }
 
-      debugPrint("fetchSpecialFilterProfiles req: $req");
+      appDebugPrint("fetchSpecialFilterProfiles req: $req");
       final response = await THttpHelper.post(
         ApiConstant.specialFilterEndPoint,
         req,
       );
-      debugPrint("fetchSpecialFilterProfiles res: $response");
+      appDebugPrint("fetchSpecialFilterProfiles res: $response");
 
       if (response['statusCode'] == 200) {
         final List profiles = response['profiles'] ?? [];

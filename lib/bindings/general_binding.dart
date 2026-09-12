@@ -1,7 +1,7 @@
 import 'package:tamilnadu_matrimony/features/profile/repository/profile_repository.dart';
 
-import '../utils/constants/path_provider.dart';
 import '../data/services/dynamic_link_service.dart';
+import '../utils/constants/path_provider.dart';
 
 class GeneralBinding extends Bindings {
   @override

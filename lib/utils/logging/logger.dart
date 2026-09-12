@@ -1,25 +1,9 @@
-// import 'package:logger/logger.dart';
-//
-// class TLoggerHelper {
-//   static final Logger _logger = Logger(
-//     printer: PrettyPrinter(),
-//     // Customize the log levels based on your needs
-//     level: Level.debug,
-//   );
-//
-//   static void debug(String message) {
-//     _logger.d(message);
-//   }
-//
-//   static void info(String message) {
-//     _logger.i(message);
-//   }
-//
-//   static void warning(String message) {
-//     _logger.w(message);
-//   }
-//
-//   static void error(String message, [dynamic error]) {
-//     _logger.e(message, error: error,  stackTrace: StackTrace.current);
-//   }
-// }
+import 'package:flutter/foundation.dart';
+
+/// A reusable function to print logs only in debug mode,
+/// preventing them from showing up in release/production versions (e.g., Play Store).
+void appDebugPrint(dynamic message) {
+  if (kDebugMode) {
+    debugPrint(message.toString());
+  }
+}

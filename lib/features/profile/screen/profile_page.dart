@@ -244,7 +244,7 @@ class ProfilePage extends StatelessWidget {
                         onConfirm: (reason) {
                           profileController.deleteProfile(reason: reason);
                           // API call / controller logic
-                          debugPrint("Deleted because: $reason");
+                          appDebugPrint("Deleted because: $reason");
                         },
                       );
                     },

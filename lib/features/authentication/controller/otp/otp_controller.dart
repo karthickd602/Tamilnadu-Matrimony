@@ -51,15 +51,15 @@ class OtpController extends GetxController {
 
       await NotificationService().init();
 
-      debugPrint("Fcm 1:${storage.read(TTexts.fcmToken)}");
+      appDebugPrint("Fcm 1:${storage.read(TTexts.fcmToken)}");
       final request = {
         "mobile_no": loginController.mobileNoT.text,
         "otp": otpTextController.text,
         "fcm_token": await storage.read(TTexts.fcmToken),
       };
-      debugPrint("OTP Verify1 request: $request");
+      appDebugPrint("OTP Verify1 request: $request");
       final response = await THttpHelper.post(ApiConstant.verifyOtp, request);
-      debugPrint("OTP Verify response : $response");
+      appDebugPrint("OTP Verify response : $response");
       if (response['statusCode'] == 200) {
         storage.write(TTexts.userId, response['user_id'].toString());
         storage.write(TTexts.barerToken, response['token'].toString());
@@ -123,9 +123,7 @@ class OtpController extends GetxController {
       loginController.loginOtpModel.value = (response['data'] as List)
           .map((e) => LoginOtpModel.fromJson(e))
           .toList();
-      debugPrint(
-        "loginApi Response:${loginController.mobileNoT.text} ${response.toString()}",
-      );
+ 
 
       secondsRemaining.value = 60;
       startTimer();

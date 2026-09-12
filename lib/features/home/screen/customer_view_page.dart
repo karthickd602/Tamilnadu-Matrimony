@@ -1,6 +1,7 @@
 import 'package:tamilnadu_matrimony/common/widgets/images/image_preview_page.dart';
 import 'package:tamilnadu_matrimony/features/home/model/customer_user_model.dart';
 import 'package:tamilnadu_matrimony/utils/constants/path_provider.dart';
+import 'package:tamilnadu_matrimony/utils/helpers/url_launcher.dart';
 
 import '../../../common/widgets/appbar/appbar.dart';
 import '../../../common/widgets/horoscope/horoscope_chart.dart';
@@ -236,13 +237,19 @@ class CustomerDetailsView extends StatelessWidget {
                               "value": userModel.mobile.isEmpty
                                   ? "-"
                                   : userModel.mobile,
+                              "onTap": (userModel.mobile.isNotEmpty && userModel.mobile != "-")
+                                  ? () => TUrlLauncher.callPhone(userModel.mobile)
+                                  : null,
                             },
                             {
                               "icon": Icons.phone,
-                              "label": TTexts.mobileNo.tr,
+                              "label": TTexts.phone.tr,
                               "value": userModel.phone.isEmpty
                                   ? "-"
                                   : userModel.phone,
+                              "onTap": (userModel.phone.isNotEmpty && userModel.phone != "-")
+                                  ? () => TUrlLauncher.callPhone(userModel.phone)
+                                  : null,
                             },
                             {
                               "icon": Icons.home,
@@ -426,12 +433,17 @@ class CustomerDetailsView extends StatelessWidget {
 
           /// Detail rows
           ...details.map(
-            (item) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
+            (item) {
+              final VoidCallback? onTap = item["onTap"];
+              
+              Widget rowContent = Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(item["icon"], size: 22, color: Colors.grey[700]),
+                  Icon(
+                    item["icon"], 
+                    size: 22, 
+                    color: onTap != null ? primaryColor : Colors.grey[700],
+                  ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
@@ -448,17 +460,43 @@ class CustomerDetailsView extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(
                           item["value"],
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
-                            color: Colors.black54,
+                            color: onTap != null ? primaryColor : Colors.black54,
+                            fontWeight: onTap != null ? FontWeight.w500 : FontWeight.normal,
                           ),
                         ),
                       ],
                     ),
                   ),
+                  if (onTap != null) ...[
+                    const SizedBox(width: 10),
+                    Icon(
+                      Icons.phone_forwarded_outlined,
+                      size: 18,
+                      color: primaryColor.withValues(alpha: 0.6),
+                    ),
+                  ],
                 ],
-              ),
-            ),
+              );
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: onTap != null
+                    ? InkWell(
+                        onTap: onTap,
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                          child: rowContent,
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                        child: rowContent,
+                      ),
+              );
+            },
           ),
         ],
       ),

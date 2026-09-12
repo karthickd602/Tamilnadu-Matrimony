@@ -1,3 +1,4 @@
+import '../../../../common/widgets/dialog/custom_alert_dialog.dart';
 import '../../../../utils/constants/path_provider.dart';
 import '../../controller/dashboard_controller.dart';
 import '../../model/dashboard_list_model.dart';
@@ -238,19 +239,32 @@ class CustomerCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Obx(() {
-                        debugPrint(
+                        appDebugPrint(
                           "CustomerCard isUnlocked: ${customerProfile.isUnlocked}",
                         );
-                        debugPrint(
+                        appDebugPrint(
                           "CustomerCard isUnlocked: ${customerProfile.name}",
                         );
 
                         return ElevatedButton.icon(
                           onPressed: () {
-                            controller.unlockProfile(
-                              profileId: customerProfile.id ?? 0,
-                              unlockValue: customerProfile.isUnlocked,
+                            customAlertDialog(
+                              context: context,
+                              yesText: TTexts.correct.tr,
+                              noText: TTexts.cancel.tr,
+                              title: TTexts.confirmationDialog.tr,
+                              content: TTexts.confirmationDialogContent.tr,
+                              onYes: () => controller.unlockProfile(
+                                profileId: customerProfile.id ?? 0,
+                                unlockValue: customerProfile.isUnlocked,
+                              ),
+                              noButtonColor: TColors.red,
                             );
+
+                            // controller.unlockProfile(
+                            //   profileId: customerProfile.id ?? 0,
+                            //   unlockValue: customerProfile.isUnlocked,
+                            // );
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
@@ -335,4 +349,6 @@ class CustomerCard extends StatelessWidget {
       ),
     );
   }
+
+  void confirmAlertForUnlock() {}
 }

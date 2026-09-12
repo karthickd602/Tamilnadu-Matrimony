@@ -28,23 +28,23 @@ class UnlockedController extends GetxController {
       // TFullScreenLoader.popUpCircular();
       final req = {"user_id": storage.read(TTexts.userId)};
 
-      debugPrint("fetchUnlockList req: $req");
+      appDebugPrint("fetchUnlockList req: $req");
       final response = await THttpHelper.post(
         ApiConstant.unlockListEndPoint,
         req,
       );
-      debugPrint('fetchUnlockList response: $response');
+      appDebugPrint('fetchUnlockList response: $response');
       if (response['statusCode'] == 204) {
         return;
       }
       // if(response)
-      debugPrint("fetch like list response: $response");
+      appDebugPrint("fetch like list response: $response");
 
       unlockList.value = (response["data"] as List)
           .map((e) => CustomerProfileListModel.fromJson(e))
           .toList();
     } catch (e) {
-      debugPrint("fetchUnlockList Error: $e");
+      appDebugPrint("fetchUnlockList Error: $e");
       TLoaders.errorSnackBar(title: "Error", message: e.toString());
     } finally {
       isUnlockLoading.value = false;

@@ -61,12 +61,12 @@ class ProfileRepository extends GetxController {
 
   Future<Map<String, dynamic>> deleteProfile({required String reason}) async {
     final request = {"id": storage.read(TTexts.userId), "message": reason};
-    debugPrint("Delete Profile Request : $request");
+    appDebugPrint("Delete Profile Request : $request");
     final response = await THttpHelper.post(
       ApiConstant.deleteProfileEndpoint,
       request,
     );
-    debugPrint("Delete Profile Response : $response");
+    appDebugPrint("Delete Profile Response : $response");
     return response;
   }
 }

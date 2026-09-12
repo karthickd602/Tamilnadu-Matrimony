@@ -32,13 +32,11 @@ class LoginController extends GetxController {
       //
       final response = await THttpHelper.post(ApiConstant.sendOtp, request);
 
-      debugPrint("loginApi Response:${mobileNoT.text} ${response.toString()}");
 
       loginOtpModel.value = (response['data'] as List)
           .map((e) => LoginOtpModel.fromJson(e))
           .toList();
 
-      debugPrint("OTP: ${loginOtpModel.first.otp}");
 
       // GetStorage().read(TTexts.mobileNo,)
       TFullScreenLoader.stopLoading();

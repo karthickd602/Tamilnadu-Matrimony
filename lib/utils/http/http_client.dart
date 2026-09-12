@@ -30,9 +30,7 @@ class THttpHelper {
       'Accept-Language': storage.read(TTexts.languageCode) ?? "en",
       'x-authorization': 'Bearer ${storage.read(TTexts.barerToken)}',
     });
-    debugPrint('Bearer token:Bearer ${storage.read(TTexts.barerToken)}');
 
-    debugPrint("Endpoint : $endpoint  --  Body : $body --- $request");
     // Convert dynamic body → String fields safely
     body.forEach((key, value) {
       if (value != null) {
@@ -48,8 +46,8 @@ class THttpHelper {
 
     request.files.add(multipartFile);
 
-    debugPrint('Multipart Body Fields: ${request.fields}');
-    debugPrint(
+    appDebugPrint('Multipart Body Fields: ${request.fields}');
+    appDebugPrint(
       'Multipart Files: ${request.files.map((f) => 'Field: ${f.field}, File: ${f.filename}').toList()}',
     );
 
@@ -62,7 +60,7 @@ class THttpHelper {
     }
 
     if (response.statusCode == 401) {
-      debugPrint("multipartPost StatusCode: ${response.statusCode}");
+      appDebugPrint("multipartPost StatusCode: ${response.statusCode}");
       storage.remove(TTexts.barerToken);
       storage.remove(TTexts.userId);
       Get.offAllNamed(TRoutes.loginPage);
@@ -93,8 +91,6 @@ class THttpHelper {
       },
       body: json.encode(data),
     );
-    debugPrint('Headers: ${response.request?.headers}');
-    debugPrint('Bearer ${storage.read(TTexts.barerToken)}');
     return _handleResponse(response);
   }
 
@@ -122,7 +118,6 @@ class THttpHelper {
     if (response.statusCode == 200) {
       return json.decode(responseBody);
     } else if (response.statusCode == 401) {
-      debugPrint("postWithFiles StatusCode: ${response.statusCode}");
       storage.remove(TTexts.barerToken);
       storage.remove(TTexts.userId);
       Get.offAllNamed(TRoutes.languageSelection);
@@ -153,8 +148,8 @@ class THttpHelper {
     if (response.statusCode == 200 ||
         response.statusCode == 201 ||
         response.statusCode == 204) {
-      debugPrint("StatusCode: ${response.statusCode}");
-      // debugPrint("StatusCode: ${response.body}");
+      appDebugPrint("StatusCode: ${response.statusCode}");
+      // appDebugPrint("StatusCode: ${response.body}");
 
       return json.decode(response.body);
     } else if (response.statusCode == 404 ||
@@ -162,17 +157,17 @@ class THttpHelper {
         response.statusCode == 409 ||
         response.statusCode == 302) {
       final message = json.decode(response.body)['message'];
-      debugPrint("StatusCode: ${response.statusCode}");
-      // debugPrint("StatusCode: ${response.body}");
+      appDebugPrint("StatusCode: ${response.statusCode}");
+      // appDebugPrint("StatusCode: ${response.body}");
 
       throw message;
     } else if (response.statusCode == 500) {
-      debugPrint("StatusCode 500: ${response.statusCode}");
+      appDebugPrint("StatusCode 500: ${response.statusCode}");
 
       // final message = json.decode(response.body)['message'];
       throw "Something went wrong";
     } else if (response.statusCode == 401) {
-      debugPrint("StatusCode: ${response.statusCode}");
+      appDebugPrint("StatusCode: ${response.statusCode}");
       storage.remove(TTexts.barerToken);
       storage.remove(TTexts.userId);
       Get.offAllNamed(TRoutes.loginPage);

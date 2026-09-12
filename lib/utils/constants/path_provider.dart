@@ -20,3 +20,4 @@ export '../../../utils/constants/api_constants.dart';
 export '../../../utils/constants/path_provider.dart';
 export '../../../utils/http/http_client.dart';
 export '../../../utils/popups/loaders.dart';
+export '../logging/logger.dart';

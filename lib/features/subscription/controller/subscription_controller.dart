@@ -47,7 +47,7 @@ class SubscriptionController extends GetxController
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       // User returning from background (or in-app browser close)
-      debugPrint("App Resumed: Refreshing Subscription Status...");
+      appDebugPrint("App Resumed: Refreshing Subscription Status...");
       fetchUserSubscriptionPlan(navigate: false);
     }
   }
@@ -62,7 +62,7 @@ class SubscriptionController extends GetxController
   }
 
   void _handleDeepLink(Uri uri) {
-    debugPrint("Deep link received: $uri");
+    appDebugPrint("Deep link received: $uri");
     if (uri.path.contains('payment')) {
       fetchUserSubscriptionPlan();
     }
@@ -104,7 +104,7 @@ class SubscriptionController extends GetxController
         isSubscribed.value = false;
       }
     } catch (e) {
-      debugPrint("Silent check error: $e");
+      appDebugPrint("Silent check error: $e");
     }
   }
 
@@ -123,7 +123,7 @@ class SubscriptionController extends GetxController
         req,
       );
 
-      debugPrint("getSubscriptionUserPlan response: $response");
+      appDebugPrint("getSubscriptionUserPlan response: $response");
 
       if (response['statusCode'] == 200) {
         final data = response['data'];
@@ -142,13 +142,13 @@ class SubscriptionController extends GetxController
             daysLeft.value =
                 "${calculateBalanceDays(DateTime.parse(data["expiry_date"]))} Days Left";
           }
-          debugPrint("Response structure is Active");
+          appDebugPrint("Response structure is Active");
           isSubscribed.value = true;
 
           TFullScreenLoader.stopLoading();
           if (navigate) Get.toNamed(TRoutes.userSubscriptionPlan);
         } else {
-          debugPrint("Response structure is not Active");
+          appDebugPrint("Response structure is not Active");
           isSubscribed.value = false;
           // await fetchSubscriptionPlans();
           TFullScreenLoader.stopLoading();
@@ -196,7 +196,7 @@ class SubscriptionController extends GetxController
         selectedIndex.value = selectedIndex.value.clamp(0, plans.length - 1);
       }
     } catch (e) {
-      debugPrint("Error fetching plans: $e");
+      appDebugPrint("Error fetching plans: $e");
     }
   }
 

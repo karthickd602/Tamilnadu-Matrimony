@@ -86,15 +86,17 @@ class TCircularImage extends StatelessWidget {
         color: overlayColor,
         imageUrl: image!,
         errorWidget: (context, url, error) {
-          debugPrint("Image Load Error: $url - $error");
+          appDebugPrint("Image Load Error: $url - $error");
           return Image.asset(TImages.defaultProfilePic, fit: fit);
         },
         progressIndicatorBuilder: (context, url, downloadProgress) =>
             const TShimmerEffect(width: 55, height: 55),
-        memCacheHeight:
-            (height > 0 && height.isFinite) ? (height * 3).toInt() : null,
-        memCacheWidth:
-            (width > 0 && width.isFinite) ? (width * 3).toInt() : null,
+        memCacheHeight: (height > 0 && height.isFinite)
+            ? (height * 3).toInt()
+            : null,
+        memCacheWidth: (width > 0 && width.isFinite)
+            ? (width * 3).toInt()
+            : null,
       );
     } else {
       // Return fallback image if no valid image URL is provided

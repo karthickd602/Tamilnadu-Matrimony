@@ -21,7 +21,7 @@ class NotificationController extends GetxController {
       }
       isLoading.value = true;
       final res = await THttpHelper.get(ApiConstant.notificationListEndPoint);
-      debugPrint("Notification List : $res");
+      appDebugPrint("Notification List : $res");
 
       if (res['statusCode'] == 204) {
         return;
@@ -31,7 +31,7 @@ class NotificationController extends GetxController {
           .map((e) => NotificationModel.fromJson(e))
           .toList();
     } catch (e) {
-      debugPrint("Notification Error - $e");
+      appDebugPrint("Notification Error - $e");
       TLoaders.errorSnackBar(
         title: "Notification Error",
         message: e.toString(),

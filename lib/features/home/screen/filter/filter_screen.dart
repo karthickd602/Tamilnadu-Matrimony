@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 
 import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../utils/constants/colors.dart';
+import '../../../../utils/popups/loaders.dart';
+import '../../../subscription/controller/subscription_controller.dart';
 import '../../controller/filter_controller.dart';
 import '../widget/filter_options.dart';
-import '../../../subscription/controller/subscription_controller.dart';
-import '../../../../utils/popups/loaders.dart';
 
 class FilterPage extends StatelessWidget {
   const FilterPage({super.key});
@@ -101,10 +101,12 @@ class _LeftCategoryMenu extends StatelessWidget {
                     if (isLocked) {
                       TLoaders.warningSnackBar(
                         title: "Subscription Required",
-                        message: "Please subscribe to use the $category filter.",
+                        message:
+                            "Please subscribe to use the $category filter.",
                       );
-                      SubscriptionController.instance
-                          .fetchUserSubscriptionPlan(navigate: true);
+                      SubscriptionController.instance.fetchUserSubscriptionPlan(
+                        navigate: true,
+                      );
                     } else {
                       controller.changeCategory(index);
                     }

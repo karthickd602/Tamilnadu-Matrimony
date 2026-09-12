@@ -30,13 +30,13 @@ class LikeController extends GetxController {
       // TFullScreenLoader.popUpCircular();
       final req = {"user_id": storage.read(TTexts.userId)};
 
-      debugPrint("fetchLikeList req: $req");
+      appDebugPrint("fetchLikeList req: $req");
       final response = await THttpHelper.post(
         ApiConstant.likeListEndPoint,
         req,
       );
-      debugPrint("fetch like list response: $response");
-      if(response['statusCode']==204) {
+      appDebugPrint("fetch like list response: $response");
+      if (response['statusCode'] == 204) {
         // TFullScreenLoader.stopLoading();
         return;
       }
@@ -44,14 +44,16 @@ class LikeController extends GetxController {
       likeList.value = (response["data"] as List)
           .map((e) => CustomerProfileListModel.fromJson(e))
           .toList();
-      isLikeLoading.value=false;
+      isLikeLoading.value = false;
       // TFullScreenLoader.stopLoading();
     } catch (e) {
       // TFullScreenLoader.stopLoading();
-      debugPrint("fetchLikeList Error: $e");
-      TLoaders.errorSnackBar(title: "Error in Like List", message: e.toString());
-    }
-    finally{
+      appDebugPrint("fetchLikeList Error: $e");
+      TLoaders.errorSnackBar(
+        title: "Error in Like List",
+        message: e.toString(),
+      );
+    } finally {
       isLikeLoading.value = false;
     }
   }

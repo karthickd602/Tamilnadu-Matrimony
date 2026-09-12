@@ -87,7 +87,8 @@ class TTexts {
   static const String caste = "caste";
   static const String subCaste = "sub_caste";
   static const String disablePerson = "disablePerson";
-
+  static const String confirmationDialog = "confirmationDialog";
+  static const String confirmationDialogContent = "confirmationDialogContent";
   // -- FAMILY DETAILS
   static const String fatherName = "father_name";
   static const String motherName = "mother_name";
@@ -112,9 +113,11 @@ class TTexts {
   static const String dasaType = "dasa_type";
   static const String dasaBalanceDays = "dasa_balance_days";
   static const String yes = "yes";
+  static const String cancel = "cancel";
   static const String lagnam = "lagnam";
   static const String star = "star";
-
+  static const String correct = "correct";
+  static const String noWithViewContact = "no_view_contact";
   static const String no = "no";
   static const String iDontKnow = "i_dont_know";
   static const String uploadHoroscopeImage = "upload_horoscope_image";

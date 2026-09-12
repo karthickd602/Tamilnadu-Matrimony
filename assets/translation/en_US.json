@@ -183,5 +183,10 @@
   "send_mail": "Send Mail",
   "close": "Close",
   "contact_address": "Contact Address",
-  "office_address": "Tamilnadu Matrimony,\n95, Northveli Street,\nSimmakal Bus Stop,\nMadurai - 625001."
+  "office_address": "Tamilnadu Matrimony,\n95, Northveli Street,\nSimmakal Bus Stop,\nMadurai - 625001.",
+  "confirmationDialog": "Confirmation",
+  "confirmationDialogContent": "Deduct 1 contact from your package",
+  "yes_view_contact": "Yes (View Contact)",
+  "cancel": "Cancel",
+   "correct": "Yes"
 }

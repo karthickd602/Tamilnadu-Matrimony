@@ -222,7 +222,7 @@ class RegistrationController extends GetxController {
       final userId = storage.read(TTexts.userId);
       // final userId = "96166";
       final response = await repo.fetchUserProfile(userId: userId);
-      debugPrint("Edit Profile Response : $response");
+      appDebugPrint("Edit Profile Response : $response");
       if (response["data"]['Name'] == null || response["data"]['Name'] == '') {
         return;
       }
@@ -231,7 +231,7 @@ class RegistrationController extends GetxController {
 
       await _mapProfileToFields();
     } catch (e) {
-      debugPrint("Profile Error : $e");
+      appDebugPrint("Profile Error : $e");
       TLoaders.errorSnackBar(title: "Profile Error", message: e.toString());
     } finally {
       isLoading.value = false;
@@ -288,7 +288,7 @@ class RegistrationController extends GetxController {
 
     await Future.delayed(const Duration(milliseconds: 100));
     occupationDetailsController.text = profile.workplace ?? '';
-    debugPrint(
+    appDebugPrint(
       'occupation Details : ${profile.workplace}---${occupationDetailsController.text}',
     );
     selectedEducation.value = educationDDList.firstWhereOrNull(
@@ -313,7 +313,7 @@ class RegistrationController extends GetxController {
       selectedHeight.value = heightList.firstWhereOrNull(
         (e) => e.id.toString() == profile.heightID.toString(),
       );
-      debugPrint("✅selected Caste ${selectedCaste.value}");
+      appDebugPrint("✅selected Caste ${selectedCaste.value}");
     }
 
     fatherNameController.text = profile.fatherName ?? '';
@@ -374,7 +374,7 @@ class RegistrationController extends GetxController {
         ? TTexts.yes.tr
         : TTexts.no.tr;
     isDoshamHave.value = profile.thoosamType ?? 'No';
-    debugPrint(" dosham ${isDoshamHave.value}");
+    appDebugPrint(" dosham ${isDoshamHave.value}");
 
     /// ---------------- PROFILE IMAGE ----------------
 
@@ -382,7 +382,7 @@ class RegistrationController extends GetxController {
     //   profileImagePath.value = profile.photo1!;
     // }
 
-    debugPrint("✅ Profile mapped to form successfully");
+    appDebugPrint("✅ Profile mapped to form successfully");
   }
 
   Future<void> fetchOccupationDropdown() async {
@@ -398,7 +398,7 @@ class RegistrationController extends GetxController {
       TFullScreenLoader.popUpCircular();
       final response = await THttpHelper.get(ApiConstant.getOccupationDD);
       //
-      debugPrint("occupation Response:${response.toString()}");
+      appDebugPrint("occupation Response:${response.toString()}");
       if (response['statusCode'] == 200) {
         occupationDDList.value = (response['data'] as List)
             .map((e) => OccupationDDModel.fromJson(e))
@@ -425,7 +425,7 @@ class RegistrationController extends GetxController {
 
       final response = await THttpHelper.get(ApiConstant.getEducationDD);
       //
-      debugPrint("Education Response:${response.toString()}");
+      appDebugPrint("Education Response:${response.toString()}");
       if (response['statusCode'] == 200) {
         educationDDList.value = (response['data'] as List)
             .map((e) => EducationDDModel.fromJson(e))
@@ -457,7 +457,7 @@ class RegistrationController extends GetxController {
 
       final response = await THttpHelper.get(ApiConstant.getReligionDD);
       //
-      debugPrint("occupation Response:${response.toString()}");
+      appDebugPrint("occupation Response:${response.toString()}");
       if (response['statusCode'] == 200) {
         religionDDList.value = (response['data'] as List)
             .map((e) => ReligionDDModel.fromJson(e))
@@ -489,7 +489,7 @@ class RegistrationController extends GetxController {
       final req = {"religion_id": religionId};
       final response = await THttpHelper.post(ApiConstant.getCasteDD, req);
       //
-      debugPrint("occupation Response:${response.toString()}");
+      appDebugPrint("occupation Response:${response.toString()}");
       if (response['statusCode'] == 200) {
         casteDDList.value = (response['data'] as List)
             .map((e) => CasteDDModel.fromJson(e))
@@ -517,12 +517,12 @@ class RegistrationController extends GetxController {
         );
         return;
       }
-      debugPrint("country Dropdown1111111111111111");
+      appDebugPrint("country Dropdown1111111111111111");
 
       // final req = {"religion_id": religionId};
       final response = await THttpHelper.get(ApiConstant.getCountryDD);
       //
-      debugPrint("country Response:${response.toString()}");
+      appDebugPrint("country Response:${response.toString()}");
       if (response['statusCode'] == 200) {
         countryList.value = (response['data'] as List)
             .map((e) => CountryModel.fromJson(e))
@@ -554,7 +554,7 @@ class RegistrationController extends GetxController {
       final req = {"country_id": selectedCountry.value?.id};
       final response = await THttpHelper.post(ApiConstant.getStateDD, req);
       //
-      debugPrint("state Response:${response.toString()}");
+      appDebugPrint("state Response:${response.toString()}");
       if (response['statusCode'] == 204) {
         stateList.value = <CountryModel>[];
         return;
@@ -587,7 +587,7 @@ class RegistrationController extends GetxController {
       final req = {"state_id": selectedState.value?.id};
       final response = await THttpHelper.post(ApiConstant.getCityDD, req);
       //
-      debugPrint("state Response:${response.toString()}");
+      appDebugPrint("state Response:${response.toString()}");
       if (response['statusCode'] == 204) {
         districtList.value = <CountryModel>[];
         return;
@@ -686,7 +686,7 @@ class RegistrationController extends GetxController {
         "spe_cases": isDisablePerson.value.toString() == TTexts.yes.tr ? 1 : 0,
       };
 
-      debugPrint(
+      appDebugPrint(
         "Basic Edit Form Req ${ApiConstant.basicRegisterEndpoint}: $request",
       );
 
@@ -701,11 +701,11 @@ class RegistrationController extends GetxController {
 
       TLoaders.successSnackBar(title: "Success", message: response['message']);
 
-      debugPrint("Basic Register Response : $response");
+      appDebugPrint("Basic Register Response : $response");
 
       currentStep.value++;
     } catch (e) {
-      debugPrint("basicFormSubmit - $e");
+      appDebugPrint("basicFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
@@ -724,7 +724,7 @@ class RegistrationController extends GetxController {
       }
 
       if (!familyFormKey.currentState!.validate()) {
-        debugPrint("familyFormSubmit - validate");
+        appDebugPrint("familyFormSubmit - validate");
         return;
       }
 
@@ -760,14 +760,14 @@ class RegistrationController extends GetxController {
         "irupidam": nativePlaceController.text,
         "property": "",
       };
-      debugPrint('Family Register reqq $request');
+      appDebugPrint('Family Register reqq $request');
 
       final response = await THttpHelper.post(
         ApiConstant.familyRegisterEndpoint,
         request,
       );
 
-      debugPrint("Family Register Response : $response");
+      appDebugPrint("Family Register Response : $response");
       TLoaders.successSnackBar(title: "Success", message: response['message']);
 
       if (selectedReligion.value?.id == 1) {
@@ -777,7 +777,7 @@ class RegistrationController extends GetxController {
         currentStep.value++;
       }
     } catch (e) {
-      debugPrint("familyFormSubmit - $e");
+      appDebugPrint("familyFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:
@@ -820,14 +820,14 @@ class RegistrationController extends GetxController {
         "thosam": selectedDhosam.value,
         if (base64Image != null) "file": base64Image,
       };
-      debugPrint("Horoscope req : $request");
+      appDebugPrint("Horoscope req : $request");
 
       final res = await THttpHelper.post(
         ApiConstant.horoscopeRegisterEndpoint,
         request,
       );
 
-      debugPrint("Horoscope res : $res");
+      appDebugPrint("Horoscope res : $res");
       TFullScreenLoader.stopLoading();
       TLoaders.successSnackBar(title: "Success", message: res['message']);
 
@@ -835,7 +835,7 @@ class RegistrationController extends GetxController {
       currentStep.value++;
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      debugPrint("horoscopeFormSubmit - $e");
+      appDebugPrint("horoscopeFormSubmit - $e");
 
       TLoaders.errorSnackBar(
         title: "Failed",
@@ -868,19 +868,19 @@ class RegistrationController extends GetxController {
         "nocaste": noCasteChecked.value ? "no_caste" : "",
       };
 
-      debugPrint(
+      appDebugPrint(
         "============= CONTACT DETAILS API REQUEST BODY =============",
       );
       request.forEach((key, value) {
-        debugPrint("$key : $value");
+        appDebugPrint("$key : $value");
       });
       if (profileImageFile.value.path.isNotEmpty &&
           profileImagePath.value.isNotEmpty) {
-        debugPrint("photo1 : ${profileImageFile.value.path}");
+        appDebugPrint("photo1 : ${profileImageFile.value.path}");
       } else {
-        debugPrint("photo1 : <No Image Selected>");
+        appDebugPrint("photo1 : <No Image Selected>");
       }
-      debugPrint(
+      appDebugPrint(
         "============================================================",
       );
 
@@ -901,14 +901,14 @@ class RegistrationController extends GetxController {
         );
       }
       TFullScreenLoader.stopLoading();
-      debugPrint("Contact Register Response : $response");
+      appDebugPrint("Contact Register Response : $response");
 
       TLoaders.successSnackBar(title: "Success", message: response['message']);
       storage.write(TTexts.appPages, 0);
       Get.offAllNamed(TRoutes.bottomNav);
     } catch (e) {
       TFullScreenLoader.stopLoading();
-      debugPrint("contactFormSubmit - $e");
+      appDebugPrint("contactFormSubmit - $e");
       TLoaders.errorSnackBar(
         title: "Failed",
         message:

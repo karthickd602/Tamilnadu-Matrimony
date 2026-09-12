@@ -98,7 +98,7 @@ class NetworkSpeedChecker {
       stopwatch.stop();
       final ping = stopwatch.elapsedMilliseconds;
 
-      debugPrint("📡 Network Ping: $ping ms");
+      appDebugPrint("📡 Network Ping: $ping ms");
 
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         if (ping > 800) return false;

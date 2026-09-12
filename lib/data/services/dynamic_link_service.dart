@@ -1,10 +1,7 @@
 import 'package:app_links/app_links.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+
 import '../../features/home/controller/dashboard_controller.dart';
-import '../../routes/routes.dart';
-import '../../utils/constants/text_strings.dart';
+import '../../utils/constants/path_provider.dart';
 
 class DynamicLinkService extends GetxService {
   static DynamicLinkService get instance => Get.find();
@@ -22,37 +19,41 @@ class DynamicLinkService extends GetxService {
   }
 
   Future<void> _init() async {
-    debugPrint("DynamicLinkService: Initializing AppLinks Engine...");
-    
+    appDebugPrint("DynamicLinkService: Initializing AppLinks Engine...");
+
     // Optimistically set to true to stall Splash until we check for initial link
-    isHandled = true; 
+    isHandled = true;
 
     // 1. Cold Start Check
     try {
       final Uri? initialLink = await _appLinks.getInitialLink();
       if (initialLink != null) {
-        debugPrint("DynamicLinkService: !!! Cold Start Link detected: $initialLink");
+        appDebugPrint(
+          "DynamicLinkService: !!! Cold Start Link detected: $initialLink",
+        );
         // isHandled remains true to keep Splash waiting
-        _processSafe(initialLink, delay: 1500); 
+        _processSafe(initialLink, delay: 1500);
       } else {
         // No cold start link, tellSplash it's safe to proceed
         isHandled = false;
       }
     } catch (e) {
-      debugPrint("DynamicLinkService: Cold start error: $e");
+      appDebugPrint("DynamicLinkService: Cold start error: $e");
       isHandled = false;
     }
 
     // 2. Stream Check (Warm Start)
     _appLinks.uriLinkStream.listen((uri) {
-      debugPrint("DynamicLinkService: Link received via stream: $uri");
-      
+      appDebugPrint("DynamicLinkService: Link received via stream: $uri");
+
       // If we are currently handling a handoff, don't trigger twice
       if (isHandled && !_lock) {
-         debugPrint("DynamicLinkService: Ignoring stream link during cold-start handoff.");
-         return;
+        appDebugPrint(
+          "DynamicLinkService: Ignoring stream link during cold-start handoff.",
+        );
+        return;
       }
-      
+
       _processSafe(uri, delay: 500);
     });
   }
@@ -71,7 +72,7 @@ class DynamicLinkService extends GetxService {
       // Ensure user is logged in
       final userId = _storage.read(TTexts.userId);
       if (userId == null || userId.isEmpty) {
-        debugPrint("DynamicLinkService: No user logged in. Aborting.");
+        appDebugPrint("DynamicLinkService: No user logged in. Aborting.");
         isHandled = false;
         return;
       }
@@ -82,8 +83,10 @@ class DynamicLinkService extends GetxService {
         await Future.delayed(const Duration(milliseconds: 100));
       }
 
-      debugPrint("DynamicLinkService: Processing Profile $profileId (Atomic Flow)");
-      
+      appDebugPrint(
+        "DynamicLinkService: Processing Profile $profileId (Atomic Flow)",
+      );
+
       // 2. Prepare data silently
       final dashboardController = Get.isRegistered<DashboardController>()
           ? Get.find<DashboardController>()
@@ -93,9 +96,9 @@ class DynamicLinkService extends GetxService {
       // 3. STABLE NAVIGATION SEQUENCE
       // A. If we are not on BottomNav, reset to it first.
       if (Get.currentRoute != TRoutes.bottomNav) {
-        debugPrint("DynamicLinkService: Resetting route stack...");
+        appDebugPrint("DynamicLinkService: Resetting route stack...");
         Get.offAllNamed(TRoutes.bottomNav);
-        
+
         // CRITICAL: Wait for Navigator to fully transition and update GetX route state
         // This prevents the GlobalKey collision by ensuring we don't 'push' during 'reset'.
         int settleTimeout = 0;
@@ -110,12 +113,11 @@ class DynamicLinkService extends GetxService {
 
       // C. Final push
       if (Get.currentRoute != TRoutes.customerDetails) {
-        debugPrint("DynamicLinkService: Navigating to Profile Page.");
+        appDebugPrint("DynamicLinkService: Navigating to Profile Page.");
         Get.toNamed(TRoutes.customerDetails);
       }
-
     } catch (e) {
-      debugPrint("DynamicLinkService Navigation Error: $e");
+      appDebugPrint("DynamicLinkService Navigation Error: $e");
     } finally {
       isHandled = false; // Always release Splash
       // Debounce lock for spam prevention

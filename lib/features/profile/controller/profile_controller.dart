@@ -22,14 +22,14 @@ class ProfileController extends GetxController {
   Future<void> fetchUserProfile() async {
     try {
       isLoading.value = true;
-      debugPrint("-----------------${storage.read(TTexts.userId)}");
+      appDebugPrint("-----------------${storage.read(TTexts.userId)}");
 
       final userId = storage.read(TTexts.userId);
       final response = await repo.fetchUserProfile(userId: userId);
-      debugPrint("Profile Response : $response");
+      appDebugPrint("Profile Response : $response");
       userProfile.value = FetchUserProfileModel.fromJson(response["data"]);
     } catch (e) {
-      debugPrint("Profile Error : $e");
+      appDebugPrint("Profile Error : $e");
       TLoaders.errorSnackBar(title: "Profile Error", message: e.toString());
     } finally {
       isLoading.value = false;

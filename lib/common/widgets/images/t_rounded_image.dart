@@ -2,11 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 
-import '../../../utils/constants/enums.dart';
-import '../../../utils/constants/image_strings.dart';
-import '../../../utils/constants/sizes.dart';
+import '../../../utils/constants/path_provider.dart';
 import '../shimmers/shimmer.dart'; // your shimmer widget
 
 class TRoundedImage extends StatelessWidget {
@@ -95,13 +92,13 @@ class TRoundedImage extends StatelessWidget {
       progressIndicatorBuilder: (_, __, downloadProgress) =>
           TShimmerEffect(width: width, height: height),
       errorWidget: (context, url, error) {
-        debugPrint("Image Load Error: $url - $error");
+        appDebugPrint("Image Load Error: $url - $error");
         return _fallbackImage();
       },
-      memCacheHeight:
-          (height > 0 && height.isFinite) ? (height * 3).toInt() : null,
-      memCacheWidth:
-          (width > 0 && width.isFinite) ? (width * 3).toInt() : null,
+      memCacheHeight: (height > 0 && height.isFinite)
+          ? (height * 3).toInt()
+          : null,
+      memCacheWidth: (width > 0 && width.isFinite) ? (width * 3).toInt() : null,
     );
   }
 

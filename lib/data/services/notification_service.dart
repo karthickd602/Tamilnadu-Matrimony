@@ -7,7 +7,7 @@ import '../../utils/constants/path_provider.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
-    debugPrint("Handling a background message: ${message.messageId}");
+    appDebugPrint("Handling a background message: ${message.messageId}");
   }
 }
 
@@ -37,7 +37,7 @@ class NotificationService {
     );
 
     if (kDebugMode) {
-      debugPrint('User granted permission: ${settings.authorizationStatus}');
+      appDebugPrint('User granted permission: ${settings.authorizationStatus}');
     }
 
     // Get Token
@@ -49,13 +49,13 @@ class NotificationService {
       }
 
       if (kDebugMode) {
-        debugPrint('FCM Token: $token');
+        appDebugPrint('FCM Token: $token');
         final storage = GetStorage();
-        debugPrint('FCM Token stored: ${storage.read(TTexts.fcmToken)}');
+        appDebugPrint('FCM Token stored: ${storage.read(TTexts.fcmToken)}');
       }
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('Error getting token: $e');
+        appDebugPrint('Error getting token: $e');
       }
     }
 
@@ -68,8 +68,8 @@ class NotificationService {
     // Foreground Message Handler
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (kDebugMode) {
-        debugPrint('Got a message whilst in the foreground!');
-        debugPrint('Message data: ${message.data}');
+        appDebugPrint('Got a message whilst in the foreground!');
+        appDebugPrint('Message data: ${message.data}');
       }
 
       if (message.notification != null) {

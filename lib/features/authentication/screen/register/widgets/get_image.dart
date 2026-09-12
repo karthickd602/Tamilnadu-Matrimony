@@ -1,9 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../../../../../utils/constants/path_provider.dart';
-import '../../../../../common/widgets/images/t_rounded_image.dart';
 
 class ImagePickerBox extends StatelessWidget {
   final String title;
