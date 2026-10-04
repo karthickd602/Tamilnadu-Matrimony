@@ -66,6 +66,7 @@ class FetchUserProfileModel {
   final String? horosApprove;
   final String? horosCheck;
   final String? expections;
+  final String? paymentstatus;
 
   /// IMAGES
   final String? photo1;
@@ -130,6 +131,8 @@ class FetchUserProfileModel {
     this.horosApprove,
     this.horosCheck,
     this.expections,
+    this.paymentstatus,
+
     this.photo1,
     this.photo1Approve,
     this.verified,
@@ -200,6 +203,7 @@ class FetchUserProfileModel {
       horosApprove: json['HorosApprove'],
       horosCheck: json['Horoscheck'],
       expections: json['expections'],
+      paymentstatus: json['paymentstatus'],
 
       photo1: json['photo1'],
       photo1Approve: json['Photo1Approve'],

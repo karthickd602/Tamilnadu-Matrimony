@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:package_info_plus/package_info_plus.dart';
+
 import '../../../utils/constants/path_provider.dart';
 import '../../../utils/popups/full_screen_loader.dart';
 import '../model/user_profile_model.dart';
@@ -15,6 +17,20 @@ class ProfileController extends GetxController {
 
   final userProfile = Rxn<FetchUserProfileModel>();
   final pickedImage = Rxn<File>();
+
+  late var versionName = "0";
+  late var versionNo = "";
+
+  Future<void> fetchAppVersion() async {
+    try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      versionName = packageInfo.version;
+      versionNo = packageInfo.buildNumber;
+    } catch (e) {
+      appDebugPrint("Profile Error : $e");
+      TLoaders.errorSnackBar(title: "Profile Error", message: e.toString());
+    }
+  }
 
   /* ========================================================
    *  FETCH USER PROFILE

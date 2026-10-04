@@ -39,6 +39,7 @@ class TTexts {
 
   // --- Language selection Screen
   static const String selectLanguage = "select_language";
+  static const String appVersion = "App Version";
   static const String continueText = "continue_text";
 
   // -- Login

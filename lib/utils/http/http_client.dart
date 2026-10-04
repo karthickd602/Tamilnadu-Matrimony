@@ -7,8 +7,11 @@ import '../constants/path_provider.dart';
 
 class THttpHelper {
   // static const String _baseUrl = 'https://www.jobsintimate.com/api';
+  // static const String _baseUrl = 'https://www.jobsintimate.com/api/production';
   static const String _baseUrl =
-      'https://api.tamilnadumatrimony.net/public/api';
+      'https://api.tamilnadumatrimony.net/public/api/production';
+  // static const String _baseUrl =
+  //     'https://api.tamilnadumatrimony.net/public/api';
   static final storage = GetStorage();
 
   // Helper method to make a GET request

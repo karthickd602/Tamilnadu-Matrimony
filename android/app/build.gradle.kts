@@ -23,10 +23,10 @@ android {
 
     defaultConfig {
         applicationId = "com.maac.tamilnadumatrimony"
-        minSdk = flutter.minSdkVersion
+        minSdk = 23
         targetSdk = 36
-        versionCode = 13
-        versionName = "2.3.7"
+        versionCode = 15
+        versionName = "2.3.9"
         multiDexEnabled = true
     }
 
@@ -68,7 +68,8 @@ android {
 
     splits {
         abi {
-            isEnable = true
+            val isBuildingBundle = gradle.startParameter.taskNames.any { it.lowercase().contains("bundle") }
+            isEnable = !isBuildingBundle
             reset()
             include("armeabi-v7a", "arm64-v8a") // only target main ABIs
             isUniversalApk = true               // per-ABI APKs for smaller size

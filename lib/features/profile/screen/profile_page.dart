@@ -22,11 +22,13 @@ class ProfilePage extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final profileController = Get.put(ProfileController());
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await profileController.fetchAppVersion();
       await profileController.fetchUserProfile();
     });
+
     // final controller = Get.put()
     return Scaffold(
-      appBar: TAppBar(title: TTexts.profile.tr),
+      appBar: TAppBar(title: "${TTexts.profile.tr}"),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () {
@@ -145,7 +147,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "${user?.matriId} | Active Member",
+                        "${user?.matriId} | ${user?.paymentstatus} Member",
                         style: textTheme.bodyMedium?.copyWith(
                           color: Colors.grey[600],
                         ),
@@ -216,6 +218,12 @@ class ProfilePage extends StatelessWidget {
                     Icons.language,
                     TTexts.selectLanguage.tr,
                     () => _showLanguageBottomSheet(context),
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.info_outline,
+                    "${TTexts.appVersion}- ${profileController.versionName}- ${profileController.versionNo}",
+                    () {},
                   ),
 
                   /// Danger Section

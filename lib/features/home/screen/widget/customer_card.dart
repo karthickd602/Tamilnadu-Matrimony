@@ -247,8 +247,14 @@ class CustomerCard extends StatelessWidget {
                         );
 
                         return ElevatedButton.icon(
-                          onPressed: () {
-                            customAlertDialog(
+                          onPressed: ()async {
+                            if(customerProfile.isUnlocked.toLowerCase() == "true") {
+                                 await controller.fetchCustomerPage(customerProfile.id??0);
+          Get.to(() => CustomerDetailsView());
+        
+                              
+                            }else{
+       customAlertDialog(
                               context: context,
                               yesText: TTexts.correct.tr,
                               noText: TTexts.cancel.tr,
@@ -265,6 +271,8 @@ class CustomerCard extends StatelessWidget {
                             //   profileId: customerProfile.id ?? 0,
                             //   unlockValue: customerProfile.isUnlocked,
                             // );
+                            }
+                     
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
